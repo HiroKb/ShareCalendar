@@ -72,6 +72,7 @@ class RegisterController extends Controller
     }
 
     /**
+     * RegisterUsersトレイトのメソッドをオーバーライド
      * 登録後の挙動を変更(登録ユーザーデータを返却する)
      * @param Request $request
      * @param $user
