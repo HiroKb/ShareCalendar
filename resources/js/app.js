@@ -1,7 +1,13 @@
-require('./bootstrap');
+require('./bootstrap')
 import Vue from 'vue'
+// ルーティング定義
+import router from "./router"
+// ルートコンポーネント
+import App from './App.vue'
 
 new Vue({
     el:'#app',
-    template: '<h1>ShareCalendar</h1>'
+    router,
+    components: { App },
+    template: '<App />'
 })
