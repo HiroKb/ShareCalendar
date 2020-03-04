@@ -37418,6 +37418,7 @@ var mutations = {
   }
 };
 var actions = {
+  // 会員登録処理
   register: function register(context, data) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
       var response;
@@ -37440,6 +37441,7 @@ var actions = {
       }, _callee);
     }))();
   },
+  // ログイン処理
   login: function login(context, data) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
       var response;
