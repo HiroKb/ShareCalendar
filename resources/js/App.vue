@@ -12,7 +12,7 @@
         computed:{
             status: function () {
                 if(this.$store.state.auth.user){
-                    return 'login'
+                    return 'login [' + this.$store.state.auth.user.name + ']'
                 }
                  return 'logout'
             }
