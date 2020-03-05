@@ -28,8 +28,14 @@ const actions = {
         const response = await axios.post('/api/login', data)
         context.commit('setUser', response.data)
     },
+    // ログアウト処理
+    async logout (context) {
+        const response = await axios.post('/api/logout')
+        context.commit('setUser', null)
+    },
     // ログインユーザー取得
     async getLoginUser(context) {
+        // ログインユーザー取得APIの呼び出し
         const response = await axios.get('/api/user')
         const user = response.data || null
         context.commit('setUser', user)
