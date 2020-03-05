@@ -29,6 +29,8 @@
             async register () {
                 // authストアのregisterアクション呼び出し
                 await this.$store.dispatch('auth/register', this.registerData)
+
+                this.$router.push('/my-calendar')
             }
         }
     }

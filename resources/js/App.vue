@@ -11,8 +11,8 @@
     export default {
         computed:{
             status: function () {
-                if(this.$store.state.auth.user){
-                    return 'login [' + this.$store.state.auth.user.name + ']'
+                if(this.$store.getters['auth/loginCheck']){
+                    return 'login [' + this.$store.getters['auth/getUser'].name + ']'
                 }
                  return 'logout'
             }

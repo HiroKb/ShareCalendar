@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from "vue-router"
+import store from "./store";
 
 // ページコンポーネント
 import Welcome from "./pages/Welcome.vue"
@@ -15,25 +16,59 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/',
-        component: Welcome
+        component: Welcome,
+        beforeEnter (to, from, next) {
+            if (store.getters['auth/loginCheck']){
+                next('/my-calendar')
+            } else {
+                next()
+            }
+        }
     },
     {
         path: '/register',
-        component: Register
+        component: Register,
+        beforeEnter (to, from, next) {
+            if (store.getters['auth/loginCheck']){
+                next('/my-calendar')
+            } else {
+                next()
+            }
+        }
     },
     {
         path: '/login',
-        component: Login
+        component: Login,
+        beforeEnter (to, from, next) {
+            if (store.getters['auth/loginCheck']){
+                next('/my-calendar')
+            } else {
+                next()
+            }
+        }
     },
     {
         path: '/my-calendar',
-        component: MyCalendar
+        component: MyCalendar,
+        beforeEnter (to, from, next) {
+            if (store.getters['auth/loginCheck']){
+                next()
+            } else {
+                next('/')
+            }
+        }
     },
     {
         path: '/share-calendar',
-        component: ShareCalendar
+        component: ShareCalendar,
+        beforeEnter (to, from, next) {
+            if (store.getters['auth/loginCheck']){
+                next()
+            } else {
+                next('/')
+            }
+        }
     },
-
 ]
 
 // VueRouterインスタンスを作成

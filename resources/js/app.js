@@ -3,7 +3,7 @@ import Vue from 'vue'
 // ルーター
 import router from "./router"
 // ストア
-import store from "./pages/store";
+import store from "./store";
 // ルートコンポーネント
 import App from './App.vue'
 

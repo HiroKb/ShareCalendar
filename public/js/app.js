@@ -1932,8 +1932,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: {
     status: function status() {
-      if (this.$store.state.auth.user) {
-        return 'login [' + this.$store.state.auth.user.name + ']';
+      if (this.$store.getters['auth/loginCheck']) {
+        return 'login [' + this.$store.getters['auth/getUser'].name + ']';
       }
 
       return 'logout';
@@ -1995,6 +1995,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _this.$store.dispatch('auth/login', _this.loginData);
 
               case 2:
+                _this.$router.push('/my-calendar');
+
+              case 3:
               case "end":
                 return _context.stop();
             }
@@ -2082,6 +2085,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _this.$store.dispatch('auth/register', _this.registerData);
 
               case 2:
+                _this.$router.push('/my-calendar');
+
+              case 3:
               case "end":
                 return _context.stop();
             }
@@ -36983,7 +36989,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./router */ "./resources/js/router.js");
-/* harmony import */ var _pages_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/store */ "./resources/js/pages/store/index.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
 /* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./App.vue */ "./resources/js/App.vue");
 
 
@@ -37008,13 +37014,13 @@ var createApp = /*#__PURE__*/function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return _pages_store__WEBPACK_IMPORTED_MODULE_3__["default"].dispatch('auth/getLoginUser');
+            return _store__WEBPACK_IMPORTED_MODULE_3__["default"].dispatch('auth/getLoginUser');
 
           case 2:
             new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
               el: '#app',
               router: _router__WEBPACK_IMPORTED_MODULE_2__["default"],
-              store: _pages_store__WEBPACK_IMPORTED_MODULE_3__["default"],
+              store: _store__WEBPACK_IMPORTED_MODULE_3__["default"],
               components: {
                 App: _App_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
               },
@@ -37425,10 +37431,100 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/pages/store/auth.js":
-/*!******************************************!*\
-  !*** ./resources/js/pages/store/auth.js ***!
-  \******************************************/
+/***/ "./resources/js/router.js":
+/*!********************************!*\
+  !*** ./resources/js/router.js ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
+/* harmony import */ var _pages_Welcome_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/Welcome.vue */ "./resources/js/pages/Welcome.vue");
+/* harmony import */ var _pages_Register_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages/Register.vue */ "./resources/js/pages/Register.vue");
+/* harmony import */ var _pages_Login_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/Login.vue */ "./resources/js/pages/Login.vue");
+/* harmony import */ var _pages_MyCalendar_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/MyCalendar.vue */ "./resources/js/pages/MyCalendar.vue");
+/* harmony import */ var _pages_ShareCalendar_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./pages/ShareCalendar.vue */ "./resources/js/pages/ShareCalendar.vue");
+
+
+ // ページコンポーネント
+
+
+
+
+
+ // VueRouterの使用を宣言
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]); // ルーティング定義
+
+var routes = [{
+  path: '/',
+  component: _pages_Welcome_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+  beforeEnter: function beforeEnter(to, from, next) {
+    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/loginCheck']) {
+      next('/my-calendar');
+    } else {
+      next();
+    }
+  }
+}, {
+  path: '/register',
+  component: _pages_Register_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
+  beforeEnter: function beforeEnter(to, from, next) {
+    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/loginCheck']) {
+      next('/my-calendar');
+    } else {
+      next();
+    }
+  }
+}, {
+  path: '/login',
+  component: _pages_Login_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+  beforeEnter: function beforeEnter(to, from, next) {
+    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/loginCheck']) {
+      next('/my-calendar');
+    } else {
+      next();
+    }
+  }
+}, {
+  path: '/my-calendar',
+  component: _pages_MyCalendar_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
+  beforeEnter: function beforeEnter(to, from, next) {
+    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/loginCheck']) {
+      next();
+    } else {
+      next('/');
+    }
+  }
+}, {
+  path: '/share-calendar',
+  component: _pages_ShareCalendar_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
+  beforeEnter: function beforeEnter(to, from, next) {
+    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/loginCheck']) {
+      next();
+    } else {
+      next('/');
+    }
+  }
+}]; // VueRouterインスタンスを作成
+
+var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
+  mode: 'history',
+  routes: routes
+});
+/* harmony default export */ __webpack_exports__["default"] = (router);
+
+/***/ }),
+
+/***/ "./resources/js/store/auth.js":
+/*!************************************!*\
+  !*** ./resources/js/store/auth.js ***!
+  \************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -37445,7 +37541,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var state = {
   user: null
 };
-var getters = {};
+var getters = {
+  // ログインしているかどうか
+  loginCheck: function loginCheck(state) {
+    return !!state.user;
+  },
+  // ユーザー情報
+  getUser: function getUser(state) {
+    return state.user ? state.user : '';
+  }
+};
 var mutations = {
   setUser: function setUser(state, user) {
     state.user = user;
@@ -37533,10 +37638,10 @@ var actions = {
 
 /***/ }),
 
-/***/ "./resources/js/pages/store/index.js":
-/*!*******************************************!*\
-  !*** ./resources/js/pages/store/index.js ***!
-  \*******************************************/
+/***/ "./resources/js/store/index.js":
+/*!*************************************!*\
+  !*** ./resources/js/store/index.js ***!
+  \*************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -37545,7 +37650,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./auth */ "./resources/js/pages/store/auth.js");
+/* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./auth */ "./resources/js/store/auth.js");
 
 
 
@@ -37556,59 +37661,6 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   }
 });
 /* harmony default export */ __webpack_exports__["default"] = (store);
-
-/***/ }),
-
-/***/ "./resources/js/router.js":
-/*!********************************!*\
-  !*** ./resources/js/router.js ***!
-  \********************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
-/* harmony import */ var _pages_Welcome_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./pages/Welcome.vue */ "./resources/js/pages/Welcome.vue");
-/* harmony import */ var _pages_Register_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/Register.vue */ "./resources/js/pages/Register.vue");
-/* harmony import */ var _pages_Login_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages/Login.vue */ "./resources/js/pages/Login.vue");
-/* harmony import */ var _pages_MyCalendar_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/MyCalendar.vue */ "./resources/js/pages/MyCalendar.vue");
-/* harmony import */ var _pages_ShareCalendar_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/ShareCalendar.vue */ "./resources/js/pages/ShareCalendar.vue");
-
- // ページコンポーネント
-
-
-
-
-
- // VueRouterの使用を宣言
-
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]); // ルーティング定義
-
-var routes = [{
-  path: '/',
-  component: _pages_Welcome_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
-}, {
-  path: '/register',
-  component: _pages_Register_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
-}, {
-  path: '/login',
-  component: _pages_Login_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
-}, {
-  path: '/my-calendar',
-  component: _pages_MyCalendar_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
-}, {
-  path: '/share-calendar',
-  component: _pages_ShareCalendar_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
-}]; // VueRouterインスタンスを作成
-
-var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
-  mode: 'history',
-  routes: routes
-});
-/* harmony default export */ __webpack_exports__["default"] = (router);
 
 /***/ }),
 

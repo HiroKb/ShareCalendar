@@ -2,7 +2,12 @@ const state = {
     user: null
 }
 
-const getters = {}
+const getters = {
+    // ログインしているかどうか
+    loginCheck: state => !! state.user,
+    // ユーザー情報
+    getUser: state => state.user ? state.user : ''
+}
 
 const mutations = {
     setUser(state, user){

@@ -25,6 +25,8 @@
             async login () {
                 // authストアのregisterアクション呼び出し
                 await this.$store.dispatch('auth/login', this.loginData)
+
+                this.$router.push('/my-calendar')
             }
         }
     }
