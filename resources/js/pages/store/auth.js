@@ -22,6 +22,12 @@ const actions = {
         // ログインAPIの呼び出し
         const response = await axios.post('/api/login', data)
         context.commit('setUser', response.data)
+    },
+    // ログインユーザー取得
+    async getLoginUser(context) {
+        const response = await axios.get('/api/user')
+        const user = response.data || null
+        context.commit('setUser', user)
     }
 }
 
