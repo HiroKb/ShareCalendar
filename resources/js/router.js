@@ -8,6 +8,7 @@ import Register from "./pages/Register.vue"
 import Login from "./pages/Login.vue"
 import MyCalendar from "./pages/MyCalendar.vue"
 import ShareCalendar from "./pages/ShareCalendar.vue"
+import SystemError from "./pages/errors/SystemError.vue";
 
 // VueRouterの使用を宣言
 Vue.use(VueRouter)
@@ -69,6 +70,10 @@ const routes = [
             }
         }
     },
+    {
+        path: '/500',
+        component: SystemError
+    }
 ]
 
 // VueRouterインスタンスを作成

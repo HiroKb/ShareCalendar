@@ -1,4 +1,5 @@
 import { getCookieValue } from "./util"
+import error from "./store/error";
 
 window._ = require('lodash')
 
@@ -13,12 +14,18 @@ window.axios = require('axios')
 // Ajaxリクエストであることを示すヘッダを付与
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
+// トークンを取り出してヘッダーに添付
 window.axios.interceptors.request.use(config => {
-    // トークンを取り出してヘッダーに添付
     config.headers['X-XSRF-TOKEN'] = getCookieValue('XSRF-TOKEN')
 
     return config
 })
+
+// 通信エラー時のレスポンスを変更(エラーそのものではなくレスポンスオブジェクトを返す)
+window.axios.interceptors.response.use(
+    response => response,
+    error => error.response || error
+)
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
