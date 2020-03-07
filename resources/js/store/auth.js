@@ -96,10 +96,18 @@ const actions = {
     },
     // ログインユーザー取得
     async getLoginUser(context) {
+        // apiStatusの初期化
+        context.commit('setApiStatus', null)
         // ログインユーザー取得APIの呼び出し
         const response = await axios.get('/api/user')
         const user = response.data || null
-        context.commit('setUser', user)
+
+        if (response.status === SUCCESS) {
+            context.commit('setUser', user)
+            return false
+        }
+        // エラー時
+        context.commit('error/setCode', response.status, {root: true })
     }
 }
 

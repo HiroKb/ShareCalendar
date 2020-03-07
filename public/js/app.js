@@ -38739,15 +38739,31 @@ var actions = {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              _context4.next = 2;
+              // apiStatusの初期化
+              context.commit('setApiStatus', null); // ログインユーザー取得APIの呼び出し
+
+              _context4.next = 3;
               return axios.get('/api/user');
 
-            case 2:
+            case 3:
               response = _context4.sent;
               user = response.data || null;
-              context.commit('setUser', user);
 
-            case 5:
+              if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
+                _context4.next = 8;
+                break;
+              }
+
+              context.commit('setUser', user);
+              return _context4.abrupt("return", false);
+
+            case 8:
+              // エラー時
+              context.commit('error/setCode', response.status, {
+                root: true
+              });
+
+            case 9:
             case "end":
               return _context4.stop();
           }
