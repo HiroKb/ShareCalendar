@@ -6,13 +6,23 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex'
     export default {
         name: "MyCalendar",
+        computed: {
+            ...mapState({
+                apiStatus: state => state.auth.apiStatus, // API通信成否
+            })
+        },
         methods: {
             async logout () {
+                // authストアのlogoutアクション呼び出し
                 await this.$store.dispatch('auth/logout')
 
-                this.$router.push('/')
+                // 通信成功時
+                if (this.apiStatus){
+                    this.$router.push('/')
+                }
             }
         }
     }

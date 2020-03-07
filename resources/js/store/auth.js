@@ -78,8 +78,21 @@ const actions = {
     },
     // ログアウト処理
     async logout (context) {
+        // apiStatusの初期化
+        context.commit('setApiStatus', null)
+        // ログアウトAPIの呼び出し
         const response = await axios.post('/api/logout')
-        context.commit('setUser', null)
+
+        // 通信成功時
+        if(response.status === SUCCESS) {
+            context.commit('setApiStatus', true)
+            context.commit('setUser', null)
+            return false
+        }
+
+        // エラー時
+        context.commit('setApiStatus', false)
+        context.commit('error/setCode', response.status, {root: true })
     },
     // ログインユーザー取得
     async getLoginUser(context) {

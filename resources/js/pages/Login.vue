@@ -32,7 +32,7 @@
         },
         methods: {
             async login () {
-                // authストアのregisterアクション呼び出し
+                // authストアのloginアクション呼び出し
                 await this.$store.dispatch('auth/login', this.loginData)
 
                 // 通信成功時
