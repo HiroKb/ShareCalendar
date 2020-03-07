@@ -1,8 +1,5 @@
 <template>
     <div>
-
-        <p>{{ status }}</p>
-
         <RouterView />
     </div>
 </template>
@@ -12,13 +9,7 @@
     import { INTERNAL_SERVER_ERROR } from './util'
 
     export default {
-        computed:{
-            status: function () {
-                if(this.$store.getters['auth/loginCheck']){
-                    return 'login [' + this.$store.getters['auth/getUser'].name + ']'
-                }
-                 return 'logout'
-            },
+        computed: {
             ...mapState({
                 errorCode: state => state.error.code
             })

@@ -9,8 +9,8 @@ const state = {
 const getters = {
     // ログインしているかどうか
     loginCheck: state => !! state.user,
-    // ユーザー情報
-    getUser: state => state.user ? state.user : ''
+    // ユーザーの名前
+    userName: state => state.user ? state.user.name : ''
 }
 
 const mutations = {

@@ -6,9 +6,10 @@ import store from "./store";
 import Welcome from "./pages/Welcome.vue"
 import Register from "./pages/Register.vue"
 import Login from "./pages/Login.vue"
+import UserInfo from "./pages/UserInfo"
 import MyCalendar from "./pages/MyCalendar.vue"
 import ShareCalendar from "./pages/ShareCalendar.vue"
-import SystemError from "./pages/errors/SystemError.vue";
+import SystemError from "./pages/errors/SystemError.vue"
 
 // VueRouterの使用を宣言
 Vue.use(VueRouter)
@@ -45,6 +46,17 @@ const routes = [
                 next('/my-calendar')
             } else {
                 next()
+            }
+        }
+    },
+    {
+        path: '/user-info',
+        component: UserInfo,
+        beforeEnter (to, from, next) {
+            if (store.getters['auth/loginCheck']){
+                next()
+            } else {
+                next('/')
             }
         }
     },

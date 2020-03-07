@@ -1,23 +1,22 @@
 <template>
     <div>
         <SideBar />
-        <div class="my-calendar">
-            <h1>MyCalendar</h1>
+        <div class="user-info">
+            <h1>UserInfo</h1>
         </div>
     </div>
 </template>
 
 <script>
-    import {mapState} from 'vuex'
     import SideBar from "../components/SideBar";
     export default {
-        name: "MyCalendar",
+        name: "UserInfo",
         components: {SideBar}
     }
 </script>
 
 <style scoped>
-.my-calendar{
+.user-info{
     max-width: 500px;
     margin: 0 auto;
 }
