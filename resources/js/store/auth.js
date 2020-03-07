@@ -32,27 +32,49 @@ const actions = {
         context.commit('setApiStatus', null)
         // 会員登録APIの呼び出し
         const response = await axios.post('/api/register', data)
-        // 通信成功の場合
+
+        // 通信成功時
         if(response.status === CREATED) {
             context.commit('setApiStatus', true)
             context.commit('setUser', response.data)
             return false
         }
 
+        // エラー時
         context.commit('setApiStatus', false)
+        // バリデーションエラーの場合
         if (response.status === VALIDATION_ERROR) {
-            // バリデーションエラーの場合
             context.commit('setErrorMessages', response.data.errors)
+
+        // その他のエラーの場合
         } else {
-            // その他のエラーの場合
             context.commit('error/setCode', response.status, { root: true})
         }
     },
     // ログイン処理
     async login(context, data) {
+        // apiStatusの初期化
+        context.commit('setApiStatus', null)
         // ログインAPIの呼び出し
         const response = await axios.post('/api/login', data)
-        context.commit('setUser', response.data)
+
+        // 通信成功時
+        if(response.status === SUCCESS) {
+            context.commit('setApiStatus', true)
+            context.commit('setUser', response.data)
+            return false
+        }
+
+        // エラー時
+        context.commit('setApiStatus', false)
+        // バリデーションエラーの場合
+        if (response.status === VALIDATION_ERROR) {
+            context.commit('setErrorMessages', response.data.errors)
+
+            // その他のエラーの場合
+        } else {
+            context.commit('error/setCode', response.status, { root: true})
+        }
     },
     // ログアウト処理
     async logout (context) {

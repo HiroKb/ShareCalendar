@@ -30,10 +30,10 @@
                 }
             }
         },
-        computed :{
+        computed: {
             ...mapState({
                 apiStatus: state => state.auth.apiStatus, // API通信成否
-                errorMessages: state => state.auth.errorMessages
+                errorMessages: state => state.auth.errorMessages // バリデーションエラーメッセージ
             })
         },
         methods: {
@@ -42,7 +42,6 @@
                 await this.$store.dispatch('auth/register', this.registerData)
 
 
-                console.log(this.apiStatus)
                 // 通信成功の場合
                 if (this.apiStatus) {
                     this.$router.push('/my-calendar')
