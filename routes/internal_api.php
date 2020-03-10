@@ -18,4 +18,6 @@ Route::get('/user', fn() => Auth::user())->name('user');
 Route::patch('/user-name', 'UserController@updateName');
 // ユーザーパスワード変更
 Route::patch('/user-password', 'UserController@updatePassword');
+// メールアドレス変更
+Route::patch('/user-email', 'UserController@updateEmail');
 

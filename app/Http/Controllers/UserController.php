@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateUserEmailRequest;
 use App\Http\Requests\UpdateUserNameRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
 use App\User;
@@ -37,5 +38,16 @@ class UserController extends Controller
         $user->save();
 
         return response()->json();
+    }
+
+    public function updateEmail(UpdateUserEmailRequest $request)
+    {
+        $user = Auth::user();
+
+        $user->email = $request->email;
+
+        $user->save();
+
+        return Auth::user();
     }
 }
