@@ -11,6 +11,7 @@ import MyCalendar from "./pages/MyCalendar.vue"
 import ShareCalendar from "./pages/ShareCalendar.vue"
 import SystemError from "./pages/errors/SystemError.vue"
 import EditUserName from "./pages/EditUserName";
+import EditUserPassword from "./pages/EditUserPassword";
 
 // VueRouterの使用を宣言
 Vue.use(VueRouter)
@@ -64,6 +65,17 @@ const routes = [
     {
         path: '/edit-username',
         component: EditUserName,
+        beforeEnter (to, from, next) {
+            if (store.getters['user/loginCheck']){
+                next()
+            } else {
+                next('/')
+            }
+        }
+    },
+    {
+        path: '/edit-password',
+        component: EditUserPassword,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
                 next()

@@ -7,6 +7,10 @@
             <p>ユーザー名</p>
             <p>{{ userName }}</p>
             <router-link to="edit-username">編集</router-link>
+
+            <p>パスワード</p>
+            <p>********</p>
+            <router-link to="edit-password">編集</router-link>
         </div>
     </div>
 </template>

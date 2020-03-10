@@ -34,14 +34,17 @@
         },
         methods: {
             async updateName () {
-                // userストアのupdateUserNameアクション呼び出し
-                await this.$store.dispatch('user/updateUserName', {name: this.name})
+                // userストアのupdateNameアクション呼び出し
+                await this.$store.dispatch('user/updateName', {name: this.name})
 
                 // 通信成功時
                 if (this.apiStatus) {
                     this.$router.push('/user-info')
                 }
             }
+        },
+        created() {
+            this.$store.commit('user/setErrorMessages', null)
         }
     }
 </script>
