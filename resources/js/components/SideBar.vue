@@ -13,16 +13,16 @@
         name: "SideBar",
         computed: {
             ...mapState({
-                apiStatus: state => state.auth.apiStatus, // API通信成否
+                apiStatus: state => state.user.apiStatus, // API通信成否
             }),
             ...mapGetters({
-                userName: 'auth/userName'
+                userName: 'user/userName'
             })
         },
         methods: {
             async logout () {
-                // authストアのlogoutアクション呼び出し
-                await this.$store.dispatch('auth/logout')
+                // userストアのlogoutアクション呼び出し
+                await this.$store.dispatch('user/logout')
 
                 // 通信成功時
                 if (this.apiStatus){

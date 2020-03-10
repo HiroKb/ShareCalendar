@@ -8,11 +8,11 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
     import SideBar from "../components/SideBar";
+    import {mapGetters} from "vuex";
     export default {
         name: "MyCalendar",
-        components: {SideBar}
+        components: {SideBar},
     }
 </script>
 

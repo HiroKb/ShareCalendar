@@ -3,15 +3,25 @@
         <SideBar />
         <div class="user-info">
             <h1>UserInfo</h1>
+
+            <p>ユーザー名</p>
+            <p>{{ userName }}</p>
+            <router-link to="edit-username">編集</router-link>
         </div>
     </div>
 </template>
 
 <script>
     import SideBar from "../components/SideBar";
+    import {mapGetters} from "vuex";
     export default {
         name: "UserInfo",
-        components: {SideBar}
+        components: {SideBar},
+        computed : {
+            ...mapGetters({
+                userName: 'user/userName'
+            })
+        }
     }
 </script>
 

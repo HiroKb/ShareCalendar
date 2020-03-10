@@ -26,14 +26,14 @@
         },
         computed: {
             ...mapState({
-                apiStatus: state => state.auth.apiStatus, // API通信成否
-                errorMessages: state => state.auth.errorMessages // バリデーションエラーメッセージ
+                apiStatus: state => state.user.apiStatus, // API通信成否
+                errorMessages: state => state.user.errorMessages // バリデーションエラーメッセージ
             })
         },
         methods: {
             async login () {
-                // authストアのloginアクション呼び出し
-                await this.$store.dispatch('auth/login', this.loginData)
+                // userストアのloginアクション呼び出し
+                await this.$store.dispatch('user/login', this.loginData)
 
                 // 通信成功時
                 if (this.apiStatus) {
@@ -42,7 +42,7 @@
             }
         },
         created() {
-            this.$store.commit('auth/setErrorMessages', null)
+            this.$store.commit('user/setErrorMessages', null)
         }
     }
 </script>

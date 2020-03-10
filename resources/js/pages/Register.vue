@@ -1,6 +1,6 @@
 <template>
     <form @submit.prevent="register">
-        <label for="name">表示名</label>
+        <label for="name">ユーザー名</label>
         <input type="text" id="name" v-model="registerData.name">
         <p v-if="errorMessages && errorMessages.name">{{ errorMessages.name }}</p>
 
@@ -32,14 +32,14 @@
         },
         computed: {
             ...mapState({
-                apiStatus: state => state.auth.apiStatus, // API通信成否
-                errorMessages: state => state.auth.errorMessages // バリデーションエラーメッセージ
+                apiStatus: state => state.user.apiStatus, // API通信成否
+                errorMessages: state => state.user.errorMessages // バリデーションエラーメッセージ
             })
         },
         methods: {
             async register () {
-                // authストアのregisterアクション呼び出し
-                await this.$store.dispatch('auth/register', this.registerData)
+                // userストアのregisterアクション呼び出し
+                await this.$store.dispatch('user/register', this.registerData)
 
 
                 // 通信成功の場合
@@ -49,7 +49,7 @@
             }
         },
         created() {
-              this.$store.commit('auth/setErrorMessages', null)
+              this.$store.commit('user/setErrorMessages', null)
         }
     }
 </script>

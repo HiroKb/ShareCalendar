@@ -10,6 +10,7 @@ import UserInfo from "./pages/UserInfo"
 import MyCalendar from "./pages/MyCalendar.vue"
 import ShareCalendar from "./pages/ShareCalendar.vue"
 import SystemError from "./pages/errors/SystemError.vue"
+import EditUserName from "./pages/EditUserName";
 
 // VueRouterの使用を宣言
 Vue.use(VueRouter)
@@ -20,7 +21,7 @@ const routes = [
         path: '/',
         component: Welcome,
         beforeEnter (to, from, next) {
-            if (store.getters['auth/loginCheck']){
+            if (store.getters['user/loginCheck']){
                 next('/my-calendar')
             } else {
                 next()
@@ -31,7 +32,7 @@ const routes = [
         path: '/register',
         component: Register,
         beforeEnter (to, from, next) {
-            if (store.getters['auth/loginCheck']){
+            if (store.getters['user/loginCheck']){
                 next('/my-calendar')
             } else {
                 next()
@@ -42,7 +43,7 @@ const routes = [
         path: '/login',
         component: Login,
         beforeEnter (to, from, next) {
-            if (store.getters['auth/loginCheck']){
+            if (store.getters['user/loginCheck']){
                 next('/my-calendar')
             } else {
                 next()
@@ -53,7 +54,18 @@ const routes = [
         path: '/user-info',
         component: UserInfo,
         beforeEnter (to, from, next) {
-            if (store.getters['auth/loginCheck']){
+            if (store.getters['user/loginCheck']){
+                next()
+            } else {
+                next('/')
+            }
+        }
+    },
+    {
+        path: '/edit-username',
+        component: EditUserName,
+        beforeEnter (to, from, next) {
+            if (store.getters['user/loginCheck']){
                 next()
             } else {
                 next('/')
@@ -64,7 +76,7 @@ const routes = [
         path: '/my-calendar',
         component: MyCalendar,
         beforeEnter (to, from, next) {
-            if (store.getters['auth/loginCheck']){
+            if (store.getters['user/loginCheck']){
                 next()
             } else {
                 next('/')
@@ -75,7 +87,7 @@ const routes = [
         path: '/share-calendar',
         component: ShareCalendar,
         beforeEnter (to, from, next) {
-            if (store.getters['auth/loginCheck']){
+            if (store.getters['user/loginCheck']){
                 next()
             } else {
                 next('/')
