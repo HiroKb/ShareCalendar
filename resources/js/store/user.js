@@ -10,7 +10,9 @@ const getters = {
     // ログインしているかどうか
     loginCheck: state => !! state.user,
     // ユーザーの名前
-    userName: state => state.user ? state.user.name : ''
+    userName: state => state.user ? state.user.name : '',
+    // ユーザーのメールアドレス
+    userEmail: state => state.user ? state.user.email : ''
 }
 
 const mutations = {
@@ -134,6 +136,32 @@ const actions = {
             context.commit('error/setCode', response.status, { root: true})
         }
     },
+    // ユーザー名変更
+    async updateEmail(context, data) {
+        // apiStatusの初期化
+        context.commit('setApiStatus', null)
+        // メールアドレス変更APIの呼び出し
+        const response = await axios.patch('/api/user-email', data)
+
+        // 通信成功時
+        if(response.status === SUCCESS) {
+            context.commit('setApiStatus', true)
+            context.commit('setUser', response.data)
+            return false
+        }
+
+        // エラー時
+        context.commit('setApiStatus', false)
+        // バリデーションエラーの場合
+        if (response.status === VALIDATION_ERROR) {
+            context.commit('setErrorMessages', response.data.errors)
+
+            // その他のエラーの場合
+        } else {
+            context.commit('error/setCode', response.status, { root: true})
+        }
+    },
+    // パスワード変更
     async updatePassword(context, data) {
         // apiStatusの初期化
         context.commit('setApiStatus', null)

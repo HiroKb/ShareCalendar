@@ -41,8 +41,6 @@
         },
         methods: {
             async updatePassword () {
-                console.log(this.current_password)
-                console.log(this.new_password)
                 // userストアのupdatePasswordアクション呼び出し
                 await this.$store.dispatch('user/updatePassword', {
                     current_password: this.current_password,

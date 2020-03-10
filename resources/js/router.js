@@ -12,6 +12,7 @@ import ShareCalendar from "./pages/ShareCalendar.vue"
 import SystemError from "./pages/errors/SystemError.vue"
 import EditUserName from "./pages/EditUserName";
 import EditUserPassword from "./pages/EditUserPassword";
+import EditUserEmail from "./pages/EditUserEmail";
 
 // VueRouterの使用を宣言
 Vue.use(VueRouter)
@@ -63,7 +64,7 @@ const routes = [
         }
     },
     {
-        path: '/edit-username',
+        path: '/edit-user-name',
         component: EditUserName,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
@@ -74,7 +75,18 @@ const routes = [
         }
     },
     {
-        path: '/edit-password',
+        path: '/edit-user-email',
+        component: EditUserEmail,
+        beforeEnter (to, from, next) {
+            if (store.getters['user/loginCheck']){
+                next()
+            } else {
+                next('/')
+            }
+        }
+    },
+    {
+        path: '/edit-user-password',
         component: EditUserPassword,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
