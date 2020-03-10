@@ -14,6 +14,8 @@ Route::post('/login', 'Auth\LoginController@login')->name('login');
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 // ログインユーザー返却
 Route::get('/user', fn() => Auth::user())->name('user');
-//ユーザーネーム変更
+// ユーザーネーム変更
 Route::patch('/user-name', 'UserController@updateName');
+// ユーザーパスワード変更
+Route::patch('/user-password', 'UserController@updatePassword');
 
