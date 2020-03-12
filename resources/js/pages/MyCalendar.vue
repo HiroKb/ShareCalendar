@@ -19,7 +19,7 @@
                     </thead>
 
                     <tbody>
-                        <tr v-for="row in 5">
+                        <tr v-for="row in weeks">
                             <th v-for="column in 7">{{ dates[(row - 1) * 7  + column - 1 ] }}</th>
                         </tr>
                     </tbody>
@@ -40,6 +40,7 @@
                 dates: [], // 日付配列(選択月前後35日分)
                 dateLabel: '', // 選択中の年月表示用(YYYY年MM月)
                 selectedMonth: null, // 選択中の月(momentオブジェクト)
+                weeks: 0 // 選択月が何週を跨ぐか
             }
         },
         methods: {
@@ -61,8 +62,15 @@
                 this.dates = []
                 this.dateLabel = moment(this.selectedMonth).format('YYYY年MM月')
 
+                // 選択月の日数
+                const monthDays = moment(this.selectedMonth).daysInMonth()
                 // 選択月初日の曜日
-                let firstDay = moment(this.selectedMonth).startOf('month').day()
+                const firstDay = moment(this.selectedMonth).startOf('month').day()
+
+                this.weeks = Math.ceil((monthDays + firstDay) / 7)
+
+
+
                 // 選択月初日より前の日付データ(選択月前月)を配列へ追加
                 for(let i = 0; i < firstDay; i++){
                     this.dates.unshift(moment(this.selectedMonth).startOf('month').subtract(i + 1, 'days').date())
@@ -70,13 +78,13 @@
 
 
                 // 選択月の日付データを配列へ追加
-                for (let i = 0; i < moment(this.selectedMonth).daysInMonth(); i++) {
+                for (let i = 0; i < monthDays; i++) {
                     this.dates.push(i + 1)
                 }
 
 
                 // 選択月末日より後の日付データを配列へ追加
-                for (let length = this.dates.length, i = 1; length < 35; length++, i++){
+                for (let length = this.dates.length, i = 1; length < this.weeks * 7; length++, i++){
                     this.dates.push(moment(this.selectedMonth).endOf('month').add(i, 'days').date())
                 }
 

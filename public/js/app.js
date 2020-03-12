@@ -2499,7 +2499,9 @@ __webpack_require__.r(__webpack_exports__);
       // 日付配列(選択月前後35日分)
       dateLabel: '',
       // 選択中の年月表示用(YYYY年MM月)
-      selectedMonth: null // 選択中の月(momentオブジェクト)
+      selectedMonth: null,
+      // 選択中の月(momentオブジェクト)
+      weeks: 0 // 選択月が何週を跨ぐか
 
     };
   },
@@ -2520,21 +2522,24 @@ __webpack_require__.r(__webpack_exports__);
     selectedMonth: function selectedMonth() {
       // 日付配列の初期化、選択中の年月設定
       this.dates = [];
-      this.dateLabel = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).format('YYYY年MM月'); // 選択月初日の曜日
+      this.dateLabel = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).format('YYYY年MM月'); // 選択月の日数
 
-      var firstDay = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).startOf('month').day(); // 選択月初日より前の日付データ(選択月前月)を配列へ追加
+      var monthDays = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).daysInMonth(); // 選択月初日の曜日
+
+      var firstDay = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).startOf('month').day();
+      this.weeks = Math.ceil((monthDays + firstDay) / 7); // 選択月初日より前の日付データ(選択月前月)を配列へ追加
 
       for (var i = 0; i < firstDay; i++) {
         this.dates.unshift(moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).startOf('month').subtract(i + 1, 'days').date());
       } // 選択月の日付データを配列へ追加
 
 
-      for (var _i = 0; _i < moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).daysInMonth(); _i++) {
+      for (var _i = 0; _i < monthDays; _i++) {
         this.dates.push(_i + 1);
       } // 選択月末日より後の日付データを配列へ追加
 
 
-      for (var length = this.dates.length, _i2 = 1; length < 35; length++, _i2++) {
+      for (var length = this.dates.length, _i2 = 1; length < this.weeks * 7; length++, _i2++) {
         this.dates.push(moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).endOf('month').add(_i2, 'days').date());
       }
     }
@@ -40165,7 +40170,7 @@ var render = function() {
             _vm._v(" "),
             _c(
               "tbody",
-              _vm._l(5, function(row) {
+              _vm._l(_vm.weeks, function(row) {
                 return _c(
                   "tr",
                   _vm._l(7, function(column) {
