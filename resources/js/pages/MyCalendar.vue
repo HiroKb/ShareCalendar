@@ -5,7 +5,7 @@
             <h1>MyCalendar</h1>
             <div class="calendar">
                 <table>
-                    <caption>{{ dateLabel }}</caption>
+                    <caption><span @click="changeSelectedMonth(-1)"><  </span><span>{{ dateLabel }}</span><span @click="changeSelectedMonth(1)">  ></span></caption>
                     <thead>
                     <tr>
                         <th>日</th>
@@ -42,6 +42,15 @@
                 selectedMonth: null, // 選択中の月(momentオブジェクト)
             }
         },
+        methods: {
+            changeSelectedMonth(num) {
+                if (num === -1) {
+                    this.selectedMonth = moment(this.selectedMonth).subtract(1, 'month')
+                } else if (num === 1) {
+                    this.selectedMonth = moment(this.selectedMonth).add(1, 'month')
+                }
+            }
+        },
         created() {
             // 現在月を設定
             this.selectedMonth = moment()
@@ -72,7 +81,7 @@
                 }
 
             }
-        }
+        },
     }
 </script>
 

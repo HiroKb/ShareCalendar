@@ -2503,6 +2503,15 @@ __webpack_require__.r(__webpack_exports__);
 
     };
   },
+  methods: {
+    changeSelectedMonth: function changeSelectedMonth(num) {
+      if (num === -1) {
+        this.selectedMonth = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).subtract(1, 'month');
+      } else if (num === 1) {
+        this.selectedMonth = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).add(1, 'month');
+      }
+    }
+  },
   created: function created() {
     // 現在月を設定
     this.selectedMonth = moment__WEBPACK_IMPORTED_MODULE_1___default()();
@@ -40126,7 +40135,31 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "calendar" }, [
           _c("table", [
-            _c("caption", [_vm._v(_vm._s(_vm.dateLabel))]),
+            _c("caption", [
+              _c(
+                "span",
+                {
+                  on: {
+                    click: function($event) {
+                      return _vm.changeSelectedMonth(-1)
+                    }
+                  }
+                },
+                [_vm._v("<  ")]
+              ),
+              _c("span", [_vm._v(_vm._s(_vm.dateLabel))]),
+              _c(
+                "span",
+                {
+                  on: {
+                    click: function($event) {
+                      return _vm.changeSelectedMonth(1)
+                    }
+                  }
+                },
+                [_vm._v("  >")]
+              )
+            ]),
             _vm._v(" "),
             _vm._m(0),
             _vm._v(" "),
