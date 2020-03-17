@@ -29,6 +29,27 @@ class UserController extends Controller
         return Auth::user();
     }
 
+    /**
+     * ユーザーのメールアドレス変更
+     * @param UpdateUserEmailRequest $request
+     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     */
+    public function updateEmail(UpdateUserEmailRequest $request)
+    {
+        $user = Auth::user();
+
+        $user->email = $request->email;
+
+        $user->save();
+
+        return Auth::user();
+    }
+
+    /**
+     * ユーザーのパスワード変更
+     * @param UpdateUserPasswordRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updatePassword(UpdateUserPasswordRequest $request)
     {
         $user = Auth::user();
@@ -40,14 +61,4 @@ class UserController extends Controller
         return response()->json();
     }
 
-    public function updateEmail(UpdateUserEmailRequest $request)
-    {
-        $user = Auth::user();
-
-        $user->email = $request->email;
-
-        $user->save();
-
-        return Auth::user();
-    }
 }

@@ -21,3 +21,5 @@ Route::patch('/user-password', 'UserController@updatePassword');
 // メールアドレス変更
 Route::patch('/user-email', 'UserController@updateEmail');
 
+// スケジュール登録
+Route::post('/schedule', 'ScheduleController@create');
