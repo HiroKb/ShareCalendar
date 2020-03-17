@@ -20,11 +20,49 @@
 
                     <tbody>
                         <tr v-for="row in weeks">
-                            <th v-for="column in 7">{{ dates[(row - 1) * 7  + column - 1 ] }}</th>
+                            <th
+                                v-for="column in 7"
+                                :data-date="dates[(row - 1) * 7 + column - 1].date"
+                                @click="changeSelectDate"
+                            >
+                                {{ dates[(row - 1) * 7  + column - 1 ].dateNum }}
+                            </th>
                         </tr>
                     </tbody>
                 </table>
             </div>
+        </div>
+        <div class="modal">
+            <form @submit.prevent="createSchedule">
+                <p>{{ selectedDate }}</p>
+
+                <label for="hour">時間</label>
+                <select name="hour"
+                        id="hour"
+                        v-model="createScheduleData.hour">
+                    <option value="unspecified">指定なし</option>
+                    <option :value="hour" v-for="hour in 23">{{ hour }}</option>
+                </select>
+                <span>時</span>
+
+                <select name="minute"
+                        id="minute"
+                        v-model="createScheduleData.minute">
+                    <option value="unspecified">指定なし</option>
+                    <option value="0">0</option>
+                    <option :value="minute * 5" v-for="minute in 11">{{ minute * 5 }}</option>
+                </select>
+
+                <label for="title">スケジュール名 *必須</label>
+                <input id="title" type="text" v-model="createScheduleData.title">
+
+                <label for="description">詳細</label>
+                <input id="description" type="text" v-model="createScheduleData.description">
+
+
+                <button type="submit">スケジュール追加</button>
+
+            </form>
         </div>
     </div>
 </template>
@@ -32,6 +70,7 @@
 <script>
     import SideBar from "../components/SideBar"
     import moment from "moment"
+    import {CREATED} from "../util";
     export default {
         name: "MyCalendar",
         components: {SideBar},
@@ -40,16 +79,59 @@
                 dates: [], // 日付配列(選択月前後35日分)
                 dateLabel: '', // 選択中の年月表示用(YYYY年MM月)
                 selectedMonth: null, // 選択中の月(momentオブジェクト)
-                weeks: 0 // 選択月が何週を跨ぐか
+                selectedDate: null, // 選択中の日付
+                weeks: 0, // 選択月が何週を跨ぐか
+                createScheduleData: {
+                    hour: 'unspecified',
+                    minute: 'unspecified',
+                    title: '',
+                    description: ''
+                }
             }
         },
         methods: {
+            // 選択月の変更
             changeSelectedMonth(num) {
                 if (num === -1) {
                     this.selectedMonth = moment(this.selectedMonth).subtract(1, 'month')
                 } else if (num === 1) {
                     this.selectedMonth = moment(this.selectedMonth).add(1, 'month')
                 }
+            },
+            // 選択日の変更
+            changeSelectDate(e) {
+                this.selectedDate = e.currentTarget.dataset.date
+            },
+            async createSchedule(){
+                if (!this.selectedDate) {
+                    return false
+                }
+                if ((this.createScheduleData.hour === 'unspecified' && this.createScheduleData.minute !== 'unspecified') ||
+                    (this.createScheduleData.hour !== 'unspecified' && this.createScheduleData.minute === 'unspecified')) {
+                    return false
+                }
+                if(!this.createScheduleData.title){
+                    return false
+                }
+
+
+                const time = this.createScheduleData.hour === 'unspecified'
+                             ? null
+                             : ('0' + this.createScheduleData.hour).slice(-2) + ':' + ('0' + this.createScheduleData.minute).slice(-2)
+                const description = !!this.createScheduleData.description ? this.createScheduleData.description : null
+                const data = {
+                    date: this.selectedDate,
+                    time: time,
+                    title: this.createScheduleData.title,
+                    description: description
+                }
+
+                const response = await axios.post('/api/schedule', data)
+
+                if (response.status === CREATED) {
+                    return false
+                }
+
             }
         },
         created() {
@@ -73,22 +155,34 @@
 
                 // 選択月初日より前の日付データ(選択月前月)を配列へ追加
                 for(let i = 0; i < firstDay; i++){
-                    this.dates.unshift(moment(this.selectedMonth).startOf('month').subtract(i + 1, 'days').date())
+                    const day = moment(this.selectedMonth).startOf('month').subtract(i + 1, 'days')
+                    this.dates.unshift({
+                        date: day.format('YYYY-MM-DD'),
+                        dateNum: day.date()
+                        })
                 }
 
 
                 // 選択月の日付データを配列へ追加
                 for (let i = 0; i < monthDays; i++) {
-                    this.dates.push(i + 1)
+                    const day = moment(this.selectedMonth).startOf('month').add(i, 'days')
+                    this.dates.push({
+                        date: day.format('YYYY-MM-DD'),
+                        dateNum: day.date()
+                    })
                 }
 
 
                 // 選択月末日より後の日付データを配列へ追加
                 for (let length = this.dates.length, i = 1; length < this.weeks * 7; length++, i++){
-                    this.dates.push(moment(this.selectedMonth).endOf('month').add(i, 'days').date())
+                    const day = moment(this.selectedMonth).endOf('month').add(i, 'days')
+                    this.dates.push({
+                        date: day.format('YYYY-MM-DD'),
+                        dateNum :day.date()
+                    })
                 }
 
-            }
+            },
         },
     }
 </script>

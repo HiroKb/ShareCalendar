@@ -2452,9 +2452,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_SideBar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/SideBar */ "./resources/js/components/SideBar.vue");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_SideBar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/SideBar */ "./resources/js/components/SideBar.vue");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -2486,12 +2495,51 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "MyCalendar",
   components: {
-    SideBar: _components_SideBar__WEBPACK_IMPORTED_MODULE_0__["default"]
+    SideBar: _components_SideBar__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
@@ -2501,46 +2549,135 @@ __webpack_require__.r(__webpack_exports__);
       // 選択中の年月表示用(YYYY年MM月)
       selectedMonth: null,
       // 選択中の月(momentオブジェクト)
-      weeks: 0 // 選択月が何週を跨ぐか
-
+      selectedDate: null,
+      // 選択中の日付
+      weeks: 0,
+      // 選択月が何週を跨ぐか
+      createScheduleData: {
+        hour: 'unspecified',
+        minute: 'unspecified',
+        title: '',
+        description: ''
+      }
     };
   },
   methods: {
+    // 選択月の変更
     changeSelectedMonth: function changeSelectedMonth(num) {
       if (num === -1) {
-        this.selectedMonth = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).subtract(1, 'month');
+        this.selectedMonth = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).subtract(1, 'month');
       } else if (num === 1) {
-        this.selectedMonth = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).add(1, 'month');
+        this.selectedMonth = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).add(1, 'month');
       }
+    },
+    // 選択日の変更
+    changeSelectDate: function changeSelectDate(e) {
+      this.selectedDate = e.currentTarget.dataset.date;
+    },
+    createSchedule: function createSchedule() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var time, description, data, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (_this.selectedDate) {
+                  _context.next = 2;
+                  break;
+                }
+
+                return _context.abrupt("return", false);
+
+              case 2:
+                if (!(_this.createScheduleData.hour === 'unspecified' && _this.createScheduleData.minute !== 'unspecified' || _this.createScheduleData.hour !== 'unspecified' && _this.createScheduleData.minute === 'unspecified')) {
+                  _context.next = 4;
+                  break;
+                }
+
+                return _context.abrupt("return", false);
+
+              case 4:
+                if (_this.createScheduleData.title) {
+                  _context.next = 6;
+                  break;
+                }
+
+                return _context.abrupt("return", false);
+
+              case 6:
+                time = _this.createScheduleData.hour === 'unspecified' ? null : ('0' + _this.createScheduleData.hour).slice(-2) + ':' + ('0' + _this.createScheduleData.minute).slice(-2);
+                description = !!_this.createScheduleData.description ? _this.createScheduleData.description : null;
+                data = {
+                  date: _this.selectedDate,
+                  time: time,
+                  title: _this.createScheduleData.title,
+                  description: description
+                };
+                _context.next = 11;
+                return axios.post('/api/schedule', data);
+
+              case 11:
+                response = _context.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_3__["CREATED"])) {
+                  _context.next = 14;
+                  break;
+                }
+
+                return _context.abrupt("return", false);
+
+              case 14:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
     }
   },
   created: function created() {
     // 現在月を設定
-    this.selectedMonth = moment__WEBPACK_IMPORTED_MODULE_1___default()();
+    this.selectedMonth = moment__WEBPACK_IMPORTED_MODULE_2___default()();
   },
   watch: {
     selectedMonth: function selectedMonth() {
       // 日付配列の初期化、選択中の年月設定
       this.dates = [];
-      this.dateLabel = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).format('YYYY年MM月'); // 選択月の日数
+      this.dateLabel = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).format('YYYY年MM月'); // 選択月の日数
 
-      var monthDays = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).daysInMonth(); // 選択月初日の曜日
+      var monthDays = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).daysInMonth(); // 選択月初日の曜日
 
-      var firstDay = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).startOf('month').day();
+      var firstDay = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).startOf('month').day();
       this.weeks = Math.ceil((monthDays + firstDay) / 7); // 選択月初日より前の日付データ(選択月前月)を配列へ追加
 
       for (var i = 0; i < firstDay; i++) {
-        this.dates.unshift(moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).startOf('month').subtract(i + 1, 'days').date());
+        var day = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).startOf('month').subtract(i + 1, 'days');
+        this.dates.unshift({
+          date: day.format('YYYY-MM-DD'),
+          dateNum: day.date()
+        });
       } // 選択月の日付データを配列へ追加
 
 
       for (var _i = 0; _i < monthDays; _i++) {
-        this.dates.push(_i + 1);
+        var _day = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).startOf('month').add(_i, 'days');
+
+        this.dates.push({
+          date: _day.format('YYYY-MM-DD'),
+          dateNum: _day.date()
+        });
       } // 選択月末日より後の日付データを配列へ追加
 
 
       for (var length = this.dates.length, _i2 = 1; length < this.weeks * 7; length++, _i2++) {
-        this.dates.push(moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).endOf('month').add(_i2, 'days').date());
+        var _day2 = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).endOf('month').add(_i2, 'days');
+
+        this.dates.push({
+          date: _day2.format('YYYY-MM-DD'),
+          dateNum: _day2.date()
+        });
       }
     }
   }
@@ -40174,9 +40311,25 @@ var render = function() {
                 return _c(
                   "tr",
                   _vm._l(7, function(column) {
-                    return _c("th", [
-                      _vm._v(_vm._s(_vm.dates[(row - 1) * 7 + column - 1]))
-                    ])
+                    return _c(
+                      "th",
+                      {
+                        attrs: {
+                          "data-date":
+                            _vm.dates[(row - 1) * 7 + column - 1].date
+                        },
+                        on: { click: _vm.changeSelectDate }
+                      },
+                      [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(
+                              _vm.dates[(row - 1) * 7 + column - 1].dateNum
+                            ) +
+                            "\n                        "
+                        )
+                      ]
+                    )
                   }),
                   0
                 )
@@ -40185,6 +40338,173 @@ var render = function() {
             )
           ])
         ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "modal" }, [
+        _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.createSchedule($event)
+              }
+            }
+          },
+          [
+            _c("p", [_vm._v(_vm._s(_vm.selectedDate))]),
+            _vm._v(" "),
+            _c("label", { attrs: { for: "hour" } }, [_vm._v("時間")]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.createScheduleData.hour,
+                    expression: "createScheduleData.hour"
+                  }
+                ],
+                attrs: { name: "hour", id: "hour" },
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.createScheduleData,
+                      "hour",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { value: "unspecified" } }, [
+                  _vm._v("指定なし")
+                ]),
+                _vm._v(" "),
+                _vm._l(23, function(hour) {
+                  return _c("option", { domProps: { value: hour } }, [
+                    _vm._v(_vm._s(hour))
+                  ])
+                })
+              ],
+              2
+            ),
+            _vm._v(" "),
+            _c("span", [_vm._v("時")]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.createScheduleData.minute,
+                    expression: "createScheduleData.minute"
+                  }
+                ],
+                attrs: { name: "minute", id: "minute" },
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.createScheduleData,
+                      "minute",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { value: "unspecified" } }, [
+                  _vm._v("指定なし")
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "0" } }, [_vm._v("0")]),
+                _vm._v(" "),
+                _vm._l(11, function(minute) {
+                  return _c("option", { domProps: { value: minute * 5 } }, [
+                    _vm._v(_vm._s(minute * 5))
+                  ])
+                })
+              ],
+              2
+            ),
+            _vm._v(" "),
+            _c("label", { attrs: { for: "title" } }, [
+              _vm._v("スケジュール名 *必須")
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.createScheduleData.title,
+                  expression: "createScheduleData.title"
+                }
+              ],
+              attrs: { id: "title", type: "text" },
+              domProps: { value: _vm.createScheduleData.title },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.createScheduleData, "title", $event.target.value)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("label", { attrs: { for: "description" } }, [_vm._v("詳細")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.createScheduleData.description,
+                  expression: "createScheduleData.description"
+                }
+              ],
+              attrs: { id: "description", type: "text" },
+              domProps: { value: _vm.createScheduleData.description },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(
+                    _vm.createScheduleData,
+                    "description",
+                    $event.target.value
+                  )
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("button", { attrs: { type: "submit" } }, [
+              _vm._v("スケジュール追加")
+            ])
+          ]
+        )
       ])
     ],
     1
