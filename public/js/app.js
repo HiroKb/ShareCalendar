@@ -2574,6 +2574,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     changeSelectDate: function changeSelectDate(e) {
       this.selectedDate = e.currentTarget.dataset.date;
     },
+    // スケジュール登録
     createSchedule: function createSchedule() {
       var _this = this;
 
@@ -2607,6 +2608,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 6:
+                // postするデータを作成
                 time = _this.createScheduleData.hour === 'unspecified' ? null : ('0' + _this.createScheduleData.hour).slice(-2) + ':' + ('0' + _this.createScheduleData.minute).slice(-2);
                 description = !!_this.createScheduleData.description ? _this.createScheduleData.description : null;
                 data = {

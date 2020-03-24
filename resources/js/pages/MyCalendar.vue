@@ -102,7 +102,9 @@
             changeSelectDate(e) {
                 this.selectedDate = e.currentTarget.dataset.date
             },
+            // スケジュール登録
             async createSchedule(){
+                // 入力値が不正な場合
                 if (!this.selectedDate) {
                     return false
                 }
@@ -115,6 +117,7 @@
                 }
 
 
+                // postするデータを作成
                 const time = this.createScheduleData.hour === 'unspecified'
                              ? null
                              : ('0' + this.createScheduleData.hour).slice(-2) + ':' + ('0' + this.createScheduleData.minute).slice(-2)
