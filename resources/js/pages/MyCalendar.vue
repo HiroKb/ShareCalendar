@@ -7,26 +7,27 @@
                 <table>
                     <caption><span @click="changeSelectedMonth(-1)"><  </span><span>{{ dateLabel }}</span><span @click="changeSelectedMonth(1)">  ></span></caption>
                     <thead>
-                    <tr>
-                        <th>日</th>
-                        <th>月</th>
-                        <th>火</th>
-                        <th>水</th>
-                        <th>木</th>
-                        <th>金</th>
-                        <th>土</th>
-                    </tr>
+                        <tr>
+                            <th>日</th>
+                            <th>月</th>
+                            <th>火</th>
+                            <th>水</th>
+                            <th>木</th>
+                            <th>金</th>
+                            <th>土</th>
+                        </tr>
                     </thead>
 
                     <tbody>
                         <tr v-for="row in weeks">
-                            <th
+                            <td
                                 v-for="column in 7"
                                 :data-date="dates[(row - 1) * 7 + column - 1].date"
                                 @click="changeSelectDate"
                             >
-                                {{ dates[(row - 1) * 7  + column - 1 ].dateNum }}
-                            </th>
+                                <p>{{ dates[(row - 1) * 7  + column - 1 ].dateNum }}</p>
+                                <p>{{ dates[(row - 1) * 7 + column - 1 ].schedules.length}}</p>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -76,7 +77,7 @@
         components: {SideBar},
         data() {
             return {
-                dates: [], // 日付配列(選択月前後35日分)
+                dates: [], // 日付データ配列(選択月前後35日分)
                 dateLabel: '', // 選択中の年月表示用(YYYY年MM月)
                 selectedMonth: null, // 選択中の月(momentオブジェクト)
                 selectedDate: null, // 選択中の日付
@@ -142,7 +143,7 @@
             this.selectedMonth = moment()
         },
         watch: {
-            selectedMonth: function () {
+            selectedMonth: async function () {
                 // 日付配列の初期化、選択中の年月設定
                 this.dates = []
                 this.dateLabel = moment(this.selectedMonth).format('YYYY年MM月')
@@ -161,7 +162,8 @@
                     const day = moment(this.selectedMonth).startOf('month').subtract(i + 1, 'days')
                     this.dates.unshift({
                         date: day.format('YYYY-MM-DD'),
-                        dateNum: day.date()
+                        dateNum: day.date(),
+                        schedules: []
                         })
                 }
 
@@ -171,7 +173,8 @@
                     const day = moment(this.selectedMonth).startOf('month').add(i, 'days')
                     this.dates.push({
                         date: day.format('YYYY-MM-DD'),
-                        dateNum: day.date()
+                        dateNum: day.date(),
+                        schedules: []
                     })
                 }
 
@@ -181,9 +184,28 @@
                     const day = moment(this.selectedMonth).endOf('month').add(i, 'days')
                     this.dates.push({
                         date: day.format('YYYY-MM-DD'),
-                        dateNum :day.date()
+                        dateNum : day.date(),
+                        schedules: []
                     })
                 }
+
+                // カレンダーの初日の日付
+                const from = this.dates[0].date
+                // カレンダーの最終日の日付
+                const until = this.dates[this.dates.length - 1].date
+
+                // 登録スケジュール取得API
+                const schedules = await axios.get('/api/schedule/' + from + '/' + until)
+
+
+                // 日付データ配列にスケジュールを追加
+                this.dates.forEach(function(dateData){
+                    schedules.data.forEach(function (scheduleData) {
+                        if (dateData.date === scheduleData.date){
+                            dateData.schedules.push(scheduleData)
+                        }
+                    })
+                })
 
             },
         },
@@ -195,4 +217,13 @@
     max-width: 500px;
     margin: 0 auto;
 }
+table{
+    border-collapse: collapse;
+}
+th,td{
+    width: 60px;
+    border: solid 1px black;
+    text-align: center;
+}
+
 </style>

@@ -22,8 +22,8 @@ Route::patch('/user-password', 'UserController@updatePassword');
 Route::patch('/user-email', 'UserController@updateEmail');
 
 
+//登録スケジュール取得
 Route::get('/schedule/{from}/{until}', 'ScheduleController@index');
-
 // スケジュール登録
 Route::post('/schedule', 'ScheduleController@create');
 

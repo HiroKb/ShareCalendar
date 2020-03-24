@@ -2533,6 +2533,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 
@@ -2544,7 +2545,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       dates: [],
-      // 日付配列(選択月前後35日分)
+      // 日付データ配列(選択月前後35日分)
       dateLabel: '',
       // 選択中の年月表示用(YYYY年MM月)
       selectedMonth: null,
@@ -2644,44 +2645,85 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     this.selectedMonth = moment__WEBPACK_IMPORTED_MODULE_2___default()();
   },
   watch: {
-    selectedMonth: function selectedMonth() {
-      // 日付配列の初期化、選択中の年月設定
-      this.dates = [];
-      this.dateLabel = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).format('YYYY年MM月'); // 選択月の日数
+    selectedMonth: function () {
+      var _selectedMonth = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var monthDays, firstDay, i, day, _i, _day, length, _i2, _day2, from, until, schedules;
 
-      var monthDays = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).daysInMonth(); // 選択月初日の曜日
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                // 日付配列の初期化、選択中の年月設定
+                this.dates = [];
+                this.dateLabel = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).format('YYYY年MM月'); // 選択月の日数
 
-      var firstDay = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).startOf('month').day();
-      this.weeks = Math.ceil((monthDays + firstDay) / 7); // 選択月初日より前の日付データ(選択月前月)を配列へ追加
+                monthDays = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).daysInMonth(); // 選択月初日の曜日
 
-      for (var i = 0; i < firstDay; i++) {
-        var day = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).startOf('month').subtract(i + 1, 'days');
-        this.dates.unshift({
-          date: day.format('YYYY-MM-DD'),
-          dateNum: day.date()
-        });
-      } // 選択月の日付データを配列へ追加
+                firstDay = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).startOf('month').day();
+                this.weeks = Math.ceil((monthDays + firstDay) / 7); // 選択月初日より前の日付データ(選択月前月)を配列へ追加
 
-
-      for (var _i = 0; _i < monthDays; _i++) {
-        var _day = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).startOf('month').add(_i, 'days');
-
-        this.dates.push({
-          date: _day.format('YYYY-MM-DD'),
-          dateNum: _day.date()
-        });
-      } // 選択月末日より後の日付データを配列へ追加
+                for (i = 0; i < firstDay; i++) {
+                  day = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).startOf('month').subtract(i + 1, 'days');
+                  this.dates.unshift({
+                    date: day.format('YYYY-MM-DD'),
+                    dateNum: day.date(),
+                    schedules: []
+                  });
+                } // 選択月の日付データを配列へ追加
 
 
-      for (var length = this.dates.length, _i2 = 1; length < this.weeks * 7; length++, _i2++) {
-        var _day2 = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).endOf('month').add(_i2, 'days');
+                for (_i = 0; _i < monthDays; _i++) {
+                  _day = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).startOf('month').add(_i, 'days');
+                  this.dates.push({
+                    date: _day.format('YYYY-MM-DD'),
+                    dateNum: _day.date(),
+                    schedules: []
+                  });
+                } // 選択月末日より後の日付データを配列へ追加
 
-        this.dates.push({
-          date: _day2.format('YYYY-MM-DD'),
-          dateNum: _day2.date()
-        });
+
+                for (length = this.dates.length, _i2 = 1; length < this.weeks * 7; length++, _i2++) {
+                  _day2 = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).endOf('month').add(_i2, 'days');
+                  this.dates.push({
+                    date: _day2.format('YYYY-MM-DD'),
+                    dateNum: _day2.date(),
+                    schedules: []
+                  });
+                } // カレンダーの初日の日付
+
+
+                from = this.dates[0].date; // カレンダーの最終日の日付
+
+                until = this.dates[this.dates.length - 1].date; // 登録スケジュール取得API
+
+                _context2.next = 12;
+                return axios.get('/api/schedule/' + from + '/' + until);
+
+              case 12:
+                schedules = _context2.sent;
+                // 日付データ配列にスケジュールを追加
+                this.dates.forEach(function (dateData) {
+                  schedules.data.forEach(function (scheduleData) {
+                    if (dateData.date === scheduleData.date) {
+                      dateData.schedules.push(scheduleData);
+                    }
+                  });
+                });
+
+              case 14:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function selectedMonth() {
+        return _selectedMonth.apply(this, arguments);
       }
-    }
+
+      return selectedMonth;
+    }()
   }
 });
 
@@ -3007,7 +3049,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.my-calendar[data-v-04413e53]{\n    max-width: 500px;\n    margin: 0 auto;\n}\n", ""]);
+exports.push([module.i, "\n.my-calendar[data-v-04413e53]{\n    max-width: 500px;\n    margin: 0 auto;\n}\ntable[data-v-04413e53]{\n    border-collapse: collapse;\n}\nth[data-v-04413e53],td[data-v-04413e53]{\n    width: 60px;\n    border: solid 1px black;\n    text-align: center;\n}\n\n", ""]);
 
 // exports
 
@@ -40314,7 +40356,7 @@ var render = function() {
                   "tr",
                   _vm._l(7, function(column) {
                     return _c(
-                      "th",
+                      "td",
                       {
                         attrs: {
                           "data-date":
@@ -40323,13 +40365,22 @@ var render = function() {
                         on: { click: _vm.changeSelectDate }
                       },
                       [
-                        _vm._v(
-                          "\n                            " +
+                        _c("p", [
+                          _vm._v(
                             _vm._s(
                               _vm.dates[(row - 1) * 7 + column - 1].dateNum
-                            ) +
-                            "\n                        "
-                        )
+                            )
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _vm._v(
+                            _vm._s(
+                              _vm.dates[(row - 1) * 7 + column - 1].schedules
+                                .length
+                            )
+                          )
+                        ])
                       ]
                     )
                   }),
