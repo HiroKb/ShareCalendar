@@ -2534,6 +2534,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2554,6 +2562,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       // 選択中の日付
       weeks: 0,
       // 選択月が何週を跨ぐか
+      schedules: [],
       createScheduleData: {
         hour: 'unspecified',
         minute: 'unspecified',
@@ -2561,6 +2570,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         description: ''
       }
     };
+  },
+  computed: {
+    // 選択日のスケジュールデータ
+    selectDateSchedules: function selectDateSchedules() {
+      var selectedDate = this.selectedDate;
+      return this.schedules.filter(function (schedule) {
+        return schedule.date === selectedDate;
+      });
+    }
   },
   methods: {
     // 選択月の変更
@@ -2653,8 +2671,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                // 日付配列の初期化、選択中の年月設定
+                // 日付、スケジュール配列の初期化、選択中の年月設定
                 this.dates = [];
+                this.schedules = [];
                 this.dateLabel = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).format('YYYY年MM月'); // 選択月の日数
 
                 monthDays = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).daysInMonth(); // 選択月初日の曜日
@@ -2696,12 +2715,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 until = this.dates[this.dates.length - 1].date; // 登録スケジュール取得API
 
-                _context2.next = 12;
+                _context2.next = 13;
                 return axios.get('/api/schedule/' + from + '/' + until);
 
-              case 12:
+              case 13:
                 schedules = _context2.sent;
-                // 日付データ配列にスケジュールを追加
+                this.schedules = schedules.data; // 日付データ配列にスケジュールデータを追加
+
                 this.dates.forEach(function (dateData) {
                   schedules.data.forEach(function (scheduleData) {
                     if (dateData.date === scheduleData.date) {
@@ -2710,7 +2730,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   });
                 });
 
-              case 14:
+              case 16:
               case "end":
                 return _context2.stop();
             }
@@ -40557,6 +40577,21 @@ var render = function() {
               _vm._v("スケジュール追加")
             ])
           ]
+        ),
+        _vm._v(" "),
+        _c(
+          "ul",
+          { staticClass: "schedules" },
+          _vm._l(_vm.selectDateSchedules, function(schedule) {
+            return _c("li", { staticClass: "schedule" }, [
+              _c("p", [_vm._v(_vm._s(schedule.date))]),
+              _vm._v(" "),
+              _c("p", [_vm._v(_vm._s(schedule.time))]),
+              _vm._v(" "),
+              _c("p", [_vm._v(_vm._s(schedule.title))])
+            ])
+          }),
+          0
         )
       ])
     ],

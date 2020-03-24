@@ -64,6 +64,14 @@
                 <button type="submit">スケジュール追加</button>
 
             </form>
+
+            <ul class="schedules">
+                <li class="schedule" v-for="schedule in selectDateSchedules">
+                    <p>{{ schedule.date}}</p>
+                    <p>{{ schedule.time}}</p>
+                    <p>{{ schedule.title }}</p>
+                </li>
+            </ul>
         </div>
     </div>
 </template>
@@ -82,12 +90,22 @@
                 selectedMonth: null, // 選択中の月(momentオブジェクト)
                 selectedDate: null, // 選択中の日付
                 weeks: 0, // 選択月が何週を跨ぐか
+                schedules: [],
                 createScheduleData: {
                     hour: 'unspecified',
                     minute: 'unspecified',
                     title: '',
                     description: ''
                 }
+            }
+        },
+        computed: {
+            // 選択日のスケジュールデータ
+            selectDateSchedules: function() {
+                const selectedDate = this.selectedDate
+                return this.schedules.filter(function (schedule) {
+                    return schedule.date === selectedDate
+                })
             }
         },
         methods: {
@@ -143,9 +161,10 @@
             this.selectedMonth = moment()
         },
         watch: {
-            selectedMonth: async function () {
-                // 日付配列の初期化、選択中の年月設定
+            selectedMonth: async function() {
+                // 日付、スケジュール配列の初期化、選択中の年月設定
                 this.dates = []
+                this.schedules = []
                 this.dateLabel = moment(this.selectedMonth).format('YYYY年MM月')
 
                 // 選択月の日数
@@ -196,9 +215,9 @@
 
                 // 登録スケジュール取得API
                 const schedules = await axios.get('/api/schedule/' + from + '/' + until)
+                this.schedules = schedules.data
 
-
-                // 日付データ配列にスケジュールを追加
+                // 日付データ配列にスケジュールデータを追加
                 this.dates.forEach(function(dateData){
                     schedules.data.forEach(function (scheduleData) {
                         if (dateData.date === scheduleData.date){
