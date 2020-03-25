@@ -22,11 +22,11 @@
                         <tr v-for="row in weeks">
                             <td
                                 v-for="column in 7"
-                                :data-date="dates[(row - 1) * 7 + column - 1].date"
+                                :data-date="datesData[(row - 1) * 7 + column - 1].date"
                                 @click="changeSelectDate"
                             >
-                                <p>{{ dates[(row - 1) * 7  + column - 1 ].dateNum }}</p>
-                                <p>{{ dates[(row - 1) * 7 + column - 1 ].schedules.length}}</p>
+                                <p>{{ datesData[(row - 1) * 7  + column - 1 ].dateNum }}</p>
+                                <p>{{ datesData[(row - 1) * 7 + column - 1 ].schedules.length}}</p>
                             </td>
                         </tr>
                     </tbody>
@@ -42,6 +42,7 @@
                         id="hour"
                         v-model="createScheduleData.hour">
                     <option value="unspecified">指定なし</option>
+                    <option value="0">0</option>
                     <option :value="hour" v-for="hour in 23">{{ hour }}</option>
                 </select>
                 <span>時</span>
@@ -90,7 +91,6 @@
                 selectedMonth: null, // 選択中の月(momentオブジェクト)
                 selectedDate: null, // 選択中の日付
                 weeks: 0, // 選択月が何週を跨ぐか
-                schedules: [],
                 createScheduleData: {
                     hour: 'unspecified',
                     minute: 'unspecified',
@@ -103,9 +103,14 @@
             // 選択日のスケジュールデータ
             selectDateSchedules: function() {
                 const selectedDate = this.selectedDate
-                return this.schedules.filter(function (schedule) {
-                    return schedule.date === selectedDate
-                })
+                for (let i = 0; i < this.dates.length; i++){
+                    if (selectedDate === this.dates[i].date){
+                        return this.dates[i].schedules
+                    }
+                }
+            },
+            datesData: function() {
+                return this.dates
             }
         },
         methods: {
@@ -139,7 +144,7 @@
                 // postするデータを作成
                 const time = this.createScheduleData.hour === 'unspecified'
                              ? null
-                             : ('0' + this.createScheduleData.hour).slice(-2) + ':' + ('0' + this.createScheduleData.minute).slice(-2)
+                             : ('0' + this.createScheduleData.hour).slice(-2) + ':' + ('0' + this.createScheduleData.minute).slice(-2) + ':00'
                 const description = !!this.createScheduleData.description ? this.createScheduleData.description : null
                 const data = {
                     date: this.selectedDate,
@@ -151,6 +156,35 @@
                 const response = await axios.post('/api/schedule', data)
 
                 if (response.status === CREATED) {
+                    // 登録したスケジュールデータを追加
+                    outer: for (let i = 0; i < this.dates.length; i++) {
+                        if (response.data.date === this.dates[i].date){
+                            // スケジュール登録数0の日付か
+                            // 登録したスケジュールに時間情報がない場合
+                            // 配列の先頭にデータを追加
+                            if (!this.dates[i].schedules.length || response.data.time === null) {
+                                this.dates[i].schedules.unshift(response.data)
+                                break
+                            }
+
+                            // 前後スケジュールが登録されている場合
+                            // 時間順に並ぶようにデータを追加
+                            for (let t = 0; t < this.dates[i].schedules.length; t++) {
+
+                                if (this.dates[i].schedules[t].time === null) {
+                                    continue
+                                }
+
+                                if(response.data.time <= this.dates[i].schedules[t].time) {
+                                    this.dates[i].schedules.splice(t, 0, response.data)
+                                    break outer
+                                }
+                            }
+
+                            // 上記以外の場合最後にデータを追加
+                            this.dates[i].schedules.push(response.data)
+                        }
+                    }
                     return false
                 }
 
@@ -215,7 +249,6 @@
 
                 // 登録スケジュール取得API
                 const schedules = await axios.get('/api/schedule/' + from + '/' + until)
-                this.schedules = schedules.data
 
                 // 日付データ配列にスケジュールデータを追加
                 this.dates.forEach(function(dateData){

@@ -2542,6 +2542,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 
@@ -2562,7 +2563,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       // 選択中の日付
       weeks: 0,
       // 選択月が何週を跨ぐか
-      schedules: [],
       createScheduleData: {
         hour: 'unspecified',
         minute: 'unspecified',
@@ -2575,9 +2575,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     // 選択日のスケジュールデータ
     selectDateSchedules: function selectDateSchedules() {
       var selectedDate = this.selectedDate;
-      return this.schedules.filter(function (schedule) {
-        return schedule.date === selectedDate;
-      });
+
+      for (var i = 0; i < this.dates.length; i++) {
+        if (selectedDate === this.dates[i].date) {
+          return this.dates[i].schedules;
+        }
+      }
+    },
+    datesData: function datesData() {
+      return this.dates;
     }
   },
   methods: {
@@ -2598,7 +2604,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var time, description, data, response;
+        var time, description, data, response, i, t;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -2628,7 +2634,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 6:
                 // postするデータを作成
-                time = _this.createScheduleData.hour === 'unspecified' ? null : ('0' + _this.createScheduleData.hour).slice(-2) + ':' + ('0' + _this.createScheduleData.minute).slice(-2);
+                time = _this.createScheduleData.hour === 'unspecified' ? null : ('0' + _this.createScheduleData.hour).slice(-2) + ':' + ('0' + _this.createScheduleData.minute).slice(-2) + ':00';
                 description = !!_this.createScheduleData.description ? _this.createScheduleData.description : null;
                 data = {
                   date: _this.selectedDate,
@@ -2643,13 +2649,76 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 response = _context.sent;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_3__["CREATED"])) {
-                  _context.next = 14;
+                  _context.next = 34;
                   break;
                 }
 
-                return _context.abrupt("return", false);
+                i = 0;
 
               case 14:
+                if (!(i < _this.dates.length)) {
+                  _context.next = 33;
+                  break;
+                }
+
+                if (!(response.data.date === _this.dates[i].date)) {
+                  _context.next = 30;
+                  break;
+                }
+
+                if (!(!_this.dates[i].schedules.length || response.data.time === null)) {
+                  _context.next = 19;
+                  break;
+                }
+
+                _this.dates[i].schedules.unshift(response.data);
+
+                return _context.abrupt("break", 33);
+
+              case 19:
+                t = 0;
+
+              case 20:
+                if (!(t < _this.dates[i].schedules.length)) {
+                  _context.next = 29;
+                  break;
+                }
+
+                if (!(_this.dates[i].schedules[t].time === null)) {
+                  _context.next = 23;
+                  break;
+                }
+
+                return _context.abrupt("continue", 26);
+
+              case 23:
+                if (!(response.data.time <= _this.dates[i].schedules[t].time)) {
+                  _context.next = 26;
+                  break;
+                }
+
+                _this.dates[i].schedules.splice(t, 0, response.data);
+
+                return _context.abrupt("break", 33);
+
+              case 26:
+                t++;
+                _context.next = 20;
+                break;
+
+              case 29:
+                // 上記以外の場合最後にデータを追加
+                _this.dates[i].schedules.push(response.data);
+
+              case 30:
+                i++;
+                _context.next = 14;
+                break;
+
+              case 33:
+                return _context.abrupt("return", false);
+
+              case 34:
               case "end":
                 return _context.stop();
             }
@@ -2720,8 +2789,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 13:
                 schedules = _context2.sent;
-                this.schedules = schedules.data; // 日付データ配列にスケジュールデータを追加
-
+                // 日付データ配列にスケジュールデータを追加
                 this.dates.forEach(function (dateData) {
                   schedules.data.forEach(function (scheduleData) {
                     if (dateData.date === scheduleData.date) {
@@ -2730,7 +2798,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   });
                 });
 
-              case 16:
+              case 15:
               case "end":
                 return _context2.stop();
             }
@@ -40380,7 +40448,7 @@ var render = function() {
                       {
                         attrs: {
                           "data-date":
-                            _vm.dates[(row - 1) * 7 + column - 1].date
+                            _vm.datesData[(row - 1) * 7 + column - 1].date
                         },
                         on: { click: _vm.changeSelectDate }
                       },
@@ -40388,7 +40456,7 @@ var render = function() {
                         _c("p", [
                           _vm._v(
                             _vm._s(
-                              _vm.dates[(row - 1) * 7 + column - 1].dateNum
+                              _vm.datesData[(row - 1) * 7 + column - 1].dateNum
                             )
                           )
                         ]),
@@ -40396,8 +40464,8 @@ var render = function() {
                         _c("p", [
                           _vm._v(
                             _vm._s(
-                              _vm.dates[(row - 1) * 7 + column - 1].schedules
-                                .length
+                              _vm.datesData[(row - 1) * 7 + column - 1]
+                                .schedules.length
                             )
                           )
                         ])
@@ -40463,6 +40531,8 @@ var render = function() {
                 _c("option", { attrs: { value: "unspecified" } }, [
                   _vm._v("指定なし")
                 ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "0" } }, [_vm._v("0")]),
                 _vm._v(" "),
                 _vm._l(23, function(hour) {
                   return _c("option", { domProps: { value: hour } }, [

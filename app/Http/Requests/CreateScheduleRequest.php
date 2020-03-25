@@ -25,7 +25,7 @@ class CreateScheduleRequest extends FormRequest
     {
         return [
             'date' => 'required|date_format:"Y-m-d"',
-            'time' => 'nullable|date_format:"H:i"',
+            'time' => 'nullable|date_format:"H:i:s"',
             'title' => 'required|string|max:50',
             'description' => 'nullable|string|max:100'
         ];
