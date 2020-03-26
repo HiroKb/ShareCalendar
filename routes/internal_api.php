@@ -26,6 +26,8 @@ Route::patch('/user-email', 'UserController@updateEmail');
 Route::get('/schedule/{from}/{until}', 'ScheduleController@index');
 // スケジュール登録
 Route::post('/schedule', 'ScheduleController@create');
+// スケジュール更新
+Route::patch('/schedule/{schedule}', 'ScheduleController@update');
 // スケジュール削除
 Route::delete('/schedule/{schedule}', 'ScheduleController@destroy');
 

@@ -6,10 +6,9 @@ use App\Schedule;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
-class DeleteScheduleApiTest extends TestCase
+class UpdateScheduleApiTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -23,7 +22,7 @@ class DeleteScheduleApiTest extends TestCase
     /**
      * @test
      */
-    public function should_指定されたスケジュールを削除()
+    public function should_指定されたスケジュールを更新()
     {
 
 
@@ -52,12 +51,28 @@ class DeleteScheduleApiTest extends TestCase
         // スケジュールが登録されていることを確認
         $this->assertDatabaseHas('schedules', ['id' => $schedule2->id]);
 
-        $response = $this->actingAs($this->user)->json('delete', '/api/schedule/' . $schedule2->id);
+        $data = [
+            'time' => '20:55:00',
+            'title' => 'test22',
+            'description' => 'description22'
+        ];
+        $response = $this->actingAs($this->user)->json('patch', '/api/schedule/' . $schedule2->id, $data);
 
 //        レスポンスが期待通りか
-        $response->assertStatus(200);
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                'id' => $schedule2->id,
+                'date' => $schedule2->date,
+                'time' => $data['time'],
+                'title' => $data['title'],
+                'description' => $data['description'],
+            ]);
 
-        // スケジュールが削除されているか
-        $this->assertDatabaseMissing('schedules', ['id' => $schedule2->id]);
+        $updatedSchedule = Schedule::find($schedule2->id);
+
+        $this->assertEquals($updatedSchedule->time, $data['time']);
+        $this->assertEquals($updatedSchedule->title, $data['title']);
+        $this->assertEquals($updatedSchedule->description, $data['description']);
     }
 }
