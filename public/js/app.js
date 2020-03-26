@@ -2548,6 +2548,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2573,22 +2593,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         minute: 'unspecified',
         title: '',
         description: ''
+      },
+      modalFlg: false,
+      deleteForm: {
+        showFlg: false,
+        scheduleData: null
       }
     };
   },
   computed: {
     // 選択日のスケジュールデータ
     selectDateSchedules: function selectDateSchedules() {
-      var selectedDate = this.selectedDate;
-
       for (var i = 0; i < this.dates.length; i++) {
-        if (selectedDate === this.dates[i].date) {
+        if (this.selectedDate === this.dates[i].date) {
           return this.dates[i].schedules;
         }
       }
     },
     datesData: function datesData() {
       return this.dates;
+    },
+    deleteData: function deleteData() {
+      return {
+        date: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.date : '',
+        time: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.time ? this.deleteForm.scheduleData.time : '指定なし' : '',
+        title: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.title : '',
+        description: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.description ? this.deleteForm.scheduleData.description : 'なし' : ''
+      };
     }
   },
   methods: {
@@ -2732,6 +2763,97 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee);
       }))();
+    },
+    // スケジュールの削除
+    deleteSchedule: function deleteSchedule() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var response, i, t;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                if (_this2.deleteForm.scheduleData) {
+                  _context2.next = 2;
+                  break;
+                }
+
+                return _context2.abrupt("return", false);
+
+              case 2:
+                _context2.next = 4;
+                return axios["delete"]('/api/schedule/' + _this2.deleteForm.scheduleData.id);
+
+              case 4:
+                response = _context2.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_3__["SUCCESS"])) {
+                  _context2.next = 21;
+                  break;
+                }
+
+                i = 0;
+
+              case 7:
+                if (!(i < _this2.dates.length)) {
+                  _context2.next = 20;
+                  break;
+                }
+
+                if (!(response.data.date === _this2.dates[i].date)) {
+                  _context2.next = 17;
+                  break;
+                }
+
+                t = 0;
+
+              case 10:
+                if (!(t < _this2.dates[i].schedules.length)) {
+                  _context2.next = 17;
+                  break;
+                }
+
+                if (!(response.data.id === _this2.dates[i].schedules[t].id)) {
+                  _context2.next = 14;
+                  break;
+                }
+
+                _this2.dates[i].schedules.splice(t, 1);
+
+                return _context2.abrupt("break", 20);
+
+              case 14:
+                t++;
+                _context2.next = 10;
+                break;
+
+              case 17:
+                i++;
+                _context2.next = 7;
+                break;
+
+              case 20:
+                _this2.hideModal();
+
+              case 21:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
+    showDeleteModal: function showDeleteModal(schedule) {
+      this.modalFlg = true;
+      this.deleteForm.showFlg = true;
+      this.deleteForm.scheduleData = schedule;
+      console.log(this.deleteForm.scheduleData);
+    },
+    hideModal: function hideModal() {
+      this.modalFlg = false;
+      this.deleteForm.showFlg = false;
+      this.deleteForm.scheduleData = null;
     }
   },
   created: function created() {
@@ -2741,12 +2863,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   watch: {
     selectedMonth: function () {
-      var _selectedMonth = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+      var _selectedMonth = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
         var monthDays, firstDay, i, day, _i, _day, length, _i2, _day2, from, until, schedules;
 
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
                 // データの初期化、選択中の年月日設定
                 this.dates = [];
@@ -2792,11 +2914,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 until = this.dates[this.dates.length - 1].date; // 登録スケジュール取得API
 
-                _context2.next = 13;
+                _context3.next = 13;
                 return axios.get('/api/schedule/' + from + '/' + until);
 
               case 13:
-                schedules = _context2.sent;
+                schedules = _context3.sent;
                 // 日付データ配列にスケジュールデータを追加
                 this.dates.forEach(function (dateData) {
                   schedules.data.forEach(function (scheduleData) {
@@ -2808,10 +2930,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 15:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee3, this);
       }));
 
       function selectedMonth() {
@@ -3164,7 +3286,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.my-calendar[data-v-04413e53]{\n    max-width: 800px;\n    margin: 0 auto;\n    display: flex;\n}\ntable[data-v-04413e53]{\n    border-collapse: collapse;\n}\nth[data-v-04413e53],td[data-v-04413e53]{\n    width: 80px;\n    height: 80px;\n    border: solid 1px black;\n    text-align: center;\n}\nlabel[data-v-04413e53]{\n        display: block;\n        margin-top: 16px;\n}\ninput[data-v-04413e53]{\n        width: 100%;\n}\ntextarea[data-v-04413e53]{\n        width: 100%;\n}\nbutton[data-v-04413e53]{\n        margin-top: 16px;\n}\n.calendar-menu[data-v-04413e53]{\n        margin-left: 20px;\n}\n.schedules[data-v-04413e53]{\n        margin-top: 20px;\n}\n.schedule[data-v-04413e53]{\n        padding: 8px 0;\n        border-top: 1px solid black;\n}\n\n", ""]);
+exports.push([module.i, "\n.my-calendar[data-v-04413e53]{\n    max-width: 800px;\n    margin: 0 auto;\n    display: flex;\n}\ntable[data-v-04413e53]{\n    border-collapse: collapse;\n}\nth[data-v-04413e53],td[data-v-04413e53]{\n    width: 80px;\n    height: 80px;\n    border: solid 1px black;\n    text-align: center;\n}\nlabel[data-v-04413e53]{\n        display: block;\n        margin-top: 16px;\n}\ninput[data-v-04413e53]{\n        width: 100%;\n}\ntextarea[data-v-04413e53]{\n        width: 100%;\n}\nbutton[data-v-04413e53]{\n        margin-top: 16px;\n}\n.calendar-menu[data-v-04413e53]{\n        margin-left: 20px;\n}\n.schedules[data-v-04413e53]{\n        margin-top: 20px;\n}\n.schedule[data-v-04413e53]{\n        padding: 8px 0;\n        border-top: 1px solid black;\n}\n.modal-background[data-v-04413e53]{\n        position: fixed;\n        top: 0;\n        left: 0;\n        height: 100vh;\n        width: 100vw ;\n        z-index: 10;\n        background: rgba(0, 0, 0, .1);\n}\n.modal[data-v-04413e53]{\n        display: flex;\n        justify-content: center;\n        align-items: center;\n        height: 100vh;\n        width: 100vw ;\n}\n.modal-inner[data-v-04413e53]{\n        background: #ffffff;\n}\n\n", ""]);
 
 // exports
 
@@ -40595,9 +40717,11 @@ var render = function() {
                   _c("option", { attrs: { value: "0" } }, [_vm._v("0")]),
                   _vm._v(" "),
                   _vm._l(23, function(hour) {
-                    return _c("option", { domProps: { value: hour } }, [
-                      _vm._v(_vm._s(hour))
-                    ])
+                    return _c(
+                      "option",
+                      { key: hour, domProps: { value: hour } },
+                      [_vm._v(_vm._s(hour))]
+                    )
                   })
                 ],
                 2
@@ -40645,15 +40769,17 @@ var render = function() {
                   _c("option", { attrs: { value: "0" } }, [_vm._v("0")]),
                   _vm._v(" "),
                   _vm._l(11, function(minute) {
-                    return _c("option", { domProps: { value: minute * 5 } }, [
-                      _vm._v(_vm._s(minute * 5))
-                    ])
+                    return _c(
+                      "option",
+                      { key: minute, domProps: { value: minute * 5 } },
+                      [_vm._v(_vm._s(minute * 5))]
+                    )
                   })
                 ],
                 2
               ),
               _vm._v(" "),
-              _c("span", [_vm._v("時")]),
+              _c("span", [_vm._v("分")]),
               _vm._v(" "),
               _c("label", { attrs: { for: "title" } }, [
                 _vm._v("スケジュール名 *必須")
@@ -40721,10 +40847,22 @@ var render = function() {
             "ul",
             { staticClass: "schedules" },
             _vm._l(_vm.selectDateSchedules, function(schedule) {
-              return _c("li", { staticClass: "schedule" }, [
+              return _c("li", { key: schedule.id, staticClass: "schedule" }, [
                 _c("p", [_vm._v(_vm._s(schedule.time))]),
                 _vm._v(" "),
-                _c("p", [_vm._v(_vm._s(schedule.title))])
+                _c("p", [_vm._v(_vm._s(schedule.title))]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    on: {
+                      click: function($event) {
+                        return _vm.showDeleteModal(schedule)
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "far fa-trash-alt" })]
+                )
               ])
             }),
             0
@@ -40732,7 +40870,88 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "modal" })
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.modalFlg,
+              expression: "modalFlg"
+            }
+          ],
+          staticClass: "modal-background",
+          on: { click: _vm.hideModal }
+        },
+        [
+          _c("div", { staticClass: "modal" }, [
+            _c(
+              "div",
+              {
+                staticClass: "modal-inner",
+                on: {
+                  click: function($event) {
+                    $event.stopPropagation()
+                  }
+                }
+              },
+              [
+                _c("i", {
+                  staticClass: "fas fa-times",
+                  on: { click: _vm.hideModal }
+                }),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.deleteForm.showFlg,
+                        expression: "deleteForm.showFlg"
+                      }
+                    ]
+                  },
+                  [
+                    _c("p", [_vm._v("このスケジュールを削除しますか？")]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("日付")]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v(_vm._s(_vm.deleteData.date))]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("時間")]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v(_vm._s(_vm.deleteData.time))]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("スケジュール名")]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v(_vm._s(_vm.deleteData.title))]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("詳細")]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v(_vm._s(_vm.deleteData.description))]),
+                    _vm._v(" "),
+                    _c(
+                      "form",
+                      {
+                        on: {
+                          submit: function($event) {
+                            $event.preventDefault()
+                            return _vm.deleteSchedule($event)
+                          }
+                        }
+                      },
+                      [_c("button", [_vm._v("削除")])]
+                    )
+                  ]
+                )
+              ]
+            )
+          ])
+        ]
+      )
     ],
     1
   )

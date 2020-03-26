@@ -42,7 +42,7 @@
                             v-model="createScheduleData.hour">
                         <option value="unspecified">指定なし</option>
                         <option value="0">0</option>
-                        <option :value="hour" v-for="hour in 23">{{ hour }}</option>
+                        <option :value="hour" v-for="hour in 23" :key="hour">{{ hour }}</option>
                     </select>
                     <span>時</span>
 
@@ -51,9 +51,9 @@
                             v-model="createScheduleData.minute">
                         <option value="unspecified">指定なし</option>
                         <option value="0">0</option>
-                        <option :value="minute * 5" v-for="minute in 11">{{ minute * 5 }}</option>
+                        <option :value="minute * 5" v-for="minute in 11" :key="minute">{{ minute * 5 }}</option>
                     </select>
-                    <span>時</span>
+                    <span>分</span>
 
                     <label for="title">スケジュール名 *必須</label>
                     <input id="title" type="text" v-model="createScheduleData.title">
@@ -67,14 +67,34 @@
                 </form>
 
                 <ul class="schedules">
-                    <li class="schedule" v-for="schedule in selectDateSchedules">
+                    <li class="schedule" v-for="schedule in selectDateSchedules" :key="schedule.id">
                         <p>{{ schedule.time}}</p>
                         <p>{{ schedule.title }}</p>
+                        <button @click="showDeleteModal(schedule)"><i class="far fa-trash-alt"></i></button>
                     </li>
                 </ul>
             </div>
         </div>
-        <div class="modal">
+        <div class="modal-background" v-show="modalFlg" @click="hideModal">
+            <div class="modal" >
+                <div class="modal-inner" @click.stop>
+                    <i class="fas fa-times" @click="hideModal"></i>
+                    <div v-show="deleteForm.showFlg">
+                        <p>このスケジュールを削除しますか？</p>
+                        <p>日付</p>
+                        <p>{{ deleteData.date}}</p>
+                        <p>時間</p>
+                        <p>{{ deleteData.time }}</p>
+                        <p>スケジュール名</p>
+                        <p>{{ deleteData.title }}</p>
+                        <p>詳細</p>
+                        <p>{{ deleteData.description }}</p>
+                        <form @submit.prevent="deleteSchedule">
+                            <button>削除</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -82,7 +102,7 @@
 <script>
     import SideBar from "../components/SideBar"
     import moment from "moment"
-    import {CREATED} from "../util";
+    import {CREATED, SUCCESS} from "../util";
     export default {
         name: "MyCalendar",
         components: {SideBar},
@@ -98,21 +118,33 @@
                     minute: 'unspecified',
                     title: '',
                     description: ''
+                },
+                modalFlg: false,
+                deleteForm: {
+                    showFlg: false,
+                    scheduleData: null
                 }
             }
         },
         computed: {
             // 選択日のスケジュールデータ
             selectDateSchedules: function() {
-                const selectedDate = this.selectedDate
                 for (let i = 0; i < this.dates.length; i++){
-                    if (selectedDate === this.dates[i].date){
+                    if (this.selectedDate === this.dates[i].date){
                         return this.dates[i].schedules
                     }
                 }
             },
             datesData: function() {
                 return this.dates
+            },
+            deleteData: function () {
+                return {
+                    date: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.date : '',
+                    time: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.time ? this.deleteForm.scheduleData.time : '指定なし' : '',
+                    title: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.title : '',
+                    description: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.description ? this.deleteForm.scheduleData.description : 'なし' : '',
+                }
             }
         },
         methods: {
@@ -191,7 +223,41 @@
                     return false
                 }
 
+            },
+            // スケジュールの削除
+            async deleteSchedule(){
+                if (!this.deleteForm.scheduleData) {
+                    return false
+                }
+
+                const response = await axios.delete('/api/schedule/' + this.deleteForm.scheduleData.id)
+
+                if (response.status === SUCCESS) {
+                    outer: for (let i = 0; i < this.dates.length; i++){
+                        if (response.data.date === this.dates[i].date){
+                            for (let t = 0 ; t < this.dates[i].schedules.length; t++) {
+                                if (response.data.id === this.dates[i].schedules[t].id) {
+                                    this.dates[i].schedules.splice(t, 1)
+                                    break outer
+                                }
+                            }
+                        }
+                    }
+                    this.hideModal()
+                }
+            },
+            showDeleteModal(schedule){
+                this.modalFlg = true
+                this.deleteForm.showFlg = true
+                this.deleteForm.scheduleData = schedule
+                console.log(this.deleteForm.scheduleData)
+            },
+            hideModal(){
+                this.modalFlg = false
+                this.deleteForm.showFlg = false
+                this.deleteForm.scheduleData = null
             }
+
         },
         created() {
             // 現在月を設定
@@ -305,6 +371,27 @@ th,td{
     .schedule{
         padding: 8px 0;
         border-top: 1px solid black;
+    }
+
+    .modal-background{
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100vw ;
+        z-index: 10;
+        background: rgba(0, 0, 0, .1);
+    }
+
+    .modal{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100vw ;
+    }
+    .modal-inner{
+        background: #ffffff;
     }
 
 </style>

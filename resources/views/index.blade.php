@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible"
           content="ie=edge">
     <title>{{ config('app.name') }}</title>
-
+    <script src="https://kit.fontawesome.com/dee60321f1.js" crossorigin="anonymous"></script>
     <script src="{{ mix('js/app.js') }}" defer></script>
 </head>
 <body>
