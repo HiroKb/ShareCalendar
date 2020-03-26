@@ -17,8 +17,13 @@ class Schedule extends Model
         'description' => null
     ];
 
+    protected $casts = [
+        'user_id' => 'integer'
+    ];
+
     public function user()
     {
         return $this->belongsTo('App\User');
     }
+
 }

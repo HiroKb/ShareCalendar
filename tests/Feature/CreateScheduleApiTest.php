@@ -28,7 +28,7 @@ class CreateScheduleApiTest extends TestCase
     {
         $data = [
             'date' => Carbon::now()->format('Y-m-d'),
-            'time' => Carbon::now()->format('H:i'),
+            'time' => Carbon::now()->format('H:i:s'),
             'title' => 'test title test title',
             'description' => 'test description test description'
         ];

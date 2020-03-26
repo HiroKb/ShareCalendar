@@ -16,7 +16,6 @@ class ScheduleController extends Controller
                                  ->whereBetween('date', [$from, $until])
                                  ->orderBy('date', 'asc')
                                  ->orderBy('time', 'asc')->get();
-        Log::debug($schedules);
 
         return response($schedules);
     }
@@ -39,5 +38,17 @@ class ScheduleController extends Controller
         Auth::user()->schedules()->save($schedule);
 
         return response($schedule, 201);
+    }
+
+    public function destroy(Schedule $schedule)
+    {
+
+        if ($schedule->user_id !== Auth::id()){
+            abort(response()->json([],404));
+        }
+
+        $schedule->delete();
+
+        return response($schedule, 200);
     }
 }
