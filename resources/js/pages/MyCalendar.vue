@@ -2,7 +2,6 @@
     <div>
         <SideBar />
         <div class="my-calendar">
-            <h1>MyCalendar</h1>
             <div class="calendar">
                 <table>
                     <caption><span @click="changeSelectedMonth(-1)"><  </span><span>{{ dateLabel }}</span><span @click="changeSelectedMonth(1)">  ></span></caption>
@@ -32,47 +31,50 @@
                     </tbody>
                 </table>
             </div>
+            <div class="calendar-menu">
+
+                <form @submit.prevent="createSchedule">
+                    <p>{{ selectedDate }}</p>
+
+                    <label for="hour">時間</label>
+                    <select name="hour"
+                            id="hour"
+                            v-model="createScheduleData.hour">
+                        <option value="unspecified">指定なし</option>
+                        <option value="0">0</option>
+                        <option :value="hour" v-for="hour in 23">{{ hour }}</option>
+                    </select>
+                    <span>時</span>
+
+                    <select name="minute"
+                            id="minute"
+                            v-model="createScheduleData.minute">
+                        <option value="unspecified">指定なし</option>
+                        <option value="0">0</option>
+                        <option :value="minute * 5" v-for="minute in 11">{{ minute * 5 }}</option>
+                    </select>
+                    <span>時</span>
+
+                    <label for="title">スケジュール名 *必須</label>
+                    <input id="title" type="text" v-model="createScheduleData.title">
+
+                    <label for="description">詳細</label>
+                    <textarea id="description" v-model="createScheduleData.description"></textarea>
+
+
+                    <button type="submit">スケジュール追加</button>
+
+                </form>
+
+                <ul class="schedules">
+                    <li class="schedule" v-for="schedule in selectDateSchedules">
+                        <p>{{ schedule.time}}</p>
+                        <p>{{ schedule.title }}</p>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div class="modal">
-            <form @submit.prevent="createSchedule">
-                <p>{{ selectedDate }}</p>
-
-                <label for="hour">時間</label>
-                <select name="hour"
-                        id="hour"
-                        v-model="createScheduleData.hour">
-                    <option value="unspecified">指定なし</option>
-                    <option value="0">0</option>
-                    <option :value="hour" v-for="hour in 23">{{ hour }}</option>
-                </select>
-                <span>時</span>
-
-                <select name="minute"
-                        id="minute"
-                        v-model="createScheduleData.minute">
-                    <option value="unspecified">指定なし</option>
-                    <option value="0">0</option>
-                    <option :value="minute * 5" v-for="minute in 11">{{ minute * 5 }}</option>
-                </select>
-
-                <label for="title">スケジュール名 *必須</label>
-                <input id="title" type="text" v-model="createScheduleData.title">
-
-                <label for="description">詳細</label>
-                <input id="description" type="text" v-model="createScheduleData.description">
-
-
-                <button type="submit">スケジュール追加</button>
-
-            </form>
-
-            <ul class="schedules">
-                <li class="schedule" v-for="schedule in selectDateSchedules">
-                    <p>{{ schedule.date}}</p>
-                    <p>{{ schedule.time}}</p>
-                    <p>{{ schedule.title }}</p>
-                </li>
-            </ul>
         </div>
     </div>
 </template>
@@ -183,6 +185,7 @@
 
                             // 上記以外の場合最後にデータを追加
                             this.dates[i].schedules.push(response.data)
+                            break
                         }
                     }
                     return false
@@ -193,10 +196,11 @@
         created() {
             // 現在月を設定
             this.selectedMonth = moment()
+            this.selectedDate = moment().format('YYYY-MM-DD')
         },
         watch: {
             selectedMonth: async function() {
-                // 日付、スケジュール配列の初期化、選択中の年月設定
+                // データの初期化、選択中の年月日設定
                 this.dates = []
                 this.schedules = []
                 this.dateLabel = moment(this.selectedMonth).format('YYYY年MM月')
@@ -266,16 +270,41 @@
 
 <style scoped>
 .my-calendar{
-    max-width: 500px;
+    max-width: 800px;
     margin: 0 auto;
+    display: flex;
 }
 table{
     border-collapse: collapse;
 }
 th,td{
-    width: 60px;
+    width: 80px;
+    height: 80px;
     border: solid 1px black;
     text-align: center;
 }
+    label{
+        display: block;
+        margin-top: 16px;
+    }
+    input{
+        width: 100%;
+    }
+    textarea{
+        width: 100%;
+    }
+    button{
+        margin-top: 16px;
+    }
+    .calendar-menu{
+        margin-left: 20px;
+    }
+    .schedules{
+        margin-top: 20px;
+    }
+    .schedule{
+        padding: 8px 0;
+        border-top: 1px solid black;
+    }
 
 </style>

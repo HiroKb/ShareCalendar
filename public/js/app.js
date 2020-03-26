@@ -1994,6 +1994,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SideBar",
@@ -2543,6 +2546,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 
 
@@ -2649,7 +2654,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 response = _context.sent;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_3__["CREATED"])) {
-                  _context.next = 34;
+                  _context.next = 35;
                   break;
                 }
 
@@ -2657,12 +2662,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 14:
                 if (!(i < _this.dates.length)) {
-                  _context.next = 33;
+                  _context.next = 34;
                   break;
                 }
 
                 if (!(response.data.date === _this.dates[i].date)) {
-                  _context.next = 30;
+                  _context.next = 31;
                   break;
                 }
 
@@ -2673,7 +2678,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this.dates[i].schedules.unshift(response.data);
 
-                return _context.abrupt("break", 33);
+                return _context.abrupt("break", 34);
 
               case 19:
                 t = 0;
@@ -2699,7 +2704,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this.dates[i].schedules.splice(t, 0, response.data);
 
-                return _context.abrupt("break", 33);
+                return _context.abrupt("break", 34);
 
               case 26:
                 t++;
@@ -2710,15 +2715,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 // 上記以外の場合最後にデータを追加
                 _this.dates[i].schedules.push(response.data);
 
-              case 30:
+                return _context.abrupt("break", 34);
+
+              case 31:
                 i++;
                 _context.next = 14;
                 break;
 
-              case 33:
+              case 34:
                 return _context.abrupt("return", false);
 
-              case 34:
+              case 35:
               case "end":
                 return _context.stop();
             }
@@ -2730,6 +2737,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   created: function created() {
     // 現在月を設定
     this.selectedMonth = moment__WEBPACK_IMPORTED_MODULE_2___default()();
+    this.selectedDate = moment__WEBPACK_IMPORTED_MODULE_2___default()().format('YYYY-MM-DD');
   },
   watch: {
     selectedMonth: function () {
@@ -2740,7 +2748,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                // 日付、スケジュール配列の初期化、選択中の年月設定
+                // データの初期化、選択中の年月日設定
                 this.dates = [];
                 this.schedules = [];
                 this.dateLabel = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.selectedMonth).format('YYYY年MM月'); // 選択月の日数
@@ -3030,6 +3038,25 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/App.vue?vue&type=style&index=0&lang=css&":
+/*!**********************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/App.vue?vue&type=style&index=0&lang=css& ***!
+  \**********************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\nhtml, body, div, span, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\nabbr, address, cite, code,\ndel, dfn, em, img, ins, kbd, q, samp,\nsmall, strong, sub, sup, var,\nb, i,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section, summary,\ntime, mark, audio, video {\n    margin:0;\n    padding:0;\n    border:0;\n    outline:0;\n    font-size:100%;\n    vertical-align:baseline;\n    background:transparent;\n}\nbody {\n    line-height:1;\n}\narticle,aside,details,figcaption,figure,\nfooter,header,hgroup,menu,nav,section {\n    display:block;\n}\nnav ul {\n    list-style:none;\n}\nblockquote, q {\n    quotes:none;\n}\nblockquote:before, blockquote:after,\nq:before, q:after {\n    content:'';\n    content:none;\n}\na {\n    margin:0;\n    padding:0;\n    font-size:100%;\n    vertical-align:baseline;\n    background:transparent;\n}\n\n/* change colours to suit your needs */\nins {\n    background-color:#ff9;\n    color:#000;\n    text-decoration:none;\n}\n\n/* change colours to suit your needs */\nmark {\n    background-color:#ff9;\n    color:#000;\n    font-style:italic;\n    font-weight:bold;\n}\ndel {\n    text-decoration: line-through;\n}\nabbr[title], dfn[title] {\n    border-bottom:1px dotted;\n    cursor:help;\n}\ntable {\n    border-collapse:collapse;\n    border-spacing:0;\n}\n\n/* change border colour to suit your needs */\nhr {\n    display:block;\n    height:1px;\n    border:0;\n    border-top:1px solid #cccccc;\n    margin:1em 0;\n    padding:0;\n}\ninput, select {\n    vertical-align:middle;\n}\n*{\n    box-sizing: border-box;\n}\nul, ol{\n    list-style: none;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SideBar.vue?vue&type=style&index=0&id=223abea1&scoped=true&lang=css&":
 /*!*************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SideBar.vue?vue&type=style&index=0&id=223abea1&scoped=true&lang=css& ***!
@@ -3137,7 +3164,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.my-calendar[data-v-04413e53]{\n    max-width: 500px;\n    margin: 0 auto;\n}\ntable[data-v-04413e53]{\n    border-collapse: collapse;\n}\nth[data-v-04413e53],td[data-v-04413e53]{\n    width: 60px;\n    border: solid 1px black;\n    text-align: center;\n}\n\n", ""]);
+exports.push([module.i, "\n.my-calendar[data-v-04413e53]{\n    max-width: 800px;\n    margin: 0 auto;\n    display: flex;\n}\ntable[data-v-04413e53]{\n    border-collapse: collapse;\n}\nth[data-v-04413e53],td[data-v-04413e53]{\n    width: 80px;\n    height: 80px;\n    border: solid 1px black;\n    text-align: center;\n}\nlabel[data-v-04413e53]{\n        display: block;\n        margin-top: 16px;\n}\ninput[data-v-04413e53]{\n        width: 100%;\n}\ntextarea[data-v-04413e53]{\n        width: 100%;\n}\nbutton[data-v-04413e53]{\n        margin-top: 16px;\n}\n.calendar-menu[data-v-04413e53]{\n        margin-left: 20px;\n}\n.schedules[data-v-04413e53]{\n        margin-top: 20px;\n}\n.schedule[data-v-04413e53]{\n        padding: 8px 0;\n        border-top: 1px solid black;\n}\n\n", ""]);
 
 // exports
 
@@ -39120,6 +39147,36 @@ try {
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/App.vue?vue&type=style&index=0&lang=css&":
+/*!**************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/App.vue?vue&type=style&index=0&lang=css& ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../node_modules/css-loader??ref--6-1!../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../node_modules/postcss-loader/src??ref--6-2!../../node_modules/vue-loader/lib??vue-loader-options!./App.vue?vue&type=style&index=0&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/App.vue?vue&type=style&index=0&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SideBar.vue?vue&type=style&index=0&id=223abea1&scoped=true&lang=css&":
 /*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SideBar.vue?vue&type=style&index=0&id=223abea1&scoped=true&lang=css& ***!
@@ -39989,6 +40046,10 @@ var render = function() {
     [
       _c("p", [_vm._v(_vm._s(_vm.userName))]),
       _vm._v(" "),
+      _c("router-link", { attrs: { tag: "p", to: "/my-calendar" } }, [
+        _vm._v("マイカレンダー")
+      ]),
+      _vm._v(" "),
       _c("router-link", { attrs: { tag: "p", to: "/user-info" } }, [
         _vm._v("ユーザー情報/変更")
       ]),
@@ -40405,8 +40466,6 @@ var render = function() {
       _c("SideBar"),
       _vm._v(" "),
       _c("div", { staticClass: "my-calendar" }, [
-        _c("h1", [_vm._v("MyCalendar")]),
-        _vm._v(" "),
         _c("div", { staticClass: "calendar" }, [
           _c("table", [
             _c("caption", [
@@ -40478,192 +40537,202 @@ var render = function() {
               0
             )
           ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "calendar-menu" }, [
+          _c(
+            "form",
+            {
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.createSchedule($event)
+                }
+              }
+            },
+            [
+              _c("p", [_vm._v(_vm._s(_vm.selectedDate))]),
+              _vm._v(" "),
+              _c("label", { attrs: { for: "hour" } }, [_vm._v("時間")]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.createScheduleData.hour,
+                      expression: "createScheduleData.hour"
+                    }
+                  ],
+                  attrs: { name: "hour", id: "hour" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.createScheduleData,
+                        "hour",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "unspecified" } }, [
+                    _vm._v("指定なし")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "0" } }, [_vm._v("0")]),
+                  _vm._v(" "),
+                  _vm._l(23, function(hour) {
+                    return _c("option", { domProps: { value: hour } }, [
+                      _vm._v(_vm._s(hour))
+                    ])
+                  })
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _c("span", [_vm._v("時")]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.createScheduleData.minute,
+                      expression: "createScheduleData.minute"
+                    }
+                  ],
+                  attrs: { name: "minute", id: "minute" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.createScheduleData,
+                        "minute",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "unspecified" } }, [
+                    _vm._v("指定なし")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "0" } }, [_vm._v("0")]),
+                  _vm._v(" "),
+                  _vm._l(11, function(minute) {
+                    return _c("option", { domProps: { value: minute * 5 } }, [
+                      _vm._v(_vm._s(minute * 5))
+                    ])
+                  })
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _c("span", [_vm._v("時")]),
+              _vm._v(" "),
+              _c("label", { attrs: { for: "title" } }, [
+                _vm._v("スケジュール名 *必須")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.createScheduleData.title,
+                    expression: "createScheduleData.title"
+                  }
+                ],
+                attrs: { id: "title", type: "text" },
+                domProps: { value: _vm.createScheduleData.title },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(
+                      _vm.createScheduleData,
+                      "title",
+                      $event.target.value
+                    )
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("label", { attrs: { for: "description" } }, [_vm._v("詳細")]),
+              _vm._v(" "),
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.createScheduleData.description,
+                    expression: "createScheduleData.description"
+                  }
+                ],
+                attrs: { id: "description" },
+                domProps: { value: _vm.createScheduleData.description },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(
+                      _vm.createScheduleData,
+                      "description",
+                      $event.target.value
+                    )
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("button", { attrs: { type: "submit" } }, [
+                _vm._v("スケジュール追加")
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "ul",
+            { staticClass: "schedules" },
+            _vm._l(_vm.selectDateSchedules, function(schedule) {
+              return _c("li", { staticClass: "schedule" }, [
+                _c("p", [_vm._v(_vm._s(schedule.time))]),
+                _vm._v(" "),
+                _c("p", [_vm._v(_vm._s(schedule.title))])
+              ])
+            }),
+            0
+          )
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "modal" }, [
-        _c(
-          "form",
-          {
-            on: {
-              submit: function($event) {
-                $event.preventDefault()
-                return _vm.createSchedule($event)
-              }
-            }
-          },
-          [
-            _c("p", [_vm._v(_vm._s(_vm.selectedDate))]),
-            _vm._v(" "),
-            _c("label", { attrs: { for: "hour" } }, [_vm._v("時間")]),
-            _vm._v(" "),
-            _c(
-              "select",
-              {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.createScheduleData.hour,
-                    expression: "createScheduleData.hour"
-                  }
-                ],
-                attrs: { name: "hour", id: "hour" },
-                on: {
-                  change: function($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function(o) {
-                        return o.selected
-                      })
-                      .map(function(o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.$set(
-                      _vm.createScheduleData,
-                      "hour",
-                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-                    )
-                  }
-                }
-              },
-              [
-                _c("option", { attrs: { value: "unspecified" } }, [
-                  _vm._v("指定なし")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "0" } }, [_vm._v("0")]),
-                _vm._v(" "),
-                _vm._l(23, function(hour) {
-                  return _c("option", { domProps: { value: hour } }, [
-                    _vm._v(_vm._s(hour))
-                  ])
-                })
-              ],
-              2
-            ),
-            _vm._v(" "),
-            _c("span", [_vm._v("時")]),
-            _vm._v(" "),
-            _c(
-              "select",
-              {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.createScheduleData.minute,
-                    expression: "createScheduleData.minute"
-                  }
-                ],
-                attrs: { name: "minute", id: "minute" },
-                on: {
-                  change: function($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function(o) {
-                        return o.selected
-                      })
-                      .map(function(o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.$set(
-                      _vm.createScheduleData,
-                      "minute",
-                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-                    )
-                  }
-                }
-              },
-              [
-                _c("option", { attrs: { value: "unspecified" } }, [
-                  _vm._v("指定なし")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "0" } }, [_vm._v("0")]),
-                _vm._v(" "),
-                _vm._l(11, function(minute) {
-                  return _c("option", { domProps: { value: minute * 5 } }, [
-                    _vm._v(_vm._s(minute * 5))
-                  ])
-                })
-              ],
-              2
-            ),
-            _vm._v(" "),
-            _c("label", { attrs: { for: "title" } }, [
-              _vm._v("スケジュール名 *必須")
-            ]),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.createScheduleData.title,
-                  expression: "createScheduleData.title"
-                }
-              ],
-              attrs: { id: "title", type: "text" },
-              domProps: { value: _vm.createScheduleData.title },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.createScheduleData, "title", $event.target.value)
-                }
-              }
-            }),
-            _vm._v(" "),
-            _c("label", { attrs: { for: "description" } }, [_vm._v("詳細")]),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.createScheduleData.description,
-                  expression: "createScheduleData.description"
-                }
-              ],
-              attrs: { id: "description", type: "text" },
-              domProps: { value: _vm.createScheduleData.description },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(
-                    _vm.createScheduleData,
-                    "description",
-                    $event.target.value
-                  )
-                }
-              }
-            }),
-            _vm._v(" "),
-            _c("button", { attrs: { type: "submit" } }, [
-              _vm._v("スケジュール追加")
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "ul",
-          { staticClass: "schedules" },
-          _vm._l(_vm.selectDateSchedules, function(schedule) {
-            return _c("li", { staticClass: "schedule" }, [
-              _c("p", [_vm._v(_vm._s(schedule.date))]),
-              _vm._v(" "),
-              _c("p", [_vm._v(_vm._s(schedule.time))]),
-              _vm._v(" "),
-              _c("p", [_vm._v(_vm._s(schedule.title))])
-            ])
-          }),
-          0
-        )
-      ])
+      _c("div", { staticClass: "modal" })
     ],
     1
   )
@@ -57130,7 +57199,9 @@ module.exports = function(module) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _App_vue_vue_type_template_id_f348271a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App.vue?vue&type=template&id=f348271a& */ "./resources/js/App.vue?vue&type=template&id=f348271a&");
 /* harmony import */ var _App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App.vue?vue&type=script&lang=js& */ "./resources/js/App.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _App_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./App.vue?vue&type=style&index=0&lang=css& */ "./resources/js/App.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
 
 
 
@@ -57138,7 +57209,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _App_vue_vue_type_template_id_f348271a___WEBPACK_IMPORTED_MODULE_0__["render"],
   _App_vue_vue_type_template_id_f348271a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -57167,6 +57238,22 @@ component.options.__file = "resources/js/App.vue"
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/babel-loader/lib??ref--4-0!../../node_modules/vue-loader/lib??vue-loader-options!./App.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/App.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/App.vue?vue&type=style&index=0&lang=css&":
+/*!***************************************************************!*\
+  !*** ./resources/js/App.vue?vue&type=style&index=0&lang=css& ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/style-loader!../../node_modules/css-loader??ref--6-1!../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../node_modules/postcss-loader/src??ref--6-2!../../node_modules/vue-loader/lib??vue-loader-options!./App.vue?vue&type=style&index=0&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/App.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
