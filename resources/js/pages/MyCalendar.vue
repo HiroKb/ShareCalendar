@@ -36,6 +36,8 @@
                 <form @submit.prevent="createSchedule">
                     <p>{{ selectedDate }}</p>
 
+                    <p v-if="createError.errors.date">{{ createError.errors.date }}</p>
+
                     <label for="hour">時間</label>
                     <select name="hour"
                             id="hour"
@@ -85,12 +87,15 @@
                         <option value="50">50</option>
                         <option value="55">55</option>
                     </select>
+                    <p v-if="createError.errors.time">{{ createError.errors.time }}</p>
 
                     <label for="title">スケジュール名 *必須</label>
                     <input id="title" type="text" v-model="createScheduleData.title">
+                    <p v-if="createError.errors.title">{{ createError.errors.title }}</p>
 
                     <label for="description">詳細</label>
                     <textarea id="description" v-model="createScheduleData.description"></textarea>
+                    <p v-if="createError.errors.description">{{ createError.errors.description }}</p>
 
 
                     <button type="submit">スケジュール追加</button>
@@ -127,7 +132,8 @@
                     </div>
 
 
-                    <form @submit.prevent="updateSchedule">
+                    <form @submit.prevent="updateSchedule" v-show="editForm.showFlg">
+                        <p v-if="editError.errors.schedule">{{ editError.errors.schedule }}</p>
                         <p>{{ selectedDate }}</p>
 
                         <label for="edit-hour">時間</label>
@@ -179,12 +185,15 @@
                             <option value="50">50</option>
                             <option value="55">55</option>
                         </select>
+                        <p v-if="editError.errors.time">{{ editError.errors.time }}</p>
 
                         <label for="edit-title">スケジュール名 *必須</label>
                         <input id="edit-title" type="text" v-model="editForm.scheduleData.title">
+                        <p v-if="editError.errors.title">{{ editError.errors.title }}</p>
 
                         <label for="edit-description">詳細</label>
                         <textarea id="edit-description" v-model="editForm.scheduleData.description"></textarea>
+                        <p v-if="editError.errors.description">{{ editError.errors.description }}</p>
 
 
                         <button type="submit">スケジュール更新</button>
@@ -199,7 +208,7 @@
 <script>
     import SideBar from "../components/SideBar"
     import moment from "moment"
-    import {CREATED, SUCCESS} from "../util";
+    import {CREATED, NOT_FOUND, SUCCESS, VALIDATION_ERROR} from "../util";
     export default {
         name: "MyCalendar",
         components: {SideBar},
@@ -231,7 +240,15 @@
                 deleteForm: {
                     showFlg: false,
                     scheduleData: null
-                }
+                },
+                createError: {
+                    errorFlg: false,
+                    errors: {}
+                },
+                editError: {
+                    errorFlg: false,
+                    errors: {}
+                },
             }
         },
         computed: {
@@ -270,15 +287,24 @@
             },
             // スケジュール登録
             async createSchedule(){
+                this.createError.errorFlg = false
+                this.createError.errors = {}
                 // 入力値が不正な場合
                 if (!this.selectedDate) {
-                    return false
+                    this.createError.errors.date = '日付を選択してください'
+                    this.createError.errorFlg = true
                 }
                 if ((this.createScheduleData.hour === 'unspecified' && this.createScheduleData.minute !== 'unspecified') ||
                     (this.createScheduleData.hour !== 'unspecified' && this.createScheduleData.minute === 'unspecified')) {
-                    return false
+                    this.createError.errors.time = '時間の形式を確認してください'
+                    this.createError.errorFlg = true
                 }
                 if(!this.createScheduleData.title){
+                    this.createError.errors.title = 'スケジュール名は必須です'
+                    this.createError.errorFlg = true
+                }
+
+                if (this.createError.errorFlg) {
                     return false
                 }
 
@@ -328,23 +354,45 @@
                             break
                         }
                     }
+                    this.createScheduleData = {
+                        hour: 'unspecified',
+                        minute: 'unspecified',
+                        title: '',
+                        description: ''
+                    }
                     return false
                 }
+
+                if (response.status === VALIDATION_ERROR) {
+                    this.createError.errors = response.data.errors
+                    return false
+                }
+
+                this.$store.commit('error/setCode', response.status)
 
             },
             async updateSchedule(){
+                this.editError.errorFlg = false
+                this.editError.errors = {}
+
                 // 入力値が不正な場合
                 if (!this.editForm.scheduleData.id) {
-                    return false
+                    this.editError.errors.schedule = 'スケジュールを選択してください'
+                    this.editError.errorFlg = true
                 }
                 if ((this.editForm.scheduleData.hour === 'unspecified' && this.editForm.scheduleData.minute !== 'unspecified') ||
                     (this.editForm.scheduleData.hour !== 'unspecified' && this.editForm.scheduleData.minute === 'unspecified')) {
-                    return false
+                    this.editError.errors.time = '時間の形式を確認してください'
+                    this.editError.errorFlg = true
                 }
                 if(!this.editForm.scheduleData.title){
-                    return false
+                    this.editError.errors.title = 'スケジュール名は必須です'
+                    this.editError.errorFlg = true
                 }
 
+                if (this.editError.errorFlg) {
+                    return false
+                }
 
                 // postするデータを作成
                 const time = this.editForm.scheduleData.hour === 'unspecified'
@@ -402,8 +450,17 @@
                             break
                         }
                     }
+
                     this.hideModal()
+                    return false
                 }
+
+                if (response.status === VALIDATION_ERROR) {
+                    this.editError = response.data.errors
+                    return false
+                }
+
+                this.$store.commit('error/setCode', response.status)
 
             },
             // スケジュールの削除
@@ -426,7 +483,10 @@
                         }
                     }
                     this.hideModal()
+                    return false
                 }
+
+                this.$store.commit('error/setCode', response.status)
             },
             showEditModal(schedule){
                 this.modalFlg = true
@@ -458,8 +518,10 @@
             },
             hideModal(){
                 this.modalFlg = false
+
                 this.deleteForm.showFlg = false
                 this.deleteForm.scheduleData = null
+
                 this.editForm.showFlg = false
                 this.editForm.scheduleData = {
                     id: null,
@@ -468,6 +530,11 @@
                     minute: 'unspecified',
                     title: '',
                     description: ''
+                }
+
+                this.editError = {
+                    errorFlg: false,
+                    errors: {}
                 }
             }
 

@@ -6,7 +6,7 @@
 
 <script>
     import { mapState } from 'vuex'
-    import { INTERNAL_SERVER_ERROR } from './util'
+    import {INTERNAL_SERVER_ERROR, NOT_FOUND} from './util'
 
     export default {
         computed: {
@@ -19,6 +19,8 @@
                 handler (val) {
                     if (val === INTERNAL_SERVER_ERROR) {
                         this.$router.push('/500')
+                    }else if (val === NOT_FOUND) {
+                        this.$router.push('/404')
                     }
                 },
                 immediate: true

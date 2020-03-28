@@ -9,11 +9,12 @@ import Login from "./pages/Login.vue"
 import UserInfo from "./pages/UserInfo"
 import MyCalendar from "./pages/MyCalendar.vue"
 import ShareCalendar from "./pages/ShareCalendar.vue"
-import SystemError from "./pages/errors/SystemError.vue"
-import EditUserName from "./pages/EditUserName";
-import EditUserPassword from "./pages/EditUserPassword";
-import EditUserEmail from "./pages/EditUserEmail";
+import EditUserName from "./pages/EditUserName"
+import EditUserPassword from "./pages/EditUserPassword"
+import EditUserEmail from "./pages/EditUserEmail"
 
+import SystemError from "./pages/errors/SystemError.vue"
+import NotFound from "./pages/errors/NotFound.vue";
 // VueRouterの使用を宣言
 Vue.use(VueRouter)
 
@@ -121,6 +122,10 @@ const routes = [
     {
         path: '/500',
         component: SystemError
+    },
+    {
+        path: '/404',
+        component: NotFound
     }
 ]
 

@@ -1948,6 +1948,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       handler: function handler(val) {
         if (val === _util__WEBPACK_IMPORTED_MODULE_1__["INTERNAL_SERVER_ERROR"]) {
           this.$router.push('/500');
+        } else if (val === _util__WEBPACK_IMPORTED_MODULE_1__["NOT_FOUND"]) {
+          this.$router.push('/404');
         }
       },
       immediate: true
@@ -2665,6 +2667,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2706,6 +2717,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       deleteForm: {
         showFlg: false,
         scheduleData: null
+      },
+      createError: {
+        errorFlg: false,
+        errors: {}
+      },
+      editError: {
+        errorFlg: false,
+        errors: {}
       }
     };
   },
@@ -2753,30 +2772,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                if (_this.selectedDate) {
-                  _context.next = 2;
+                _this.createError.errorFlg = false;
+                _this.createError.errors = {}; // 入力値が不正な場合
+
+                if (!_this.selectedDate) {
+                  _this.createError.errors.date = '日付を選択してください';
+                  _this.createError.errorFlg = true;
+                }
+
+                if (_this.createScheduleData.hour === 'unspecified' && _this.createScheduleData.minute !== 'unspecified' || _this.createScheduleData.hour !== 'unspecified' && _this.createScheduleData.minute === 'unspecified') {
+                  _this.createError.errors.time = '時間の形式を確認してください';
+                  _this.createError.errorFlg = true;
+                }
+
+                if (!_this.createScheduleData.title) {
+                  _this.createError.errors.title = 'スケジュール名は必須です';
+                  _this.createError.errorFlg = true;
+                }
+
+                if (!_this.createError.errorFlg) {
+                  _context.next = 7;
                   break;
                 }
 
                 return _context.abrupt("return", false);
 
-              case 2:
-                if (!(_this.createScheduleData.hour === 'unspecified' && _this.createScheduleData.minute !== 'unspecified' || _this.createScheduleData.hour !== 'unspecified' && _this.createScheduleData.minute === 'unspecified')) {
-                  _context.next = 4;
-                  break;
-                }
-
-                return _context.abrupt("return", false);
-
-              case 4:
-                if (_this.createScheduleData.title) {
-                  _context.next = 6;
-                  break;
-                }
-
-                return _context.abrupt("return", false);
-
-              case 6:
+              case 7:
                 // postするデータを作成
                 time = _this.createScheduleData.hour === 'unspecified' ? null : _this.createScheduleData.hour + ':' + _this.createScheduleData.minute + ':00';
                 description = !!_this.createScheduleData.description ? _this.createScheduleData.description : null;
@@ -2786,85 +2807,103 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   title: _this.createScheduleData.title,
                   description: description
                 };
-                _context.next = 11;
+                _context.next = 12;
                 return axios.post('/api/schedule', data);
 
-              case 11:
+              case 12:
                 response = _context.sent;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_3__["CREATED"])) {
-                  _context.next = 35;
+                  _context.next = 37;
                   break;
                 }
 
                 i = 0;
 
-              case 14:
+              case 15:
                 if (!(i < _this.dates.length)) {
-                  _context.next = 34;
+                  _context.next = 35;
                   break;
                 }
 
                 if (!(response.data.date === _this.dates[i].date)) {
-                  _context.next = 31;
+                  _context.next = 32;
                   break;
                 }
 
                 if (!(!_this.dates[i].schedules.length || response.data.time === null)) {
-                  _context.next = 19;
+                  _context.next = 20;
                   break;
                 }
 
                 _this.dates[i].schedules.unshift(response.data);
 
-                return _context.abrupt("break", 34);
-
-              case 19:
-                t = 0;
+                return _context.abrupt("break", 35);
 
               case 20:
+                t = 0;
+
+              case 21:
                 if (!(t < _this.dates[i].schedules.length)) {
-                  _context.next = 29;
+                  _context.next = 30;
                   break;
                 }
 
                 if (!(_this.dates[i].schedules[t].time === null)) {
-                  _context.next = 23;
+                  _context.next = 24;
                   break;
                 }
 
-                return _context.abrupt("continue", 26);
+                return _context.abrupt("continue", 27);
 
-              case 23:
+              case 24:
                 if (!(response.data.time <= _this.dates[i].schedules[t].time)) {
-                  _context.next = 26;
+                  _context.next = 27;
                   break;
                 }
 
                 _this.dates[i].schedules.splice(t, 0, response.data);
 
-                return _context.abrupt("break", 34);
+                return _context.abrupt("break", 35);
 
-              case 26:
+              case 27:
                 t++;
-                _context.next = 20;
+                _context.next = 21;
                 break;
 
-              case 29:
+              case 30:
                 // 上記以外の場合最後にデータを追加
                 _this.dates[i].schedules.push(response.data);
 
-                return _context.abrupt("break", 34);
+                return _context.abrupt("break", 35);
 
-              case 31:
+              case 32:
                 i++;
-                _context.next = 14;
+                _context.next = 15;
                 break;
 
-              case 34:
+              case 35:
+                _this.createScheduleData = {
+                  hour: 'unspecified',
+                  minute: 'unspecified',
+                  title: '',
+                  description: ''
+                };
                 return _context.abrupt("return", false);
 
-              case 35:
+              case 37:
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_3__["VALIDATION_ERROR"])) {
+                  _context.next = 40;
+                  break;
+                }
+
+                _this.createError.errors = response.data.errors;
+                return _context.abrupt("return", false);
+
+              case 40:
+                _this.$store.commit('error/setCode', response.status);
+
+              case 41:
               case "end":
                 return _context.stop();
             }
@@ -2882,30 +2921,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                if (_this2.editForm.scheduleData.id) {
-                  _context2.next = 2;
+                _this2.editError.errorFlg = false;
+                _this2.editError.errors = {}; // 入力値が不正な場合
+
+                if (!_this2.editForm.scheduleData.id) {
+                  _this2.editError.errors.schedule = 'スケジュールを選択してください';
+                  _this2.editError.errorFlg = true;
+                }
+
+                if (_this2.editForm.scheduleData.hour === 'unspecified' && _this2.editForm.scheduleData.minute !== 'unspecified' || _this2.editForm.scheduleData.hour !== 'unspecified' && _this2.editForm.scheduleData.minute === 'unspecified') {
+                  _this2.editError.errors.time = '時間の形式を確認してください';
+                  _this2.editError.errorFlg = true;
+                }
+
+                if (!_this2.editForm.scheduleData.title) {
+                  _this2.editError.errors.title = 'スケジュール名は必須です';
+                  _this2.editError.errorFlg = true;
+                }
+
+                if (!_this2.editError.errorFlg) {
+                  _context2.next = 7;
                   break;
                 }
 
                 return _context2.abrupt("return", false);
 
-              case 2:
-                if (!(_this2.editForm.scheduleData.hour === 'unspecified' && _this2.editForm.scheduleData.minute !== 'unspecified' || _this2.editForm.scheduleData.hour !== 'unspecified' && _this2.editForm.scheduleData.minute === 'unspecified')) {
-                  _context2.next = 4;
-                  break;
-                }
-
-                return _context2.abrupt("return", false);
-
-              case 4:
-                if (_this2.editForm.scheduleData.title) {
-                  _context2.next = 6;
-                  break;
-                }
-
-                return _context2.abrupt("return", false);
-
-              case 6:
+              case 7:
                 // postするデータを作成
                 time = _this2.editForm.scheduleData.hour === 'unspecified' ? null : _this2.editForm.scheduleData.hour + ':' + _this2.editForm.scheduleData.minute + ':00';
                 description = !!_this2.editForm.scheduleData.description ? _this2.editForm.scheduleData.description : null;
@@ -2914,126 +2955,140 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   title: _this2.editForm.scheduleData.title,
                   description: description
                 };
-                _context2.next = 11;
+                _context2.next = 12;
                 return axios.patch('/api/schedule/' + _this2.editForm.scheduleData.id, data);
 
-              case 11:
+              case 12:
                 response = _context2.sent;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_3__["SUCCESS"])) {
-                  _context2.next = 49;
+                  _context2.next = 51;
                   break;
                 }
 
                 i = 0;
 
-              case 14:
+              case 15:
                 if (!(i < _this2.dates.length)) {
-                  _context2.next = 27;
+                  _context2.next = 28;
                   break;
                 }
 
                 if (!(response.data.date === _this2.dates[i].date)) {
-                  _context2.next = 24;
+                  _context2.next = 25;
                   break;
                 }
 
                 t = 0;
 
-              case 17:
+              case 18:
                 if (!(t < _this2.dates[i].schedules.length)) {
-                  _context2.next = 24;
+                  _context2.next = 25;
                   break;
                 }
 
                 if (!(response.data.id === _this2.dates[i].schedules[t].id)) {
-                  _context2.next = 21;
+                  _context2.next = 22;
                   break;
                 }
 
                 _this2.dates[i].schedules.splice(t, 1);
 
-                return _context2.abrupt("break", 27);
+                return _context2.abrupt("break", 28);
 
-              case 21:
+              case 22:
                 t++;
-                _context2.next = 17;
+                _context2.next = 18;
                 break;
 
-              case 24:
+              case 25:
                 i++;
-                _context2.next = 14;
+                _context2.next = 15;
                 break;
-
-              case 27:
-                _i = 0;
 
               case 28:
+                _i = 0;
+
+              case 29:
                 if (!(_i < _this2.dates.length)) {
-                  _context2.next = 48;
+                  _context2.next = 49;
                   break;
                 }
 
                 if (!(response.data.date === _this2.dates[_i].date)) {
-                  _context2.next = 45;
+                  _context2.next = 46;
                   break;
                 }
 
                 if (!(!_this2.dates[_i].schedules.length || response.data.time === null)) {
-                  _context2.next = 33;
+                  _context2.next = 34;
                   break;
                 }
 
                 _this2.dates[_i].schedules.unshift(response.data);
 
-                return _context2.abrupt("break", 48);
-
-              case 33:
-                _t = 0;
+                return _context2.abrupt("break", 49);
 
               case 34:
+                _t = 0;
+
+              case 35:
                 if (!(_t < _this2.dates[_i].schedules.length)) {
-                  _context2.next = 43;
+                  _context2.next = 44;
                   break;
                 }
 
                 if (!(_this2.dates[_i].schedules[_t].time === null)) {
-                  _context2.next = 37;
+                  _context2.next = 38;
                   break;
                 }
 
-                return _context2.abrupt("continue", 40);
+                return _context2.abrupt("continue", 41);
 
-              case 37:
+              case 38:
                 if (!(response.data.time <= _this2.dates[_i].schedules[_t].time)) {
-                  _context2.next = 40;
+                  _context2.next = 41;
                   break;
                 }
 
                 _this2.dates[_i].schedules.splice(_t, 0, response.data);
 
-                return _context2.abrupt("break", 48);
+                return _context2.abrupt("break", 49);
 
-              case 40:
+              case 41:
                 _t++;
-                _context2.next = 34;
+                _context2.next = 35;
                 break;
 
-              case 43:
+              case 44:
                 // 上記以外の場合最後にデータを追加
                 _this2.dates[_i].schedules.push(response.data);
 
-                return _context2.abrupt("break", 48);
+                return _context2.abrupt("break", 49);
 
-              case 45:
+              case 46:
                 _i++;
-                _context2.next = 28;
+                _context2.next = 29;
                 break;
 
-              case 48:
+              case 49:
                 _this2.hideModal();
 
-              case 49:
+                return _context2.abrupt("return", false);
+
+              case 51:
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_3__["VALIDATION_ERROR"])) {
+                  _context2.next = 54;
+                  break;
+                }
+
+                _this2.editError = response.data.errors;
+                return _context2.abrupt("return", false);
+
+              case 54:
+                _this2.$store.commit('error/setCode', response.status);
+
+              case 55:
               case "end":
                 return _context2.stop();
             }
@@ -3066,7 +3121,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 response = _context3.sent;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_3__["SUCCESS"])) {
-                  _context3.next = 21;
+                  _context3.next = 22;
                   break;
                 }
 
@@ -3113,7 +3168,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 20:
                 _this3.hideModal();
 
-              case 21:
+                return _context3.abrupt("return", false);
+
+              case 22:
+                _this3.$store.commit('error/setCode', response.status);
+
+              case 23:
               case "end":
                 return _context3.stop();
             }
@@ -3161,6 +3221,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         minute: 'unspecified',
         title: '',
         description: ''
+      };
+      this.editError = {
+        errorFlg: false,
+        errors: {}
       };
     }
   },
@@ -3445,6 +3509,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Welcome"
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/errors/NotFound.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/errors/NotFound.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "NotFound"
 });
 
 /***/ }),
@@ -40983,6 +41068,10 @@ var render = function() {
             [
               _c("p", [_vm._v(_vm._s(_vm.selectedDate))]),
               _vm._v(" "),
+              _vm.createError.errors.date
+                ? _c("p", [_vm._v(_vm._s(_vm.createError.errors.date))])
+                : _vm._e(),
+              _vm._v(" "),
               _c("label", { attrs: { for: "hour" } }, [_vm._v("時間")]),
               _vm._v(" "),
               _c(
@@ -41137,6 +41226,10 @@ var render = function() {
                 ]
               ),
               _vm._v(" "),
+              _vm.createError.errors.time
+                ? _c("p", [_vm._v(_vm._s(_vm.createError.errors.time))])
+                : _vm._e(),
+              _vm._v(" "),
               _c("label", { attrs: { for: "title" } }, [
                 _vm._v("スケジュール名 *必須")
               ]),
@@ -41166,6 +41259,10 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
+              _vm.createError.errors.title
+                ? _c("p", [_vm._v(_vm._s(_vm.createError.errors.title))])
+                : _vm._e(),
+              _vm._v(" "),
               _c("label", { attrs: { for: "description" } }, [_vm._v("詳細")]),
               _vm._v(" "),
               _c("textarea", {
@@ -41192,6 +41289,10 @@ var render = function() {
                   }
                 }
               }),
+              _vm._v(" "),
+              _vm.createError.errors.description
+                ? _c("p", [_vm._v(_vm._s(_vm.createError.errors.description))])
+                : _vm._e(),
               _vm._v(" "),
               _c("button", { attrs: { type: "submit" } }, [
                 _vm._v("スケジュール追加")
@@ -41319,6 +41420,14 @@ var render = function() {
                 _c(
                   "form",
                   {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.editForm.showFlg,
+                        expression: "editForm.showFlg"
+                      }
+                    ],
                     on: {
                       submit: function($event) {
                         $event.preventDefault()
@@ -41327,6 +41436,10 @@ var render = function() {
                     }
                   },
                   [
+                    _vm.editError.errors.schedule
+                      ? _c("p", [_vm._v(_vm._s(_vm.editError.errors.schedule))])
+                      : _vm._e(),
+                    _vm._v(" "),
                     _c("p", [_vm._v(_vm._s(_vm.selectedDate))]),
                     _vm._v(" "),
                     _c("label", { attrs: { for: "edit-hour" } }, [
@@ -41553,6 +41666,10 @@ var render = function() {
                       ]
                     ),
                     _vm._v(" "),
+                    _vm.editError.errors.time
+                      ? _c("p", [_vm._v(_vm._s(_vm.editError.errors.time))])
+                      : _vm._e(),
+                    _vm._v(" "),
                     _c("label", { attrs: { for: "edit-title" } }, [
                       _vm._v("スケジュール名 *必須")
                     ]),
@@ -41581,6 +41698,10 @@ var render = function() {
                         }
                       }
                     }),
+                    _vm._v(" "),
+                    _vm.editError.errors.title
+                      ? _c("p", [_vm._v(_vm._s(_vm.editError.errors.title))])
+                      : _vm._e(),
                     _vm._v(" "),
                     _c("label", { attrs: { for: "edit-description" } }, [
                       _vm._v("詳細")
@@ -41612,6 +41733,12 @@ var render = function() {
                         }
                       }
                     }),
+                    _vm._v(" "),
+                    _vm.editError.errors.description
+                      ? _c("p", [
+                          _vm._v(_vm._s(_vm.editError.errors.description))
+                        ])
+                      : _vm._e(),
                     _vm._v(" "),
                     _c("button", { attrs: { type: "submit" } }, [
                       _vm._v("スケジュール更新")
@@ -41888,6 +42015,30 @@ var render = function() {
     ],
     1
   )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/errors/NotFound.vue?vue&type=template&id=2eaaa6da&scoped=true&":
+/*!*************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/errors/NotFound.vue?vue&type=template&id=2eaaa6da&scoped=true& ***!
+  \*************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("p", [_vm._v("\n    ページが見つかりません\n")])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -59118,6 +59269,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/pages/errors/NotFound.vue":
+/*!************************************************!*\
+  !*** ./resources/js/pages/errors/NotFound.vue ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _NotFound_vue_vue_type_template_id_2eaaa6da_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./NotFound.vue?vue&type=template&id=2eaaa6da&scoped=true& */ "./resources/js/pages/errors/NotFound.vue?vue&type=template&id=2eaaa6da&scoped=true&");
+/* harmony import */ var _NotFound_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NotFound.vue?vue&type=script&lang=js& */ "./resources/js/pages/errors/NotFound.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _NotFound_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _NotFound_vue_vue_type_template_id_2eaaa6da_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _NotFound_vue_vue_type_template_id_2eaaa6da_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "2eaaa6da",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/pages/errors/NotFound.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/pages/errors/NotFound.vue?vue&type=script&lang=js&":
+/*!*************************************************************************!*\
+  !*** ./resources/js/pages/errors/NotFound.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NotFound_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./NotFound.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/errors/NotFound.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NotFound_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/pages/errors/NotFound.vue?vue&type=template&id=2eaaa6da&scoped=true&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/pages/errors/NotFound.vue?vue&type=template&id=2eaaa6da&scoped=true& ***!
+  \*******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NotFound_vue_vue_type_template_id_2eaaa6da_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./NotFound.vue?vue&type=template&id=2eaaa6da&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/errors/NotFound.vue?vue&type=template&id=2eaaa6da&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NotFound_vue_vue_type_template_id_2eaaa6da_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NotFound_vue_vue_type_template_id_2eaaa6da_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/pages/errors/SystemError.vue":
 /*!***************************************************!*\
   !*** ./resources/js/pages/errors/SystemError.vue ***!
@@ -59206,13 +59426,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pages_UserInfo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/UserInfo */ "./resources/js/pages/UserInfo.vue");
 /* harmony import */ var _pages_MyCalendar_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./pages/MyCalendar.vue */ "./resources/js/pages/MyCalendar.vue");
 /* harmony import */ var _pages_ShareCalendar_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./pages/ShareCalendar.vue */ "./resources/js/pages/ShareCalendar.vue");
-/* harmony import */ var _pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./pages/errors/SystemError.vue */ "./resources/js/pages/errors/SystemError.vue");
-/* harmony import */ var _pages_EditUserName__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./pages/EditUserName */ "./resources/js/pages/EditUserName.vue");
-/* harmony import */ var _pages_EditUserPassword__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./pages/EditUserPassword */ "./resources/js/pages/EditUserPassword.vue");
-/* harmony import */ var _pages_EditUserEmail__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./pages/EditUserEmail */ "./resources/js/pages/EditUserEmail.vue");
+/* harmony import */ var _pages_EditUserName__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./pages/EditUserName */ "./resources/js/pages/EditUserName.vue");
+/* harmony import */ var _pages_EditUserPassword__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./pages/EditUserPassword */ "./resources/js/pages/EditUserPassword.vue");
+/* harmony import */ var _pages_EditUserEmail__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./pages/EditUserEmail */ "./resources/js/pages/EditUserEmail.vue");
+/* harmony import */ var _pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./pages/errors/SystemError.vue */ "./resources/js/pages/errors/SystemError.vue");
+/* harmony import */ var _pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./pages/errors/NotFound.vue */ "./resources/js/pages/errors/NotFound.vue");
 
 
  // ページコンポーネント
+
 
 
 
@@ -59269,7 +59491,7 @@ var routes = [{
   }
 }, {
   path: '/edit-user-name',
-  component: _pages_EditUserName__WEBPACK_IMPORTED_MODULE_10__["default"],
+  component: _pages_EditUserName__WEBPACK_IMPORTED_MODULE_9__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
     if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['user/loginCheck']) {
       next();
@@ -59279,7 +59501,7 @@ var routes = [{
   }
 }, {
   path: '/edit-user-email',
-  component: _pages_EditUserEmail__WEBPACK_IMPORTED_MODULE_12__["default"],
+  component: _pages_EditUserEmail__WEBPACK_IMPORTED_MODULE_11__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
     if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['user/loginCheck']) {
       next();
@@ -59289,7 +59511,7 @@ var routes = [{
   }
 }, {
   path: '/edit-user-password',
-  component: _pages_EditUserPassword__WEBPACK_IMPORTED_MODULE_11__["default"],
+  component: _pages_EditUserPassword__WEBPACK_IMPORTED_MODULE_10__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
     if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['user/loginCheck']) {
       next();
@@ -59319,7 +59541,10 @@ var routes = [{
   }
 }, {
   path: '/500',
-  component: _pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_9__["default"]
+  component: _pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_12__["default"]
+}, {
+  path: '/404',
+  component: _pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_13__["default"]
 }]; // VueRouterインスタンスを作成
 
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
@@ -59763,7 +59988,7 @@ var actions = {
 /*!******************************!*\
   !*** ./resources/js/util.js ***!
   \******************************/
-/*! exports provided: SUCCESS, CREATED, VALIDATION_ERROR, INTERNAL_SERVER_ERROR, getCookieValue */
+/*! exports provided: SUCCESS, CREATED, VALIDATION_ERROR, NOT_FOUND, INTERNAL_SERVER_ERROR, getCookieValue */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -59771,6 +59996,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SUCCESS", function() { return SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATED", function() { return CREATED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VALIDATION_ERROR", function() { return VALIDATION_ERROR; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NOT_FOUND", function() { return NOT_FOUND; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "INTERNAL_SERVER_ERROR", function() { return INTERNAL_SERVER_ERROR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCookieValue", function() { return getCookieValue; });
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
@@ -59785,6 +60011,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var SUCCESS = 200;
 var CREATED = 201;
 var VALIDATION_ERROR = 422;
+var NOT_FOUND = 404;
 var INTERNAL_SERVER_ERROR = 500;
 /**
  * クッキーの値を取得
