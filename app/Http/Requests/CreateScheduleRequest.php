@@ -30,4 +30,5 @@ class CreateScheduleRequest extends FormRequest
             'description' => 'nullable|string|max:100'
         ];
     }
+
 }

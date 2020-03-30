@@ -2,11 +2,11 @@
     <form @submit.prevent="login">
         <label for="email">メールアドレス</label>
         <input type="text" id="email" v-model="loginData.email">
-        <p v-if="errorMessages && errorMessages.email">{{ errorMessages.email }}</p>
+        <p v-if="errorMessages && errorMessages.email">{{ errorMessages.email[0] }}</p>
 
         <label for="password">パスワード</label>
         <input type="text" id="password" v-model="loginData.password">
-        <p v-if="errorMessages && errorMessages.password">{{ errorMessages.password }}</p>
+        <p v-if="errorMessages && errorMessages.password">{{ errorMessages.password[0] }}</p>
 
         <button type="submit">ログイン</button>
     </form>

@@ -6,11 +6,11 @@
             <form @submit.prevent="updatePassword">
                 <label for="current-password">現在のパスワード</label>
                 <input type="text" id="current-password" v-model="current_password">
-                <p v-if="errorMessages && errorMessages.current_password">{{ errorMessages.current_password }}</p>
+                <p v-if="errorMessages && errorMessages.current_password">{{ errorMessages.current_password[0] }}</p>
 
                 <label for="new-password">新しいパスワード</label>
                 <input type="text" id="new-password" v-model="new_password">
-                <p v-if="errorMessages && errorMessages.new_password">{{ errorMessages.new_password }}</p>
+                <p v-if="errorMessages && errorMessages.new_password">{{ errorMessages.new_password[0] }}</p>
 
                 <button type="submit">更新</button>
 

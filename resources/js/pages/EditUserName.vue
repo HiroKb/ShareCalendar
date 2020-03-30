@@ -6,7 +6,7 @@
             <form @submit.prevent="updateName">
                 <label for="name">ユーザー名</label>
                 <input type="text" id="name" v-model="name">
-                <p v-if="errorMessages && errorMessages.name">{{ errorMessages.name }}</p>
+                <p v-if="errorMessages && errorMessages.name">{{ errorMessages.name [0]}}</p>
 
                 <button type="submit">更新</button>
 

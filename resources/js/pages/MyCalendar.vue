@@ -36,7 +36,7 @@
                 <form @submit.prevent="createSchedule">
                     <p>{{ selectedDate }}</p>
 
-                    <p v-if="createError.errors.date">{{ createError.errors.date }}</p>
+                    <p v-if="createError.errors.date">{{ createError.errors.date [0]}}</p>
 
                     <label for="hour">時間</label>
                     <select name="hour"
@@ -87,15 +87,15 @@
                         <option value="50">50</option>
                         <option value="55">55</option>
                     </select>
-                    <p v-if="createError.errors.time">{{ createError.errors.time }}</p>
+                    <p v-if="createError.errors.time">{{ createError.errors.time[0] }}</p>
 
                     <label for="title">スケジュール名 *必須</label>
                     <input id="title" type="text" v-model="createScheduleData.title">
-                    <p v-if="createError.errors.title">{{ createError.errors.title }}</p>
+                    <p v-if="createError.errors.title">{{ createError.errors.title [0]}}</p>
 
                     <label for="description">詳細</label>
                     <textarea id="description" v-model="createScheduleData.description"></textarea>
-                    <p v-if="createError.errors.description">{{ createError.errors.description }}</p>
+                    <p v-if="createError.errors.description">{{ createError.errors.description[0] }}</p>
 
 
                     <button type="submit">スケジュール追加</button>
@@ -115,25 +115,10 @@
         <div class="modal-background" v-show="modalFlg" @click="hideModal">
             <div class="modal" >
                 <div class="modal-inner" @click.stop>
-                    <i class="fas fa-times" @click="hideModal"></i>
-                    <div v-show="deleteForm.showFlg">
-                        <p>このスケジュールを削除しますか？</p>
-                        <p>日付</p>
-                        <p>{{ deleteData.date}}</p>
-                        <p>時間</p>
-                        <p>{{ deleteData.time }}</p>
-                        <p>スケジュール名</p>
-                        <p>{{ deleteData.title }}</p>
-                        <p>詳細</p>
-                        <p>{{ deleteData.description }}</p>
-                        <form @submit.prevent="deleteSchedule">
-                            <button>削除</button>
-                        </form>
-                    </div>
 
 
                     <form @submit.prevent="updateSchedule" v-show="editForm.showFlg">
-                        <p v-if="editError.errors.schedule">{{ editError.errors.schedule }}</p>
+                        <p v-if="editError.errors.schedule">{{ editError.errors.schedule[0] }}</p>
                         <p>{{ selectedDate }}</p>
 
                         <label for="edit-hour">時間</label>
@@ -185,20 +170,34 @@
                             <option value="50">50</option>
                             <option value="55">55</option>
                         </select>
-                        <p v-if="editError.errors.time">{{ editError.errors.time }}</p>
+                        <p v-if="editError.errors.time">{{ editError.errors.time[0] }}</p>
 
                         <label for="edit-title">スケジュール名 *必須</label>
                         <input id="edit-title" type="text" v-model="editForm.scheduleData.title">
-                        <p v-if="editError.errors.title">{{ editError.errors.title }}</p>
+                        <p v-if="editError.errors.title">{{ editError.errors.title[0] }}</p>
 
                         <label for="edit-description">詳細</label>
                         <textarea id="edit-description" v-model="editForm.scheduleData.description"></textarea>
-                        <p v-if="editError.errors.description">{{ editError.errors.description }}</p>
-
+                        <p v-if="editError.errors.description">{{ editError.errors.description[0] }}</p>
 
                         <button type="submit">スケジュール更新</button>
-
                     </form>
+
+                    <i class="fas fa-times" @click="hideModal"></i>
+                    <div v-show="deleteForm.showFlg">
+                        <p>このスケジュールを削除しますか？</p>
+                        <p>日付</p>
+                        <p>{{ deleteData.date}}</p>
+                        <p>時間</p>
+                        <p>{{ deleteData.time }}</p>
+                        <p>スケジュール名</p>
+                        <p>{{ deleteData.title }}</p>
+                        <p>詳細</p>
+                        <p>{{ deleteData.description }}</p>
+                        <form @submit.prevent="deleteSchedule">
+                            <button>削除</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -291,16 +290,16 @@
                 this.createError.errors = {}
                 // 入力値が不正な場合
                 if (!this.selectedDate) {
-                    this.createError.errors.date = '日付を選択してください'
+                    this.createError.errors.date = ['日付を選択してください。']
                     this.createError.errorFlg = true
                 }
                 if ((this.createScheduleData.hour === 'unspecified' && this.createScheduleData.minute !== 'unspecified') ||
                     (this.createScheduleData.hour !== 'unspecified' && this.createScheduleData.minute === 'unspecified')) {
-                    this.createError.errors.time = '時間の形式を確認してください'
+                    this.createError.errors.time = ['時間の形式を確認してください。']
                     this.createError.errorFlg = true
                 }
                 if(!this.createScheduleData.title){
-                    this.createError.errors.title = 'スケジュール名は必須です'
+                    this.createError.errors.title = ['スケジュール名は必須です。']
                     this.createError.errorFlg = true
                 }
 
@@ -377,16 +376,16 @@
 
                 // 入力値が不正な場合
                 if (!this.editForm.scheduleData.id) {
-                    this.editError.errors.schedule = 'スケジュールを選択してください'
+                    this.editError.errors.schedule = ['スケジュールを選択してください。']
                     this.editError.errorFlg = true
                 }
                 if ((this.editForm.scheduleData.hour === 'unspecified' && this.editForm.scheduleData.minute !== 'unspecified') ||
                     (this.editForm.scheduleData.hour !== 'unspecified' && this.editForm.scheduleData.minute === 'unspecified')) {
-                    this.editError.errors.time = '時間の形式を確認してください'
+                    this.editError.errors.time = ['時間の形式を確認してください。']
                     this.editError.errorFlg = true
                 }
                 if(!this.editForm.scheduleData.title){
-                    this.editError.errors.title = 'スケジュール名は必須です'
+                    this.editError.errors.title = ['スケジュール名は必須です。']
                     this.editError.errorFlg = true
                 }
 
@@ -456,7 +455,7 @@
                 }
 
                 if (response.status === VALIDATION_ERROR) {
-                    this.editError = response.data.errors
+                    this.editError.errors = response.data.errors
                     return false
                 }
 
@@ -509,7 +508,6 @@
                     title: schedule.title,
                     description: schedule.description
                 }
-                console.log(this.editForm.scheduleData)
             },
             showDeleteModal(schedule){
                 this.modalFlg = true

@@ -7,11 +7,11 @@
             <form @submit.prevent="updateEmail">
                 <label for="email">新しいメールアドレス</label>
                 <input type="text" id="email" v-model="email">
-                <p v-if="errorMessages && errorMessages.email">{{ errorMessages.email }}</p>
+                <p v-if="errorMessages && errorMessages.email">{{ errorMessages.email [0]}}</p>
 
                 <label for="password">パスワード</label>
                 <input type="text" id="password" v-model="password">
-                <p v-if="errorMessages && errorMessages.password">{{ errorMessages.password }}</p>
+                <p v-if="errorMessages && errorMessages.password">{{ errorMessages.password[0] }}</p>
 
                 <button type="submit">更新</button>
 

@@ -2,15 +2,15 @@
     <form @submit.prevent="register">
         <label for="name">ユーザー名</label>
         <input type="text" id="name" v-model="registerData.name">
-        <p v-if="errorMessages && errorMessages.name">{{ errorMessages.name }}</p>
+        <p v-if="errorMessages && errorMessages.name">{{ errorMessages.name[0] }}</p>
 
         <label for="email">メールアドレス</label>
         <input type="text" id="email" v-model="registerData.email">
-        <p v-if="errorMessages && errorMessages.email">{{ errorMessages.email }}</p>
+        <p v-if="errorMessages && errorMessages.email">{{ errorMessages.email[0] }}</p>
 
         <label for="password">パスワード</label>
         <input type="text" id="password" v-model="registerData.password">
-        <p v-if="errorMessages && errorMessages.password">{{ errorMessages.password }}</p>
+        <p v-if="errorMessages && errorMessages.password">{{ errorMessages.password[0] }}</p>
 
         <button type="submit">登録</button>
 

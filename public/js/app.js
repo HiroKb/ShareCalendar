@@ -2675,7 +2675,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
 
 
 
@@ -2776,17 +2775,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.createError.errors = {}; // 入力値が不正な場合
 
                 if (!_this.selectedDate) {
-                  _this.createError.errors.date = '日付を選択してください';
+                  _this.createError.errors.date = ['日付を選択してください。'];
                   _this.createError.errorFlg = true;
                 }
 
                 if (_this.createScheduleData.hour === 'unspecified' && _this.createScheduleData.minute !== 'unspecified' || _this.createScheduleData.hour !== 'unspecified' && _this.createScheduleData.minute === 'unspecified') {
-                  _this.createError.errors.time = '時間の形式を確認してください';
+                  _this.createError.errors.time = ['時間の形式を確認してください。'];
                   _this.createError.errorFlg = true;
                 }
 
                 if (!_this.createScheduleData.title) {
-                  _this.createError.errors.title = 'スケジュール名は必須です';
+                  _this.createError.errors.title = ['スケジュール名は必須です。'];
                   _this.createError.errorFlg = true;
                 }
 
@@ -2925,17 +2924,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this2.editError.errors = {}; // 入力値が不正な場合
 
                 if (!_this2.editForm.scheduleData.id) {
-                  _this2.editError.errors.schedule = 'スケジュールを選択してください';
+                  _this2.editError.errors.schedule = ['スケジュールを選択してください。'];
                   _this2.editError.errorFlg = true;
                 }
 
                 if (_this2.editForm.scheduleData.hour === 'unspecified' && _this2.editForm.scheduleData.minute !== 'unspecified' || _this2.editForm.scheduleData.hour !== 'unspecified' && _this2.editForm.scheduleData.minute === 'unspecified') {
-                  _this2.editError.errors.time = '時間の形式を確認してください';
+                  _this2.editError.errors.time = ['時間の形式を確認してください。'];
                   _this2.editError.errorFlg = true;
                 }
 
                 if (!_this2.editForm.scheduleData.title) {
-                  _this2.editError.errors.title = 'スケジュール名は必須です';
+                  _this2.editError.errors.title = ['スケジュール名は必須です。'];
                   _this2.editError.errorFlg = true;
                 }
 
@@ -3082,7 +3081,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   break;
                 }
 
-                _this2.editError = response.data.errors;
+                _this2.editError.errors = response.data.errors;
                 return _context2.abrupt("return", false);
 
               case 54:
@@ -3202,7 +3201,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         title: schedule.title,
         description: schedule.description
       };
-      console.log(this.editForm.scheduleData);
     },
     showDeleteModal: function showDeleteModal(schedule) {
       this.modalFlg = true;
@@ -40641,7 +40639,7 @@ var render = function() {
             }),
             _vm._v(" "),
             _vm.errorMessages && _vm.errorMessages.email
-              ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.email))])
+              ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.email[0]))])
               : _vm._e(),
             _vm._v(" "),
             _c("label", { attrs: { for: "password" } }, [_vm._v("パスワード")]),
@@ -40668,7 +40666,7 @@ var render = function() {
             }),
             _vm._v(" "),
             _vm.errorMessages && _vm.errorMessages.password
-              ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.password))])
+              ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.password[0]))])
               : _vm._e(),
             _vm._v(" "),
             _c("button", { attrs: { type: "submit" } }, [_vm._v("更新")])
@@ -40744,7 +40742,7 @@ var render = function() {
             }),
             _vm._v(" "),
             _vm.errorMessages && _vm.errorMessages.name
-              ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.name))])
+              ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.name[0]))])
               : _vm._e(),
             _vm._v(" "),
             _c("button", { attrs: { type: "submit" } }, [_vm._v("更新")])
@@ -40822,7 +40820,7 @@ var render = function() {
             }),
             _vm._v(" "),
             _vm.errorMessages && _vm.errorMessages.current_password
-              ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.current_password))])
+              ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.current_password[0]))])
               : _vm._e(),
             _vm._v(" "),
             _c("label", { attrs: { for: "new-password" } }, [
@@ -40851,7 +40849,7 @@ var render = function() {
             }),
             _vm._v(" "),
             _vm.errorMessages && _vm.errorMessages.new_password
-              ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.new_password))])
+              ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.new_password[0]))])
               : _vm._e(),
             _vm._v(" "),
             _c("button", { attrs: { type: "submit" } }, [_vm._v("更新")])
@@ -40919,7 +40917,7 @@ var render = function() {
       }),
       _vm._v(" "),
       _vm.errorMessages && _vm.errorMessages.email
-        ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.email))])
+        ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.email[0]))])
         : _vm._e(),
       _vm._v(" "),
       _c("label", { attrs: { for: "password" } }, [_vm._v("パスワード")]),
@@ -40946,7 +40944,7 @@ var render = function() {
       }),
       _vm._v(" "),
       _vm.errorMessages && _vm.errorMessages.password
-        ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.password))])
+        ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.password[0]))])
         : _vm._e(),
       _vm._v(" "),
       _c("button", { attrs: { type: "submit" } }, [_vm._v("ログイン")])
@@ -41069,7 +41067,7 @@ var render = function() {
               _c("p", [_vm._v(_vm._s(_vm.selectedDate))]),
               _vm._v(" "),
               _vm.createError.errors.date
-                ? _c("p", [_vm._v(_vm._s(_vm.createError.errors.date))])
+                ? _c("p", [_vm._v(_vm._s(_vm.createError.errors.date[0]))])
                 : _vm._e(),
               _vm._v(" "),
               _c("label", { attrs: { for: "hour" } }, [_vm._v("時間")]),
@@ -41227,7 +41225,7 @@ var render = function() {
               ),
               _vm._v(" "),
               _vm.createError.errors.time
-                ? _c("p", [_vm._v(_vm._s(_vm.createError.errors.time))])
+                ? _c("p", [_vm._v(_vm._s(_vm.createError.errors.time[0]))])
                 : _vm._e(),
               _vm._v(" "),
               _c("label", { attrs: { for: "title" } }, [
@@ -41260,7 +41258,7 @@ var render = function() {
               }),
               _vm._v(" "),
               _vm.createError.errors.title
-                ? _c("p", [_vm._v(_vm._s(_vm.createError.errors.title))])
+                ? _c("p", [_vm._v(_vm._s(_vm.createError.errors.title[0]))])
                 : _vm._e(),
               _vm._v(" "),
               _c("label", { attrs: { for: "description" } }, [_vm._v("詳細")]),
@@ -41291,7 +41289,9 @@ var render = function() {
               }),
               _vm._v(" "),
               _vm.createError.errors.description
-                ? _c("p", [_vm._v(_vm._s(_vm.createError.errors.description))])
+                ? _c("p", [
+                    _vm._v(_vm._s(_vm.createError.errors.description[0]))
+                  ])
                 : _vm._e(),
               _vm._v(" "),
               _c("button", { attrs: { type: "submit" } }, [
@@ -41366,57 +41366,6 @@ var render = function() {
                 }
               },
               [
-                _c("i", {
-                  staticClass: "fas fa-times",
-                  on: { click: _vm.hideModal }
-                }),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.deleteForm.showFlg,
-                        expression: "deleteForm.showFlg"
-                      }
-                    ]
-                  },
-                  [
-                    _c("p", [_vm._v("このスケジュールを削除しますか？")]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("日付")]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v(_vm._s(_vm.deleteData.date))]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("時間")]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v(_vm._s(_vm.deleteData.time))]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("スケジュール名")]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v(_vm._s(_vm.deleteData.title))]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("詳細")]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v(_vm._s(_vm.deleteData.description))]),
-                    _vm._v(" "),
-                    _c(
-                      "form",
-                      {
-                        on: {
-                          submit: function($event) {
-                            $event.preventDefault()
-                            return _vm.deleteSchedule($event)
-                          }
-                        }
-                      },
-                      [_c("button", [_vm._v("削除")])]
-                    )
-                  ]
-                ),
-                _vm._v(" "),
                 _c(
                   "form",
                   {
@@ -41437,7 +41386,9 @@ var render = function() {
                   },
                   [
                     _vm.editError.errors.schedule
-                      ? _c("p", [_vm._v(_vm._s(_vm.editError.errors.schedule))])
+                      ? _c("p", [
+                          _vm._v(_vm._s(_vm.editError.errors.schedule[0]))
+                        ])
                       : _vm._e(),
                     _vm._v(" "),
                     _c("p", [_vm._v(_vm._s(_vm.selectedDate))]),
@@ -41667,7 +41618,7 @@ var render = function() {
                     ),
                     _vm._v(" "),
                     _vm.editError.errors.time
-                      ? _c("p", [_vm._v(_vm._s(_vm.editError.errors.time))])
+                      ? _c("p", [_vm._v(_vm._s(_vm.editError.errors.time[0]))])
                       : _vm._e(),
                     _vm._v(" "),
                     _c("label", { attrs: { for: "edit-title" } }, [
@@ -41700,7 +41651,7 @@ var render = function() {
                     }),
                     _vm._v(" "),
                     _vm.editError.errors.title
-                      ? _c("p", [_vm._v(_vm._s(_vm.editError.errors.title))])
+                      ? _c("p", [_vm._v(_vm._s(_vm.editError.errors.title[0]))])
                       : _vm._e(),
                     _vm._v(" "),
                     _c("label", { attrs: { for: "edit-description" } }, [
@@ -41736,13 +41687,64 @@ var render = function() {
                     _vm._v(" "),
                     _vm.editError.errors.description
                       ? _c("p", [
-                          _vm._v(_vm._s(_vm.editError.errors.description))
+                          _vm._v(_vm._s(_vm.editError.errors.description[0]))
                         ])
                       : _vm._e(),
                     _vm._v(" "),
                     _c("button", { attrs: { type: "submit" } }, [
                       _vm._v("スケジュール更新")
                     ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c("i", {
+                  staticClass: "fas fa-times",
+                  on: { click: _vm.hideModal }
+                }),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.deleteForm.showFlg,
+                        expression: "deleteForm.showFlg"
+                      }
+                    ]
+                  },
+                  [
+                    _c("p", [_vm._v("このスケジュールを削除しますか？")]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("日付")]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v(_vm._s(_vm.deleteData.date))]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("時間")]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v(_vm._s(_vm.deleteData.time))]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("スケジュール名")]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v(_vm._s(_vm.deleteData.title))]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("詳細")]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v(_vm._s(_vm.deleteData.description))]),
+                    _vm._v(" "),
+                    _c(
+                      "form",
+                      {
+                        on: {
+                          submit: function($event) {
+                            $event.preventDefault()
+                            return _vm.deleteSchedule($event)
+                          }
+                        }
+                      },
+                      [_c("button", [_vm._v("削除")])]
+                    )
                   ]
                 )
               ]
@@ -41834,7 +41836,7 @@ var render = function() {
       }),
       _vm._v(" "),
       _vm.errorMessages && _vm.errorMessages.name
-        ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.name))])
+        ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.name[0]))])
         : _vm._e(),
       _vm._v(" "),
       _c("label", { attrs: { for: "email" } }, [_vm._v("メールアドレス")]),
@@ -41861,7 +41863,7 @@ var render = function() {
       }),
       _vm._v(" "),
       _vm.errorMessages && _vm.errorMessages.email
-        ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.email))])
+        ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.email[0]))])
         : _vm._e(),
       _vm._v(" "),
       _c("label", { attrs: { for: "password" } }, [_vm._v("パスワード")]),
@@ -41888,7 +41890,7 @@ var render = function() {
       }),
       _vm._v(" "),
       _vm.errorMessages && _vm.errorMessages.password
-        ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.password))])
+        ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.password[0]))])
         : _vm._e(),
       _vm._v(" "),
       _c("button", { attrs: { type: "submit" } }, [_vm._v("登録")])
