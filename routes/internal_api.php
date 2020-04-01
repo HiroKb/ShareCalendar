@@ -31,3 +31,4 @@ Route::patch('/schedule/{schedule}', 'ScheduleController@update');
 // スケジュール削除
 Route::delete('/schedule/{schedule}', 'ScheduleController@destroy');
 
+Route::post('shared-calendar', 'SharedCalendarController@create');
