@@ -14,13 +14,13 @@ class CreateSharedCalendarUserTable extends Migration
     public function up()
     {
         Schema::create('shared_calendar_user', function (Blueprint $table) {
-            $table->unsignedBigInteger('calendar_id');
-            $table->unsignedBigInteger('user_id');
-            $table->primary(['calendar_id', 'user_id']);
+            $table->uuid('calendar_id');
+            $table->uuid('user_id');
             $table->timestamps();
-
             $table->foreign('calendar_id')->references('id')->on('shared_calendars')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->primary(['calendar_id', 'user_id']);
+
         });
     }
 

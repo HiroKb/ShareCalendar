@@ -3,10 +3,20 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Ramsey\Uuid\Uuid;
 
 class Schedule extends Model
 {
     protected $table = 'schedules';
+    protected $keyType = 'string';
+    public $incrementing = false;
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->attributes['id'] = Uuid::uuid4()->toString();
+    }
 
     protected $guarded = [
         'id', 'created_at', 'updated_at'
@@ -17,9 +27,6 @@ class Schedule extends Model
         'description' => null
     ];
 
-    protected $casts = [
-        'user_id' => 'integer'
-    ];
 
     public function user()
     {

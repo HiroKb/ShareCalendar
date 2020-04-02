@@ -5,10 +5,21 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Ramsey\Uuid\Uuid;
 
 class User extends Authenticatable
 {
     use Notifiable;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->attributes['id'] = Uuid::uuid4()->toString();
+    }
 
     /**
      * The attributes that are mass assignable.

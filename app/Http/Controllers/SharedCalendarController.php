@@ -21,8 +21,6 @@ class SharedCalendarController extends Controller
 
             $calendar->members()->attach([Auth::id()]);
 
-
-            Log::debug($calendar);
             return $calendar;
         });
 

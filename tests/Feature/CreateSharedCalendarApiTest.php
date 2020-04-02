@@ -14,9 +14,11 @@ class CreateSharedCalendarApiTest extends TestCase
 {
     use RefreshDatabase;
 
+
     protected function setUp(): void
     {
         parent::setUp();
+        
 
         $this->user = factory(User::class)->create();
     }
