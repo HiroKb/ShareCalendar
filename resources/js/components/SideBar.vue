@@ -5,6 +5,8 @@
 
         <router-link tag="p" to="/my-calendar">マイカレンダー</router-link>
 
+        <router-link tag="p" to="/create-share-calendar">共有カレンダー作成</router-link>
+
         <router-link tag="p" to="/user-info">ユーザー情報/変更</router-link>
         <button @click="logout">Logout</button>
     </div>

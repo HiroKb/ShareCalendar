@@ -8,6 +8,7 @@ import Register from "./pages/Register.vue"
 import Login from "./pages/Login.vue"
 import UserInfo from "./pages/UserInfo"
 import MyCalendar from "./pages/MyCalendar.vue"
+import CreateShareCalendar from "./pages/CreateShareCalendar.vue"
 import ShareCalendar from "./pages/ShareCalendar.vue"
 import EditUserName from "./pages/EditUserName"
 import EditUserPassword from "./pages/EditUserPassword"
@@ -109,8 +110,20 @@ const routes = [
         }
     },
     {
-        path: '/share-calendar',
+        path: '/create-share-calendar',
+        component: CreateShareCalendar,
+        beforeEnter (to, from, next) {
+            if (store.getters['user/loginCheck']){
+                next()
+            } else {
+                next('/')
+            }
+        }
+    },
+    {
+        path: '/share-calendar/:shareCalendarId',
         component: ShareCalendar,
+        props: true,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
                 next()

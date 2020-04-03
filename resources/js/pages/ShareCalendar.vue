@@ -1,10 +1,18 @@
 <template>
-    <h1>ShareCalendar</h1>
+    <div>
+        <h1>ShareCalendar</h1>
+        <p>{{ shareCalendarId }}</p>
+    </div>
 </template>
 
 <script>
     export default {
-        name: "ShareCalendar"
+        name: "ShareCalendar",
+        props: {
+            shareCalendarId: {
+                required: true
+            }
+        }
     }
 </script>
 
