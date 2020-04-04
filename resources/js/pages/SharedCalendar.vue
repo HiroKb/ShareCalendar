@@ -1,15 +1,15 @@
 <template>
     <div>
-        <h1>ShareCalendar</h1>
-        <p>{{ shareCalendarId }}</p>
+        <h1>SharedCalendar</h1>
+        <p>{{ sharedCalendarId }}</p>
     </div>
 </template>
 
 <script>
     export default {
-        name: "ShareCalendar",
+        name: "SharedCalendar",
         props: {
-            shareCalendarId: {
+            sharedCalendarId: {
                 required: true
             }
         }

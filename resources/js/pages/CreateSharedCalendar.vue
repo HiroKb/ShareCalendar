@@ -50,7 +50,7 @@
 
                 if (response.status === CREATED) {
                     console.log(response)
-                    this.$router.push('/share-calendar/' + response.data.id)
+                    this.$router.push('/shared-calendar/' + response.data.id)
                     return false
                 }
 

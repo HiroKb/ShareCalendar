@@ -8,8 +8,9 @@ import Register from "./pages/Register.vue"
 import Login from "./pages/Login.vue"
 import UserInfo from "./pages/UserInfo"
 import MyCalendar from "./pages/MyCalendar.vue"
-import CreateShareCalendar from "./pages/CreateShareCalendar.vue"
-import ShareCalendar from "./pages/ShareCalendar.vue"
+import SharedCalendarList from "./pages/SharedCalendarList.vue"
+import CreateSharedCalendar from "./pages/CreateSharedCalendar.vue"
+import SharedCalendar from "./pages/SharedCalendar.vue"
 import EditUserName from "./pages/EditUserName"
 import EditUserPassword from "./pages/EditUserPassword"
 import EditUserEmail from "./pages/EditUserEmail"
@@ -110,8 +111,8 @@ const routes = [
         }
     },
     {
-        path: '/create-share-calendar',
-        component: CreateShareCalendar,
+        path: '/shared-calendar/create',
+        component: CreateSharedCalendar,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
                 next()
@@ -121,8 +122,20 @@ const routes = [
         }
     },
     {
-        path: '/share-calendar/:shareCalendarId',
-        component: ShareCalendar,
+        path: '/shared-calendar/list',
+        component: SharedCalendarList,
+        beforeEnter (to, from, next) {
+            if (store.getters['user/loginCheck']){
+                next()
+            } else {
+                next('/')
+            }
+        }
+    },
+    {
+        path: '/shared-calendar/:sharedCalendarId',
+        name: 'sharedCalendar',
+        component: SharedCalendar,
         props: true,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){

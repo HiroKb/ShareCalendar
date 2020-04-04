@@ -3,11 +3,13 @@
         <p>{{ userName }}</p>
 
 
-        <router-link tag="p" to="/my-calendar">マイカレンダー</router-link>
+        <router-link to="/my-calendar">マイカレンダー</router-link>
 
-        <router-link tag="p" to="/create-share-calendar">共有カレンダー作成</router-link>
+        <router-link to="/shared-calendar/list">共有カレンダー一覧</router-link>
 
-        <router-link tag="p" to="/user-info">ユーザー情報/変更</router-link>
+        <router-link to="/shared-calendar/create">共有カレンダー作成</router-link>
+
+        <router-link to="/user-info">ユーザー情報/変更</router-link>
         <button @click="logout">Logout</button>
     </div>
 </template>
@@ -43,4 +45,7 @@
     position: fixed;
     z-index: 1;
 }
+    a{
+        display: block;
+    }
 </style>
