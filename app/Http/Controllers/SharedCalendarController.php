@@ -7,10 +7,23 @@ use App\SharedCalendar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
 class SharedCalendarController extends Controller
 {
+    public function index(SharedCalendar $calendar)
+    {
+        $user_id = Auth::id();
+        if (!$calendar->members()->where('user_id', $user_id)->exists()){
+            abort(404);
+        }
+
+        if ($calendar->admin_id !== $user_id){
+            unset($calendar['search_id']);
+        }
+        return $calendar;
+    }
     /**
      * 参加共有カレンダー一覧
      * @return mixed
@@ -32,7 +45,6 @@ class SharedCalendarController extends Controller
     {
         return DB::transaction(function () use($request){
             $calendar = new SharedCalendar();
-            $this->search_id = Uuid::uuid4()->toString();
             $calendar->calendar_name = $request->calendar_name;
             $calendar->admin_id = Auth::id();
             $calendar->save();

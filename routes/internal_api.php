@@ -33,6 +33,7 @@ Route::delete('/schedule/{schedule}', 'ScheduleController@destroy');
 
 // 参加共有カレンダー一覧
 Route::get('/shared-calendar/list', 'SharedCalendarController@list');
-
+// 共有カレンダーデータ
+Route::get('/shared-calendar/{sharedCalendar}', 'SharedCalendarController@index');
 // 共有カレンダー作成
 Route::post('/shared-calendar', 'SharedCalendarController@create');
