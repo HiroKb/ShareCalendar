@@ -7,6 +7,7 @@ use App\SharedCalendar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Uuid;
 
 class SharedCalendarController extends Controller
 {
@@ -31,6 +32,7 @@ class SharedCalendarController extends Controller
     {
         return DB::transaction(function () use($request){
             $calendar = new SharedCalendar();
+            $this->search_id = Uuid::uuid4()->toString();
             $calendar->calendar_name = $request->calendar_name;
             $calendar->admin_id = Auth::id();
             $calendar->save();

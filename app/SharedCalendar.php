@@ -16,6 +16,8 @@ class SharedCalendar extends Model
         parent::__construct($attributes);
 
         $this->attributes['id'] = Uuid::uuid4()->toString();
+
+        $this->attributes['search_id'] = Uuid::uuid4()->toString();
     }
 
     public function members()

@@ -15,6 +15,7 @@ class CreateSharedCalendarsTable extends Migration
     {
         Schema::create('shared_calendars', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
+            $table->uuid('search_id')->unique();
             $table->uuid('admin_id');
             $table->string('calendar_name');
             $table->timestamps();
