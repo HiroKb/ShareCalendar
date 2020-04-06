@@ -9,6 +9,8 @@ const state = {
 const getters = {
     // ログインしているかどうか
     loginCheck: state => !! state.user,
+    // ユーザーのID
+    userId: state => state.user ? state.user.id : '',
     // ユーザーの名前
     userName: state => state.user ? state.user.name : '',
     // ユーザーのメールアドレス

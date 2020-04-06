@@ -42,8 +42,6 @@
 
 <style scoped>
 .sidebar{
-    position: fixed;
-    z-index: 1;
 }
     a{
         display: block;
