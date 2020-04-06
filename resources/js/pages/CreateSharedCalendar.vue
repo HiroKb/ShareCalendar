@@ -1,6 +1,8 @@
 <template>
     <div>
-        <SideBar />
+        <div class="sidebar-wrap">
+            <SideBar />
+        </div>
         <div class="create-share-calendar">
             <h1>CreateShareCalendar</h1>
             <form @submit.prevent="createShareCalendar">

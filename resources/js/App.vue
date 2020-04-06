@@ -135,4 +135,9 @@
     ul, ol{
         list-style: none;
     }
+
+    .sidebar-wrap{
+        position: fixed;
+        z-index: 1;
+    }
 </style>

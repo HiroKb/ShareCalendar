@@ -1,7 +1,9 @@
 <template>
 
     <div>
-        <SideBar />
+        <div class="sidebar-wrap">
+            <SideBar />
+        </div>
         <div class="edit-user-email">
             <h1>EditUserEmail</h1>
             <form @submit.prevent="updateEmail">

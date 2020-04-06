@@ -1,6 +1,8 @@
 <template>
     <div>
-        <SideBar />
+        <div class="sidebar-wrap">
+            <SideBar />
+        </div>
         <div class="edit-user-password">
             <h1>EditUserPassword</h1>
             <form @submit.prevent="updatePassword">

@@ -1,6 +1,8 @@
 <template>
     <div>
-        <SideBar />
+        <div class="sidebar-wrap">
+            <SideBar />
+        </div>
         <div class="edit-user-name">
             <h1>EditUserName</h1>
             <form @submit.prevent="updateName">

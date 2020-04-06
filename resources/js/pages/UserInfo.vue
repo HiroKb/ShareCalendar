@@ -1,6 +1,8 @@
 <template>
     <div>
-        <SideBar />
+        <div class="sidebar-wrap">
+            <SideBar />
+        </div>
         <div class="user-info">
             <h1>UserInfo</h1>
 

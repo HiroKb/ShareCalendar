@@ -1,6 +1,8 @@
 <template>
     <div>
-        <SideBar />
+        <div class="sidebar-wrap">
+            <SideBar />
+        </div>
         <div class="my-calendar">
             <div class="calendar">
                 <table>

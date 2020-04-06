@@ -69,8 +69,6 @@
 <style scoped>
     .sidebar-wrap{
         display: flex;
-        position: fixed;
-        z-index: 1;
     }
     .shared-calendar{
         max-width: 800px;
