@@ -4,7 +4,7 @@
         <div class="sidebar-wrap">
             <SideBar />
         </div>
-        <div class="edit-user-email">
+        <div class="contents">
             <h1>EditUserEmail</h1>
             <form @submit.prevent="updateEmail">
                 <label for="email">新しいメールアドレス</label>
@@ -62,8 +62,4 @@
 </script>
 
 <style scoped>
-.edit-user-email{
-    max-width: 500px;
-    margin: 0 auto;
-}
 </style>

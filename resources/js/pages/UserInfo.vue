@@ -3,7 +3,7 @@
         <div class="sidebar-wrap">
             <SideBar />
         </div>
-        <div class="user-info">
+        <div class="contents">
             <h1>UserInfo</h1>
 
             <p>ユーザー名</p>
@@ -37,8 +37,4 @@
 </script>
 
 <style scoped>
-.user-info{
-    max-width: 500px;
-    margin: 0 auto;
-}
 </style>

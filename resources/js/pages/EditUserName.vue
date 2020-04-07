@@ -3,7 +3,7 @@
         <div class="sidebar-wrap">
             <SideBar />
         </div>
-        <div class="edit-user-name">
+        <div class="contents">
             <h1>EditUserName</h1>
             <form @submit.prevent="updateName">
                 <label for="name">ユーザー名</label>
@@ -52,8 +52,4 @@
 </script>
 
 <style scoped>
-.edit-user-name{
-    max-width: 500px;
-    margin: 0 auto;
-}
 </style>

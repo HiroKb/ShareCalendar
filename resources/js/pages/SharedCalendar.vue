@@ -6,7 +6,7 @@
 
             </div>
         </div>
-        <div class="shared-calendar">
+        <div class="contents">
             <h1>SharedCalendar</h1>
             <p>{{ sharedCalendar.name }}</p>
             <p>{{ sharedCalendar.invitationUrl }}</p>
@@ -69,9 +69,5 @@
 <style scoped>
     .sidebar-wrap{
         display: flex;
-    }
-    .shared-calendar{
-        max-width: 800px;
-        margin: 0 auto;
     }
 </style>

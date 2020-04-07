@@ -3,7 +3,7 @@
         <div class="sidebar-wrap">
             <SideBar />
         </div>
-        <div class="create-share-calendar">
+        <div class="contents">
             <h1>CreateShareCalendar</h1>
             <form @submit.prevent="createShareCalendar">
                 <label for="calendar-name">カレンダー名</label>
@@ -69,8 +69,4 @@
 </script>
 
 <style scoped>
-.create-share-calendar{
-    max-width: 500px;
-    margin: 0 auto;
-}
 </style>

@@ -3,7 +3,7 @@
         <div class="sidebar-wrap">
             <SideBar />
         </div>
-        <div class="shared-calendar-list">
+        <div class="contents">
             <h1>SharedCalendarList</h1>
             <p v-if="loadingFlg">読み込み中</p>
 
@@ -52,8 +52,4 @@
 
 <style scoped>
 
-    .shared-calendar-list{
-        max-width: 800px;
-        margin: 0 auto;
-    }
 </style>

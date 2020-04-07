@@ -3,7 +3,7 @@
         <div class="sidebar-wrap">
             <SideBar />
         </div>
-        <div class="edit-user-password">
+        <div class="contents">
             <h1>EditUserPassword</h1>
             <form @submit.prevent="updatePassword">
                 <label for="current-password">現在のパスワード</label>
@@ -62,8 +62,4 @@
 </script>
 
 <style scoped>
-.edit-user-password{
-    max-width: 500px;
-    margin: 0 auto;
-}
 </style>
