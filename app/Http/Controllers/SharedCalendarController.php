@@ -36,6 +36,15 @@ class SharedCalendarController extends Controller
                            ->get();
     }
 
+    public function search($searchId)
+    {
+        $calendar = SharedCalendar::where('search_id', $searchId)->first();
+        return [
+                 'search_id' => $calendar->search_id,
+                 'admin_name' => $calendar->admin->name
+                ];
+    }
+
     /**
      * 共有カレンダー作成
      * @param CreateSharedCalendarRequest $request

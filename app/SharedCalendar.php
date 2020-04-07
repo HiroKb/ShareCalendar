@@ -20,6 +20,11 @@ class SharedCalendar extends Model
         $this->attributes['search_id'] = Uuid::uuid4()->toString();
     }
 
+    public function admin()
+    {
+        return $this->belongsTo('App\User', 'admin_id', 'id');
+    }
+
     public function members()
     {
         return $this->belongsToMany('App\User','shared_calendar_user', 'calendar_id', 'user_id')
