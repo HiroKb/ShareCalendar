@@ -34,11 +34,20 @@ class SearchSharedCalendarApiTest extends TestCase
         $calendar->members()->attach([$this->user1->id]);
 
         $response = $this->actingAs($this->user2)->json('post', '/api/shared-calendar/search/' . $calendar->search_id);
-
+//        未共有のカレンダーであればカレンダデータを返却
         $response->assertStatus(200)
             ->assertJson([
                 'search_id' => $calendar->search_id,
                 'admin_name' => $this->user1->name
+            ]);
+
+
+        $response = $this->actingAs($this->user1)->json('post', '/api/shared-calendar/search/' . $calendar->search_id);
+//        共有済みのカレンダーであれば空文字を返却
+        $response->assertStatus(200)
+            ->assertJson([
+                'search_id' => '',
+                'admin_name' => ''
             ]);
     }
 }
