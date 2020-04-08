@@ -11,6 +11,7 @@ import MyCalendar from "./pages/MyCalendar.vue"
 import SharedCalendarList from "./pages/SharedCalendarList.vue"
 import CreateSharedCalendar from "./pages/CreateSharedCalendar.vue"
 import SearchSharedCalendar from "./pages/SearchSharedCalendar.vue"
+import JoinSharedCalendar from "./pages/JoinSharedCalendar.vue"
 import SharedCalendar from "./pages/SharedCalendar.vue"
 import EditUserName from "./pages/EditUserName"
 import EditUserPassword from "./pages/EditUserPassword"
@@ -145,7 +146,19 @@ const routes = [
         }
     },
     {
-        path: '/shared-calendar/:sharedCalendarId',
+        path: '/shared-calendar/join/:searchId',
+        props:true,
+        component: JoinSharedCalendar,
+        beforeEnter (to, from, next) {
+            if (store.getters['user/loginCheck']){
+                next()
+            } else {
+                next('/')
+            }
+        }
+    },
+    {
+        path: '/shared-calendar/index/:sharedCalendarId',
         name: 'sharedCalendar',
         component: SharedCalendar,
         props: true,

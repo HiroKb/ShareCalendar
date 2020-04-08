@@ -42,10 +42,11 @@
                     this.searchError.errors.search_id = ['検索IDを入力してください。']
                     this.searchError.errorFlg = true
                 }
-
                 if (this.searchError.errorFlg) {
                     return false
                 }
+
+                this.$router.push('/shared-calendar/join/' + this.searchSharedCalendarData.search_id)
             }
         }
     }
