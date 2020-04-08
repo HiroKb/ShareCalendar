@@ -39,16 +39,26 @@ class SharedCalendarController extends Controller
     public function search($searchId)
     {
         $calendar = SharedCalendar::where('search_id', $searchId)->first();
+        if (!$calendar){
+            Log::debug($calendar);
+            return [
+                'status' => 'NotFound',
+                'search_id' => '',
+                'admin_name' => ''
+            ];
+        }
         if ($calendar->members()->where('user_id', Auth::id())->exists()){
             return [
-                     'search_id' => '',
-                     'admin_name' => ''
-                    ];
+                'status' => 'Shared',
+                'search_id' => '',
+                'admin_name' => ''
+            ];
         }
         return [
-                 'search_id' => $calendar->search_id,
-                 'admin_name' => $calendar->admin->name
-                ];
+            'status' => 'NotShared',
+            'search_id' => $calendar->search_id,
+            'admin_name' => $calendar->admin->name
+        ];
     }
 
     /**

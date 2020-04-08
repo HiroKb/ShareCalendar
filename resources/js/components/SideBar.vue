@@ -9,6 +9,8 @@
 
         <router-link to="/shared-calendar/create">共有カレンダー作成</router-link>
 
+        <router-link to="/shared-calendar/search">共有カレンダー検索</router-link>
+
         <router-link to="/user-info">ユーザー情報/変更</router-link>
         <button @click="logout">Logout</button>
     </div>

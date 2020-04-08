@@ -5,10 +5,10 @@
         </div>
         <div class="contents">
             <h1>SearchSharedCalendar</h1>
-            <form @submit.prevent="searchShareCalendar">
+            <form @submit.prevent="searchSharedCalendar">
                 <label for="calendar-id">検索ID</label>
-                <input type="text" id="calendar-id" v-model="searchShareCalendarData.search_id">
-<!--                <p v-if="createError.errors.calendar_name">{{ createError.errors.calendar_name[0]}}</p>-->
+                <input type="text" id="calendar-id" v-model="searchSharedCalendarData.search_id">
+                <p v-if="searchError.errors.search_id">{{ searchError.errors.search_id[0]}}</p>
 
                 <button type="submit">検索</button>
 
@@ -18,8 +18,36 @@
 </template>
 
 <script>
+    import SideBar from "../components/SideBar"
     export default {
-        name: "SearchSharedCalendar"
+        name: "SearchSharedCalendar",
+        components: {SideBar},
+        data() {
+            return {
+                searchSharedCalendarData: {
+                    search_id: ''
+                },
+                searchError: {
+                    errors: {},
+                    errorFlg: false
+                }
+            }
+        },
+        methods: {
+            async searchSharedCalendar () {
+                this.searchError.errors = {}
+                this.searchError.errorFlg = false
+
+                if (!this.searchSharedCalendarData.search_id) {
+                    this.searchError.errors.search_id = ['検索IDを入力してください。']
+                    this.searchError.errorFlg = true
+                }
+
+                if (this.searchError.errorFlg) {
+                    return false
+                }
+            }
+        }
     }
 </script>
 
