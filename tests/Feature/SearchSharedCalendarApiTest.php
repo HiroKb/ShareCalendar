@@ -33,7 +33,7 @@ class SearchSharedCalendarApiTest extends TestCase
         $calendar->save();
         $calendar->members()->attach([$this->user1->id]);
 
-        $response = $this->actingAs($this->user2)->json('post', '/api/shared-calendar/search/' . $calendar->search_id);
+        $response = $this->actingAs($this->user2)->json('get', '/api/shared-calendar/search/' . $calendar->search_id);
 //        未共有のカレンダーであればカレンダデータを返却
         $response->assertStatus(200)
             ->assertJson([
@@ -42,7 +42,7 @@ class SearchSharedCalendarApiTest extends TestCase
             ]);
 
 
-        $response = $this->actingAs($this->user1)->json('post', '/api/shared-calendar/search/' . $calendar->search_id);
+        $response = $this->actingAs($this->user1)->json('get', '/api/shared-calendar/search/' . $calendar->search_id);
 //        共有済みのカレンダーであれば空文字を返却
         $response->assertStatus(200)
             ->assertJson([

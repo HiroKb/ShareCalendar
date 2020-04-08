@@ -37,4 +37,5 @@ Route::get('/shared-calendar/list', 'SharedCalendarController@list');
 Route::get('/shared-calendar/{sharedCalendar}', 'SharedCalendarController@index');
 // 共有カレンダー作成
 Route::post('/shared-calendar', 'SharedCalendarController@create');
-Route::post('/shared-calendar/search/{searchId}', 'SharedCalendarController@search');
+// 共有カレンダー検索
+Route::get('/shared-calendar/search/{searchId}', 'SharedCalendarController@search');
