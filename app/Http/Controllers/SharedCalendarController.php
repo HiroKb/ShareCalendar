@@ -10,9 +10,41 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
+use function Psy\debug;
 
 class SharedCalendarController extends Controller
 {
+    /**
+     * 共有カレンダー作成
+     * @param CreateSharedCalendarRequest $request
+     * @return mixed
+     */
+    public function create(CreateSharedCalendarRequest $request)
+    {
+        return DB::transaction(function () use($request){
+            $calendar = new SharedCalendar();
+            $calendar->calendar_name = $request->calendar_name;
+            $calendar->admin_id = Auth::id();
+            $calendar->save();
+
+            $calendar->members()->attach([Auth::id()]);
+
+            return $calendar;
+        });
+    }
+
+    /**
+     * 参加共有カレンダー一覧
+     * @return mixed
+     */
+    public function list()
+    {
+        return Auth::user()->sharedCalendars()
+            ->withPivot('created_at AS joined_at')
+            ->orderBy('joined_at', 'asc')
+            ->get();
+    }
+
     /**
      * 共有カレンダーデータ
      * @param SharedCalendar $calendar
@@ -31,35 +63,17 @@ class SharedCalendarController extends Controller
         return $calendar;
     }
 
-    /**
-     * 参加共有カレンダー一覧
-     * @return mixed
-     */
-    public function list()
+    public function applicantsList(SharedCalendar $calendar)
     {
-        return Auth::user()->sharedCalendars()
-                           ->withPivot('created_at AS joined_at')
-                           ->orderBy('joined_at', 'asc')
-                           ->get();
-    }
+        // カレンダー管理者以外のアクセスの場合
+        if ($calendar->admin_id !== Auth::id()) {
+            abort(404);
+        }
+        return $calendar->applicants()
+            ->withPivot('created_at AS application_at')
+            ->orderBy('application_at', 'asc')
+            ->get();
 
-    /**
-     * 共有カレンダー作成
-     * @param CreateSharedCalendarRequest $request
-     * @return mixed
-     */
-    public function create(CreateSharedCalendarRequest $request)
-    {
-        return DB::transaction(function () use($request){
-            $calendar = new SharedCalendar();
-            $calendar->calendar_name = $request->calendar_name;
-            $calendar->admin_id = Auth::id();
-            $calendar->save();
-
-            $calendar->members()->attach([Auth::id()]);
-
-            return $calendar;
-        });
     }
 
     /**
@@ -99,6 +113,7 @@ class SharedCalendarController extends Controller
         ];
     }
 
+    // カレンダー共有申請
     public function application(ApplicationToSharingCalendarRequest $request)
     {
         $userId = Auth::id();
