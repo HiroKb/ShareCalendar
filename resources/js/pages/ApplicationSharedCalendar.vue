@@ -12,6 +12,7 @@
                     <button type="submit">共有申請</button>
                 </form>
                 <p v-else-if="sharedCalendarData.status === 'Shared'">共有済みのカレンダーです。</p>
+                <p v-else-if="sharedCalendarData.status === 'Applied'">共有申請済みのカレンダーです。</p>
                 <p v-else>共有カレンダーが見つかりません。</p>
             </template>
             <p v-else>読み込み中</p>

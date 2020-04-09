@@ -2087,6 +2087,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -41053,6 +41054,8 @@ var render = function() {
                   )
                 : _vm.sharedCalendarData.status === "Shared"
                 ? _c("p", [_vm._v("共有済みのカレンダーです。")])
+                : _vm.sharedCalendarData.status === "Applied"
+                ? _c("p", [_vm._v("共有申請済みのカレンダーです。")])
                 : _c("p", [_vm._v("共有カレンダーが見つかりません。")])
             ]
           : _c("p", [_vm._v("読み込み中")])

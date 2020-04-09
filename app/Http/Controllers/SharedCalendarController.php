@@ -69,6 +69,7 @@ class SharedCalendarController extends Controller
      */
     public function search($searchId)
     {
+        $userId = Auth::id();
         $calendar = SharedCalendar::where('search_id', $searchId)->first();
         if (!$calendar){
             return [
@@ -77,9 +78,16 @@ class SharedCalendarController extends Controller
                 'admin_name' => ''
             ];
         }
-        if ($calendar->members()->where('user_id', Auth::id())->exists()){
+        if ($calendar->members()->where('user_id', $userId)->exists()){
             return [
                 'status' => 'Shared',
+                'search_id' => '',
+                'admin_name' => ''
+            ];
+        }
+        if ($calendar->applicants()->where('user_id', $userId)->exists()) {
+            return [
+                'status' => 'Applied',
                 'search_id' => '',
                 'admin_name' => ''
             ];
