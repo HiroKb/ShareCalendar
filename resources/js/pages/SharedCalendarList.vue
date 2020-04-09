@@ -8,10 +8,10 @@
             <p v-if="loadingFlg">読み込み中</p>
 
             <template v-else>
-                <ul v-if="SharedCalendarList.length">
-                    <li v-for="SharedCalendar in SharedCalendarList">
-                        <router-link :to="{name: 'sharedCalendar', params:{sharedCalendarId: SharedCalendar.id}}">
-                            <p>{{SharedCalendar.calendar_name}}</p>
+                <ul v-if="sharedCalendarList.length">
+                    <li v-for="sharedCalendar in sharedCalendarList">
+                        <router-link :to="{name: 'sharedCalendar', params:{sharedCalendarId: sharedCalendar.id}}">
+                            <p>{{sharedCalendar.calendar_name}}</p>
                         </router-link>
                     </li>
                 </ul>
@@ -30,7 +30,7 @@
         components: {SideBar},
         data() {
             return {
-                SharedCalendarList: [],
+                sharedCalendarList: [],
                 loadingFlg: false
             }
         },
@@ -39,7 +39,7 @@
                 this.loadingFlg = true
 
                 const response = await axios.get('/api/shared-calendar/list')
-                this.SharedCalendarList = response.data
+                this.sharedCalendarList = response.data
 
                 this.loadingFlg = false
             },

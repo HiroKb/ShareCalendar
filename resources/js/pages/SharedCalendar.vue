@@ -3,7 +3,9 @@
         <div class="sidebar-wrap">
             <SideBar/>
             <div class="shared-calendar-menu">
-
+                <router-link :to="{name: 'sharedCalendarApplicants', params:{sharedCalendarId: sharedCalendar.id}}" v-if="sharedCalendar.adminFlg">
+                    共有申請者一覧
+                </router-link>
             </div>
         </div>
         <div class="contents">
@@ -24,7 +26,8 @@
         components: {SideBar},
         data () {
             return {
-                sharedCalendarData:{},
+                sharedCalendarData:{
+                },
                 invitationPath: location.protocol + '//' + location.host + '/shared-calendar/application/'
             }
         },
@@ -39,7 +42,8 @@
             }),
             sharedCalendar: function () {
                 return {
-                    adminFlg: this.sharedCalendarData.admin_id === this.userId,
+                    adminFlg: this.sharedCalendarData.admin_id ? this.sharedCalendarData.admin_id === this.userId : false,
+                    id: this.sharedCalendarData.id ? this.sharedCalendarData.id : '',
                     invitationUrl: this.sharedCalendarData.search_id ? this.invitationPath + this.sharedCalendarData.search_id : '',
                     searchId: this.sharedCalendarData.search_id ? this.sharedCalendarData.search_id : '',
                     name: this.sharedCalendarData.calendar_name ? this.sharedCalendarData.calendar_name : '',
@@ -50,10 +54,8 @@
             async fetchSharedCalendar() {
                 const response = await axios.get('/api/shared-calendar/' + this.sharedCalendarId)
 
-                console.log(response)
                 if(response.status === SUCCESS) {
                     this.sharedCalendarData = response.data
-                    console.log(this.sharedCalendarData)
                     return false
                 }
 
