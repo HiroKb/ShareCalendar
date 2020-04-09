@@ -2106,12 +2106,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
-    joinSharedCalendar: function joinSharedCalendar() {
+    ApplicationSharedCalendar: function ApplicationSharedCalendar() {
+      var _this = this;
+
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
+                _context.next = 2;
+                return axios.post('/api/shared-calendar/application', {
+                  'search_id': _this.sharedCalendarData.search_id
+                });
+
+              case 2:
+                response = _context.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["CREATED"])) {
+                  _context.next = 6;
+                  break;
+                }
+
+                _this.$router.push('/my-calendar');
+
+                return _context.abrupt("return", false);
+
+              case 6:
+                _this.$store.commit('error/setCode', response.status);
+
+              case 7:
               case "end":
                 return _context.stop();
             }
@@ -2120,7 +2144,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     searchSharedCalendar: function searchSharedCalendar() {
-      var _this = this;
+      var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
         var response;
@@ -2129,7 +2153,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios.get('/api/shared-calendar/search/' + _this.searchId);
+                return axios.get('/api/shared-calendar/search/' + _this2.searchId);
 
               case 2:
                 response = _context2.sent;
@@ -2139,11 +2163,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   break;
                 }
 
-                _this.sharedCalendarData = response.data;
+                _this2.sharedCalendarData = response.data;
                 return _context2.abrupt("return", false);
 
               case 6:
-                _this.$store.commit('error/setCode', response.status);
+                _this2.$store.commit('error/setCode', response.status);
 
               case 7:
               case "end":

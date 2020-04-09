@@ -21,7 +21,7 @@
 
 <script>
     import SideBar from "../components/SideBar"
-    import {SUCCESS} from "../util";
+    import {CREATED, SUCCESS} from "../util";
     export default {
         name: "ApplicationSharedCalendar",
         components: {SideBar},
@@ -37,7 +37,13 @@
             }
         },
         methods: {
-            async joinSharedCalendar () {
+            async ApplicationSharedCalendar () {
+                const response = await axios.post('/api/shared-calendar/application', {'search_id': this.sharedCalendarData.search_id})
+                if (response.status === CREATED) {
+                    this.$router.push('/my-calendar')
+                    return false
+                }
+                this.$store.commit('error/setCode', response.status)
             },
             async searchSharedCalendar () {
                 const response =  await axios.get('/api/shared-calendar/search/' + this.searchId)
