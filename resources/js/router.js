@@ -11,14 +11,15 @@ import MyCalendar from "./pages/MyCalendar.vue"
 import SharedCalendarList from "./pages/SharedCalendarList.vue"
 import CreateSharedCalendar from "./pages/CreateSharedCalendar.vue"
 import SearchSharedCalendar from "./pages/SearchSharedCalendar.vue"
-import JoinSharedCalendar from "./pages/JoinSharedCalendar.vue"
+import ApplicationSharedCalendar from "./pages/ApplicationSharedCalendar.vue"
 import SharedCalendar from "./pages/SharedCalendar.vue"
 import EditUserName from "./pages/EditUserName"
 import EditUserPassword from "./pages/EditUserPassword"
 import EditUserEmail from "./pages/EditUserEmail"
 
 import SystemError from "./pages/errors/SystemError.vue"
-import NotFound from "./pages/errors/NotFound.vue";
+import NotFound from "./pages/errors/NotFound.vue"
+
 // VueRouterの使用を宣言
 Vue.use(VueRouter)
 
@@ -146,9 +147,9 @@ const routes = [
         }
     },
     {
-        path: '/shared-calendar/join/:searchId',
+        path: '/shared-calendar/application/:searchId',
         props:true,
-        component: JoinSharedCalendar,
+        component: ApplicationSharedCalendar,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
                 next()

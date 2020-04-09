@@ -46,7 +46,7 @@
                     return false
                 }
 
-                this.$router.push('/shared-calendar/join/' + this.searchSharedCalendarData.search_id)
+                this.$router.push('/shared-calendar/application/' + this.searchSharedCalendarData.search_id)
             }
         }
     }

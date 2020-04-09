@@ -7,7 +7,7 @@
             <h1>JoinSharedCalendar</h1>
             <template v-if="sharedCalendarData.status">
 
-                <form v-if="sharedCalendarData.status === 'NotShared'" @submit.prevent="JoinSharedCalendar">
+                <form v-if="sharedCalendarData.status === 'NotShared'" @submit.prevent="ApplicationSharedCalendar">
                     <p>管理者: {{sharedCalendarData.admin_name}}</p>
                     <button type="submit">共有申請</button>
                 </form>
@@ -23,7 +23,7 @@
     import SideBar from "../components/SideBar"
     import {SUCCESS} from "../util";
     export default {
-        name: "JoinSharedCalendar",
+        name: "ApplicationSharedCalendar",
         components: {SideBar},
         data() {
             return {
@@ -41,7 +41,7 @@
             },
             async searchSharedCalendar () {
                 const response =  await axios.get('/api/shared-calendar/search/' + this.searchId)
-                
+
                 if (response.status === SUCCESS) {
 
                     this.sharedCalendarData = response.data

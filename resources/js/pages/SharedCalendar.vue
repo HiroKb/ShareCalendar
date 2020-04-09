@@ -25,7 +25,7 @@
         data () {
             return {
                 sharedCalendarData:{},
-                invitationPath: location.protocol + '//' + location.host + '/shared-calendar/join/'
+                invitationPath: location.protocol + '//' + location.host + '/shared-calendar/application/'
             }
         },
         props: {
