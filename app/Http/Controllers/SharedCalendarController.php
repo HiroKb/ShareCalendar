@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ApplicationToSharingCalendarRequest;
 use App\Http\Requests\CreateSharedCalendarRequest;
 use App\SharedCalendar;
 use Illuminate\Http\Request;
@@ -12,6 +13,11 @@ use Ramsey\Uuid\Uuid;
 
 class SharedCalendarController extends Controller
 {
+    /**
+     * 共有カレンダーデータ
+     * @param SharedCalendar $calendar
+     * @return SharedCalendar
+     */
     public function index(SharedCalendar $calendar)
     {
         $user_id = Auth::id();
@@ -24,6 +30,7 @@ class SharedCalendarController extends Controller
         }
         return $calendar;
     }
+
     /**
      * 参加共有カレンダー一覧
      * @return mixed
@@ -36,11 +43,34 @@ class SharedCalendarController extends Controller
                            ->get();
     }
 
+    /**
+     * 共有カレンダー作成
+     * @param CreateSharedCalendarRequest $request
+     * @return mixed
+     */
+    public function create(CreateSharedCalendarRequest $request)
+    {
+        return DB::transaction(function () use($request){
+            $calendar = new SharedCalendar();
+            $calendar->calendar_name = $request->calendar_name;
+            $calendar->admin_id = Auth::id();
+            $calendar->save();
+
+            $calendar->members()->attach([Auth::id()]);
+
+            return $calendar;
+        });
+    }
+
+    /**
+     * 共有カレンダー検索
+     * @param $searchId
+     * @return array
+     */
     public function search($searchId)
     {
         $calendar = SharedCalendar::where('search_id', $searchId)->first();
         if (!$calendar){
-            Log::debug($calendar);
             return [
                 'status' => 'NotFound',
                 'search_id' => '',
@@ -61,22 +91,18 @@ class SharedCalendarController extends Controller
         ];
     }
 
-    /**
-     * 共有カレンダー作成
-     * @param CreateSharedCalendarRequest $request
-     * @return mixed
-     */
-    public function create(CreateSharedCalendarRequest $request)
+    public function application(ApplicationToSharingCalendarRequest $request)
     {
-        return DB::transaction(function () use($request){
-            $calendar = new SharedCalendar();
-            $calendar->calendar_name = $request->calendar_name;
-            $calendar->admin_id = Auth::id();
-            $calendar->save();
+        $userId = Auth::id();
+        $calendar = SharedCalendar::where('search_id', $request->search_id)->first();
+//        すでに共有済みか申請済みの場合
+        if ($calendar->members()->where('user_id', $userId)->exists() ||
+            $calendar->applicants()->where('user_id', $userId)->exists()){
+            abort(404);
+        }
+        $calendar->applicants()->attach([$userId]);
 
-            $calendar->members()->attach([Auth::id()]);
+        return response([], 201);
 
-            return $calendar;
-        });
     }
 }

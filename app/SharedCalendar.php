@@ -30,4 +30,10 @@ class SharedCalendar extends Model
         return $this->belongsToMany('App\User','shared_calendar_user', 'calendar_id', 'user_id')
                     ->withTimestamps();
     }
+
+    public function applicants()
+    {
+        return $this->belongsToMany('App\User','sharedcalendar_user_applicants', 'calendar_id', 'user_id')
+            ->withTimestamps();
+    }
 }

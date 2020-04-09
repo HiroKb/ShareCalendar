@@ -58,4 +58,10 @@ class User extends Authenticatable
        return $this->belongsToMany('App\SharedCalendar', 'shared_calendar_user', 'user_id', 'calendar_id')
                     ->withTimestamps();
     }
+
+    public function applicationCalendars()
+    {
+        return $this->belongsToMany('App\SharedCalendar', 'sharedcalendar_applicants', 'user_id', 'calendar_id')
+            ->withTimestamps();
+    }
 }
