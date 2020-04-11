@@ -65,13 +65,32 @@ class SharedCalendarController extends Controller
         return $calendar;
     }
 
+    public function membersList(SharedCalendar $calendar)
+    {
+        if (!$calendar->members()->where('user_id', Auth::id())->exists()){
+            abort(404);
+        }
+
+        return $calendar
+            ->members()
+            ->withPivot('created_at AS joined_at')
+            ->orderBy('joined_at', 'asc')
+            ->get();
+    }
+
+    /**
+     * 共有申請者リスト
+     * @param SharedCalendar $calendar
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function applicantsList(SharedCalendar $calendar)
     {
         // カレンダー管理者以外のアクセスの場合
         if ($calendar->admin_id !== Auth::id()) {
             abort(404);
         }
-        return $calendar->applicants()
+        return $calendar
+            ->applicants()
             ->withPivot('created_at AS application_at')
             ->orderBy('application_at', 'asc')
             ->get();
