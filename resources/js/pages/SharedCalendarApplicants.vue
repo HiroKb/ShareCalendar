@@ -6,6 +6,9 @@
                 <router-link :to="{name: 'sharedCalendar', params:{sharedCalendarId: sharedCalendarId}}">
                     <p>共有カレンダーTOP</p>
                 </router-link>
+                <router-link :to="{name: 'sharedCalendarMembers', params:{sharedCalendarId: sharedCalendarId}}">
+                    共有メンバー一覧
+                </router-link>
             </div>
         </div>
         <div class="contents">
@@ -74,7 +77,6 @@
                     this.sharedCalendarApplicants = response.data
 
                     this.loadingFlg = false
-                    console.log(this.sharedCalendarApplicants)
                     return false
                 }
 
@@ -106,7 +108,6 @@
                 this.applicantData = applicant
                 this.modalFlg = true
                 this.allowFormFlg = true
-                console.log(applicant)
             },
             hideModal() {
                 this.modalFlg = false

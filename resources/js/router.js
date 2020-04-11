@@ -13,6 +13,7 @@ import CreateSharedCalendar from "./pages/CreateSharedCalendar.vue"
 import SearchSharedCalendar from "./pages/SearchSharedCalendar.vue"
 import ApplicationSharedCalendar from "./pages/ApplicationSharedCalendar.vue"
 import SharedCalendar from "./pages/SharedCalendar.vue"
+import SharedCalendarMembers from "./pages/SharedCalendarMembers.vue"
 import SharedCalendarApplicants from "./pages/SharedCalendarApplicants.vue"
 import EditUserName from "./pages/EditUserName"
 import EditUserPassword from "./pages/EditUserPassword"
@@ -163,6 +164,19 @@ const routes = [
         path: '/shared-calendar/index/:sharedCalendarId',
         name: 'sharedCalendar',
         component: SharedCalendar,
+        props: true,
+        beforeEnter (to, from, next) {
+            if (store.getters['user/loginCheck']){
+                next()
+            } else {
+                next('/')
+            }
+        }
+    },
+    {
+        path: '/shared-calendar/members/:sharedCalendarId',
+        name: 'sharedCalendarMembers',
+        component: SharedCalendarMembers,
         props: true,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
