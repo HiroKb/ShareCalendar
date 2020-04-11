@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AllowApplicationToSharingCalendarRequest;
 use App\Http\Requests\ApplicationToSharingCalendarRequest;
 use App\Http\Requests\CreateSharedCalendarRequest;
+use App\Http\Requests\ProcessingApplicationToSharingCalendarRequest;
 use App\SharedCalendar;
 use App\User;
 use Illuminate\Http\Request;
@@ -65,6 +65,11 @@ class SharedCalendarController extends Controller
         return $calendar;
     }
 
+    /**
+     * カレンダ共有メンバー
+     * @param SharedCalendar $calendar
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function membersList(SharedCalendar $calendar)
     {
         if (!$calendar->members()->where('user_id', Auth::id())->exists()){
@@ -97,7 +102,12 @@ class SharedCalendarController extends Controller
 
     }
 
-    public function applicationAllow(AllowApplicationToSharingCalendarRequest $request)
+    /**
+     * 共有申請許可
+     * @param ProcessingApplicationToSharingCalendarRequest $request
+     * @return mixed
+     */
+    public function applicationAllow(ProcessingApplicationToSharingCalendarRequest $request)
     {
         $calendar = SharedCalendar::find($request->calendar_id);
 //        カレンダー管理者以外のアクセスの場合
@@ -115,6 +125,21 @@ class SharedCalendarController extends Controller
             $calendar->applicants()->detach([$request->applicant_id]);
             return response(['id' => $request->applicant_id], 201);
         });
+    }
+
+    public function applicationReject(ProcessingApplicationToSharingCalendarRequest $request)
+    {
+        $calendar = SharedCalendar::find($request->calendar_id);
+//        カレンダー管理者以外のアクセスの場合
+        if ($calendar->admin_id !== Auth::id()) {
+            abort(404);
+        }
+//        共有申請者以外のIDがpostされた場合
+        if (!$calendar->applicants()->where('user_id', $request->applicant_id)->exists()) {
+            abort(404);
+        }
+        $calendar->applicants()->detach([$request->applicant_id]);
+        return response(['id' => $request->applicant_id], 200);
     }
 
     /**
