@@ -14,6 +14,9 @@
                 <div v-if="sharedCalendarApplicants.length">
                     <div v-for="applicant in sharedCalendarApplicants">
                         <p>{{ applicant.name }}</p>
+                        <button @click="showAllowModal(applicant)">
+                            <i class="fas fa-check"></i>
+                        </button>
                     </div>
                 </div>
                 <p v-else>
@@ -21,11 +24,25 @@
                 </p>
             </template>
         </div>
+        <div class="modal-background" v-show="modalFlg" @click="hideModal">
+            <div class="modal" >
+                <div class="modal-inner" @click.stop>
+                    <i class="fas fa-times" @click="hideModal"></i>
+
+                    <form @submit.prevent="allowApplication" v-show="allowFormFlg">
+                        <p>{{ applicantName }}</p>
+                        <p>共有申請を許可しますか</p>
+                        <button>許可</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-    import {SUCCESS} from "../util"
+    import {CREATED, SUCCESS} from "../util"
     import SideBar from "../components/SideBar";
     export default {
         name: "SharedCalendarApplicants",
@@ -33,7 +50,15 @@
         data () {
             return {
                 sharedCalendarApplicants:{},
-                loadingFlg: true
+                loadingFlg: true,
+                modalFlg: false,
+                allowFormFlg: false,
+                applicantData: null
+            }
+        },
+        computed: {
+            applicantName: function () {
+                return this.applicantData ? this.applicantData.name : ''
             }
         },
         props: {
@@ -49,10 +74,45 @@
                     this.sharedCalendarApplicants = response.data
 
                     this.loadingFlg = false
+                    console.log(this.sharedCalendarApplicants)
                     return false
                 }
 
                 this.$store.commit('error/setCode', response.status)
+            },
+            async allowApplication() {
+                if (!this.sharedCalendarId || !this.applicantData.id) {
+                    return false
+                }
+                const response = await axios.post('/api/shared-calendar/application/allow', {
+                    calendar_id: this.sharedCalendarId,
+                    applicant_id: this.applicantData.id
+                })
+
+                if (response.status === CREATED) {
+                    for (let i = 0; i < this.sharedCalendarApplicants.length; i++) {
+                        if (response.data.id === this.sharedCalendarApplicants[i].id){
+                            this.sharedCalendarApplicants.splice(i, 1)
+                            break
+                        }
+                    }
+                    this.hideModal()
+                    return false
+                }
+
+                this.$store.commit('error/setCode', response.status)
+            },
+            showAllowModal(applicant) {
+                this.applicantData = applicant
+                this.modalFlg = true
+                this.allowFormFlg = true
+                console.log(applicant)
+            },
+            hideModal() {
+                this.modalFlg = false
+                this.allowFormFlg = false
+
+                this.applicantData = null
             }
         },
         created() {
@@ -64,5 +124,25 @@
 <style scoped>
     .sidebar-wrap{
         display: flex;
+    }
+    .modal-background{
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100vw ;
+        z-index: 10;
+        background: rgba(0, 0, 0, .1);
+    }
+
+    .modal{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100vw ;
+    }
+    .modal-inner{
+        background: #ffffff;
     }
 </style>

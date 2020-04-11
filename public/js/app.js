@@ -3948,6 +3948,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3958,8 +3975,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       sharedCalendarApplicants: {},
-      loadingFlg: true
+      loadingFlg: true,
+      modalFlg: false,
+      allowFormFlg: false,
+      applicantData: null
     };
+  },
+  computed: {
+    applicantName: function applicantName() {
+      return this.applicantData ? this.applicantData.name : '';
+    }
   },
   props: {
     sharedCalendarId: {
@@ -3983,24 +4008,105 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 response = _context.sent;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                  _context.next = 7;
+                  _context.next = 8;
                   break;
                 }
 
                 _this.sharedCalendarApplicants = response.data;
                 _this.loadingFlg = false;
+                console.log(_this.sharedCalendarApplicants);
                 return _context.abrupt("return", false);
 
-              case 7:
+              case 8:
                 _this.$store.commit('error/setCode', response.status);
 
-              case 8:
+              case 9:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
       }))();
+    },
+    allowApplication: function allowApplication() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var response, i;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                if (!(!_this2.sharedCalendarId || !_this2.applicantData.id)) {
+                  _context2.next = 2;
+                  break;
+                }
+
+                return _context2.abrupt("return", false);
+
+              case 2:
+                _context2.next = 4;
+                return axios.post('/api/shared-calendar/application/allow', {
+                  calendar_id: _this2.sharedCalendarId,
+                  applicant_id: _this2.applicantData.id
+                });
+
+              case 4:
+                response = _context2.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
+                  _context2.next = 16;
+                  break;
+                }
+
+                i = 0;
+
+              case 7:
+                if (!(i < _this2.sharedCalendarApplicants.length)) {
+                  _context2.next = 14;
+                  break;
+                }
+
+                if (!(response.data.id === _this2.sharedCalendarApplicants[i].id)) {
+                  _context2.next = 11;
+                  break;
+                }
+
+                _this2.sharedCalendarApplicants.splice(i, 1);
+
+                return _context2.abrupt("break", 14);
+
+              case 11:
+                i++;
+                _context2.next = 7;
+                break;
+
+              case 14:
+                _this2.hideModal();
+
+                return _context2.abrupt("return", false);
+
+              case 16:
+                _this2.$store.commit('error/setCode', response.status);
+
+              case 17:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
+    showAllowModal: function showAllowModal(applicant) {
+      this.applicantData = applicant;
+      this.modalFlg = true;
+      this.allowFormFlg = true;
+      console.log(applicant);
+    },
+    hideModal: function hideModal() {
+      this.modalFlg = false;
+      this.allowFormFlg = false;
+      this.applicantData = null;
     }
   },
   created: function created() {
@@ -4344,7 +4450,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.sidebar-wrap[data-v-65b09b5d]{\n    display: flex;\n}\n", ""]);
+exports.push([module.i, "\n.sidebar-wrap[data-v-65b09b5d]{\n    display: flex;\n}\n.modal-background[data-v-65b09b5d]{\n    position: fixed;\n    top: 0;\n    left: 0;\n    height: 100vh;\n    width: 100vw ;\n    z-index: 10;\n    background: rgba(0, 0, 0, .1);\n}\n.modal[data-v-65b09b5d]{\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    height: 100vh;\n    width: 100vw ;\n}\n.modal-inner[data-v-65b09b5d]{\n    background: #ffffff;\n}\n", ""]);
 
 // exports
 
@@ -42733,7 +42839,19 @@ var render = function() {
                     "div",
                     _vm._l(_vm.sharedCalendarApplicants, function(applicant) {
                       return _c("div", [
-                        _c("p", [_vm._v(_vm._s(applicant.name))])
+                        _c("p", [_vm._v(_vm._s(applicant.name))]),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            on: {
+                              click: function($event) {
+                                return _vm.showAllowModal(applicant)
+                              }
+                            }
+                          },
+                          [_c("i", { staticClass: "fas fa-check" })]
+                        )
                       ])
                     }),
                     0
@@ -42746,6 +42864,70 @@ var render = function() {
             ]
       ],
       2
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.modalFlg,
+            expression: "modalFlg"
+          }
+        ],
+        staticClass: "modal-background",
+        on: { click: _vm.hideModal }
+      },
+      [
+        _c("div", { staticClass: "modal" }, [
+          _c(
+            "div",
+            {
+              staticClass: "modal-inner",
+              on: {
+                click: function($event) {
+                  $event.stopPropagation()
+                }
+              }
+            },
+            [
+              _c("i", {
+                staticClass: "fas fa-times",
+                on: { click: _vm.hideModal }
+              }),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.allowFormFlg,
+                      expression: "allowFormFlg"
+                    }
+                  ],
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.allowApplication($event)
+                    }
+                  }
+                },
+                [
+                  _c("p", [_vm._v(_vm._s(_vm.applicantName))]),
+                  _vm._v(" "),
+                  _c("p", [_vm._v("共有申請を許可しますか")]),
+                  _vm._v(" "),
+                  _c("button", [_vm._v("許可")])
+                ]
+              )
+            ]
+          )
+        ])
+      ]
     )
   ])
 }
