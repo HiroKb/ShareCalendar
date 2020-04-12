@@ -107,23 +107,22 @@ class SharedCalendarController extends Controller
      * @param ProcessingApplicationToSharingCalendarRequest $request
      * @return mixed
      */
-    public function applicationAllow(ProcessingApplicationToSharingCalendarRequest $request)
+    public function allowApplication(SharedCalendar $calendar, $applicantId)
     {
-        $calendar = SharedCalendar::find($request->calendar_id);
 //        カレンダー管理者以外のアクセスの場合
         if ($calendar->admin_id !== Auth::id()) {
             abort(404);
         }
 //        共有申請者以外のIDがpostされた場合
-        if (!$calendar->applicants()->where('user_id', $request->applicant_id)->exists()) {
+        if (!$calendar->applicants()->where('user_id', $applicantId)->exists()) {
             abort(404);
         }
 
-        return DB::transaction(function () use($request, $calendar){
+        return DB::transaction(function () use($calendar, $applicantId){
 
-            $calendar->members()->attach([$request->applicant_id]);
-            $calendar->applicants()->detach([$request->applicant_id]);
-            return response(['id' => $request->applicant_id], 201);
+            $calendar->members()->attach([$applicantId]);
+            $calendar->applicants()->detach([$applicantId]);
+            return response(['id' => $applicantId], 201);
         });
     }
 

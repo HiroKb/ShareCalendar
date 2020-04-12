@@ -96,10 +96,7 @@
                 if (!this.sharedCalendarId || !this.applicantData.id) {
                     return false
                 }
-                const response = await axios.post('/api/shared-calendar/application/allow', {
-                    calendar_id: this.sharedCalendarId,
-                    applicant_id: this.applicantData.id
-                })
+                const response = await axios.put('/api/shared-calendars/' + this.sharedCalendarId + '/applications/' + this.applicantData.id)
 
                 if (response.status === CREATED) {
                     for (let i = 0; i < this.sharedCalendarApplicants.length; i++) {

@@ -4059,10 +4059,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 _context2.next = 4;
-                return axios.post('/api/shared-calendar/application/allow', {
-                  calendar_id: _this2.sharedCalendarId,
-                  applicant_id: _this2.applicantData.id
-                });
+                return axios.put('/api/shared-calendars/' + _this2.sharedCalendarId + '/applications/' + _this2.applicantData.id);
 
               case 4:
                 response = _context2.sent;

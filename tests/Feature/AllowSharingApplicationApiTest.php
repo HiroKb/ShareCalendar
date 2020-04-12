@@ -43,10 +43,7 @@ class AllowSharingApplicationApiTest extends TestCase
             'user_id' => $this->user3->id
         ]);
 
-        $response = $this->actingAs($this->user1)->json('post', '/api/shared-calendar/application/allow', [
-            'calendar_id' => $calendar->id,
-            'applicant_id' => $this->user3->id
-            ]);
+        $response = $this->actingAs($this->user1)->json('put', '/api/shared-calendars/' . $calendar->id . '/applications/' . $this->user3->id);
 
         $response
             ->assertStatus(201)
@@ -62,5 +59,8 @@ class AllowSharingApplicationApiTest extends TestCase
             'user_id' => $this->user3->id
         ]);
 
+        $response = $this->actingAs($this->user2)->json('put', '/api/shared-calendars/' . $calendar->id . '/applications/' . $this->user2->id);
+
+        $response->assertStatus(404);
     }
 }

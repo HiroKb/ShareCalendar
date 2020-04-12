@@ -42,7 +42,7 @@ Route::get('/shared-calendar/{SharedCalendar}/members', 'SharedCalendarControlle
 // カレンダー共有申請者
 Route::get('/shared-calendar/{SharedCalendar}/applicants', 'SharedCalendarController@applicantsList');
 // カレンダー共有申請許可
-Route::post('/shared-calendar/application/allow', 'SharedCalendarController@applicationAllow');
+Route::put('/shared-calendars/{SharedCalendar}/applications/{applicantId}', 'SharedCalendarController@allowApplication');
 // カレンダー共有申請拒否
 Route::delete('/shared-calendars/{SharedCalendar}/applications/{applicantId}', 'SharedCalendarController@rejectApplication');
 
