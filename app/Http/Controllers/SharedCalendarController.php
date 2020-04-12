@@ -127,19 +127,18 @@ class SharedCalendarController extends Controller
         });
     }
 
-    public function applicationReject(ProcessingApplicationToSharingCalendarRequest $request)
+    public function rejectApplication(SharedCalendar $calendar, $applicant_id)
     {
-        $calendar = SharedCalendar::find($request->calendar_id);
 //        カレンダー管理者以外のアクセスの場合
         if ($calendar->admin_id !== Auth::id()) {
             abort(404);
         }
 //        共有申請者以外のIDがpostされた場合
-        if (!$calendar->applicants()->where('user_id', $request->applicant_id)->exists()) {
+        if (!$calendar->applicants()->where('user_id', $applicant_id)->exists()) {
             abort(404);
         }
-        $calendar->applicants()->detach([$request->applicant_id]);
-        return response(['id' => $request->applicant_id], 200);
+        $calendar->applicants()->detach([$applicant_id]);
+        return response(['id' => $applicant_id], 200);
     }
 
     /**

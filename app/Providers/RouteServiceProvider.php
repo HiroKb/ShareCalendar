@@ -28,7 +28,7 @@ class RouteServiceProvider extends ServiceProvider
 
         parent::boot();
 
-        Route::model('sharedCalendar',SharedCalendar::class);
+        Route::model('SharedCalendar',SharedCalendar::class);
     }
 
     /**

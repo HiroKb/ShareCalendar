@@ -44,10 +44,7 @@ class RejectSharingApplicationApiTest extends TestCase
         ]);
 
 
-        $response = $this->actingAs($this->user1)->json('post', '/api/shared-calendar/application/reject', [
-            'calendar_id' => $calendar->id,
-            'applicant_id' => $this->user3->id
-        ]);
+        $response = $this->actingAs($this->user1)->json('delete', '/api/shared-calendars/'. $calendar->id . '/applications/' . $this->user3->id);
 
         $response
             ->assertStatus(200)
@@ -58,10 +55,7 @@ class RejectSharingApplicationApiTest extends TestCase
         ]);
 
 
-        $response = $this->actingAs($this->user4)->json('post', '/api/shared-calendar/application/reject', [
-            'calendar_id' => $calendar->id,
-            'applicant_id' => $this->user4->id
-        ]);
+        $response = $this->actingAs($this->user4)->json('delete', '/api/shared-calendars/'. $calendar->id. '/applications/' . $this->user4->id);
 
         $response->assertStatus(404);
 

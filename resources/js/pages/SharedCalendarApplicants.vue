@@ -118,10 +118,7 @@
                 if (!this.sharedCalendarId || !this.applicantData.id) {
                     return false
                 }
-                const response = await axios.post('/api/shared-calendar/application/reject', {
-                    calendar_id: this.sharedCalendarId,
-                    applicant_id: this.applicantData.id
-                })
+                const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarId + '/applications/' + this.applicantData.id)
 
                 if (response.status === SUCCESS) {
                     for (let i = 0; i < this.sharedCalendarApplicants.length; i++) {
