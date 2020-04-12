@@ -20,6 +20,9 @@
                         <button @click="showAllowModal(applicant)">
                             <i class="fas fa-check"></i>
                         </button>
+                        <button @click="showRejectModal(applicant)">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                 </div>
                 <p v-else>
@@ -36,6 +39,12 @@
                         <p>{{ applicantName }}</p>
                         <p>共有申請を許可しますか</p>
                         <button>許可</button>
+                    </form>
+
+                    <form @submit.prevent="rejectApplication" v-show="rejectFormFlg">
+                        <p>{{ applicantName }}</p>
+                        <p>共有申請を拒否しますか</p>
+                        <button>拒否</button>
                     </form>
 
                 </div>
@@ -56,6 +65,7 @@
                 loadingFlg: true,
                 modalFlg: false,
                 allowFormFlg: false,
+                rejectFormFlg: false,
                 applicantData: null
             }
         },
@@ -104,14 +114,42 @@
 
                 this.$store.commit('error/setCode', response.status)
             },
+            async rejectApplication() {
+                if (!this.sharedCalendarId || !this.applicantData.id) {
+                    return false
+                }
+                const response = await axios.post('/api/shared-calendar/application/reject', {
+                    calendar_id: this.sharedCalendarId,
+                    applicant_id: this.applicantData.id
+                })
+
+                if (response.status === SUCCESS) {
+                    for (let i = 0; i < this.sharedCalendarApplicants.length; i++) {
+                        if (response.data.id === this.sharedCalendarApplicants[i].id){
+                            this.sharedCalendarApplicants.splice(i, 1)
+                            break
+                        }
+                    }
+                    this.hideModal()
+                    return false
+                }
+
+                this.$store.commit('error/setCode', response.status)
+            },
             showAllowModal(applicant) {
                 this.applicantData = applicant
                 this.modalFlg = true
                 this.allowFormFlg = true
             },
+            showRejectModal(applicant) {
+                this.applicantData = applicant
+                this.modalFlg = true
+                this.rejectFormFlg = true
+            },
             hideModal() {
                 this.modalFlg = false
                 this.allowFormFlg = false
+                this.rejectFormFlg = false
 
                 this.applicantData = null
             }

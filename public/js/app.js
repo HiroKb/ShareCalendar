@@ -3971,6 +3971,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3984,6 +3993,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       loadingFlg: true,
       modalFlg: false,
       allowFormFlg: false,
+      rejectFormFlg: false,
       applicantData: null
     };
   },
@@ -4102,14 +4112,89 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
+    rejectApplication: function rejectApplication() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var response, i;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                if (!(!_this3.sharedCalendarId || !_this3.applicantData.id)) {
+                  _context3.next = 2;
+                  break;
+                }
+
+                return _context3.abrupt("return", false);
+
+              case 2:
+                _context3.next = 4;
+                return axios.post('/api/shared-calendar/application/reject', {
+                  calendar_id: _this3.sharedCalendarId,
+                  applicant_id: _this3.applicantData.id
+                });
+
+              case 4:
+                response = _context3.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
+                  _context3.next = 16;
+                  break;
+                }
+
+                i = 0;
+
+              case 7:
+                if (!(i < _this3.sharedCalendarApplicants.length)) {
+                  _context3.next = 14;
+                  break;
+                }
+
+                if (!(response.data.id === _this3.sharedCalendarApplicants[i].id)) {
+                  _context3.next = 11;
+                  break;
+                }
+
+                _this3.sharedCalendarApplicants.splice(i, 1);
+
+                return _context3.abrupt("break", 14);
+
+              case 11:
+                i++;
+                _context3.next = 7;
+                break;
+
+              case 14:
+                _this3.hideModal();
+
+                return _context3.abrupt("return", false);
+
+              case 16:
+                _this3.$store.commit('error/setCode', response.status);
+
+              case 17:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
+    },
     showAllowModal: function showAllowModal(applicant) {
       this.applicantData = applicant;
       this.modalFlg = true;
       this.allowFormFlg = true;
     },
+    showRejectModal: function showRejectModal(applicant) {
+      this.applicantData = applicant;
+      this.modalFlg = true;
+      this.rejectFormFlg = true;
+    },
     hideModal: function hideModal() {
       this.modalFlg = false;
       this.allowFormFlg = false;
+      this.rejectFormFlg = false;
       this.applicantData = null;
     }
   },
@@ -42969,7 +43054,7 @@ var render = function() {
                     attrs: {
                       to: {
                         name: "sharedCalendarApplicants",
-                        params: { sharedCalendarId: _vm.sharedCalendar.id }
+                        params: { sharedCalendarId: _vm.sharedCalendarId }
                       }
                     }
                   },
@@ -42983,7 +43068,7 @@ var render = function() {
                 attrs: {
                   to: {
                     name: "sharedCalendarMembers",
-                    params: { sharedCalendarId: _vm.sharedCalendar.id }
+                    params: { sharedCalendarId: _vm.sharedCalendarId }
                   }
                 }
               },
@@ -43096,6 +43181,18 @@ var render = function() {
                             }
                           },
                           [_c("i", { staticClass: "fas fa-check" })]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            on: {
+                              click: function($event) {
+                                return _vm.showRejectModal(applicant)
+                              }
+                            }
+                          },
+                          [_c("i", { staticClass: "fas fa-times" })]
                         )
                       ])
                     }),
@@ -43167,6 +43264,33 @@ var render = function() {
                   _c("p", [_vm._v("共有申請を許可しますか")]),
                   _vm._v(" "),
                   _c("button", [_vm._v("許可")])
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.rejectFormFlg,
+                      expression: "rejectFormFlg"
+                    }
+                  ],
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.rejectApplication($event)
+                    }
+                  }
+                },
+                [
+                  _c("p", [_vm._v(_vm._s(_vm.applicantName))]),
+                  _vm._v(" "),
+                  _c("p", [_vm._v("共有申請を拒否しますか")]),
+                  _vm._v(" "),
+                  _c("button", [_vm._v("拒否")])
                 ]
               )
             ]

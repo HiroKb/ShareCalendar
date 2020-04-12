@@ -3,10 +3,10 @@
         <div class="sidebar-wrap">
             <SideBar/>
             <div class="shared-calendar-menu">
-                <router-link :to="{name: 'sharedCalendarApplicants', params:{sharedCalendarId: sharedCalendar.id}}" v-if="sharedCalendar.adminFlg">
+                <router-link :to="{name: 'sharedCalendarApplicants', params:{sharedCalendarId: sharedCalendarId}}" v-if="sharedCalendar.adminFlg">
                     共有申請者一覧
                 </router-link>
-                <router-link :to="{name: 'sharedCalendarMembers', params:{sharedCalendarId: sharedCalendar.id}}">
+                <router-link :to="{name: 'sharedCalendarMembers', params:{sharedCalendarId: sharedCalendarId}}">
                     共有メンバー一覧
                 </router-link>
             </div>
