@@ -33,7 +33,7 @@ class ApplicationToSharingCalendarApiTest extends TestCase
         $calendar->save();
         $calendar->members()->attach([$this->user1->id]);
 
-        $response = $this->actingAs($this->user2)->json('post', '/api/shared-calendar/application', ['search_id' => $calendar->search_id]);
+        $response = $this->actingAs($this->user2)->json('put', '/api/shared-calendars/' . $calendar->search_id. '/applications');
 
         $response->assertStatus(201);
         $this->assertDatabaseHas('sharedcalendar_user_applicants',[
@@ -41,7 +41,7 @@ class ApplicationToSharingCalendarApiTest extends TestCase
             'user_id' => $this->user2->id
             ]);
 
-        $response = $this->actingAs($this->user2)->json('post', '/api/shared-calendar/application', ['search_id' => $calendar->search_id]);
+        $response = $this->actingAs($this->user2)->json('put', '/api/shared-calendars/' . $calendar->search_id. '/applications');
 
         $response->assertStatus(404);
         $this->assertDatabaseHas('sharedcalendar_user_applicants',[

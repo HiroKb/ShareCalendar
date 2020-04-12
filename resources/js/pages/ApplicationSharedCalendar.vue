@@ -7,7 +7,7 @@
             <h1>JoinSharedCalendar</h1>
             <template v-if="sharedCalendarData.status">
 
-                <form v-if="sharedCalendarData.status === 'NotShared'" @submit.prevent="ApplicationSharedCalendar">
+                <form v-if="sharedCalendarData.status === 'NotShared'" @submit.prevent="applicationSharedCalendar">
                     <p>管理者: {{sharedCalendarData.admin_name}}</p>
                     <button type="submit">共有申請</button>
                 </form>
@@ -38,8 +38,8 @@
             }
         },
         methods: {
-            async ApplicationSharedCalendar () {
-                const response = await axios.post('/api/shared-calendar/application', {'search_id': this.sharedCalendarData.search_id})
+            async applicationSharedCalendar () {
+                const response = await axios.put('/api/shared-calendars/' + this.sharedCalendarData.search_id + '/applications')
                 if (response.status === CREATED) {
                     this.$router.push('/my-calendar')
                     return false

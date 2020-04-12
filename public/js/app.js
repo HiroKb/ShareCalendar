@@ -2107,7 +2107,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
-    ApplicationSharedCalendar: function ApplicationSharedCalendar() {
+    applicationSharedCalendar: function applicationSharedCalendar() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
@@ -2117,9 +2117,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios.post('/api/shared-calendar/application', {
-                  'search_id': _this.sharedCalendarData.search_id
-                });
+                return axios.put('/api/shared-calendars/' + _this.sharedCalendarData.search_id + '/applications');
 
               case 2:
                 response = _context.sent;
@@ -41600,7 +41598,7 @@ var render = function() {
                       on: {
                         submit: function($event) {
                           $event.preventDefault()
-                          return _vm.ApplicationSharedCalendar($event)
+                          return _vm.applicationSharedCalendar($event)
                         }
                       }
                     },

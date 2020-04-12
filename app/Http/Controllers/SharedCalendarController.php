@@ -127,18 +127,18 @@ class SharedCalendarController extends Controller
         });
     }
 
-    public function rejectApplication(SharedCalendar $calendar, $applicant_id)
+    public function rejectApplication(SharedCalendar $calendar, $applicantId)
     {
 //        カレンダー管理者以外のアクセスの場合
         if ($calendar->admin_id !== Auth::id()) {
             abort(404);
         }
 //        共有申請者以外のIDがpostされた場合
-        if (!$calendar->applicants()->where('user_id', $applicant_id)->exists()) {
+        if (!$calendar->applicants()->where('user_id', $applicantId)->exists()) {
             abort(404);
         }
-        $calendar->applicants()->detach([$applicant_id]);
-        return response(['id' => $applicant_id], 200);
+        $calendar->applicants()->detach([$applicantId]);
+        return response(['id' => $applicantId], 200);
     }
 
     /**
@@ -179,12 +179,13 @@ class SharedCalendarController extends Controller
     }
 
     // カレンダー共有申請
-    public function application(ApplicationToSharingCalendarRequest $request)
+    public function application($searchId)
     {
         $userId = Auth::id();
-        $calendar = SharedCalendar::where('search_id', $request->search_id)->first();
-//        すでに共有済みか申請済みの場合
-        if ($calendar->members()->where('user_id', $userId)->exists() ||
+        $calendar = SharedCalendar::where('search_id', $searchId)->first();
+//        IDが間違っているかすでに共有済み、申請済みの場合
+        if (!$calendar ||
+            $calendar->members()->where('user_id', $userId)->exists() ||
             $calendar->applicants()->where('user_id', $userId)->exists()){
             abort(404);
         }
