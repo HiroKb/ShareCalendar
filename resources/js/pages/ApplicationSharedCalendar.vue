@@ -47,7 +47,7 @@
                 this.$store.commit('error/setCode', response.status)
             },
             async searchSharedCalendar () {
-                const response =  await axios.get('/api/shared-calendar/search/' + this.searchId)
+                const response =  await axios.get('/api/shared-calendars/' + this.searchId + '/search')
 
                 if (response.status === SUCCESS) {
 

@@ -47,6 +47,6 @@ Route::put('/shared-calendars/{SharedCalendar}/applications/{applicantId}', 'Sha
 Route::delete('/shared-calendars/{SharedCalendar}/applications/{applicantId}', 'SharedCalendarController@rejectApplication');
 
 // 共有カレンダー検索
-Route::get('/shared-calendar/search/{searchId}', 'SharedCalendarController@search');
+Route::get('/shared-calendars/{searchId}/search', 'SharedCalendarController@search');
 // カレンダー共有申請
 Route::put('/shared-calendars/{searchId}/applications', 'SharedCalendarController@application');
