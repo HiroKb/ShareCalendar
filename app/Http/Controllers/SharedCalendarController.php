@@ -88,7 +88,7 @@ class SharedCalendarController extends Controller
      * @param SharedCalendar $calendar
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function applicantsList(SharedCalendar $calendar)
+    public function applicationsList(SharedCalendar $calendar)
     {
         // カレンダー管理者以外のアクセスの場合
         if ($calendar->admin_id !== Auth::id()) {

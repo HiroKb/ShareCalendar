@@ -25,7 +25,7 @@ class GetCalendarSharingApplicantsApiTest extends TestCase
     /**
      * @test
      */
-    public function shoud_指定のカレンダー共有申請者のデータを返却()
+    public function shoud_カレンダー共有申請者のデータを返却()
     {
 
         $calendar = new SharedCalendar();
@@ -40,7 +40,7 @@ class GetCalendarSharingApplicantsApiTest extends TestCase
         sleep(1);
         $calendar->applicants()->attach([$this->user4->id]);
 
-        $response = $this->actingAs($this->user1)->json('get', '/api/shared-calendar/' . $calendar->id .'/applicants');
+        $response = $this->actingAs($this->user1)->json('get', '/api/shared-calendars/' . $calendar->id .'/applications');
 
         $response
             ->assertStatus(200)
@@ -48,7 +48,7 @@ class GetCalendarSharingApplicantsApiTest extends TestCase
             ->assertJsonPath('1.name', $this->user3->name)
             ->assertJsonPath('2.name', $this->user4->name);
 
-        $response = $this->actingAs($this->user2)->json('get', '/api/shared-calendar/' . $calendar->id .'/applicants');
+        $response = $this->actingAs($this->user2)->json('get', '/api/shared-calendars/' . $calendar->id .'/applications');
         $response->assertStatus(404);
     }
 }
