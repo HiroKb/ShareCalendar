@@ -42,7 +42,7 @@ class GetSharedCalendarMembersListApiTest extends TestCase
         sleep(1);
         $calendar->members()->attach([$this->user4->id]);
 
-        $response = $this->actingAs($this->user2)->json('get', '/api/shared-calendar/' . $calendar->id .'/members');
+        $response = $this->actingAs($this->user2)->json('get', '/api/shared-calendars/' . $calendar->id .'/members');
 
         $response
             ->assertStatus(200)
@@ -51,7 +51,7 @@ class GetSharedCalendarMembersListApiTest extends TestCase
             ->assertJsonPath('2.name', $this->user3->name)
             ->assertJsonPath('3.name', $this->user4->name);
 
-        $response = $this->actingAs($this->user5)->json('get', '/api/shared-calendar/' . $calendar->id .'/members');
+        $response = $this->actingAs($this->user5)->json('get', '/api/shared-calendars/' . $calendar->id .'/members');
 
         $response->assertStatus(404);
     }

@@ -60,7 +60,7 @@
         },
         methods: {
             async fetchSharedCalendarMembers() {
-                const response = await axios.get('/api/shared-calendar/' + this.sharedCalendarId + '/members')
+                const response = await axios.get('/api/shared-calendars/' + this.sharedCalendarId + '/members')
 
                 if(response.status === SUCCESS) {
                     this.sharedCalendarMembers = response.data

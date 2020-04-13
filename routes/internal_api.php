@@ -38,7 +38,7 @@ Route::get('/shared-calendar/list', 'SharedCalendarController@list');
 // 共有カレンダーデータ
 Route::get('/shared-calendar/{SharedCalendar}', 'SharedCalendarController@index');
 // カレンダー共有メンバー
-Route::get('/shared-calendar/{SharedCalendar}/members', 'SharedCalendarController@membersList');
+Route::get('/shared-calendars/{SharedCalendar}/members', 'SharedCalendarController@membersList');
 // カレンダー共有申請者
 Route::get('/shared-calendars/{SharedCalendar}/applications', 'SharedCalendarController@applicationsList');
 // カレンダー共有申請許可
