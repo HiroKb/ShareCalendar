@@ -3978,6 +3978,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3990,8 +3999,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       sharedCalendarApplicants: {},
       loadingFlg: true,
       modalFlg: false,
-      allowFormFlg: false,
-      rejectFormFlg: false,
+      allowModalFlg: false,
+      rejectModalFlg: false,
+      rejectAllModalFlg: false,
       applicantData: null
     };
   },
@@ -4173,20 +4183,70 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }))();
     },
+    rejectAllApplication: function rejectAllApplication() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                if (_this4.sharedCalendarId) {
+                  _context4.next = 2;
+                  break;
+                }
+
+                return _context4.abrupt("return", false);
+
+              case 2:
+                _context4.next = 4;
+                return axios["delete"]('/api/shared-calendars/' + _this4.sharedCalendarId + '/applications/all');
+
+              case 4:
+                response = _context4.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
+                  _context4.next = 9;
+                  break;
+                }
+
+                _this4.sharedCalendarApplicants = {};
+
+                _this4.hideModal();
+
+                return _context4.abrupt("return", false);
+
+              case 9:
+                _this4.$store.commit('error/setCode', response.status);
+
+              case 10:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
+    },
     showAllowModal: function showAllowModal(applicant) {
       this.applicantData = applicant;
       this.modalFlg = true;
-      this.allowFormFlg = true;
+      this.allowModalFlg = true;
     },
     showRejectModal: function showRejectModal(applicant) {
       this.applicantData = applicant;
       this.modalFlg = true;
-      this.rejectFormFlg = true;
+      this.rejectModalFlg = true;
+    },
+    showRejectAllModal: function showRejectAllModal() {
+      this.modalFlg = true;
+      this.rejectAllModalFlg = true;
     },
     hideModal: function hideModal() {
       this.modalFlg = false;
-      this.allowFormFlg = false;
-      this.rejectFormFlg = false;
+      this.allowModalFlg = false;
+      this.rejectModalFlg = false;
+      this.rejectAllModalFlg = false;
       this.applicantData = null;
     }
   },
@@ -43159,36 +43219,42 @@ var render = function() {
               _vm.sharedCalendarApplicants.length
                 ? _c(
                     "div",
-                    _vm._l(_vm.sharedCalendarApplicants, function(applicant) {
-                      return _c("div", [
-                        _c("p", [_vm._v(_vm._s(applicant.name))]),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            on: {
-                              click: function($event) {
-                                return _vm.showAllowModal(applicant)
+                    [
+                      _vm._l(_vm.sharedCalendarApplicants, function(applicant) {
+                        return _c("div", { key: applicant.id }, [
+                          _c("p", [_vm._v(_vm._s(applicant.name))]),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              on: {
+                                click: function($event) {
+                                  return _vm.showAllowModal(applicant)
+                                }
                               }
-                            }
-                          },
-                          [_c("i", { staticClass: "fas fa-check" })]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            on: {
-                              click: function($event) {
-                                return _vm.showRejectModal(applicant)
+                            },
+                            [_c("i", { staticClass: "fas fa-check" })]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              on: {
+                                click: function($event) {
+                                  return _vm.showRejectModal(applicant)
+                                }
                               }
-                            }
-                          },
-                          [_c("i", { staticClass: "fas fa-times" })]
-                        )
+                            },
+                            [_c("i", { staticClass: "fas fa-times" })]
+                          )
+                        ])
+                      }),
+                      _vm._v(" "),
+                      _c("button", { on: { click: _vm.showRejectAllModal } }, [
+                        _vm._v("全て拒否")
                       ])
-                    }),
-                    0
+                    ],
+                    2
                   )
                 : _c("p", [
                     _vm._v(
@@ -43239,8 +43305,8 @@ var render = function() {
                     {
                       name: "show",
                       rawName: "v-show",
-                      value: _vm.allowFormFlg,
-                      expression: "allowFormFlg"
+                      value: _vm.allowModalFlg,
+                      expression: "allowModalFlg"
                     }
                   ],
                   on: {
@@ -43266,8 +43332,8 @@ var render = function() {
                     {
                       name: "show",
                       rawName: "v-show",
-                      value: _vm.rejectFormFlg,
-                      expression: "rejectFormFlg"
+                      value: _vm.rejectModalFlg,
+                      expression: "rejectModalFlg"
                     }
                   ],
                   on: {
@@ -43284,6 +43350,42 @@ var render = function() {
                   _vm._v(" "),
                   _c("button", [_vm._v("拒否")])
                 ]
+              ),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.rejectAllModalFlg,
+                      expression: "rejectAllModalFlg"
+                    }
+                  ],
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.rejectAllApplication($event)
+                    }
+                  }
+                },
+                [
+                  _vm._l(_vm.sharedCalendarApplicants, function(applicants) {
+                    return _c("p", { key: applicants.id }, [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(applicants.name) +
+                          "\n                    "
+                      )
+                    ])
+                  }),
+                  _vm._v(" "),
+                  _c("p", [_vm._v("全ての共有申請を拒否しますか")]),
+                  _vm._v(" "),
+                  _c("button", [_vm._v("拒否")])
+                ],
+                2
               )
             ]
           )

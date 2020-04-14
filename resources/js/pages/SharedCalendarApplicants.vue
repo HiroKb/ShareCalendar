@@ -15,7 +15,7 @@
             <p v-if="loadingFlg">読み込み中</p>
             <template v-else>
                 <div v-if="sharedCalendarApplicants.length">
-                    <div v-for="applicant in sharedCalendarApplicants">
+                    <div v-for="applicant in sharedCalendarApplicants" :key="applicant.id">
                         <p>{{ applicant.name }}</p>
                         <button @click="showAllowModal(applicant)">
                             <i class="fas fa-check"></i>
@@ -24,6 +24,7 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
+                    <button @click="showRejectAllModal">全て拒否</button>
                 </div>
                 <p v-else>
                     現在共有申請者はいません。
@@ -35,15 +36,23 @@
                 <div class="modal-inner" @click.stop>
                     <i class="fas fa-times" @click="hideModal"></i>
 
-                    <form @submit.prevent="allowApplication" v-show="allowFormFlg">
+                    <form @submit.prevent="allowApplication" v-show="allowModalFlg">
                         <p>{{ applicantName }}</p>
                         <p>共有申請を許可しますか</p>
                         <button>許可</button>
                     </form>
 
-                    <form @submit.prevent="rejectApplication" v-show="rejectFormFlg">
+                    <form @submit.prevent="rejectApplication" v-show="rejectModalFlg">
                         <p>{{ applicantName }}</p>
                         <p>共有申請を拒否しますか</p>
+                        <button>拒否</button>
+                    </form>
+
+                    <form @submit.prevent="rejectAllApplication" v-show="rejectAllModalFlg">
+                        <p v-for="applicants in sharedCalendarApplicants" :key="applicants.id">
+                            {{ applicants.name}}
+                        </p>
+                        <p>全ての共有申請を拒否しますか</p>
                         <button>拒否</button>
                     </form>
 
@@ -64,8 +73,9 @@
                 sharedCalendarApplicants:{},
                 loadingFlg: true,
                 modalFlg: false,
-                allowFormFlg: false,
-                rejectFormFlg: false,
+                allowModalFlg: false,
+                rejectModalFlg: false,
+                rejectAllModalFlg: false,
                 applicantData: null
             }
         },
@@ -130,20 +140,37 @@
 
                 this.$store.commit('error/setCode', response.status)
             },
+            async rejectAllApplication() {
+                if (!this.sharedCalendarId) {
+                    return false
+                }
+                const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarId + '/applications/all')
+                if (response.status === SUCCESS) {
+                    this.sharedCalendarApplicants = {}
+                    this.hideModal()
+                    return false
+                }
+                this.$store.commit('error/setCode', response.status)
+            },
             showAllowModal(applicant) {
                 this.applicantData = applicant
                 this.modalFlg = true
-                this.allowFormFlg = true
+                this.allowModalFlg = true
             },
             showRejectModal(applicant) {
                 this.applicantData = applicant
                 this.modalFlg = true
-                this.rejectFormFlg = true
+                this.rejectModalFlg = true
+            },
+            showRejectAllModal() {
+                this.modalFlg = true
+                this.rejectAllModalFlg= true
             },
             hideModal() {
                 this.modalFlg = false
-                this.allowFormFlg = false
-                this.rejectFormFlg = false
+                this.allowModalFlg = false
+                this.rejectModalFlg = false
+                this.rejectAllModalFlg = false
 
                 this.applicantData = null
             }
