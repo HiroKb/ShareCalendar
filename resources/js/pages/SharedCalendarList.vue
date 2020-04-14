@@ -38,7 +38,7 @@
             async fetchSharedCalendarList () {
                 this.loadingFlg = true
 
-                const response = await axios.get('/api/shared-calendar/list')
+                const response = await axios.get('/api/shared-calendars/list')
                 this.sharedCalendarList = response.data
 
                 this.loadingFlg = false

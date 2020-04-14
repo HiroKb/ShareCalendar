@@ -2267,7 +2267,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 5:
                 _context.next = 7;
-                return axios.post('/api/shared-calendar', _this.createShareCalendarData);
+                return axios.post('/api/shared-calendars', _this.createShareCalendarData);
 
               case 7:
                 response = _context.sent;
@@ -4264,7 +4264,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _this.loadingFlg = true;
                 _context.next = 3;
-                return axios.get('/api/shared-calendar/list');
+                return axios.get('/api/shared-calendars/list');
 
               case 3:
                 response = _context.sent;

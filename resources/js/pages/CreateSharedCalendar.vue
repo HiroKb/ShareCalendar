@@ -47,7 +47,7 @@
                 }
 
 
-                const response = await axios.post('/api/shared-calendar', this.createShareCalendarData)
+                const response = await axios.post('/api/shared-calendars', this.createShareCalendarData)
 
 
                 if (response.status === CREATED) {

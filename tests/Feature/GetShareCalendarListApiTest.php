@@ -49,7 +49,7 @@ class GetShareCalendarListApiTest extends TestCase
         $calendar3->members()->attach([$this->user->id]);
 
 
-        $response = $this->actingAs($this->user)->json('get', '/api/shared-calendar/list');
+        $response = $this->actingAs($this->user)->json('get', '/api/shared-calendars/list');
 
 
         $response

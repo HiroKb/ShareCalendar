@@ -18,7 +18,7 @@ class CreateSharedCalendarApiTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
 
         $this->user = factory(User::class)->create();
     }
@@ -33,7 +33,7 @@ class CreateSharedCalendarApiTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->json('post', '/api/shared-calendar', $data);
+            ->json('post', '/api/shared-calendars', $data);
 
 //        レスポンスが期待通りか
         $response

@@ -32,9 +32,9 @@ Route::patch('/schedule/{schedule}', 'ScheduleController@update');
 Route::delete('/schedule/{schedule}', 'ScheduleController@destroy');
 
 // 共有カレンダー作成
-Route::post('/shared-calendar', 'SharedCalendarController@create');
+Route::post('/shared-calendars', 'SharedCalendarController@create');
 // 参加共有カレンダー一覧
-Route::get('/shared-calendar/list', 'SharedCalendarController@list');
+Route::get('/shared-calendars/list', 'SharedCalendarController@list');
 // 共有カレンダーデータ
 Route::get('/shared-calendars/{SharedCalendar}', 'SharedCalendarController@index');
 // カレンダー共有メンバー
