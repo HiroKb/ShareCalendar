@@ -120,6 +120,22 @@ class SharedCalendarController extends Controller
         });
     }
 
+    public function rejectAllApplication(SharedCalendar $sharedCalendar)
+    {
+//        カレンダー管理者以外のアクセスの場合
+        if ($sharedCalendar->admin_id !== Auth::id()) {
+            abort(404);
+        }
+        $sharedCalendar->applicants()->detach();
+        return response([], 200);
+    }
+
+    /**
+     * 共有申請拒否
+     * @param SharedCalendar $sharedCalendar
+     * @param $applicantId
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function rejectApplication(SharedCalendar $sharedCalendar, $applicantId)
     {
 //        カレンダー管理者以外のアクセスの場合
