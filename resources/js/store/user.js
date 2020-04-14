@@ -103,7 +103,7 @@ const actions = {
         // apiStatusの初期化
         context.commit('setApiStatus', null)
         // ログインユーザー取得APIの呼び出し
-        const response = await axios.get('/api/user')
+        const response = await axios.get('/api/users')
         const user = response.data || null
 
         if (response.status === SUCCESS) {
@@ -118,7 +118,7 @@ const actions = {
         // apiStatusの初期化
         context.commit('setApiStatus', null)
         // ユーザー名変更APIの呼び出し
-        const response = await axios.patch('/api/user-name', data)
+        const response = await axios.patch('/api/users/name', data)
 
         // 通信成功時
         if(response.status === SUCCESS) {
@@ -143,7 +143,7 @@ const actions = {
         // apiStatusの初期化
         context.commit('setApiStatus', null)
         // メールアドレス変更APIの呼び出し
-        const response = await axios.patch('/api/user-email', data)
+        const response = await axios.patch('/api/users/email', data)
 
         // 通信成功時
         if(response.status === SUCCESS) {
@@ -168,7 +168,7 @@ const actions = {
         // apiStatusの初期化
         context.commit('setApiStatus', null)
         // パスワード変更APIの呼び出し
-        const response = await axios.patch('/api/user-password', data)
+        const response = await axios.patch('/api/users/password', data)
 
         // 通信成功時
         if(response.status === SUCCESS) {

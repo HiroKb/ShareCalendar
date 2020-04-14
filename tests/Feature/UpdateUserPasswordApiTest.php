@@ -30,7 +30,7 @@ class UpdateUserPasswordApiTest extends TestCase
         $newPassword = Str::random();
 
         $response = $this->actingAs($this->user)
-            ->json('patch', '/api/user-password',[
+            ->json('patch', '/api/users/password',[
                 'current_password' => 'password',
                 'new_password' => $newPassword
             ]);

@@ -61864,7 +61864,7 @@ var actions = {
               context.commit('setApiStatus', null); // ログインユーザー取得APIの呼び出し
 
               _context4.next = 3;
-              return axios.get('/api/user');
+              return axios.get('/api/users');
 
             case 3:
               response = _context4.sent;
@@ -61904,7 +61904,7 @@ var actions = {
               context.commit('setApiStatus', null); // ユーザー名変更APIの呼び出し
 
               _context5.next = 3;
-              return axios.patch('/api/user-name', data);
+              return axios.patch('/api/users/name', data);
 
             case 3:
               response = _context5.sent;
@@ -61950,7 +61950,7 @@ var actions = {
               context.commit('setApiStatus', null); // メールアドレス変更APIの呼び出し
 
               _context6.next = 3;
-              return axios.patch('/api/user-email', data);
+              return axios.patch('/api/users/email', data);
 
             case 3:
               response = _context6.sent;
@@ -61996,7 +61996,7 @@ var actions = {
               context.commit('setApiStatus', null); // パスワード変更APIの呼び出し
 
               _context7.next = 3;
-              return axios.patch('/api/user-password', data);
+              return axios.patch('/api/users/password', data);
 
             case 3:
               response = _context7.sent;

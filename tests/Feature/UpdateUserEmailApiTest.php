@@ -29,7 +29,7 @@ class UpdateUserEmailApiTest extends TestCase
         $email = Str::random() . '@test.com';
 
         $response = $this->actingAs($this->user)
-            ->json('patch', '/api/user-email',[
+            ->json('patch', '/api/users/email',[
                 'email' => $email,
                 'password' => 'password'
             ]);

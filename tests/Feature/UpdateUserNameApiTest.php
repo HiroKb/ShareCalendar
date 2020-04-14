@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-class EditUserNameApiTest extends TestCase
+class UpdateUserNameApiTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -28,7 +28,7 @@ class EditUserNameApiTest extends TestCase
         $newName = Str::random();
 
         $response = $this->actingAs($this->user)
-            ->json('patch', '/api/user-name',[
+            ->json('patch', '/api/users/name',[
                 'name' => $newName
             ]);
 
