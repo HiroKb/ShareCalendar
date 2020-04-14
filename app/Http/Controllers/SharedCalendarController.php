@@ -2,17 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ApplicationToSharingCalendarRequest;
 use App\Http\Requests\CreateSharedCalendarRequest;
 use App\Http\Requests\ProcessingApplicationToSharingCalendarRequest;
 use App\SharedCalendar;
-use App\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Ramsey\Uuid\Uuid;
-use function Psy\debug;
 
 class SharedCalendarController extends Controller
 {
@@ -49,34 +43,34 @@ class SharedCalendarController extends Controller
 
     /**
      * 共有カレンダーデータ
-     * @param SharedCalendar $calendar
+     * @param SharedCalendar $sharedCalendar
      * @return SharedCalendar
      */
-    public function index(SharedCalendar $calendar)
+    public function index(SharedCalendar $sharedCalendar)
     {
         $user_id = Auth::id();
-        if (!$calendar->members()->where('user_id', $user_id)->exists()){
+        if (!$sharedCalendar->members()->where('user_id', $user_id)->exists()){
             abort(404);
         }
 
-        if ($calendar->admin_id !== $user_id){
-            unset($calendar['search_id']);
+        if ($sharedCalendar->admin_id !== $user_id){
+            unset($sharedCalendar['search_id']);
         }
-        return $calendar;
+        return $sharedCalendar;
     }
 
     /**
      * カレンダ共有メンバー
-     * @param SharedCalendar $calendar
+     * @param SharedCalendar $sharedCalendar
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function membersList(SharedCalendar $calendar)
+    public function membersList(SharedCalendar $sharedCalendar)
     {
-        if (!$calendar->members()->where('user_id', Auth::id())->exists()){
+        if (!$sharedCalendar->members()->where('user_id', Auth::id())->exists()){
             abort(404);
         }
 
-        return $calendar
+        return $sharedCalendar
             ->members()
             ->withPivot('created_at AS joined_at')
             ->orderBy('joined_at', 'asc')
@@ -85,16 +79,16 @@ class SharedCalendarController extends Controller
 
     /**
      * 共有申請者リスト
-     * @param SharedCalendar $calendar
+     * @param SharedCalendar $sharedCalendar
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function applicationsList(SharedCalendar $calendar)
+    public function applicationsList(SharedCalendar $sharedCalendar)
     {
         // カレンダー管理者以外のアクセスの場合
-        if ($calendar->admin_id !== Auth::id()) {
+        if ($sharedCalendar->admin_id !== Auth::id()) {
             abort(404);
         }
-        return $calendar
+        return $sharedCalendar
             ->applicants()
             ->withPivot('created_at AS application_at')
             ->orderBy('application_at', 'asc')
@@ -107,36 +101,36 @@ class SharedCalendarController extends Controller
      * @param ProcessingApplicationToSharingCalendarRequest $request
      * @return mixed
      */
-    public function allowApplication(SharedCalendar $calendar, $applicantId)
+    public function allowApplication(SharedCalendar $sharedCalendar, $applicantId)
     {
 //        カレンダー管理者以外のアクセスの場合
-        if ($calendar->admin_id !== Auth::id()) {
+        if ($sharedCalendar->admin_id !== Auth::id()) {
             abort(404);
         }
 //        共有申請者以外のIDがpostされた場合
-        if (!$calendar->applicants()->where('user_id', $applicantId)->exists()) {
+        if (!$sharedCalendar->applicants()->where('user_id', $applicantId)->exists()) {
             abort(404);
         }
 
-        return DB::transaction(function () use($calendar, $applicantId){
+        return DB::transaction(function () use($sharedCalendar, $applicantId){
 
-            $calendar->members()->attach([$applicantId]);
-            $calendar->applicants()->detach([$applicantId]);
+            $sharedCalendar->members()->attach([$applicantId]);
+            $sharedCalendar->applicants()->detach([$applicantId]);
             return response(['id' => $applicantId], 201);
         });
     }
 
-    public function rejectApplication(SharedCalendar $calendar, $applicantId)
+    public function rejectApplication(SharedCalendar $sharedCalendar, $applicantId)
     {
 //        カレンダー管理者以外のアクセスの場合
-        if ($calendar->admin_id !== Auth::id()) {
+        if ($sharedCalendar->admin_id !== Auth::id()) {
             abort(404);
         }
 //        共有申請者以外のIDがpostされた場合
-        if (!$calendar->applicants()->where('user_id', $applicantId)->exists()) {
+        if (!$sharedCalendar->applicants()->where('user_id', $applicantId)->exists()) {
             abort(404);
         }
-        $calendar->applicants()->detach([$applicantId]);
+        $sharedCalendar->applicants()->detach([$applicantId]);
         return response(['id' => $applicantId], 200);
     }
 
@@ -148,22 +142,22 @@ class SharedCalendarController extends Controller
     public function search($searchId)
     {
         $userId = Auth::id();
-        $calendar = SharedCalendar::where('search_id', $searchId)->first();
-        if (!$calendar){
+        $sharedCalendar = SharedCalendar::where('search_id', $searchId)->first();
+        if (!$sharedCalendar){
             return [
                 'status' => 'NotFound',
                 'search_id' => '',
                 'admin_name' => ''
             ];
         }
-        if ($calendar->members()->where('user_id', $userId)->exists()){
+        if ($sharedCalendar->members()->where('user_id', $userId)->exists()){
             return [
                 'status' => 'Shared',
                 'search_id' => '',
                 'admin_name' => ''
             ];
         }
-        if ($calendar->applicants()->where('user_id', $userId)->exists()) {
+        if ($sharedCalendar->applicants()->where('user_id', $userId)->exists()) {
             return [
                 'status' => 'Applied',
                 'search_id' => '',
@@ -172,8 +166,8 @@ class SharedCalendarController extends Controller
         }
         return [
             'status' => 'NotShared',
-            'search_id' => $calendar->search_id,
-            'admin_name' => $calendar->admin->name
+            'search_id' => $sharedCalendar->search_id,
+            'admin_name' => $sharedCalendar->admin->name
         ];
     }
 
@@ -181,14 +175,14 @@ class SharedCalendarController extends Controller
     public function application($searchId)
     {
         $userId = Auth::id();
-        $calendar = SharedCalendar::where('search_id', $searchId)->first();
+        $sharedCalendar = SharedCalendar::where('search_id', $searchId)->first();
 //        IDが間違っているかすでに共有済み、申請済みの場合
-        if (!$calendar ||
-            $calendar->members()->where('user_id', $userId)->exists() ||
-            $calendar->applicants()->where('user_id', $userId)->exists()){
+        if (!$sharedCalendar ||
+            $sharedCalendar->members()->where('user_id', $userId)->exists() ||
+            $sharedCalendar->applicants()->where('user_id', $userId)->exists()){
             abort(404);
         }
-        $calendar->applicants()->attach([$userId]);
+        $sharedCalendar->applicants()->attach([$userId]);
 
         return response([], 201);
 
