@@ -322,7 +322,7 @@
                     description: description
                 }
 
-                const response = await axios.post('/api/schedule', data)
+                const response = await axios.post('/api/schedules', data)
 
                 if (response.status === CREATED) {
                     // 登録したスケジュールデータを追加
@@ -406,7 +406,7 @@
                     description: description
                 }
 
-                const response = await axios.patch('/api/schedule/' + this.editForm.scheduleData.id, data)
+                const response = await axios.patch('/api/schedules/' + this.editForm.scheduleData.id, data)
 
                 if (response.status === SUCCESS) {
                     // 更新前のデータを削除
@@ -470,7 +470,7 @@
                     return false
                 }
 
-                const response = await axios.delete('/api/schedule/' + this.deleteForm.scheduleData.id)
+                const response = await axios.delete('/api/schedules/' + this.deleteForm.scheduleData.id)
 
                 if (response.status === SUCCESS) {
                     outer: for (let i = 0; i < this.dates.length; i++){
@@ -598,7 +598,7 @@
                 const until = this.dates[this.dates.length - 1].date
 
                 // 登録スケジュール取得API
-                const schedules = await axios.get('/api/schedule/' + from + '/' + until)
+                const schedules = await axios.get('/api/schedules/' + from + '/' + until)
 
                 // 日付データ配列にスケジュールデータを追加
                 this.dates.forEach(function(dateData){

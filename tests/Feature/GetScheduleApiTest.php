@@ -49,7 +49,7 @@ class GetScheduleApiTest extends TestCase
         $this->user->schedules()->save($schedule2);
         $this->user->schedules()->save($schedule3);
 
-        $response = $this->actingAs($this->user)->json('get', '/api/schedule/2020-03-29/2020-05-02');
+        $response = $this->actingAs($this->user)->json('get', '/api/schedules/2020-03-29/2020-05-02');
 
         $response
             ->assertStatus(200)

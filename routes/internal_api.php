@@ -23,13 +23,13 @@ Route::patch('/user-email', 'UserController@updateEmail');
 
 
 //登録スケジュール取得
-Route::get('/schedule/{from}/{until}', 'ScheduleController@index');
+Route::get('/schedules/{from}/{until}', 'ScheduleController@index');
 // スケジュール登録
-Route::post('/schedule', 'ScheduleController@create');
+Route::post('/schedules', 'ScheduleController@create');
 // スケジュール更新
-Route::patch('/schedule/{schedule}', 'ScheduleController@update');
+Route::patch('/schedules/{schedule}', 'ScheduleController@update');
 // スケジュール削除
-Route::delete('/schedule/{schedule}', 'ScheduleController@destroy');
+Route::delete('/schedules/{schedule}', 'ScheduleController@destroy');
 
 // 共有カレンダー作成
 Route::post('/shared-calendars', 'SharedCalendarController@create');

@@ -52,7 +52,7 @@ class DeleteScheduleApiTest extends TestCase
         // スケジュールが登録されていることを確認
         $this->assertDatabaseHas('schedules', ['id' => $schedule2->id]);
 
-        $response = $this->actingAs($this->user)->json('delete', '/api/schedule/' . $schedule2->id);
+        $response = $this->actingAs($this->user)->json('delete', '/api/schedules/' . $schedule2->id);
 
 //        レスポンスが期待通りか
         $response->assertStatus(200);

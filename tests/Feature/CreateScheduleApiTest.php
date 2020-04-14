@@ -34,7 +34,7 @@ class CreateScheduleApiTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-                         ->json('post', '/api/schedule', $data);
+                         ->json('post', '/api/schedules', $data);
 
 //        レスポンスが期待通りか
         $response

@@ -3078,7 +3078,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   description: description
                 };
                 _context.next = 12;
-                return axios.post('/api/schedule', data);
+                return axios.post('/api/schedules', data);
 
               case 12:
                 response = _context.sent;
@@ -3226,7 +3226,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   description: description
                 };
                 _context2.next = 12;
-                return axios.patch('/api/schedule/' + _this2.editForm.scheduleData.id, data);
+                return axios.patch('/api/schedules/' + _this2.editForm.scheduleData.id, data);
 
               case 12:
                 response = _context2.sent;
@@ -3385,7 +3385,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 _context3.next = 4;
-                return axios["delete"]('/api/schedule/' + _this3.deleteForm.scheduleData.id);
+                return axios["delete"]('/api/schedules/' + _this3.deleteForm.scheduleData.id);
 
               case 4:
                 response = _context3.sent;
@@ -3556,7 +3556,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 until = this.dates[this.dates.length - 1].date; // 登録スケジュール取得API
 
                 _context4.next = 13;
-                return axios.get('/api/schedule/' + from + '/' + until);
+                return axios.get('/api/schedules/' + from + '/' + until);
 
               case 13:
                 schedules = _context4.sent;

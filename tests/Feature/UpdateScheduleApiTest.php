@@ -56,7 +56,7 @@ class UpdateScheduleApiTest extends TestCase
             'title' => 'test22',
             'description' => 'description22'
         ];
-        $response = $this->actingAs($this->user)->json('patch', '/api/schedule/' . $schedule2->id, $data);
+        $response = $this->actingAs($this->user)->json('patch', '/api/schedules/' . $schedule2->id, $data);
 
 //        レスポンスが期待通りか
         $response
