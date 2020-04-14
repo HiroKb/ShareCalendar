@@ -38,7 +38,7 @@ class RejectSharingApplicationApiTest extends TestCase
         $calendar->applicants()->attach([$this->user3->id]);
         $calendar->applicants()->attach([$this->user4->id]);
 
-        $this->assertDatabaseHas('sharedcalendar_user_applicants',[
+        $this->assertDatabaseHas('shared_calendar_user_applications',[
             'calendar_id' => $calendar->id,
             'user_id' => $this->user3->id
         ]);
@@ -49,7 +49,7 @@ class RejectSharingApplicationApiTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJson(['id' => $this->user3->id]);
-        $this->assertDatabaseMissing('sharedcalendar_user_applicants',[
+        $this->assertDatabaseMissing('shared_calendar_user_applications',[
             'calendar_id' => $calendar->id,
             'user_id' => $this->user3->id
         ]);
@@ -59,7 +59,7 @@ class RejectSharingApplicationApiTest extends TestCase
 
         $response->assertStatus(404);
 
-        $this->assertDatabaseHas('sharedcalendar_user_applicants',[
+        $this->assertDatabaseHas('shared_calendar_user_applications',[
             'calendar_id' => $calendar->id,
             'user_id' => $this->user4->id
         ]);

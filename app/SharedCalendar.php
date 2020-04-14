@@ -27,13 +27,13 @@ class SharedCalendar extends Model
 
     public function members()
     {
-        return $this->belongsToMany('App\User','shared_calendar_user', 'calendar_id', 'user_id')
+        return $this->belongsToMany('App\User','shared_calendar_user_members', 'calendar_id', 'user_id')
                     ->withTimestamps();
     }
 
     public function applicants()
     {
-        return $this->belongsToMany('App\User','sharedcalendar_user_applicants', 'calendar_id', 'user_id')
+        return $this->belongsToMany('App\User','shared_calendar_user_applications', 'calendar_id', 'user_id')
             ->withTimestamps();
     }
 }
