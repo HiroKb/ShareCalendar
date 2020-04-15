@@ -24,6 +24,7 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
+                    <button @click="showAllowAllModal">全て許可</button>
                     <button @click="showRejectAllModal">全て拒否</button>
                 </div>
                 <p v-else>
@@ -39,6 +40,14 @@
                     <form @submit.prevent="allowApplication" v-show="allowModalFlg">
                         <p>{{ applicantName }}</p>
                         <p>共有申請を許可しますか</p>
+                        <button>許可</button>
+                    </form>
+
+                    <form @submit.prevent="allowAllApplication" v-show="allowAllModalFlg">
+                        <p v-for="applicants in sharedCalendarApplicants" :key="applicants.id">
+                            {{ applicants.name}}
+                        </p>
+                        <p>全ての共有申請を許可しますか</p>
                         <button>許可</button>
                     </form>
 
@@ -74,6 +83,7 @@
                 loadingFlg: true,
                 modalFlg: false,
                 allowModalFlg: false,
+                allowAllModalFlg: false,
                 rejectModalFlg: false,
                 rejectAllModalFlg: false,
                 applicantData: null
@@ -121,6 +131,22 @@
 
                 this.$store.commit('error/setCode', response.status)
             },
+            async allowAllApplication() {
+                if (!this.sharedCalendarId) {
+                    return false
+                }
+                const data = {'id_list': this.sharedCalendarApplicants.map(function(applicant){
+                    return applicant.id
+                    })}
+
+                const response = await axios.put('/api/shared-calendars/' + this.sharedCalendarId + '/applications/all', data)
+                if (response.status === CREATED) {
+                    this.sharedCalendarApplicants = {}
+                    this.hideModal()
+                    return false
+                }
+                this.$store.commit('error/setCode', response.status)
+            },
             async rejectApplication() {
                 if (!this.sharedCalendarId || !this.applicantData.id) {
                     return false
@@ -157,6 +183,10 @@
                 this.modalFlg = true
                 this.allowModalFlg = true
             },
+            showAllowAllModal() {
+                this.modalFlg = true
+                this.allowAllModalFlg= true
+            },
             showRejectModal(applicant) {
                 this.applicantData = applicant
                 this.modalFlg = true
@@ -169,6 +199,7 @@
             hideModal() {
                 this.modalFlg = false
                 this.allowModalFlg = false
+                this.allowAllModalFlg = false
                 this.rejectModalFlg = false
                 this.rejectAllModalFlg = false
 

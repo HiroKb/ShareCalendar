@@ -3987,6 +3987,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4000,6 +4009,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       loadingFlg: true,
       modalFlg: false,
       allowModalFlg: false,
+      allowAllModalFlg: false,
       rejectModalFlg: false,
       rejectAllModalFlg: false,
       applicantData: null
@@ -4117,16 +4127,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
-    rejectApplication: function rejectApplication() {
+    allowAllApplication: function allowAllApplication() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        var response, i;
+        var data, response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                if (!(!_this3.sharedCalendarId || !_this3.applicantData.id)) {
+                if (_this3.sharedCalendarId) {
                   _context3.next = 2;
                   break;
                 }
@@ -4134,48 +4144,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context3.abrupt("return", false);
 
               case 2:
-                _context3.next = 4;
-                return axios["delete"]('/api/shared-calendars/' + _this3.sharedCalendarId + '/applications/' + _this3.applicantData.id);
+                data = {
+                  'id_list': _this3.sharedCalendarApplicants.map(function (applicant) {
+                    return applicant.id;
+                  })
+                };
+                _context3.next = 5;
+                return axios.put('/api/shared-calendars/' + _this3.sharedCalendarId + '/applications/all', data);
 
-              case 4:
+              case 5:
                 response = _context3.sent;
 
-                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                  _context3.next = 16;
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
+                  _context3.next = 10;
                   break;
                 }
 
-                i = 0;
+                _this3.sharedCalendarApplicants = {};
 
-              case 7:
-                if (!(i < _this3.sharedCalendarApplicants.length)) {
-                  _context3.next = 14;
-                  break;
-                }
-
-                if (!(response.data.id === _this3.sharedCalendarApplicants[i].id)) {
-                  _context3.next = 11;
-                  break;
-                }
-
-                _this3.sharedCalendarApplicants.splice(i, 1);
-
-                return _context3.abrupt("break", 14);
-
-              case 11:
-                i++;
-                _context3.next = 7;
-                break;
-
-              case 14:
                 _this3.hideModal();
 
                 return _context3.abrupt("return", false);
 
-              case 16:
+              case 10:
                 _this3.$store.commit('error/setCode', response.status);
 
-              case 17:
+              case 11:
               case "end":
                 return _context3.stop();
             }
@@ -4183,16 +4177,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }))();
     },
-    rejectAllApplication: function rejectAllApplication() {
+    rejectApplication: function rejectApplication() {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        var response;
+        var response, i;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                if (_this4.sharedCalendarId) {
+                if (!(!_this4.sharedCalendarId || !_this4.applicantData.id)) {
                   _context4.next = 2;
                   break;
                 }
@@ -4201,26 +4195,47 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 _context4.next = 4;
-                return axios["delete"]('/api/shared-calendars/' + _this4.sharedCalendarId + '/applications/all');
+                return axios["delete"]('/api/shared-calendars/' + _this4.sharedCalendarId + '/applications/' + _this4.applicantData.id);
 
               case 4:
                 response = _context4.sent;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                  _context4.next = 9;
+                  _context4.next = 16;
                   break;
                 }
 
-                _this4.sharedCalendarApplicants = {};
+                i = 0;
 
+              case 7:
+                if (!(i < _this4.sharedCalendarApplicants.length)) {
+                  _context4.next = 14;
+                  break;
+                }
+
+                if (!(response.data.id === _this4.sharedCalendarApplicants[i].id)) {
+                  _context4.next = 11;
+                  break;
+                }
+
+                _this4.sharedCalendarApplicants.splice(i, 1);
+
+                return _context4.abrupt("break", 14);
+
+              case 11:
+                i++;
+                _context4.next = 7;
+                break;
+
+              case 14:
                 _this4.hideModal();
 
                 return _context4.abrupt("return", false);
 
-              case 9:
+              case 16:
                 _this4.$store.commit('error/setCode', response.status);
 
-              case 10:
+              case 17:
               case "end":
                 return _context4.stop();
             }
@@ -4228,10 +4243,59 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee4);
       }))();
     },
+    rejectAllApplication: function rejectAllApplication() {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                if (_this5.sharedCalendarId) {
+                  _context5.next = 2;
+                  break;
+                }
+
+                return _context5.abrupt("return", false);
+
+              case 2:
+                _context5.next = 4;
+                return axios["delete"]('/api/shared-calendars/' + _this5.sharedCalendarId + '/applications/all');
+
+              case 4:
+                response = _context5.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
+                  _context5.next = 9;
+                  break;
+                }
+
+                _this5.sharedCalendarApplicants = {};
+
+                _this5.hideModal();
+
+                return _context5.abrupt("return", false);
+
+              case 9:
+                _this5.$store.commit('error/setCode', response.status);
+
+              case 10:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }))();
+    },
     showAllowModal: function showAllowModal(applicant) {
       this.applicantData = applicant;
       this.modalFlg = true;
       this.allowModalFlg = true;
+    },
+    showAllowAllModal: function showAllowAllModal() {
+      this.modalFlg = true;
+      this.allowAllModalFlg = true;
     },
     showRejectModal: function showRejectModal(applicant) {
       this.applicantData = applicant;
@@ -4245,6 +4309,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     hideModal: function hideModal() {
       this.modalFlg = false;
       this.allowModalFlg = false;
+      this.allowAllModalFlg = false;
       this.rejectModalFlg = false;
       this.rejectAllModalFlg = false;
       this.applicantData = null;
@@ -43250,6 +43315,10 @@ var render = function() {
                         ])
                       }),
                       _vm._v(" "),
+                      _c("button", { on: { click: _vm.showAllowAllModal } }, [
+                        _vm._v("全て許可")
+                      ]),
+                      _vm._v(" "),
                       _c("button", { on: { click: _vm.showRejectAllModal } }, [
                         _vm._v("全て拒否")
                       ])
@@ -43323,6 +43392,42 @@ var render = function() {
                   _vm._v(" "),
                   _c("button", [_vm._v("許可")])
                 ]
+              ),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.allowAllModalFlg,
+                      expression: "allowAllModalFlg"
+                    }
+                  ],
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.allowAllApplication($event)
+                    }
+                  }
+                },
+                [
+                  _vm._l(_vm.sharedCalendarApplicants, function(applicants) {
+                    return _c("p", { key: applicants.id }, [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(applicants.name) +
+                          "\n                    "
+                      )
+                    ])
+                  }),
+                  _vm._v(" "),
+                  _c("p", [_vm._v("全ての共有申請を許可しますか")]),
+                  _vm._v(" "),
+                  _c("button", [_vm._v("許可")])
+                ],
+                2
               ),
               _vm._v(" "),
               _c(
