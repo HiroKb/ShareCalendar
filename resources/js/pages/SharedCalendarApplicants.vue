@@ -116,11 +116,13 @@
                 if (!this.sharedCalendarId || !this.applicantData.id) {
                     return false
                 }
-                const response = await axios.put('/api/shared-calendars/' + this.sharedCalendarId + '/applications/' + this.applicantData.id)
+                const response = await axios.put('/api/shared-calendars/' + this.sharedCalendarId + '/members', {
+                    'id_list': [this.applicantData.id]
+                })
 
                 if (response.status === CREATED) {
                     for (let i = 0; i < this.sharedCalendarApplicants.length; i++) {
-                        if (response.data.id === this.sharedCalendarApplicants[i].id){
+                        if (this.applicantData.id === this.sharedCalendarApplicants[i].id){
                             this.sharedCalendarApplicants.splice(i, 1)
                             break
                         }
@@ -139,7 +141,7 @@
                     return applicant.id
                     })}
 
-                const response = await axios.put('/api/shared-calendars/' + this.sharedCalendarId + '/applications/all', data)
+                const response = await axios.put('/api/shared-calendars/' + this.sharedCalendarId + '/members', data)
                 if (response.status === CREATED) {
                     this.sharedCalendarApplicants = {}
                     this.hideModal()
@@ -151,11 +153,13 @@
                 if (!this.sharedCalendarId || !this.applicantData.id) {
                     return false
                 }
-                const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarId + '/applications/' + this.applicantData.id)
+                const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarId + '/applications', {data: {
+                        'id_list': [this.applicantData.id]
+                    }})
 
                 if (response.status === SUCCESS) {
                     for (let i = 0; i < this.sharedCalendarApplicants.length; i++) {
-                        if (response.data.id === this.sharedCalendarApplicants[i].id){
+                        if (this.applicantData.id === this.sharedCalendarApplicants[i].id){
                             this.sharedCalendarApplicants.splice(i, 1)
                             break
                         }
@@ -170,7 +174,11 @@
                 if (!this.sharedCalendarId) {
                     return false
                 }
-                const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarId + '/applications/all')
+                const idList = {'id_list': this.sharedCalendarApplicants.map(function(applicant){
+                        return applicant.id
+                    })}
+
+                const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarId + '/applications', {data: idList})
                 if (response.status === SUCCESS) {
                     this.sharedCalendarApplicants = {}
                     this.hideModal()

@@ -39,16 +39,12 @@ Route::get('/shared-calendars/list', 'SharedCalendarController@list');
 Route::get('/shared-calendars/{sharedCalendar}', 'SharedCalendarController@index');
 // カレンダー共有メンバー
 Route::get('/shared-calendars/{sharedCalendar}/members', 'SharedCalendarController@membersList');
+// カレンダー共有メンバー追加(共有申請許可
+Route::put('/shared-calendars/{sharedCalendar}/members', 'SharedCalendarController@allowApplication');
 // カレンダー共有申請者
 Route::get('/shared-calendars/{sharedCalendar}/applications', 'SharedCalendarController@applicationsList');
-// カレンダー共有申請一括許可
-Route::put('/shared-calendars/{sharedCalendar}/applications/all', 'SharedCalendarController@allowAllApplication');
-// カレンダー共有申請許可
-Route::put('/shared-calendars/{sharedCalendar}/applications/{applicantId}', 'SharedCalendarController@allowApplication');
-// カレンダー共有申請一括拒否
-Route::delete('/shared-calendars/{sharedCalendar}/applications/all', 'SharedCalendarController@rejectAllApplication');
 // カレンダー共有申請拒否
-Route::delete('/shared-calendars/{sharedCalendar}/applications/{applicantId}', 'SharedCalendarController@rejectApplication');
+Route::delete('/shared-calendars/{sharedCalendar}/applications', 'SharedCalendarController@rejectApplication');
 
 // 共有カレンダー検索
 Route::get('/shared-calendars/{searchId}/search', 'SharedCalendarController@search');

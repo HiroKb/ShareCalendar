@@ -98,7 +98,7 @@ class SharedCalendarController extends Controller
 
     }
 
-    public function allowAllApplication(SharedCalendar $sharedCalendar, Request $request)
+    public function allowApplication(SharedCalendar $sharedCalendar, Request $request)
     {
 //        カレンダー管理者以外のアクセスの場合
         if ($sharedCalendar->admin_id !== Auth::id()) {
@@ -121,58 +121,21 @@ class SharedCalendarController extends Controller
         });
     }
 
-    /**
-     * 共有申請許可
-     * @param ProcessingApplicationToSharingCalendarRequest $request
-     * @return mixed
-     */
-    public function allowApplication(SharedCalendar $sharedCalendar, $applicantId)
+    public function rejectApplication(SharedCalendar $sharedCalendar, Request $request)
     {
 //        カレンダー管理者以外のアクセスの場合
         if ($sharedCalendar->admin_id !== Auth::id()) {
             abort(404);
         }
-//        共有申請者以外のIDがpostされた場合
-        if (!$sharedCalendar->applicants()->where('user_id', $applicantId)->exists()) {
-            abort(404);
+//        送られてきたIDが全て共有申請済みか確認
+        foreach ($request->id_list as $applicantId) {
+            if (!$sharedCalendar->applicants()->where('user_id', $applicantId)->exists()){
+                abort(404);
+                break;
+            }
         }
-
-        return DB::transaction(function () use($sharedCalendar, $applicantId){
-
-            $sharedCalendar->members()->attach([$applicantId]);
-            $sharedCalendar->applicants()->detach([$applicantId]);
-            return response(['id' => $applicantId], 201);
-        });
-    }
-
-    public function rejectAllApplication(SharedCalendar $sharedCalendar)
-    {
-//        カレンダー管理者以外のアクセスの場合
-        if ($sharedCalendar->admin_id !== Auth::id()) {
-            abort(404);
-        }
-        $sharedCalendar->applicants()->detach();
+        $sharedCalendar->applicants()->detach($request->id_list);
         return response([], 200);
-    }
-
-    /**
-     * 共有申請拒否
-     * @param SharedCalendar $sharedCalendar
-     * @param $applicantId
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
-     */
-    public function rejectApplication(SharedCalendar $sharedCalendar, $applicantId)
-    {
-//        カレンダー管理者以外のアクセスの場合
-        if ($sharedCalendar->admin_id !== Auth::id()) {
-            abort(404);
-        }
-//        共有申請者以外のIDがpostされた場合
-        if (!$sharedCalendar->applicants()->where('user_id', $applicantId)->exists()) {
-            abort(404);
-        }
-        $sharedCalendar->applicants()->detach([$applicantId]);
-        return response(['id' => $applicantId], 200);
     }
 
     /**

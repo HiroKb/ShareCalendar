@@ -4079,7 +4079,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 _context2.next = 4;
-                return axios.put('/api/shared-calendars/' + _this2.sharedCalendarId + '/applications/' + _this2.applicantData.id);
+                return axios.put('/api/shared-calendars/' + _this2.sharedCalendarId + '/members', {
+                  'id_list': [_this2.applicantData.id]
+                });
 
               case 4:
                 response = _context2.sent;
@@ -4097,7 +4099,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   break;
                 }
 
-                if (!(response.data.id === _this2.sharedCalendarApplicants[i].id)) {
+                if (!(_this2.applicantData.id === _this2.sharedCalendarApplicants[i].id)) {
                   _context2.next = 11;
                   break;
                 }
@@ -4150,7 +4152,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   })
                 };
                 _context3.next = 5;
-                return axios.put('/api/shared-calendars/' + _this3.sharedCalendarId + '/applications/all', data);
+                return axios.put('/api/shared-calendars/' + _this3.sharedCalendarId + '/members', data);
 
               case 5:
                 response = _context3.sent;
@@ -4195,7 +4197,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 _context4.next = 4;
-                return axios["delete"]('/api/shared-calendars/' + _this4.sharedCalendarId + '/applications/' + _this4.applicantData.id);
+                return axios["delete"]('/api/shared-calendars/' + _this4.sharedCalendarId + '/applications', {
+                  data: {
+                    'id_list': [_this4.applicantData.id]
+                  }
+                });
 
               case 4:
                 response = _context4.sent;
@@ -4213,7 +4219,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   break;
                 }
 
-                if (!(response.data.id === _this4.sharedCalendarApplicants[i].id)) {
+                if (!(_this4.applicantData.id === _this4.sharedCalendarApplicants[i].id)) {
                   _context4.next = 11;
                   break;
                 }
@@ -4247,7 +4253,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this5 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-        var response;
+        var idList, response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
@@ -4260,14 +4266,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context5.abrupt("return", false);
 
               case 2:
-                _context5.next = 4;
-                return axios["delete"]('/api/shared-calendars/' + _this5.sharedCalendarId + '/applications/all');
+                idList = {
+                  'id_list': _this5.sharedCalendarApplicants.map(function (applicant) {
+                    return applicant.id;
+                  })
+                };
+                _context5.next = 5;
+                return axios["delete"]('/api/shared-calendars/' + _this5.sharedCalendarId + '/applications', {
+                  data: idList
+                });
 
-              case 4:
+              case 5:
                 response = _context5.sent;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                  _context5.next = 9;
+                  _context5.next = 10;
                   break;
                 }
 
@@ -4277,10 +4290,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context5.abrupt("return", false);
 
-              case 9:
+              case 10:
                 _this5.$store.commit('error/setCode', response.status);
 
-              case 10:
+              case 11:
               case "end":
                 return _context5.stop();
             }

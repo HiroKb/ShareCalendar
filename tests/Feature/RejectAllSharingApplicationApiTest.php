@@ -53,7 +53,7 @@ class RejectAllSharingApplicationApiTest extends TestCase
         $calednar2->applicants()->attach([$this->user2->id]);
 
 //        共有カレンダー管理者以外のアクセスの場合404
-        $response = $this->actingAs($this->user3)->json('delete', '/api/shared-calendars/'. $calednar1->id . '/applications/all');
+        $response = $this->actingAs($this->user3)->json('delete', '/api/shared-calendars/'. $calednar1->id . '/applications');
         $response->assertStatus(404);
         $this->assertDatabaseHas('shared_calendar_user_applications',[
             'calendar_id' => $calednar1->id,
@@ -61,7 +61,12 @@ class RejectAllSharingApplicationApiTest extends TestCase
         ]);
 
 
-        $response = $this->actingAs($this->user1)->json('delete', '/api/shared-calendars/'. $calednar1->id . '/applications/all');
+        $response = $this->actingAs($this->user1)->json('delete', '/api/shared-calendars/'. $calednar1->id . '/applications', [
+            'id_list' => [
+                $this->user2->id,
+                $this->user3->id,
+                $this->user4->id,
+            ]]);
         $response->assertStatus(200);
         $this->assertDatabaseMissing('shared_calendar_user_applications',[
             'calendar_id' => $calednar1->id,
@@ -75,12 +80,5 @@ class RejectAllSharingApplicationApiTest extends TestCase
             'calendar_id' => $calednar1->id,
             'user_id' => $this->user4->id
         ]);
-
-        $this->assertDatabaseHas('shared_calendar_user_applications',[
-            'calendar_id' => $calednar2->id,
-            'user_id' => $this->user2->id
-        ]);
-
-
     }
 }

@@ -54,7 +54,10 @@ class AllowAllSharingApplicationApiTest extends TestCase
         $calednar2->applicants()->attach([$this->user2->id]);
 
 //        共有カレンダー管理者以外のアクセスの場合404
-        $response = $this->actingAs($this->user3)->json('put', '/api/shared-calendars/'. $calednar1->id . '/applications/all');
+        $response = $this->actingAs($this->user3)->json('put', '/api/shared-calendars/'. $calednar1->id . '/members',[
+            'id_list' => [
+                $this->user3->id
+            ]]);
         $response->assertStatus(404);
         $this->assertDatabaseHas('shared_calendar_user_applications',[
             'calendar_id' => $calednar1->id,
@@ -62,14 +65,14 @@ class AllowAllSharingApplicationApiTest extends TestCase
         ]);
 
 //        申請されていないユーザーIDを送った場合404
-        $response = $this->actingAs($this->user1)->json('put', '/api/shared-calendars/'. $calednar1->id . '/applications/all',[
+        $response = $this->actingAs($this->user1)->json('put', '/api/shared-calendars/'. $calednar1->id . '/members',[
             'id_list' => [
                 $this->user5->id,
             ]]);
         $response->assertStatus(404);
 
 
-        $response = $this->actingAs($this->user1)->json('put', '/api/shared-calendars/'. $calednar1->id . '/applications/all',[
+        $response = $this->actingAs($this->user1)->json('put', '/api/shared-calendars/'. $calednar1->id . '/members',[
             'id_list' => [
                 $this->user2->id,
                 $this->user3->id,
