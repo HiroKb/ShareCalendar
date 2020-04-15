@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateSharedCalendarRequest;
 use App\Http\Requests\ProcessingApplicationToSharingCalendarRequest;
 use App\SharedCalendar;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SharedCalendarController extends Controller
 {
@@ -94,6 +96,29 @@ class SharedCalendarController extends Controller
             ->orderBy('application_at', 'asc')
             ->get();
 
+    }
+
+    public function allowAllApplication(SharedCalendar $sharedCalendar, Request $request)
+    {
+//        カレンダー管理者以外のアクセスの場合
+        if ($sharedCalendar->admin_id !== Auth::id()) {
+            abort(404);
+        }
+
+//        送られてきたIDが全て共有申請済みか確認
+        foreach ($request->id_list as $applicantId) {
+            if (!$sharedCalendar->applicants()->where('user_id', $applicantId)->exists()){
+                abort(404);
+                break;
+            }
+        }
+
+        return DB::transaction(function () use($sharedCalendar, $request){
+
+            $sharedCalendar->members()->sync($request->id_list, false);
+            $sharedCalendar->applicants()->detach($request->id_list);
+            return response([], 201);
+        });
     }
 
     /**

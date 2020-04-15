@@ -41,6 +41,8 @@ Route::get('/shared-calendars/{sharedCalendar}', 'SharedCalendarController@index
 Route::get('/shared-calendars/{sharedCalendar}/members', 'SharedCalendarController@membersList');
 // カレンダー共有申請者
 Route::get('/shared-calendars/{sharedCalendar}/applications', 'SharedCalendarController@applicationsList');
+// カレンダー共有申請一括許可
+Route::put('/shared-calendars/{sharedCalendar}/applications/all', 'SharedCalendarController@allowAllApplication');
 // カレンダー共有申請許可
 Route::put('/shared-calendars/{sharedCalendar}/applications/{applicantId}', 'SharedCalendarController@allowApplication');
 // カレンダー共有申請一括拒否
