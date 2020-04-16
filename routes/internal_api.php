@@ -39,10 +39,12 @@ Route::get('/shared-calendars/list', 'SharedCalendarController@list');
 Route::get('/shared-calendars/{sharedCalendar}', 'SharedCalendarController@index');
 // カレンダー共有メンバー
 Route::get('/shared-calendars/{sharedCalendar}/members', 'SharedCalendarController@membersList');
-// カレンダー共有メンバー追加(共有申請許可
-Route::put('/shared-calendars/{sharedCalendar}/members', 'SharedCalendarController@allowApplication');
+// カレンダー共有解除
+Route::delete('/shared-calendars/{sharedCalendar}/members/{memberId?}', 'SharedCalendarController@unShare');
 // カレンダー共有申請者
 Route::get('/shared-calendars/{sharedCalendar}/applications', 'SharedCalendarController@applicationsList');
+// カレンダー共有メンバー追加(共有申請許可
+Route::put('/shared-calendars/{sharedCalendar}/members', 'SharedCalendarController@allowApplication');
 // カレンダー共有申請拒否
 Route::delete('/shared-calendars/{sharedCalendar}/applications', 'SharedCalendarController@rejectApplication');
 

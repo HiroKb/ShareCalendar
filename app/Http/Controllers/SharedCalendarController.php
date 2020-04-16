@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use function Psy\debug;
 
 class SharedCalendarController extends Controller
 {
@@ -50,12 +51,12 @@ class SharedCalendarController extends Controller
      */
     public function index(SharedCalendar $sharedCalendar)
     {
-        $user_id = Auth::id();
-        if (!$sharedCalendar->members()->where('user_id', $user_id)->exists()){
+        $userId = Auth::id();
+        if (!$sharedCalendar->members()->where('user_id', $userId)->exists()){
             abort(404);
         }
 
-        if ($sharedCalendar->admin_id !== $user_id){
+        if ($sharedCalendar->admin_id !== $userId){
             unset($sharedCalendar['search_id']);
         }
         return $sharedCalendar;
@@ -79,6 +80,25 @@ class SharedCalendarController extends Controller
             ->get();
     }
 
+    public function unShare(SharedCalendar $sharedCalendar, $memberId = null)
+    {
+        $userId = Auth::id();
+//        カレンダー管理者のアクセスの場合はmemberIdをリクエストで渡されたIDに
+//        memberIdが指定されいない場合はアクセスしたユーザーのIDに
+//        意図しないアクセスの場合404
+        if (isset($memberId) && $sharedCalendar->admin_id !== $userId){
+            abort(404);
+        } elseif(!isset($memberId)) {
+            $memberId = $userId;
+        }
+        if ($sharedCalendar->admin_id === $memberId ||
+            !$sharedCalendar->members()->where('user_id', $memberId)->exists()){
+            abort(404);
+        }
+        $sharedCalendar->members()->detach($memberId);
+        return response([], 200);
+    }
+
     /**
      * 共有申請者リスト
      * @param SharedCalendar $sharedCalendar
@@ -98,6 +118,12 @@ class SharedCalendarController extends Controller
 
     }
 
+    /**
+     * 共有申請許可
+     * @param SharedCalendar $sharedCalendar
+     * @param Request $request
+     * @return mixed
+     */
     public function allowApplication(SharedCalendar $sharedCalendar, Request $request)
     {
 //        カレンダー管理者以外のアクセスの場合
@@ -121,6 +147,12 @@ class SharedCalendarController extends Controller
         });
     }
 
+    /**
+     * 共有申請拒否
+     * @param SharedCalendar $sharedCalendar
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function rejectApplication(SharedCalendar $sharedCalendar, Request $request)
     {
 //        カレンダー管理者以外のアクセスの場合
