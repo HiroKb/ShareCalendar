@@ -4541,32 +4541,65 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
-    unShareMember: function unShareMember() {// if (!this.sharedCalendarId || !this.applicantData.id) {
-      //     return false
-      // }
-      // const response = await axios.post('/api/shared-calendar/application/allow', {
-      //     calendar_id: this.sharedCalendarId,
-      //     applicant_id: this.applicantData.id
-      // })
-      //
-      // if (response.status === CREATED) {
-      //     for (let i = 0; i < this.sharedCalendarApplicants.length; i++) {
-      //         if (response.data.id === this.sharedCalendarApplicants[i].id){
-      //             this.sharedCalendarApplicants.splice(i, 1)
-      //             break
-      //         }
-      //     }
-      //     this.hideModal()
-      //     return false
-      // }
-      //
-      // this.$store.commit('error/setCode', response.status)
+    unShareMember: function unShareMember() {
+      var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var response, i;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
+                if (!(!_this2.sharedCalendarId || !_this2.memberData.id)) {
+                  _context2.next = 2;
+                  break;
+                }
+
+                return _context2.abrupt("return", false);
+
+              case 2:
+                _context2.next = 4;
+                return axios["delete"]('/api/shared-calendars/' + _this2.sharedCalendarId + '/members/' + _this2.memberData.id);
+
+              case 4:
+                response = _context2.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
+                  _context2.next = 16;
+                  break;
+                }
+
+                i = 0;
+
+              case 7:
+                if (!(i < _this2.sharedCalendarMembers.length)) {
+                  _context2.next = 14;
+                  break;
+                }
+
+                if (!(_this2.memberData.id === _this2.sharedCalendarMembers[i].id)) {
+                  _context2.next = 11;
+                  break;
+                }
+
+                _this2.sharedCalendarMembers.splice(i, 1);
+
+                return _context2.abrupt("break", 14);
+
+              case 11:
+                i++;
+                _context2.next = 7;
+                break;
+
+              case 14:
+                _this2.hideModal();
+
+                return _context2.abrupt("return", false);
+
+              case 16:
+                _this2.$store.commit('error/setCode', response.status);
+
+              case 17:
               case "end":
                 return _context2.stop();
             }
@@ -4577,7 +4610,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     showUnShareModal: function showUnShareModal(member) {
       this.memberData = member;
       this.modalFlg = true;
-      console.log(member);
     },
     hideModal: function hideModal() {
       this.modalFlg = false;
@@ -43655,7 +43687,7 @@ var render = function() {
                       }
                     }
                   },
-                  [_c("i", { staticClass: "fas fa-check" })]
+                  [_c("i", { staticClass: "fas fa-times" })]
                 )
               ])
             })

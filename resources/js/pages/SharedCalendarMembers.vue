@@ -13,7 +13,7 @@
             <div v-else v-for="Member in sharedCalendarMembers" >
                 <p>{{ Member.name }}</p>
                 <button @click="showUnShareModal(Member)">
-                    <i class="fas fa-check"></i>
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
         </div>
@@ -72,31 +72,27 @@
                 this.$store.commit('error/setCode', response.status)
             },
             async unShareMember() {
-                // if (!this.sharedCalendarId || !this.applicantData.id) {
-                //     return false
-                // }
-                // const response = await axios.post('/api/shared-calendar/application/allow', {
-                //     calendar_id: this.sharedCalendarId,
-                //     applicant_id: this.applicantData.id
-                // })
-                //
-                // if (response.status === CREATED) {
-                //     for (let i = 0; i < this.sharedCalendarApplicants.length; i++) {
-                //         if (response.data.id === this.sharedCalendarApplicants[i].id){
-                //             this.sharedCalendarApplicants.splice(i, 1)
-                //             break
-                //         }
-                //     }
-                //     this.hideModal()
-                //     return false
-                // }
-                //
-                // this.$store.commit('error/setCode', response.status)
+                if (!this.sharedCalendarId || !this.memberData.id) {
+                    return false
+                }
+                const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarId + '/members/' + this.memberData.id)
+
+                if (response.status === SUCCESS) {
+                    for (let i = 0; i < this.sharedCalendarMembers.length; i++) {
+                        if (this.memberData.id === this.sharedCalendarMembers[i].id){
+                            this.sharedCalendarMembers.splice(i, 1)
+                            break
+                        }
+                    }
+                    this.hideModal()
+                    return false
+                }
+
+                this.$store.commit('error/setCode', response.status)
             },
             showUnShareModal(member) {
                 this.memberData = member
                 this.modalFlg = true
-                console.log(member)
             },
             hideModal() {
                 this.modalFlg = false
