@@ -1,49 +1,35 @@
 <template>
     <div>
-        <div class="sidebar-wrap">
-            <SideBar/>
-            <div class="shared-calendar-menu">
-                <router-link :to="{name: 'sharedCalendar', params:{sharedCalendarId: sharedCalendarId}}">
-                    <p>共有カレンダーTOP</p>
-                </router-link>
-                <router-link :to="{name: 'sharedCalendarMembers', params:{sharedCalendarId: sharedCalendarId}}">
-                    共有メンバー一覧
-                </router-link>
-            </div>
-        </div>
         <div class="contents">
-            <p v-if="loadingFlg">読み込み中</p>
-            <template v-else>
-                <div v-if="sharedCalendarApplicants.length">
-                    <div v-for="applicant in sharedCalendarApplicants" :key="applicant.id">
-                        <p>{{ applicant.name }}</p>
-                        <button @click="showAllowModal(applicant)">
-                            <i class="fas fa-check"></i>
-                        </button>
-                        <button @click="showRejectModal(applicant)">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <button @click="showAllowAllModal">全て許可</button>
-                    <button @click="showRejectAllModal">全て拒否</button>
+            <div v-if="sharedCalendarApplicants.length">
+                <div v-for="applicant in sharedCalendarApplicants" :key="applicant.id">
+                    <p>{{ applicant.name }}</p>
+                    <button @click="showAllowModal(applicant)">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    <button @click="showRejectModal(applicant)">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
-                <p v-else>
-                    現在共有申請者はいません。
-                </p>
-            </template>
+                <button @click="showAllowAllModal">全て許可</button>
+                <button @click="showRejectAllModal">全て拒否</button>
+            </div>
+            <p v-else>
+                現在共有申請者はいません。
+            </p>
         </div>
         <div class="modal-background" v-show="modalFlg" @click="hideModal">
             <div class="modal" >
                 <div class="modal-inner" @click.stop>
                     <i class="fas fa-times" @click="hideModal"></i>
 
-                    <form @submit.prevent="allowApplication" v-show="allowModalFlg">
-                        <p>{{ applicantName }}</p>
+                    <form @submit.prevent="allowApplication([selectApplicantData])" v-show="allowModalFlg">
+                        <p>{{ selectApplicantName }}</p>
                         <p>共有申請を許可しますか</p>
                         <button>許可</button>
                     </form>
 
-                    <form @submit.prevent="allowAllApplication" v-show="allowAllModalFlg">
+                    <form @submit.prevent="allowApplication(allApplicantsData)" v-show="allowAllModalFlg">
                         <p v-for="applicants in sharedCalendarApplicants" :key="applicants.id">
                             {{ applicants.name}}
                         </p>
@@ -51,13 +37,13 @@
                         <button>許可</button>
                     </form>
 
-                    <form @submit.prevent="rejectApplication" v-show="rejectModalFlg">
-                        <p>{{ applicantName }}</p>
+                    <form @submit.prevent="rejectApplication([selectApplicantData])" v-show="rejectModalFlg">
+                        <p>{{ selectApplicantName }}</p>
                         <p>共有申請を拒否しますか</p>
                         <button>拒否</button>
                     </form>
 
-                    <form @submit.prevent="rejectAllApplication" v-show="rejectAllModalFlg">
+                    <form @submit.prevent="rejectApplication(allApplicantsData)" v-show="rejectAllModalFlg">
                         <p v-for="applicants in sharedCalendarApplicants" :key="applicants.id">
                             {{ applicants.name}}
                         </p>
@@ -73,121 +59,78 @@
 
 <script>
     import {CREATED, SUCCESS} from "../util"
-    import SideBar from "../components/SideBar";
     export default {
         name: "SharedCalendarApplicants",
-        components: {SideBar},
         data () {
             return {
-                sharedCalendarApplicants:{},
-                loadingFlg: true,
                 modalFlg: false,
                 allowModalFlg: false,
                 allowAllModalFlg: false,
                 rejectModalFlg: false,
                 rejectAllModalFlg: false,
-                applicantData: null
+                selectApplicantData: null
             }
         },
         computed: {
-            applicantName: function () {
-                return this.applicantData ? this.applicantData.name : ''
-            }
+            allApplicantsData: function () {
+                return [...this.sharedCalendarApplicants]
+            },
+            selectApplicantName: function () {
+                return this.selectApplicantData ? this.selectApplicantData.name : ''
+            },
         },
         props: {
-            sharedCalendarId: {
+            sharedCalendarData: {
+                type: Object,
+                required: true,
+            },
+            sharedCalendarApplicants: {
                 required: true
             },
         },
         methods: {
-            async fetchSharedCalendarApplicants() {
-                const response = await axios.get('/api/shared-calendars/' + this.sharedCalendarId + '/applications')
-
-                if(response.status === SUCCESS) {
-                    this.sharedCalendarApplicants = response.data
-
-                    this.loadingFlg = false
+            async allowApplication(applicantsList = []) {
+                if (!this.sharedCalendarData.id || !applicantsList.length) {
                     return false
                 }
 
-                this.$store.commit('error/setCode', response.status)
-            },
-            async allowApplication() {
-                if (!this.sharedCalendarId || !this.applicantData.id) {
-                    return false
-                }
-                const response = await axios.put('/api/shared-calendars/' + this.sharedCalendarId + '/members', {
-                    'id_list': [this.applicantData.id]
+                const idList = applicantsList.map(function (applicant) {
+                    return applicant.id
+                })
+
+                const response = await axios.put('/api/shared-calendars/' + this.sharedCalendarData.id + '/members', {
+                    'id_list': idList
                 })
 
                 if (response.status === CREATED) {
-                    for (let i = 0; i < this.sharedCalendarApplicants.length; i++) {
-                        if (this.applicantData.id === this.sharedCalendarApplicants[i].id){
-                            this.sharedCalendarApplicants.splice(i, 1)
-                            break
-                        }
-                    }
+                    this.$emit('allowApplication', applicantsList)
                     this.hideModal()
                     return false
                 }
 
                 this.$store.commit('error/setCode', response.status)
             },
-            async allowAllApplication() {
-                if (!this.sharedCalendarId) {
+            async rejectApplication(applicantsList) {
+                if (!this.sharedCalendarData.id || !applicantsList.length) {
                     return false
                 }
-                const data = {'id_list': this.sharedCalendarApplicants.map(function(applicant){
+
+                const idList = {'id_list': applicantsList.map(function (applicant) {
                     return applicant.id
-                    })}
+                })}
 
-                const response = await axios.put('/api/shared-calendars/' + this.sharedCalendarId + '/members', data)
-                if (response.status === CREATED) {
-                    this.sharedCalendarApplicants = {}
-                    this.hideModal()
-                    return false
-                }
-                this.$store.commit('error/setCode', response.status)
-            },
-            async rejectApplication() {
-                if (!this.sharedCalendarId || !this.applicantData.id) {
-                    return false
-                }
-                const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarId + '/applications', {data: {
-                        'id_list': [this.applicantData.id]
-                    }})
+                const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarData.id + '/applications', {data: idList})
 
                 if (response.status === SUCCESS) {
-                    for (let i = 0; i < this.sharedCalendarApplicants.length; i++) {
-                        if (this.applicantData.id === this.sharedCalendarApplicants[i].id){
-                            this.sharedCalendarApplicants.splice(i, 1)
-                            break
-                        }
-                    }
+                    this.$emit('rejectApplication', applicantsList)
                     this.hideModal()
                     return false
                 }
 
-                this.$store.commit('error/setCode', response.status)
-            },
-            async rejectAllApplication() {
-                if (!this.sharedCalendarId) {
-                    return false
-                }
-                const idList = {'id_list': this.sharedCalendarApplicants.map(function(applicant){
-                        return applicant.id
-                    })}
-
-                const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarId + '/applications', {data: idList})
-                if (response.status === SUCCESS) {
-                    this.sharedCalendarApplicants = {}
-                    this.hideModal()
-                    return false
-                }
                 this.$store.commit('error/setCode', response.status)
             },
             showAllowModal(applicant) {
-                this.applicantData = applicant
+                this.selectApplicantData = applicant
                 this.modalFlg = true
                 this.allowModalFlg = true
             },
@@ -196,7 +139,7 @@
                 this.allowAllModalFlg= true
             },
             showRejectModal(applicant) {
-                this.applicantData = applicant
+                this.selectApplicantData = applicant
                 this.modalFlg = true
                 this.rejectModalFlg = true
             },
@@ -211,12 +154,9 @@
                 this.rejectModalFlg = false
                 this.rejectAllModalFlg = false
 
-                this.applicantData = null
-            }
+                this.selectApplicantData = null
+            },
         },
-        created() {
-            this.fetchSharedCalendarApplicants()
-        }
     }
 </script>
 

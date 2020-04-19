@@ -13,8 +13,10 @@ import CreateSharedCalendar from "./pages/CreateSharedCalendar.vue"
 import SearchSharedCalendar from "./pages/SearchSharedCalendar.vue"
 import ApplicationSharedCalendar from "./pages/ApplicationSharedCalendar.vue"
 import SharedCalendar from "./pages/SharedCalendar.vue"
+import SharedCalendarIndex from "./pages/SharedCalendarIndex.vue"
 import SharedCalendarMembers from "./pages/SharedCalendarMembers.vue"
 import SharedCalendarApplicants from "./pages/SharedCalendarApplicants.vue"
+
 import EditUserName from "./pages/EditUserName"
 import EditUserPassword from "./pages/EditUserPassword"
 import EditUserEmail from "./pages/EditUserEmail"
@@ -149,7 +151,7 @@ const routes = [
         }
     },
     {
-        path: '/shared-calendar/application/:searchId',
+        path: '/shared-calendar/:searchId/application',
         props:true,
         component: ApplicationSharedCalendar,
         beforeEnter (to, from, next) {
@@ -161,8 +163,7 @@ const routes = [
         }
     },
     {
-        path: '/shared-calendar/index/:sharedCalendarId',
-        name: 'sharedCalendar',
+        path: '/shared-calendar/:sharedCalendarId',
         component: SharedCalendar,
         props: true,
         beforeEnter (to, from, next) {
@@ -171,34 +172,38 @@ const routes = [
             } else {
                 next('/')
             }
-        }
-    },
-    {
-        path: '/shared-calendar/members/:sharedCalendarId',
-        name: 'sharedCalendarMembers',
-        component: SharedCalendarMembers,
-        props: true,
-        beforeEnter (to, from, next) {
-            if (store.getters['user/loginCheck']){
-                next()
-            } else {
-                next('/')
+        },
+        children: [
+            {
+                path: 'calendar',
+                name: 'sharedCalendarIndex',
+                component: SharedCalendarIndex,
+            },
+            {
+                path: 'members',
+                name: 'sharedCalendarMembers',
+                component: SharedCalendarMembers
+            },
+            {
+                path: 'applicants',
+                name: 'sharedCalendarApplicants',
+                component: SharedCalendarApplicants,
             }
-        }
+        ]
     },
-    {
-        path: '/shared-calendar/applicants/:sharedCalendarId',
-        name: 'sharedCalendarApplicants',
-        component: SharedCalendarApplicants,
-        props: true,
-        beforeEnter (to, from, next) {
-            if (store.getters['user/loginCheck']){
-                next()
-            } else {
-                next('/')
-            }
-        }
-    },
+    // {
+    // //     path: '/shared-calendar/applicants/:sharedCalendarId',
+    //     name: 'sharedCalendarApplicants',
+    //     component: SharedCalendarApplicants,
+    //     props: true,
+    //     beforeEnter (to, from, next) {
+    //         if (store.getters['user/loginCheck']){
+    //             next()
+    //         } else {
+    //             next('/')
+    //         }
+    //     }
+    // },
     {
         path: '/500',
         component: SystemError

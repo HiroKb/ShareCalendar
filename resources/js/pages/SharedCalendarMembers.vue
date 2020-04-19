@@ -1,16 +1,7 @@
 <template>
     <div>
-        <div class="sidebar-wrap">
-            <SideBar/>
-            <div class="shared-calendar-menu">
-                <router-link :to="{name: 'sharedCalendar', params:{sharedCalendarId: sharedCalendarId}}">
-                    <p>共有カレンダーTOP</p>
-                </router-link>
-            </div>
-        </div>
         <div class="contents">
-            <p v-if="loadingFlg">読み込み中</p>
-            <div v-else v-for="Member in sharedCalendarMembers" >
+            <div v-for="Member in sharedCalendarMembers" >
                 <p>{{ Member.name }}</p>
                 <button @click="showUnShareModal(Member)">
                     <i class="fas fa-times"></i>
@@ -42,48 +33,34 @@
         components: {SideBar},
         data () {
             return {
-                sharedCalendarMembers:{},
-                loadingFlg: true,
                 modalFlg: false,
-                memberData: null
+                selectMemberData: null
             }
         },
         computed: {
             memberName: function () {
-                return this.memberData ? this.memberData.name : ''
+                return this.selectMemberData ? this.selectMemberData.name : ''
             }
         },
         props: {
-            sharedCalendarId: {
+            sharedCalendarData: {
+                type: Object,
+                required: true,
+            },
+            sharedCalendarMembers: {
+                type: Array,
                 required: true
             },
         },
         methods: {
-            async fetchSharedCalendarMembers() {
-                const response = await axios.get('/api/shared-calendars/' + this.sharedCalendarId + '/members')
-
-                if(response.status === SUCCESS) {
-                    this.sharedCalendarMembers = response.data
-
-                    this.loadingFlg = false
-                    return false
-                }
-
-                this.$store.commit('error/setCode', response.status)
-            },
             async unShareMember() {
-                if (!this.sharedCalendarId || !this.memberData.id) {
+                if (!this.sharedCalendarData.id || !this.selectMemberData.id) {
                     return false
                 }
-                const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarId + '/members/' + this.memberData.id)
+                const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarData.id + '/members/' + this.selectMemberData.id)
 
                 if (response.status === SUCCESS) {
-                    for (let i = 0; i < this.sharedCalendarMembers.length; i++) {
-                        if (this.memberData.id === this.sharedCalendarMembers[i].id){
-                            this.sharedCalendarMembers.splice(i, 1)
-                            break
-                        }
-                    }
+                    this.$emit('unShareMember', this.selectMemberData.id)
                     this.hideModal()
                     return false
                 }
@@ -91,18 +68,15 @@
                 this.$store.commit('error/setCode', response.status)
             },
             showUnShareModal(member) {
-                this.memberData = member
+                this.selectMemberData = member
                 this.modalFlg = true
             },
             hideModal() {
                 this.modalFlg = false
 
-                this.memberData = null
+                this.selectMemberData = null
             }
         },
-        created() {
-            this.fetchSharedCalendarMembers()
-        }
     }
 </script>
 

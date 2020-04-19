@@ -51,8 +51,7 @@
 
 
                 if (response.status === CREATED) {
-                    console.log(response)
-                    this.$router.push('/shared-calendar/index/' + response.data.id)
+                    this.$router.push({name: 'sharedCalendarIndex', params: {sharedCalendarId: response.data.id}})
                     return false
                 }
 
