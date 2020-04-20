@@ -12,6 +12,10 @@
                 <router-link :to="{name: 'sharedCalendarApplicants', params:{sharedCalendarId: sharedCalendarId}}" v-if="adminFlg" class="shared-calendar-link">
                     共有申請者一覧
                 </router-link>
+
+                <router-link :to="{name: 'unShareCalendar'}" v-if="!adminFlg" class="shared-calendar-link">
+                    共有解除
+                </router-link>
             </div>
         </div>
         <router-view :shared-calendar-data="sharedCalendarData"

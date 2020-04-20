@@ -16,6 +16,7 @@ import SharedCalendar from "./pages/SharedCalendar.vue"
 import SharedCalendarIndex from "./pages/SharedCalendarIndex.vue"
 import SharedCalendarMembers from "./pages/SharedCalendarMembers.vue"
 import SharedCalendarApplicants from "./pages/SharedCalendarApplicants.vue"
+import UnShareCalendar from "./pages/UnShareCalendar.vue"
 
 import EditUserName from "./pages/EditUserName"
 import EditUserPassword from "./pages/EditUserPassword"
@@ -188,7 +189,12 @@ const routes = [
                 path: 'applicants',
                 name: 'sharedCalendarApplicants',
                 component: SharedCalendarApplicants,
-            }
+            },
+            {
+                path: 'unshare',
+                name: 'unShareCalendar',
+                component: UnShareCalendar,
+            },
         ]
     },
     // {

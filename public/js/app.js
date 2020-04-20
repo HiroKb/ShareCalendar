@@ -3838,6 +3838,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -4521,6 +4525,92 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     hideModal: function hideModal() {
       this.modalFlg = false;
       this.selectMemberData = null;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/UnShareCalendar.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/UnShareCalendar.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "UnShareCalendar",
+  props: {
+    sharedCalendarData: {
+      type: Object,
+      required: true
+    }
+  },
+  methods: {
+    unShareCalendar: function unShareCalendar() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (_this.sharedCalendarData.id) {
+                  _context.next = 2;
+                  break;
+                }
+
+                return _context.abrupt("return", false);
+
+              case 2:
+                _context.next = 4;
+                return axios["delete"]('/api/shared-calendars/' + _this.sharedCalendarData.id + '/members');
+
+              case 4:
+                response = _context.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
+                  _context.next = 8;
+                  break;
+                }
+
+                _this.$router.push('/my-calendar');
+
+                return _context.abrupt("return", false);
+
+              case 8:
+                _this.$store.commit('error/setCode', response.status);
+
+              case 9:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
     }
   }
 });
@@ -43206,6 +43296,17 @@ var render = function() {
                     },
                     [_vm._v("\n                共有申請者一覧\n            ")]
                   )
+                : _vm._e(),
+              _vm._v(" "),
+              !_vm.adminFlg
+                ? _c(
+                    "router-link",
+                    {
+                      staticClass: "shared-calendar-link",
+                      attrs: { to: { name: "unShareCalendar" } }
+                    },
+                    [_vm._v("\n                共有解除\n            ")]
+                  )
                 : _vm._e()
             ],
             1
@@ -43668,6 +43769,49 @@ var render = function() {
             ]
           )
         ])
+      ]
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/UnShareCalendar.vue?vue&type=template&id=beb26caa&scoped=true&":
+/*!*************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/UnShareCalendar.vue?vue&type=template&id=beb26caa&scoped=true& ***!
+  \*************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "contents" }, [
+    _c(
+      "form",
+      {
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.unShareCalendar($event)
+          }
+        }
+      },
+      [
+        _c("p", [_vm._v(_vm._s(_vm.sharedCalendarData.calendar_name))]),
+        _vm._v(" "),
+        _c("p", [_vm._v("共有を解除しますか？")]),
+        _vm._v(" "),
+        _c("button", [_vm._v("解除")])
       ]
     )
   ])
@@ -61363,6 +61507,76 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/pages/UnShareCalendar.vue":
+/*!************************************************!*\
+  !*** ./resources/js/pages/UnShareCalendar.vue ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _UnShareCalendar_vue_vue_type_template_id_beb26caa_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UnShareCalendar.vue?vue&type=template&id=beb26caa&scoped=true& */ "./resources/js/pages/UnShareCalendar.vue?vue&type=template&id=beb26caa&scoped=true&");
+/* harmony import */ var _UnShareCalendar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UnShareCalendar.vue?vue&type=script&lang=js& */ "./resources/js/pages/UnShareCalendar.vue?vue&type=script&lang=js&");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _UnShareCalendar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _UnShareCalendar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _UnShareCalendar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _UnShareCalendar_vue_vue_type_template_id_beb26caa_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _UnShareCalendar_vue_vue_type_template_id_beb26caa_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "beb26caa",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/pages/UnShareCalendar.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/pages/UnShareCalendar.vue?vue&type=script&lang=js&":
+/*!*************************************************************************!*\
+  !*** ./resources/js/pages/UnShareCalendar.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UnShareCalendar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./UnShareCalendar.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/UnShareCalendar.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UnShareCalendar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/pages/UnShareCalendar.vue?vue&type=template&id=beb26caa&scoped=true&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/pages/UnShareCalendar.vue?vue&type=template&id=beb26caa&scoped=true& ***!
+  \*******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UnShareCalendar_vue_vue_type_template_id_beb26caa_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./UnShareCalendar.vue?vue&type=template&id=beb26caa&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/UnShareCalendar.vue?vue&type=template&id=beb26caa&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UnShareCalendar_vue_vue_type_template_id_beb26caa_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UnShareCalendar_vue_vue_type_template_id_beb26caa_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/pages/UserInfo.vue":
 /*!*****************************************!*\
   !*** ./resources/js/pages/UserInfo.vue ***!
@@ -61665,14 +61879,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pages_SharedCalendarIndex_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./pages/SharedCalendarIndex.vue */ "./resources/js/pages/SharedCalendarIndex.vue");
 /* harmony import */ var _pages_SharedCalendarMembers_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./pages/SharedCalendarMembers.vue */ "./resources/js/pages/SharedCalendarMembers.vue");
 /* harmony import */ var _pages_SharedCalendarApplicants_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./pages/SharedCalendarApplicants.vue */ "./resources/js/pages/SharedCalendarApplicants.vue");
-/* harmony import */ var _pages_EditUserName__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./pages/EditUserName */ "./resources/js/pages/EditUserName.vue");
-/* harmony import */ var _pages_EditUserPassword__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./pages/EditUserPassword */ "./resources/js/pages/EditUserPassword.vue");
-/* harmony import */ var _pages_EditUserEmail__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./pages/EditUserEmail */ "./resources/js/pages/EditUserEmail.vue");
-/* harmony import */ var _pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./pages/errors/SystemError.vue */ "./resources/js/pages/errors/SystemError.vue");
-/* harmony import */ var _pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./pages/errors/NotFound.vue */ "./resources/js/pages/errors/NotFound.vue");
+/* harmony import */ var _pages_UnShareCalendar_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./pages/UnShareCalendar.vue */ "./resources/js/pages/UnShareCalendar.vue");
+/* harmony import */ var _pages_EditUserName__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./pages/EditUserName */ "./resources/js/pages/EditUserName.vue");
+/* harmony import */ var _pages_EditUserPassword__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./pages/EditUserPassword */ "./resources/js/pages/EditUserPassword.vue");
+/* harmony import */ var _pages_EditUserEmail__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./pages/EditUserEmail */ "./resources/js/pages/EditUserEmail.vue");
+/* harmony import */ var _pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./pages/errors/SystemError.vue */ "./resources/js/pages/errors/SystemError.vue");
+/* harmony import */ var _pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./pages/errors/NotFound.vue */ "./resources/js/pages/errors/NotFound.vue");
 
 
  // ページコンポーネント
+
 
 
 
@@ -61737,7 +61953,7 @@ var routes = [{
   }
 }, {
   path: '/edit-user-name',
-  component: _pages_EditUserName__WEBPACK_IMPORTED_MODULE_16__["default"],
+  component: _pages_EditUserName__WEBPACK_IMPORTED_MODULE_17__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
     if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['user/loginCheck']) {
       next();
@@ -61747,7 +61963,7 @@ var routes = [{
   }
 }, {
   path: '/edit-user-email',
-  component: _pages_EditUserEmail__WEBPACK_IMPORTED_MODULE_18__["default"],
+  component: _pages_EditUserEmail__WEBPACK_IMPORTED_MODULE_19__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
     if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['user/loginCheck']) {
       next();
@@ -61757,7 +61973,7 @@ var routes = [{
   }
 }, {
   path: '/edit-user-password',
-  component: _pages_EditUserPassword__WEBPACK_IMPORTED_MODULE_17__["default"],
+  component: _pages_EditUserPassword__WEBPACK_IMPORTED_MODULE_18__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
     if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['user/loginCheck']) {
       next();
@@ -61839,6 +62055,10 @@ var routes = [{
     path: 'applicants',
     name: 'sharedCalendarApplicants',
     component: _pages_SharedCalendarApplicants_vue__WEBPACK_IMPORTED_MODULE_15__["default"]
+  }, {
+    path: 'unshare',
+    name: 'unShareCalendar',
+    component: _pages_UnShareCalendar_vue__WEBPACK_IMPORTED_MODULE_16__["default"]
   }]
 }, // {
 // //     path: '/shared-calendar/applicants/:sharedCalendarId',
@@ -61855,10 +62075,10 @@ var routes = [{
 // },
 {
   path: '/500',
-  component: _pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_19__["default"]
+  component: _pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_20__["default"]
 }, {
   path: '/404',
-  component: _pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_20__["default"]
+  component: _pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_21__["default"]
 }]; // VueRouterインスタンスを作成
 
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
