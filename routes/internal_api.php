@@ -52,3 +52,6 @@ Route::delete('/shared-calendars/{sharedCalendar}/applications', 'SharedCalendar
 Route::get('/shared-calendars/{searchId}/search', 'SharedCalendarController@search');
 // カレンダー共有申請
 Route::put('/shared-calendars/{searchId}/applications', 'SharedCalendarController@application');
+
+// 共有スケジュール作成
+Route::post('/shared-calendars/{sharedCalendar}/schedules', 'SharedScheduleController@create');
