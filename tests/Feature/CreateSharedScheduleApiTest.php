@@ -46,7 +46,7 @@ class CreateSharedScheduleApiTest extends TestCase
             'description' => 'test description test description'
         ];
 
-        $response = $this->actingAs($this->user1)
+        $response = $this->actingAs($this->user2)
                          ->json('post', 'api/shared-calendars/' . $calendar->id . '/schedules', $data);
 
         $schedule = SharedSchedule::first();
@@ -65,5 +65,9 @@ class CreateSharedScheduleApiTest extends TestCase
                 'title' => $data['title'],
                 'description' => $data['description']
             ]);
+
+        $response = $this->actingAs($this->user3)
+            ->json('post', 'api/shared-calendars/' . $calendar->id . '/schedules', $data);
+        $response->assertStatus(404);
     }
 }
