@@ -55,4 +55,5 @@ Route::put('/shared-calendars/{searchId}/applications', 'SharedCalendarControlle
 
 // 共有スケジュール作成
 Route::post('/shared-calendars/{sharedCalendar}/schedules', 'SharedScheduleController@create');
-Route::get('shared-calendars/{sharedCalendar}/schedules/{from}/{until}', 'SharedScheduleController@list');
+// 共有スケジュールリスト取得
+Route::get('/shared-calendars/{sharedCalendar}/schedules/{from}/{until}', 'SharedScheduleController@list');

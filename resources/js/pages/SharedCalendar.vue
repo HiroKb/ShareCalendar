@@ -18,12 +18,15 @@
                 </router-link>
             </div>
         </div>
-        <router-view :shared-calendar-data="sharedCalendarData"
+        <router-view :shared-calendar-id="sharedCalendarId"
+                     :shared-calendar-data="sharedCalendarData"
                      :shared-calendar-members="sharedCalendarMembers"
                      :shared-calendar-applicants="sharedCalendarApplicants"
+                     :shared-schedules-data="sharedSchedulesData"
                      @unShareMember="removeMember"
                      @allowApplication="allowApplications"
                      @rejectApplication="removeApplicants"
+                     @changeSchedulesData="changeSchedulesData"
         >
         </router-view>
     </div>
@@ -34,6 +37,7 @@
     import SideBar from "../components/SideBar";
     import {SUCCESS} from "../util";
     import {mapGetters} from "vuex";
+    import moment from "moment";
     export default {
         name: "SharedCalendar",
         components: {SideBar},
@@ -46,6 +50,10 @@
                 },
                 sharedCalendarMembers: [],
                 sharedCalendarApplicants: [],
+                sharedSchedulesData: {
+                    schedulesYear: null,
+                    schedules: [],
+                }
             }
         },
         props: {
@@ -119,7 +127,12 @@
                         }
                     }
                 })
-            }
+            },
+            // 以下スケジュール部分
+            changeSchedulesData(data) {
+                this.sharedSchedulesData.schedulesYear = data.schedulesYear
+                this.sharedSchedulesData.schedules = data.schedules
+            },
         },
         created() {
             Promise.all([
@@ -130,6 +143,14 @@
                     this.fetchSharedCalendarApplicants()
                 }
             })
+        },
+        watch: {
+            // 'sharedSchedulesData.schedulesYear': async function(val) {
+            //     console.log('changeyear')
+            //     this.sharedSchedulesData.fetchedFlg = false;
+            //     await this.fetchSharedSchedules(val)
+            //     this.sharedSchedulesData.fetchedFlg = true;
+            // }
         }
     }
 </script>
