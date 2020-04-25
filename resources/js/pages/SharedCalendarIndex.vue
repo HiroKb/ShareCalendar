@@ -120,7 +120,7 @@
 
 <script>
     import moment from "moment"
-    import {SUCCESS} from "../util";
+    import {CREATED, SUCCESS, VALIDATION_ERROR} from "../util";
     export default {
         name: "SharedCalendarIndex",
         data () {
@@ -188,7 +188,6 @@
             // 選択日の変更
             changeSelectDate(e) {
                 this.selectedDate = e.currentTarget.dataset.date
-                console.log(this.selectedDate)
             },
             changeDatesData() {
                 this.dates = []
@@ -234,7 +233,7 @@
 
                 this.dates.forEach((dateData) => {
                     if (this.sharedSchedulesData.schedules[dateData.date]){
-                        dateData.schedules = this.sharedSchedulesData.schedules[dateData.date]
+                        dateData.schedules = _.cloneDeep(this.sharedSchedulesData.schedules[dateData.date])
                     }
                 })
             },
@@ -288,9 +287,95 @@
                     title: this.createScheduleData.title,
                     description: description
                 }
-                console.log(data)
                 const response = await axios.post('/api/shared-calendars/' + this.sharedCalendarId + '/schedules', data)
-                console.log(response)
+                //
+                if (response.status === CREATED) {
+
+                    // 登録したスケジュールデータを追加
+                    outer: for (let i = 0; i < this.dates.length; i++) {
+                        if (response.data.date === this.dates[i].date){
+                            // スケジュール登録数0の日付か
+                            // 登録したスケジュールに時間情報がない場合
+                            // 配列の先頭にデータを追加
+                            if (!this.dates[i].schedules.length || response.data.time === null) {
+                                this.dates[i].schedules.unshift(response.data)
+                                break
+                            }
+
+                            // 前後スケジュールが登録されている場合
+                            // 時間順に並ぶようにデータを追加
+                            for (let t = 0; t < this.dates[i].schedules.length; t++) {
+
+                                if (this.dates[i].schedules[t].time === null) {
+                                    continue
+                                }
+
+                                if(response.data.time <= this.dates[i].schedules[t].time) {
+                                    this.dates[i].schedules.splice(t, 0, response.data)
+                                    break outer
+                                }
+                            }
+
+                            // 上記以外の場合最後にデータを追加
+                            this.dates[i].schedules.push(response.data)
+                            break
+                        }
+                    }
+
+                    const newSchedules =  (() => {
+                        // スケジュールデータオブジェクトを複製
+                        const schedules = _.cloneDeep(this.sharedSchedulesData.schedules)
+                        const data = response.data
+                        // 登録した日にスケジュールがない場合
+                        console.log('start')
+                        if (!schedules[data.date]){
+                            schedules[data.date] = [data]
+                            console.log(schedules)
+                            return schedules
+                        }
+
+                        // 登録したしたスケジュールに時間指定がない場合先頭に追加
+                        if(data.time === null) {
+                            schedules[data.date].unshift[data]
+                            return schedules
+                        }
+
+                        // 前後スケジュールが登録されている場合
+                        // 時間順に並ぶようにデータを追加
+                        for (let i = 0; i < schedules[data.date].length; i++) {
+
+                            if (schedules[data.date][i].time === null) {
+                                continue
+                            }
+
+                            if(schedules[data.date][i].time >= data.time) {
+                                schedules[data.date].splice(i, 0, data)
+                                return  schedules
+                            }
+                        }
+
+
+                        // 上記以外の場合最後にデータを追加
+                        schedules[data.date].push(data)
+                        return schedules
+                    })()
+                    console.log('a')
+                    console.log(newSchedules)
+                    this.$emit('changeSchedulesData', {schedules: newSchedules})
+                    this.createScheduleData = {
+                        hour: 'unspecified',
+                        minute: 'unspecified',
+                        title: '',
+                        description: ''
+                    }
+                    return false
+                }
+                if (response.status === VALIDATION_ERROR) {
+                    this.createError.errors = response.data.errors
+                    return false
+                }
+
+                this.$store.commit('error/setCode', response.status)
             }
         },
         created() {

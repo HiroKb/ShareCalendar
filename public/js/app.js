@@ -4020,8 +4020,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     // 以下スケジュール部分
     changeSchedulesData: function changeSchedulesData(data) {
-      this.sharedSchedulesData.schedulesYear = data.schedulesYear;
-      this.sharedSchedulesData.schedules = data.schedules;
+      if (data.schedulesYear) {
+        this.sharedSchedulesData.schedulesYear = data.schedulesYear;
+      }
+
+      if (data.schedules) {
+        console.log(data.schedules);
+        this.sharedSchedulesData.schedules = data.schedules;
+      }
     }
   },
   created: function created() {
@@ -4032,13 +4038,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this6.fetchSharedCalendarApplicants();
       }
     });
-  },
-  watch: {// 'sharedSchedulesData.schedulesYear': async function(val) {
-    //     console.log('changeyear')
-    //     this.sharedSchedulesData.fetchedFlg = false;
-    //     await this.fetchSharedSchedules(val)
-    //     this.sharedSchedulesData.fetchedFlg = true;
-    // }
   }
 });
 
@@ -4501,7 +4500,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     // 選択日の変更
     changeSelectDate: function changeSelectDate(e) {
       this.selectedDate = e.currentTarget.dataset.date;
-      console.log(this.selectedDate);
     },
     changeDatesData: function changeDatesData() {
       var _this = this;
@@ -4547,7 +4545,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       this.dates.forEach(function (dateData) {
         if (_this.sharedSchedulesData.schedules[dateData.date]) {
-          dateData.schedules = _this.sharedSchedulesData.schedules[dateData.date];
+          dateData.schedules = _.cloneDeep(_this.sharedSchedulesData.schedules[dateData.date]);
         }
       });
     },
@@ -4596,7 +4594,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var time, description, data, response;
+        var time, description, data, response, i, t, newSchedules;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -4636,15 +4634,148 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   title: _this3.createScheduleData.title,
                   description: description
                 };
-                console.log(data);
-                _context2.next = 13;
+                _context2.next = 12;
                 return axios.post('/api/shared-calendars/' + _this3.sharedCalendarId + '/schedules', data);
 
-              case 13:
+              case 12:
                 response = _context2.sent;
-                console.log(response);
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["CREATED"])) {
+                  _context2.next = 41;
+                  break;
+                }
+
+                i = 0;
 
               case 15:
+                if (!(i < _this3.dates.length)) {
+                  _context2.next = 35;
+                  break;
+                }
+
+                if (!(response.data.date === _this3.dates[i].date)) {
+                  _context2.next = 32;
+                  break;
+                }
+
+                if (!(!_this3.dates[i].schedules.length || response.data.time === null)) {
+                  _context2.next = 20;
+                  break;
+                }
+
+                _this3.dates[i].schedules.unshift(response.data);
+
+                return _context2.abrupt("break", 35);
+
+              case 20:
+                t = 0;
+
+              case 21:
+                if (!(t < _this3.dates[i].schedules.length)) {
+                  _context2.next = 30;
+                  break;
+                }
+
+                if (!(_this3.dates[i].schedules[t].time === null)) {
+                  _context2.next = 24;
+                  break;
+                }
+
+                return _context2.abrupt("continue", 27);
+
+              case 24:
+                if (!(response.data.time <= _this3.dates[i].schedules[t].time)) {
+                  _context2.next = 27;
+                  break;
+                }
+
+                _this3.dates[i].schedules.splice(t, 0, response.data);
+
+                return _context2.abrupt("break", 35);
+
+              case 27:
+                t++;
+                _context2.next = 21;
+                break;
+
+              case 30:
+                // 上記以外の場合最後にデータを追加
+                _this3.dates[i].schedules.push(response.data);
+
+                return _context2.abrupt("break", 35);
+
+              case 32:
+                i++;
+                _context2.next = 15;
+                break;
+
+              case 35:
+                newSchedules = function () {
+                  // スケジュールデータオブジェクトを複製
+                  var schedules = _.cloneDeep(_this3.sharedSchedulesData.schedules);
+
+                  var data = response.data; // 登録した日にスケジュールがない場合
+
+                  console.log('start');
+
+                  if (!schedules[data.date]) {
+                    schedules[data.date] = [data];
+                    console.log(schedules);
+                    return schedules;
+                  } // 登録したしたスケジュールに時間指定がない場合先頭に追加
+
+
+                  if (data.time === null) {
+                    schedules[data.date].unshift[data];
+                    return schedules;
+                  } // 前後スケジュールが登録されている場合
+                  // 時間順に並ぶようにデータを追加
+
+
+                  for (var _i3 = 0; _i3 < schedules[data.date].length; _i3++) {
+                    if (schedules[data.date][_i3].time === null) {
+                      continue;
+                    }
+
+                    if (schedules[data.date][_i3].time >= data.time) {
+                      schedules[data.date].splice(_i3, 0, data);
+                      return schedules;
+                    }
+                  } // 上記以外の場合最後にデータを追加
+
+
+                  schedules[data.date].push(data);
+                  return schedules;
+                }();
+
+                console.log('a');
+                console.log(newSchedules);
+
+                _this3.$emit('changeSchedulesData', {
+                  schedules: newSchedules
+                });
+
+                _this3.createScheduleData = {
+                  hour: 'unspecified',
+                  minute: 'unspecified',
+                  title: '',
+                  description: ''
+                };
+                return _context2.abrupt("return", false);
+
+              case 41:
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["VALIDATION_ERROR"])) {
+                  _context2.next = 44;
+                  break;
+                }
+
+                _this3.createError.errors = response.data.errors;
+                return _context2.abrupt("return", false);
+
+              case 44:
+                _this3.$store.commit('error/setCode', response.status);
+
+              case 45:
               case "end":
                 return _context2.stop();
             }

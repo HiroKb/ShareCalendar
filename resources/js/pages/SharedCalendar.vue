@@ -130,8 +130,13 @@
             },
             // 以下スケジュール部分
             changeSchedulesData(data) {
-                this.sharedSchedulesData.schedulesYear = data.schedulesYear
-                this.sharedSchedulesData.schedules = data.schedules
+                if (data.schedulesYear){
+                    this.sharedSchedulesData.schedulesYear = data.schedulesYear
+                }
+                if (data.schedules){
+                    console.log(data.schedules)
+                    this.sharedSchedulesData.schedules = data.schedules
+                }
             },
         },
         created() {
@@ -144,14 +149,6 @@
                 }
             })
         },
-        watch: {
-            // 'sharedSchedulesData.schedulesYear': async function(val) {
-            //     console.log('changeyear')
-            //     this.sharedSchedulesData.fetchedFlg = false;
-            //     await this.fetchSharedSchedules(val)
-            //     this.sharedSchedulesData.fetchedFlg = true;
-            // }
-        }
     }
 </script>
 
