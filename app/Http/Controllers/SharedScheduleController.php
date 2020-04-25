@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateScheduleRequest;
 use App\SharedCalendar;
 use App\SharedSchedule;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class SharedScheduleController extends Controller
 {
@@ -17,10 +19,11 @@ class SharedScheduleController extends Controller
         }
 
         return $sharedCalendar->schedules()
-                                ->whereBetween('date', [$from, $until])
-                                ->orderBy('date', 'asc')
-                                ->orderBy('time', 'asc')->get();
-
+                              ->whereBetween('date', [$from, $until])
+                              ->orderBy('date', 'asc')
+                              ->orderBy('time', 'asc')
+                              ->get()
+                              ->groupBy('date');
     }
     /**
      * スケジュール作成

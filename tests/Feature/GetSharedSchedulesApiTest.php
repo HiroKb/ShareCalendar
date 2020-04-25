@@ -62,9 +62,9 @@ class GetSharedSchedulesApiTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJsonPath('0.title', 'test3')
-            ->assertJsonPath('1.title', 'test2')
-            ->assertJsonPath('2.title', 'test1');
+            ->assertJsonPath('2020-04-20.0.title', 'test3')
+            ->assertJsonPath('2020-04-20.1.title', 'test2')
+            ->assertJsonPath('2020-04-30.0.title', 'test1');
 
         $response = $this->actingAs($this->user3)
             ->json('get', 'api/shared-calendars/' . $calendar->id . '/schedules/2020-04-01/2020-04-30');
