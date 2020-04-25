@@ -233,11 +233,9 @@
                 }
 
                 this.dates.forEach((dateData) => {
-                    this.sharedSchedulesData.schedules.forEach((scheduleData) => {
-                        if (dateData.date === scheduleData.date){
-                            dateData.schedules.push(scheduleData)
-                        }
-                    })
+                    if (this.sharedSchedulesData.schedules[dateData.date]){
+                        dateData.schedules = this.sharedSchedulesData.schedules[dateData.date]
+                    }
                 })
             },
             async fetchSharedSchedules(year){

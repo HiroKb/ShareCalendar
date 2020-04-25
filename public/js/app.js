@@ -4546,11 +4546,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       this.dates.forEach(function (dateData) {
-        _this.sharedSchedulesData.schedules.forEach(function (scheduleData) {
-          if (dateData.date === scheduleData.date) {
-            dateData.schedules.push(scheduleData);
-          }
-        });
+        if (_this.sharedSchedulesData.schedules[dateData.date]) {
+          dateData.schedules = _this.sharedSchedulesData.schedules[dateData.date];
+        }
       });
     },
     fetchSharedSchedules: function fetchSharedSchedules(year) {

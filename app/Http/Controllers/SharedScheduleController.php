@@ -20,7 +20,6 @@ class SharedScheduleController extends Controller
 
         return $sharedCalendar->schedules()
                               ->whereBetween('date', [$from, $until])
-                              ->orderBy('date', 'asc')
                               ->orderBy('time', 'asc')
                               ->get()
                               ->groupBy('date');
