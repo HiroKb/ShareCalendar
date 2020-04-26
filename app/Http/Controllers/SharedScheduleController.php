@@ -46,4 +46,14 @@ class SharedScheduleController extends Controller
 
         return response($schedule, 201);
     }
+
+    public function destroy(SharedCalendar $sharedCalendar, SharedSchedule $sharedSchedule)
+    {
+        if (!$sharedCalendar->members()->where('user_id', Auth::id())->exists()){
+            abort(404);
+        }
+        $sharedSchedule->delete();
+
+        return response([], 200);
+    }
 }
