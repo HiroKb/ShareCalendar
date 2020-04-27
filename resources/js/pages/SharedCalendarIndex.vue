@@ -109,9 +109,29 @@
                             <p>{{ schedule.time}}</p>
                             <p>{{ schedule.title }}</p>
 <!--                            <button @click="showEditModal(schedule)"><i class="far fa-file-alt"></i></button>-->
-<!--                            <button @click="showDeleteModal(schedule)"><i class="far fa-trash-alt"></i></button>-->
+                            <button @click="showDeleteModal(schedule)"><i class="far fa-trash-alt"></i></button>
                         </li>
                     </ul>
+                </div>
+            </div>
+        </div>
+        <div class="modal-background" v-show="modalFlg" @click="hideModal">
+            <div class="modal" >
+                <div class="modal-inner" @click.stop>
+
+                    <i class="fas fa-times" @click="hideModal"></i>
+                    <form @submit.prevent="deleteSchedule" v-show="deleteForm.showFlg">
+                        <p>このスケジュールを削除しますか？</p>
+                        <p>日付</p>
+                        <p>{{ deleteData.date}}</p>
+                        <p>時間</p>
+                        <p>{{ deleteData.time }}</p>
+                        <p>スケジュール名</p>
+                        <p>{{ deleteData.title }}</p>
+                        <p>詳細</p>
+                        <p>{{ deleteData.description }}</p>
+                        <button>削除</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -140,6 +160,11 @@
                     errorFlg: false,
                     errors: {}
                 },
+                modalFlg: false,
+                deleteForm: {
+                    showFlg: false,
+                    scheduleData: null
+            }
             }
         },
         computed: {
@@ -153,6 +178,14 @@
                     if (this.selectedDate === this.dates[i].date){
                         return this.dates[i].schedules
                     }
+                }
+            },
+            deleteData: function () {
+                return {
+                    date: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.date : '',
+                    time: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.time ? this.deleteForm.scheduleData.time : '指定なし' : '',
+                    title: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.title : '',
+                    description: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.description ? this.deleteForm.scheduleData.description : 'なし' : '',
                 }
             }
         },
@@ -327,10 +360,8 @@
                         const schedules = _.cloneDeep(this.sharedSchedulesData.schedules)
                         const data = response.data
                         // 登録した日にスケジュールがない場合
-                        console.log('start')
                         if (!schedules[data.date]){
                             schedules[data.date] = [data]
-                            console.log(schedules)
                             return schedules
                         }
 
@@ -359,8 +390,6 @@
                         schedules[data.date].push(data)
                         return schedules
                     })()
-                    console.log('a')
-                    console.log(newSchedules)
                     this.$emit('changeSchedulesData', {schedules: newSchedules})
                     this.createScheduleData = {
                         hour: 'unspecified',
@@ -376,6 +405,53 @@
                 }
 
                 this.$store.commit('error/setCode', response.status)
+            },
+            async deleteSchedule(){
+                console.log(this.deleteForm.scheduleData)
+                if (!this.deleteForm.scheduleData){
+                    return false
+                }
+                const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarId + '/schedules/' + this.deleteForm.scheduleData.id)
+                if(response.status === SUCCESS) {
+                    // カレンダーデータからスケジュールを削除
+                    outer: for (let i = 0; i < this.dates.length; i++) {
+                        if (this.dates[i].date === this.deleteForm.scheduleData.date) {
+                            for (let t = 0 ; t < this.dates[i].schedules.length; t++) {
+                                if (this.deleteForm.scheduleData.id === this.dates[i].schedules[t].id) {
+                                    this.dates[i].schedules.splice(t, 1)
+                                    break outer
+                                }
+                            }
+                        }
+                    }
+
+                    const newSchedules = (() => {
+                        const schedules = _.cloneDeep(this.sharedSchedulesData.schedules)
+                        const data = this.deleteForm.scheduleData
+                        for(let i = 0; i < schedules[data.date].length; i++) {
+                            if (schedules[data.date][i].id === data.id){
+                                schedules[data.date].splice(i, 1)
+                                break
+                            }
+                        }
+                        return schedules
+                    })()
+                    this.$emit('changeSchedulesData', {schedules: newSchedules})
+                    this.hideModal()
+                    return false
+                }
+                this.$store.commit('error/setCode', response.status)
+            },
+            showDeleteModal(schedule) {
+                this.modalFlg = true
+                this.deleteForm.showFlg = true
+                this.deleteForm.scheduleData = schedule
+            },
+            hideModal() {
+                this.modalFlg = false
+
+                this.deleteForm.showFlg = false
+                this.deleteForm.scheduleData = null
             }
         },
         created() {

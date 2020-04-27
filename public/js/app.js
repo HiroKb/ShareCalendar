@@ -4433,6 +4433,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4453,6 +4473,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       createError: {
         errorFlg: false,
         errors: {}
+      },
+      modalFlg: false,
+      deleteForm: {
+        showFlg: false,
+        scheduleData: null
       }
     };
   },
@@ -4466,6 +4491,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           return this.dates[i].schedules;
         }
       }
+    },
+    deleteData: function deleteData() {
+      return {
+        date: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.date : '',
+        time: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.time ? this.deleteForm.scheduleData.time : '指定なし' : '',
+        title: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.title : '',
+        description: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.description ? this.deleteForm.scheduleData.description : 'なし' : ''
+      };
     }
   },
   props: {
@@ -4641,7 +4674,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 response = _context2.sent;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["CREATED"])) {
-                  _context2.next = 41;
+                  _context2.next = 39;
                   break;
                 }
 
@@ -4716,11 +4749,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                   var data = response.data; // 登録した日にスケジュールがない場合
 
-                  console.log('start');
-
                   if (!schedules[data.date]) {
                     schedules[data.date] = [data];
-                    console.log(schedules);
                     return schedules;
                   } // 登録したしたスケジュールに時間指定がない場合先頭に追加
 
@@ -4748,9 +4778,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   return schedules;
                 }();
 
-                console.log('a');
-                console.log(newSchedules);
-
                 _this3.$emit('changeSchedulesData', {
                   schedules: newSchedules
                 });
@@ -4763,25 +4790,140 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 };
                 return _context2.abrupt("return", false);
 
-              case 41:
+              case 39:
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["VALIDATION_ERROR"])) {
-                  _context2.next = 44;
+                  _context2.next = 42;
                   break;
                 }
 
                 _this3.createError.errors = response.data.errors;
                 return _context2.abrupt("return", false);
 
-              case 44:
+              case 42:
                 _this3.$store.commit('error/setCode', response.status);
 
-              case 45:
+              case 43:
               case "end":
                 return _context2.stop();
             }
           }
         }, _callee2);
       }))();
+    },
+    deleteSchedule: function deleteSchedule() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var response, i, t, newSchedules;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                console.log(_this4.deleteForm.scheduleData);
+
+                if (_this4.deleteForm.scheduleData) {
+                  _context3.next = 3;
+                  break;
+                }
+
+                return _context3.abrupt("return", false);
+
+              case 3:
+                _context3.next = 5;
+                return axios["delete"]('/api/shared-calendars/' + _this4.sharedCalendarId + '/schedules/' + _this4.deleteForm.scheduleData.id);
+
+              case 5:
+                response = _context3.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["SUCCESS"])) {
+                  _context3.next = 25;
+                  break;
+                }
+
+                i = 0;
+
+              case 8:
+                if (!(i < _this4.dates.length)) {
+                  _context3.next = 21;
+                  break;
+                }
+
+                if (!(_this4.dates[i].date === _this4.deleteForm.scheduleData.date)) {
+                  _context3.next = 18;
+                  break;
+                }
+
+                t = 0;
+
+              case 11:
+                if (!(t < _this4.dates[i].schedules.length)) {
+                  _context3.next = 18;
+                  break;
+                }
+
+                if (!(_this4.deleteForm.scheduleData.id === _this4.dates[i].schedules[t].id)) {
+                  _context3.next = 15;
+                  break;
+                }
+
+                _this4.dates[i].schedules.splice(t, 1);
+
+                return _context3.abrupt("break", 21);
+
+              case 15:
+                t++;
+                _context3.next = 11;
+                break;
+
+              case 18:
+                i++;
+                _context3.next = 8;
+                break;
+
+              case 21:
+                newSchedules = function () {
+                  var schedules = _.cloneDeep(_this4.sharedSchedulesData.schedules);
+
+                  var data = _this4.deleteForm.scheduleData;
+
+                  for (var _i4 = 0; _i4 < schedules[data.date].length; _i4++) {
+                    if (schedules[data.date][_i4].id === data.id) {
+                      schedules[data.date].splice(_i4, 1);
+                      break;
+                    }
+                  }
+
+                  return schedules;
+                }();
+
+                _this4.$emit('changeSchedulesData', {
+                  schedules: newSchedules
+                });
+
+                _this4.hideModal();
+
+                return _context3.abrupt("return", false);
+
+              case 25:
+                _this4.$store.commit('error/setCode', response.status);
+
+              case 26:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
+    },
+    showDeleteModal: function showDeleteModal(schedule) {
+      this.modalFlg = true;
+      this.deleteForm.showFlg = true;
+      this.deleteForm.scheduleData = schedule;
+    },
+    hideModal: function hideModal() {
+      this.modalFlg = false;
+      this.deleteForm.showFlg = false;
+      this.deleteForm.scheduleData = null;
     }
   },
   created: function created() {
@@ -4790,24 +4932,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   watch: {
     selectedMonth: function () {
-      var _selectedMonth = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+      var _selectedMonth = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
         var selectedYear, schedules;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context4.prev = _context4.next) {
               case 0:
                 selectedYear = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).format('YYYY');
 
                 if (!(this.sharedSchedulesData.schedulesYear !== moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).format('YYYY'))) {
-                  _context3.next = 6;
+                  _context4.next = 6;
                   break;
                 }
 
-                _context3.next = 4;
+                _context4.next = 4;
                 return this.fetchSharedSchedules(selectedYear);
 
               case 4:
-                schedules = _context3.sent;
+                schedules = _context4.sent;
                 this.$emit('changeSchedulesData', {
                   schedulesYear: selectedYear,
                   schedules: schedules
@@ -4818,10 +4960,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 7:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
           }
-        }, _callee3, this);
+        }, _callee4, this);
       }));
 
       function selectedMonth() {
@@ -44455,14 +44597,104 @@ var render = function() {
               return _c("li", { key: schedule.id, staticClass: "schedule" }, [
                 _c("p", [_vm._v(_vm._s(schedule.time))]),
                 _vm._v(" "),
-                _c("p", [_vm._v(_vm._s(schedule.title))])
+                _c("p", [_vm._v(_vm._s(schedule.title))]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    on: {
+                      click: function($event) {
+                        return _vm.showDeleteModal(schedule)
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "far fa-trash-alt" })]
+                )
               ])
             }),
             0
           )
         ])
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.modalFlg,
+            expression: "modalFlg"
+          }
+        ],
+        staticClass: "modal-background",
+        on: { click: _vm.hideModal }
+      },
+      [
+        _c("div", { staticClass: "modal" }, [
+          _c(
+            "div",
+            {
+              staticClass: "modal-inner",
+              on: {
+                click: function($event) {
+                  $event.stopPropagation()
+                }
+              }
+            },
+            [
+              _c("i", {
+                staticClass: "fas fa-times",
+                on: { click: _vm.hideModal }
+              }),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.deleteForm.showFlg,
+                      expression: "deleteForm.showFlg"
+                    }
+                  ],
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.deleteSchedule($event)
+                    }
+                  }
+                },
+                [
+                  _c("p", [_vm._v("このスケジュールを削除しますか？")]),
+                  _vm._v(" "),
+                  _c("p", [_vm._v("日付")]),
+                  _vm._v(" "),
+                  _c("p", [_vm._v(_vm._s(_vm.deleteData.date))]),
+                  _vm._v(" "),
+                  _c("p", [_vm._v("時間")]),
+                  _vm._v(" "),
+                  _c("p", [_vm._v(_vm._s(_vm.deleteData.time))]),
+                  _vm._v(" "),
+                  _c("p", [_vm._v("スケジュール名")]),
+                  _vm._v(" "),
+                  _c("p", [_vm._v(_vm._s(_vm.deleteData.title))]),
+                  _vm._v(" "),
+                  _c("p", [_vm._v("詳細")]),
+                  _vm._v(" "),
+                  _c("p", [_vm._v(_vm._s(_vm.deleteData.description))]),
+                  _vm._v(" "),
+                  _c("button", [_vm._v("削除")])
+                ]
+              )
+            ]
+          )
+        ])
+      ]
+    )
   ])
 }
 var staticRenderFns = [
