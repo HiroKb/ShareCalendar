@@ -4025,7 +4025,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       if (data.schedules) {
-        console.log(data.schedules);
         this.sharedSchedulesData.schedules = data.schedules;
       }
     }
@@ -4627,7 +4626,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var time, description, data, response, i, t, newSchedules;
+        var time, description, data, response, newSchedules;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -4674,109 +4673,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 response = _context2.sent;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["CREATED"])) {
-                  _context2.next = 39;
+                  _context2.next = 18;
                   break;
                 }
 
-                i = 0;
-
-              case 15:
-                if (!(i < _this3.dates.length)) {
-                  _context2.next = 35;
-                  break;
-                }
-
-                if (!(response.data.date === _this3.dates[i].date)) {
-                  _context2.next = 32;
-                  break;
-                }
-
-                if (!(!_this3.dates[i].schedules.length || response.data.time === null)) {
-                  _context2.next = 20;
-                  break;
-                }
-
-                _this3.dates[i].schedules.unshift(response.data);
-
-                return _context2.abrupt("break", 35);
-
-              case 20:
-                t = 0;
-
-              case 21:
-                if (!(t < _this3.dates[i].schedules.length)) {
-                  _context2.next = 30;
-                  break;
-                }
-
-                if (!(_this3.dates[i].schedules[t].time === null)) {
-                  _context2.next = 24;
-                  break;
-                }
-
-                return _context2.abrupt("continue", 27);
-
-              case 24:
-                if (!(response.data.time <= _this3.dates[i].schedules[t].time)) {
-                  _context2.next = 27;
-                  break;
-                }
-
-                _this3.dates[i].schedules.splice(t, 0, response.data);
-
-                return _context2.abrupt("break", 35);
-
-              case 27:
-                t++;
-                _context2.next = 21;
-                break;
-
-              case 30:
-                // 上記以外の場合最後にデータを追加
-                _this3.dates[i].schedules.push(response.data);
-
-                return _context2.abrupt("break", 35);
-
-              case 32:
-                i++;
-                _context2.next = 15;
-                break;
-
-              case 35:
-                newSchedules = function () {
-                  // スケジュールデータオブジェクトを複製
-                  var schedules = _.cloneDeep(_this3.sharedSchedulesData.schedules);
-
-                  var data = response.data; // 登録した日にスケジュールがない場合
-
-                  if (!schedules[data.date]) {
-                    schedules[data.date] = [data];
-                    return schedules;
-                  } // 登録したしたスケジュールに時間指定がない場合先頭に追加
-
-
-                  if (data.time === null) {
-                    schedules[data.date].unshift[data];
-                    return schedules;
-                  } // 前後スケジュールが登録されている場合
-                  // 時間順に並ぶようにデータを追加
-
-
-                  for (var _i3 = 0; _i3 < schedules[data.date].length; _i3++) {
-                    if (schedules[data.date][_i3].time === null) {
-                      continue;
-                    }
-
-                    if (schedules[data.date][_i3].time >= data.time) {
-                      schedules[data.date].splice(_i3, 0, data);
-                      return schedules;
-                    }
-                  } // 上記以外の場合最後にデータを追加
-
-
-                  schedules[data.date].push(data);
-                  return schedules;
-                }();
+                // カレンダーデータとスケジュールリストデータを更新
+                newSchedules = _this3.addScheduleData(response.data, _this3.dates, _this3.sharedSchedulesData.schedules);
 
                 _this3.$emit('changeSchedulesData', {
                   schedules: newSchedules
@@ -4790,19 +4692,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 };
                 return _context2.abrupt("return", false);
 
-              case 39:
+              case 18:
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["VALIDATION_ERROR"])) {
-                  _context2.next = 42;
+                  _context2.next = 21;
                   break;
                 }
 
                 _this3.createError.errors = response.data.errors;
                 return _context2.abrupt("return", false);
 
-              case 42:
+              case 21:
                 _this3.$store.commit('error/setCode', response.status);
 
-              case 43:
+              case 22:
               case "end":
                 return _context2.stop();
             }
@@ -4814,87 +4716,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        var response, i, t, newSchedules;
+        var response, newSchedules;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                console.log(_this4.deleteForm.scheduleData);
-
                 if (_this4.deleteForm.scheduleData) {
-                  _context3.next = 3;
+                  _context3.next = 2;
                   break;
                 }
 
                 return _context3.abrupt("return", false);
 
-              case 3:
-                _context3.next = 5;
+              case 2:
+                _context3.next = 4;
                 return axios["delete"]('/api/shared-calendars/' + _this4.sharedCalendarId + '/schedules/' + _this4.deleteForm.scheduleData.id);
 
-              case 5:
+              case 4:
                 response = _context3.sent;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["SUCCESS"])) {
-                  _context3.next = 25;
+                  _context3.next = 10;
                   break;
                 }
 
-                i = 0;
-
-              case 8:
-                if (!(i < _this4.dates.length)) {
-                  _context3.next = 21;
-                  break;
-                }
-
-                if (!(_this4.dates[i].date === _this4.deleteForm.scheduleData.date)) {
-                  _context3.next = 18;
-                  break;
-                }
-
-                t = 0;
-
-              case 11:
-                if (!(t < _this4.dates[i].schedules.length)) {
-                  _context3.next = 18;
-                  break;
-                }
-
-                if (!(_this4.deleteForm.scheduleData.id === _this4.dates[i].schedules[t].id)) {
-                  _context3.next = 15;
-                  break;
-                }
-
-                _this4.dates[i].schedules.splice(t, 1);
-
-                return _context3.abrupt("break", 21);
-
-              case 15:
-                t++;
-                _context3.next = 11;
-                break;
-
-              case 18:
-                i++;
-                _context3.next = 8;
-                break;
-
-              case 21:
-                newSchedules = function () {
-                  var schedules = _.cloneDeep(_this4.sharedSchedulesData.schedules);
-
-                  var data = _this4.deleteForm.scheduleData;
-
-                  for (var _i4 = 0; _i4 < schedules[data.date].length; _i4++) {
-                    if (schedules[data.date][_i4].id === data.id) {
-                      schedules[data.date].splice(_i4, 1);
-                      break;
-                    }
-                  }
-
-                  return schedules;
-                }();
+                // カレンダーデータとスケジュールリストデータを更新
+                newSchedules = _this4.removeScheduleData(_this4.deleteForm.scheduleData, _this4.dates, _this4.sharedSchedulesData.schedules);
 
                 _this4.$emit('changeSchedulesData', {
                   schedules: newSchedules
@@ -4904,16 +4751,130 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context3.abrupt("return", false);
 
-              case 25:
+              case 10:
                 _this4.$store.commit('error/setCode', response.status);
 
-              case 26:
+              case 11:
               case "end":
                 return _context3.stop();
             }
           }
         }, _callee3);
       }))();
+    },
+
+    /**
+     * カレンダーデータとスケジュールリストデータにスケジュールデータを追加する
+     * @param additionalSchedule 追加するスケジュールデータ
+     * @param dates カレンダーデータ(破壊的)
+     * @param schedulesList スケジュールリストデータ(非破壊的)
+     * @returns {*} (変更後のスケジュールリストデータ)
+     */
+    addScheduleData: function addScheduleData(additionalSchedule, dates, schedulesList) {
+      // 追加するスケジュールの日にち
+      var additionalScheduleDate = additionalSchedule.date; // 追加するスケジュールの時間
+
+      var additionalScheduleTime = additionalSchedule.time; // スケジュールをカレンダーデータに追加
+
+      outer: for (var i = 0; i < dates.length; i++) {
+        if (additionalScheduleDate === dates[i].date) {
+          // スケジュール登録数0の日付か
+          // 登録したスケジュールに時間情報がない場合
+          // 配列の先頭にデータを追加
+          if (!dates[i].schedules.length || additionalScheduleTime === null) {
+            dates[i].schedules.unshift(additionalSchedule);
+            break;
+          } // 前後スケジュールが登録されている場合
+          // 時間順に並ぶようにデータを追加
+
+
+          for (var t = 0; t < dates[i].schedules.length; t++) {
+            if (dates[i].schedules[t].time === null) {
+              continue;
+            }
+
+            if (additionalScheduleTime <= dates[i].schedules[t].time) {
+              dates[i].schedules.splice(t, 0, additionalSchedule);
+              break outer;
+            }
+          } // 上記以外の場合最後にデータを追加
+
+
+          dates[i].schedules.push(additionalSchedule);
+          break;
+        }
+      } // スケジュールをスケジュールリストデータに追加
+
+
+      var newSchedules = _.cloneDeep(schedulesList); // 登録した日にスケジュールがない場合
+
+
+      if (!newSchedules[additionalScheduleDate]) {
+        newSchedules[additionalScheduleDate] = [additionalSchedule];
+        return newSchedules;
+      } // 登録したしたスケジュールに時間指定がない場合先頭に追加
+
+
+      if (additionalScheduleTime === null) {
+        newSchedules[additionalScheduleDate].unshift(additionalSchedule);
+        return newSchedules;
+      } // 前後スケジュールが登録されている場合
+      // 時間順に並ぶようにデータを追加
+
+
+      for (var _i3 = 0; _i3 < newSchedules[additionalScheduleDate].length; _i3++) {
+        if (newSchedules[additionalScheduleDate][_i3].time === null) {
+          continue;
+        }
+
+        if (newSchedules[additionalScheduleDate][_i3].time >= additionalScheduleTime) {
+          newSchedules[additionalScheduleDate].splice(_i3, 0, additionalSchedule);
+          return newSchedules;
+        }
+      } // 上記以外の場合最後にデータを追加
+
+
+      newSchedules[additionalScheduleDate].push(additionalSchedule); // 変更したスケジュールリストデータを返却
+
+      return newSchedules;
+    },
+
+    /**
+     * カレンダーデータとスケジュールリストデータからスケジュールを削除
+     * @param removalSchedule 削除するスケジュールデータ
+     * @param dates カレンダーデータ(破壊的)
+     * @param schedulesList スケジュールリストデータ(非破壊的)
+     * @returns {*} (変更後のスケジュールリストデータ)
+     */
+    removeScheduleData: function removeScheduleData(removalSchedule, dates, schedulesList) {
+      // 削除するスケジュールの日にち
+      var removalScheduleDate = removalSchedule.date; // 削除するスケジュールのID
+
+      var removalScheduleId = removalSchedule.id; // カレンダーデータからスケジュールを削除
+
+      outer: for (var i = 0; i < dates.length; i++) {
+        if (removalScheduleDate === dates[i].date) {
+          for (var t = 0; t < dates[i].schedules.length; t++) {
+            if (removalScheduleId === dates[i].schedules[t].id) {
+              this.dates[i].schedules.splice(t, 1);
+              break outer;
+            }
+          }
+        }
+      } // スケジュールリストデータからスケジュールを削除
+
+
+      var newSchedules = _.cloneDeep(schedulesList);
+
+      for (var _i4 = 0; _i4 < newSchedules[removalScheduleDate].length; _i4++) {
+        if (newSchedules[removalScheduleDate][_i4].id === removalScheduleId) {
+          newSchedules[removalScheduleDate].splice(_i4, 1);
+          break;
+        }
+      } // 変更したスケジュールリストデータを返却
+
+
+      return newSchedules;
     },
     showDeleteModal: function showDeleteModal(schedule) {
       this.modalFlg = true;

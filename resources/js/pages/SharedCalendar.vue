@@ -134,7 +134,6 @@
                     this.sharedSchedulesData.schedulesYear = data.schedulesYear
                 }
                 if (data.schedules){
-                    console.log(data.schedules)
                     this.sharedSchedulesData.schedules = data.schedules
                 }
             },

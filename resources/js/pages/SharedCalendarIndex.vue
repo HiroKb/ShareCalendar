@@ -323,74 +323,10 @@
                 const response = await axios.post('/api/shared-calendars/' + this.sharedCalendarId + '/schedules', data)
                 //
                 if (response.status === CREATED) {
-
-                    // 登録したスケジュールデータを追加
-                    outer: for (let i = 0; i < this.dates.length; i++) {
-                        if (response.data.date === this.dates[i].date){
-                            // スケジュール登録数0の日付か
-                            // 登録したスケジュールに時間情報がない場合
-                            // 配列の先頭にデータを追加
-                            if (!this.dates[i].schedules.length || response.data.time === null) {
-                                this.dates[i].schedules.unshift(response.data)
-                                break
-                            }
-
-                            // 前後スケジュールが登録されている場合
-                            // 時間順に並ぶようにデータを追加
-                            for (let t = 0; t < this.dates[i].schedules.length; t++) {
-
-                                if (this.dates[i].schedules[t].time === null) {
-                                    continue
-                                }
-
-                                if(response.data.time <= this.dates[i].schedules[t].time) {
-                                    this.dates[i].schedules.splice(t, 0, response.data)
-                                    break outer
-                                }
-                            }
-
-                            // 上記以外の場合最後にデータを追加
-                            this.dates[i].schedules.push(response.data)
-                            break
-                        }
-                    }
-
-                    const newSchedules =  (() => {
-                        // スケジュールデータオブジェクトを複製
-                        const schedules = _.cloneDeep(this.sharedSchedulesData.schedules)
-                        const data = response.data
-                        // 登録した日にスケジュールがない場合
-                        if (!schedules[data.date]){
-                            schedules[data.date] = [data]
-                            return schedules
-                        }
-
-                        // 登録したしたスケジュールに時間指定がない場合先頭に追加
-                        if(data.time === null) {
-                            schedules[data.date].unshift[data]
-                            return schedules
-                        }
-
-                        // 前後スケジュールが登録されている場合
-                        // 時間順に並ぶようにデータを追加
-                        for (let i = 0; i < schedules[data.date].length; i++) {
-
-                            if (schedules[data.date][i].time === null) {
-                                continue
-                            }
-
-                            if(schedules[data.date][i].time >= data.time) {
-                                schedules[data.date].splice(i, 0, data)
-                                return  schedules
-                            }
-                        }
-
-
-                        // 上記以外の場合最後にデータを追加
-                        schedules[data.date].push(data)
-                        return schedules
-                    })()
+                    // カレンダーデータとスケジュールリストデータを更新
+                    const newSchedules = this.addScheduleData(response.data, this.dates, this.sharedSchedulesData.schedules)
                     this.$emit('changeSchedulesData', {schedules: newSchedules})
+
                     this.createScheduleData = {
                         hour: 'unspecified',
                         minute: 'unspecified',
@@ -407,40 +343,130 @@
                 this.$store.commit('error/setCode', response.status)
             },
             async deleteSchedule(){
-                console.log(this.deleteForm.scheduleData)
                 if (!this.deleteForm.scheduleData){
                     return false
                 }
                 const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarId + '/schedules/' + this.deleteForm.scheduleData.id)
                 if(response.status === SUCCESS) {
-                    // カレンダーデータからスケジュールを削除
-                    outer: for (let i = 0; i < this.dates.length; i++) {
-                        if (this.dates[i].date === this.deleteForm.scheduleData.date) {
-                            for (let t = 0 ; t < this.dates[i].schedules.length; t++) {
-                                if (this.deleteForm.scheduleData.id === this.dates[i].schedules[t].id) {
-                                    this.dates[i].schedules.splice(t, 1)
-                                    break outer
-                                }
-                            }
-                        }
-                    }
-
-                    const newSchedules = (() => {
-                        const schedules = _.cloneDeep(this.sharedSchedulesData.schedules)
-                        const data = this.deleteForm.scheduleData
-                        for(let i = 0; i < schedules[data.date].length; i++) {
-                            if (schedules[data.date][i].id === data.id){
-                                schedules[data.date].splice(i, 1)
-                                break
-                            }
-                        }
-                        return schedules
-                    })()
+                    // カレンダーデータとスケジュールリストデータを更新
+                    const newSchedules = this.removeScheduleData(this.deleteForm.scheduleData, this.dates, this.sharedSchedulesData.schedules)
                     this.$emit('changeSchedulesData', {schedules: newSchedules})
                     this.hideModal()
                     return false
                 }
                 this.$store.commit('error/setCode', response.status)
+            },
+            /**
+             * カレンダーデータとスケジュールリストデータにスケジュールデータを追加する
+             * @param additionalSchedule 追加するスケジュールデータ
+             * @param dates カレンダーデータ(破壊的)
+             * @param schedulesList スケジュールリストデータ(非破壊的)
+             * @returns {*} (変更後のスケジュールリストデータ)
+             */
+            addScheduleData(additionalSchedule, dates, schedulesList) {
+                // 追加するスケジュールの日にち
+                const additionalScheduleDate = additionalSchedule.date
+                // 追加するスケジュールの時間
+                const additionalScheduleTime = additionalSchedule.time
+                // スケジュールをカレンダーデータに追加
+
+                outer: for (let i = 0; i < dates.length; i++) {
+                    if (additionalScheduleDate === dates[i].date){
+                        // スケジュール登録数0の日付か
+                        // 登録したスケジュールに時間情報がない場合
+                        // 配列の先頭にデータを追加
+                        if (!dates[i].schedules.length || additionalScheduleTime === null) {
+                            dates[i].schedules.unshift(additionalSchedule)
+                            break
+                        }
+
+                        // 前後スケジュールが登録されている場合
+                        // 時間順に並ぶようにデータを追加
+                        for (let t = 0; t < dates[i].schedules.length; t++) {
+
+                            if (dates[i].schedules[t].time === null) {
+                                continue
+                            }
+
+                            if(additionalScheduleTime <= dates[i].schedules[t].time) {
+                                dates[i].schedules.splice(t, 0, additionalSchedule)
+                                break outer
+                            }
+                        }
+
+                        // 上記以外の場合最後にデータを追加
+                        dates[i].schedules.push(additionalSchedule)
+                        break
+                    }
+                }
+
+                // スケジュールをスケジュールリストデータに追加
+                const newSchedules = _.cloneDeep(schedulesList)
+                // 登録した日にスケジュールがない場合
+                if (!newSchedules[additionalScheduleDate]){
+                    newSchedules[additionalScheduleDate] = [additionalSchedule]
+                    return newSchedules
+                }
+
+                // 登録したしたスケジュールに時間指定がない場合先頭に追加
+                if(additionalScheduleTime === null) {
+                    newSchedules[additionalScheduleDate].unshift(additionalSchedule)
+                    return newSchedules
+                }
+
+                // 前後スケジュールが登録されている場合
+                // 時間順に並ぶようにデータを追加
+                for (let i = 0; i < newSchedules[additionalScheduleDate].length; i++) {
+
+                    if (newSchedules[additionalScheduleDate][i].time === null) {
+                        continue
+                    }
+
+                    if(newSchedules[additionalScheduleDate][i].time >= additionalScheduleTime) {
+                        newSchedules[additionalScheduleDate].splice(i, 0, additionalSchedule)
+                        return  newSchedules
+                    }
+                }
+                // 上記以外の場合最後にデータを追加
+                newSchedules[additionalScheduleDate].push(additionalSchedule)
+
+                // 変更したスケジュールリストデータを返却
+                return newSchedules
+            },
+            /**
+             * カレンダーデータとスケジュールリストデータからスケジュールを削除
+             * @param removalSchedule 削除するスケジュールデータ
+             * @param dates カレンダーデータ(破壊的)
+             * @param schedulesList スケジュールリストデータ(非破壊的)
+             * @returns {*} (変更後のスケジュールリストデータ)
+             */
+            removeScheduleData(removalSchedule, dates, schedulesList){
+                // 削除するスケジュールの日にち
+                const removalScheduleDate = removalSchedule.date
+                // 削除するスケジュールのID
+                const removalScheduleId = removalSchedule.id
+                // カレンダーデータからスケジュールを削除
+                outer: for (let i = 0; i < dates.length; i++) {
+                    if (removalScheduleDate === dates[i].date) {
+                        for (let t = 0 ; t < dates[i].schedules.length; t++) {
+                            if (removalScheduleId === dates[i].schedules[t].id) {
+                                this.dates[i].schedules.splice(t, 1)
+                                break outer
+                            }
+                        }
+                    }
+                }
+
+                // スケジュールリストデータからスケジュールを削除
+                const newSchedules = _.cloneDeep(schedulesList)
+                for(let i = 0; i < newSchedules[removalScheduleDate].length; i++) {
+                    if (newSchedules[removalScheduleDate][i].id === removalScheduleId){
+                        newSchedules[removalScheduleDate].splice(i, 1)
+                        break
+                    }
+                }
+                // 変更したスケジュールリストデータを返却
+                return newSchedules
             },
             showDeleteModal(schedule) {
                 this.modalFlg = true
