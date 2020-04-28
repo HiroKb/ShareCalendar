@@ -5,12 +5,11 @@ namespace Tests\Feature;
 use App\SharedCalendar;
 use App\SharedSchedule;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class GetSharedSchedulesApiTest extends TestCase
+class UpdateSharedScheduleApiTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -26,7 +25,7 @@ class GetSharedSchedulesApiTest extends TestCase
     /**
      * @test
      */
-    public function shoud_指定したカレンダーの共有スケジュールを取得()
+    public function shoud_指定した共有スケジュールを更新()
     {
         $calendar = new SharedCalendar();
         $calendar->calendar_name = 'test';
@@ -57,17 +56,29 @@ class GetSharedSchedulesApiTest extends TestCase
         $calendar->schedules()->save($schedule2);
         $calendar->schedules()->save($schedule3);
 
-        $response = $this->actingAs($this->user2)
-            ->json('get', '/api/shared-calendars/' . $calendar->id . '/schedules/2020-04-01/2020-04-30');
+        $data = [
+            'time' => '23:45:00',
+            'title' => 'updated',
+            'description' => 'updated'
+        ];
+        $response = $this->actingAs($this->user3)
+            ->json('patch', '/api/shared-calendars/' . $calendar->id . '/schedules/' . $schedule2->id, $data);
+        $response->assertStatus(404);
+        $this->assertDatabaseMissing('shared_schedules', $data);
 
+
+        $updatedData = [
+            'id' => $schedule1->id,
+            'date' => $schedule1->date,
+            'time' => '23:45:00',
+            'title' => 'updated',
+            'description' => 'updated'
+        ];
+        $response = $this->actingAs($this->user2)
+            ->json('patch', 'api/shared-calendars/' . $calendar->id . '/schedules/' . $schedule1->id, $data);
         $response
             ->assertStatus(200)
-            ->assertJsonPath('2020-04-20.0.title', 'test3')
-            ->assertJsonPath('2020-04-20.1.title', 'test2')
-            ->assertJsonPath('2020-04-30.0.title', 'test1');
-
-        $response = $this->actingAs($this->user3)
-            ->json('get', '/api/shared-calendars/' . $calendar->id . '/schedules/2020-04-01/2020-04-30');
-        $response->assertStatus(404);
+            ->assertJson($updatedData);
+        $this->assertDatabaseHas('shared_schedules', $updatedData);
     }
 }

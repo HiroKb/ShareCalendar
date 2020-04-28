@@ -4452,6 +4452,73 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4474,6 +4541,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         errors: {}
       },
       modalFlg: false,
+      editForm: {
+        showFlg: false,
+        scheduleData: {
+          id: null,
+          date: '',
+          hour: 'unspecified',
+          minute: 'unspecified',
+          title: '',
+          description: ''
+        }
+      },
+      editError: {
+        errorFlg: false,
+        errors: {}
+      },
       deleteForm: {
         showFlg: false,
         scheduleData: null
@@ -4762,6 +4844,82 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }))();
     },
+    updateSchedule: function updateSchedule() {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        var time, description, data, response, deletedSchedules, newSchedules;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _this5.editError.errorFlg = false;
+                _this5.editError.errors = {}; // 入力値が不正な場合
+
+                if (!_this5.editForm.scheduleData.id) {
+                  _this5.editError.errors.schedule = ['スケジュールを選択してください。'];
+                  _this5.editError.errorFlg = true;
+                }
+
+                if (_this5.editForm.scheduleData.hour === 'unspecified' && _this5.editForm.scheduleData.minute !== 'unspecified' || _this5.editForm.scheduleData.hour !== 'unspecified' && _this5.editForm.scheduleData.minute === 'unspecified') {
+                  _this5.editError.errors.time = ['時間の形式を確認してください。'];
+                  _this5.editError.errorFlg = true;
+                }
+
+                if (!_this5.editForm.scheduleData.title) {
+                  _this5.editError.errors.title = ['スケジュール名は必須です。'];
+                  _this5.editError.errorFlg = true;
+                }
+
+                if (!_this5.editError.errorFlg) {
+                  _context4.next = 7;
+                  break;
+                }
+
+                return _context4.abrupt("return", false);
+
+              case 7:
+                // postするデータを作成
+                time = _this5.editForm.scheduleData.hour === 'unspecified' ? null : _this5.editForm.scheduleData.hour + ':' + _this5.editForm.scheduleData.minute + ':00';
+                description = !!_this5.editForm.scheduleData.description ? _this5.editForm.scheduleData.description : null;
+                data = {
+                  time: time,
+                  title: _this5.editForm.scheduleData.title,
+                  description: description
+                };
+                _context4.next = 12;
+                return axios.patch('/api/shared-calendars/' + _this5.sharedCalendarId + '/schedules/' + _this5.editForm.scheduleData.id, data);
+
+              case 12:
+                response = _context4.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["SUCCESS"])) {
+                  _context4.next = 19;
+                  break;
+                }
+
+                deletedSchedules = _this5.removeScheduleData(_this5.editForm.scheduleData, _this5.dates, _this5.sharedSchedulesData.schedules);
+                newSchedules = _this5.addScheduleData(response.data, _this5.dates, deletedSchedules);
+
+                _this5.$emit('changeSchedulesData', {
+                  schedules: newSchedules
+                });
+
+                _this5.hideModal();
+
+                return _context4.abrupt("return", false);
+
+              case 19:
+                _this5.$store.commit('error/setCode', response.status);
+
+              case 20:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
+    },
 
     /**
      * カレンダーデータとスケジュールリストデータにスケジュールデータを追加する
@@ -4876,6 +5034,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return newSchedules;
     },
+    showEditModal: function showEditModal(schedule) {
+      this.modalFlg = true;
+      this.editForm.showFlg = true;
+      var hour, minute;
+
+      if (schedule.time) {
+        hour = schedule.time.substr(0, 2);
+        minute = schedule.time.substr(3, 2);
+      } else {
+        hour = 'unspecified';
+        minute = 'unspecified';
+      }
+
+      this.editForm.scheduleData = {
+        id: schedule.id,
+        date: schedule.date,
+        hour: hour,
+        minute: minute,
+        title: schedule.title,
+        description: schedule.description
+      };
+    },
     showDeleteModal: function showDeleteModal(schedule) {
       this.modalFlg = true;
       this.deleteForm.showFlg = true;
@@ -4885,6 +5065,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.modalFlg = false;
       this.deleteForm.showFlg = false;
       this.deleteForm.scheduleData = null;
+      this.editForm.showFlg = false;
+      this.editForm.scheduleData = {
+        id: null,
+        date: '',
+        hour: 'unspecified',
+        minute: 'unspecified',
+        title: '',
+        description: ''
+      };
+      this.editError = {
+        errorFlg: false,
+        errors: {}
+      };
     }
   },
   created: function created() {
@@ -4893,24 +5086,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   watch: {
     selectedMonth: function () {
-      var _selectedMonth = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+      var _selectedMonth = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
         var selectedYear, schedules;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
                 selectedYear = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).format('YYYY');
 
                 if (!(this.sharedSchedulesData.schedulesYear !== moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).format('YYYY'))) {
-                  _context4.next = 6;
+                  _context5.next = 6;
                   break;
                 }
 
-                _context4.next = 4;
+                _context5.next = 4;
                 return this.fetchSharedSchedules(selectedYear);
 
               case 4:
-                schedules = _context4.sent;
+                schedules = _context5.sent;
                 this.$emit('changeSchedulesData', {
                   schedulesYear: selectedYear,
                   schedules: schedules
@@ -4921,10 +5114,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 7:
               case "end":
-                return _context4.stop();
+                return _context5.stop();
             }
           }
-        }, _callee4, this);
+        }, _callee5, this);
       }));
 
       function selectedMonth() {
@@ -44565,6 +44758,18 @@ var render = function() {
                   {
                     on: {
                       click: function($event) {
+                        return _vm.showEditModal(schedule)
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "far fa-file-alt" })]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    on: {
+                      click: function($event) {
                         return _vm.showDeleteModal(schedule)
                       }
                     }
@@ -44610,6 +44815,267 @@ var render = function() {
                 staticClass: "fas fa-times",
                 on: { click: _vm.hideModal }
               }),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.editForm.showFlg,
+                      expression: "editForm.showFlg"
+                    }
+                  ],
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.updateSchedule($event)
+                    }
+                  }
+                },
+                [
+                  _vm.editError.errors.schedule
+                    ? _c("p", [
+                        _vm._v(_vm._s(_vm.editError.errors.schedule[0]))
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("p", [_vm._v(_vm._s(_vm.selectedDate))]),
+                  _vm._v(" "),
+                  _c("label", { attrs: { for: "edit-hour" } }, [
+                    _vm._v("時間")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editForm.scheduleData.hour,
+                          expression: "editForm.scheduleData.hour"
+                        }
+                      ],
+                      attrs: { name: "hour", id: "edit-hour" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.editForm.scheduleData,
+                            "hour",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    [
+                      _c("option", { attrs: { value: "unspecified" } }, [
+                        _vm._v("指定なし")
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "00" } }, [_vm._v("00")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "01" } }, [_vm._v("01")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "02" } }, [_vm._v("02")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "03" } }, [_vm._v("03")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "04" } }, [_vm._v("04")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "05" } }, [_vm._v("05")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "06" } }, [_vm._v("06")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "07" } }, [_vm._v("07")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "08" } }, [_vm._v("08")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "09" } }, [_vm._v("09")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "10" } }, [_vm._v("10")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "11" } }, [_vm._v("11")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "12" } }, [_vm._v("12")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "13" } }, [_vm._v("13")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "14" } }, [_vm._v("14")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "15" } }, [_vm._v("15")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "16" } }, [_vm._v("16")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "17" } }, [_vm._v("17")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "18" } }, [_vm._v("18")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "19" } }, [_vm._v("19")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "20" } }, [_vm._v("20")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "21" } }, [_vm._v("21")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "22" } }, [_vm._v("22")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "23" } }, [_vm._v("23")])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("span", [_vm._v(" : ")]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editForm.scheduleData.minute,
+                          expression: "editForm.scheduleData.minute"
+                        }
+                      ],
+                      attrs: { name: "minute", id: "edit-minute" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.editForm.scheduleData,
+                            "minute",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    [
+                      _c("option", { attrs: { value: "unspecified" } }, [
+                        _vm._v("指定なし")
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "00" } }, [_vm._v("00")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "05" } }, [_vm._v("05")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "10" } }, [_vm._v("10")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "15" } }, [_vm._v("15")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "20" } }, [_vm._v("20")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "25" } }, [_vm._v("25")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "30" } }, [_vm._v("30")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "35" } }, [_vm._v("35")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "40" } }, [_vm._v("40")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "45" } }, [_vm._v("45")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "50" } }, [_vm._v("50")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "55" } }, [_vm._v("55")])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _vm.editError.errors.time
+                    ? _c("p", [_vm._v(_vm._s(_vm.editError.errors.time[0]))])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("label", { attrs: { for: "edit-title" } }, [
+                    _vm._v("スケジュール名 *必須")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.editForm.scheduleData.title,
+                        expression: "editForm.scheduleData.title"
+                      }
+                    ],
+                    attrs: { id: "edit-title", type: "text" },
+                    domProps: { value: _vm.editForm.scheduleData.title },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.editForm.scheduleData,
+                          "title",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.editError.errors.title
+                    ? _c("p", [_vm._v(_vm._s(_vm.editError.errors.title[0]))])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("label", { attrs: { for: "edit-description" } }, [
+                    _vm._v("詳細")
+                  ]),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.editForm.scheduleData.description,
+                        expression: "editForm.scheduleData.description"
+                      }
+                    ],
+                    attrs: { id: "edit-description" },
+                    domProps: { value: _vm.editForm.scheduleData.description },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.editForm.scheduleData,
+                          "description",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.editError.errors.description
+                    ? _c("p", [
+                        _vm._v(_vm._s(_vm.editError.errors.description[0]))
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("button", { attrs: { type: "submit" } }, [
+                    _vm._v("スケジュール更新")
+                  ])
+                ]
+              ),
               _vm._v(" "),
               _c(
                 "form",

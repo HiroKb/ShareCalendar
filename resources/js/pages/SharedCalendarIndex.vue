@@ -108,7 +108,7 @@
                         <li class="schedule" v-for="schedule in selectDateSchedules" :key="schedule.id">
                             <p>{{ schedule.time}}</p>
                             <p>{{ schedule.title }}</p>
-<!--                            <button @click="showEditModal(schedule)"><i class="far fa-file-alt"></i></button>-->
+                            <button @click="showEditModal(schedule)"><i class="far fa-file-alt"></i></button>
                             <button @click="showDeleteModal(schedule)"><i class="far fa-trash-alt"></i></button>
                         </li>
                     </ul>
@@ -120,6 +120,73 @@
                 <div class="modal-inner" @click.stop>
 
                     <i class="fas fa-times" @click="hideModal"></i>
+
+                    <form @submit.prevent="updateSchedule" v-show="editForm.showFlg">
+                        <p v-if="editError.errors.schedule">{{ editError.errors.schedule[0] }}</p>
+                        <p>{{ selectedDate }}</p>
+
+                        <label for="edit-hour">時間</label>
+                        <select name="hour"
+                                id="edit-hour"
+                                v-model="editForm.scheduleData.hour">
+                            <option value="unspecified">指定なし</option>
+                            <option value="00">00</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                        </select>
+                        <span> : </span>
+
+                        <select name="minute"
+                                id="edit-minute"
+                                v-model="editForm.scheduleData.minute">
+                            <option value="unspecified">指定なし</option>
+                            <option value="00">00</option>
+                            <option value="05">05</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                            <option value="25">25</option>
+                            <option value="30">30</option>
+                            <option value="35">35</option>
+                            <option value="40">40</option>
+                            <option value="45">45</option>
+                            <option value="50">50</option>
+                            <option value="55">55</option>
+                        </select>
+                        <p v-if="editError.errors.time">{{ editError.errors.time[0] }}</p>
+
+                        <label for="edit-title">スケジュール名 *必須</label>
+                        <input id="edit-title" type="text" v-model="editForm.scheduleData.title">
+                        <p v-if="editError.errors.title">{{ editError.errors.title[0] }}</p>
+
+                        <label for="edit-description">詳細</label>
+                        <textarea id="edit-description" v-model="editForm.scheduleData.description"></textarea>
+                        <p v-if="editError.errors.description">{{ editError.errors.description[0] }}</p>
+
+                        <button type="submit">スケジュール更新</button>
+                    </form>
+
                     <form @submit.prevent="deleteSchedule" v-show="deleteForm.showFlg">
                         <p>このスケジュールを削除しますか？</p>
                         <p>日付</p>
@@ -161,6 +228,21 @@
                     errors: {}
                 },
                 modalFlg: false,
+                editForm: {
+                    showFlg: false,
+                    scheduleData: {
+                        id: null,
+                        date: '',
+                        hour: 'unspecified',
+                        minute: 'unspecified',
+                        title: '',
+                        description: ''
+                    }
+                },
+                editError: {
+                    errorFlg: false,
+                    errors: {}
+                },
                 deleteForm: {
                     showFlg: false,
                     scheduleData: null
@@ -356,6 +438,54 @@
                 }
                 this.$store.commit('error/setCode', response.status)
             },
+            async updateSchedule(){
+                this.editError.errorFlg = false
+                this.editError.errors = {}
+
+                // 入力値が不正な場合
+                if (!this.editForm.scheduleData.id) {
+                    this.editError.errors.schedule = ['スケジュールを選択してください。']
+                    this.editError.errorFlg = true
+                }
+                if ((this.editForm.scheduleData.hour === 'unspecified' && this.editForm.scheduleData.minute !== 'unspecified') ||
+                    (this.editForm.scheduleData.hour !== 'unspecified' && this.editForm.scheduleData.minute === 'unspecified')) {
+                    this.editError.errors.time = ['時間の形式を確認してください。']
+                    this.editError.errorFlg = true
+                }
+                if(!this.editForm.scheduleData.title){
+                    this.editError.errors.title = ['スケジュール名は必須です。']
+                    this.editError.errorFlg = true
+                }
+
+                if (this.editError.errorFlg) {
+                    return false
+                }
+
+
+                // postするデータを作成
+                const time = this.editForm.scheduleData.hour === 'unspecified'
+                    ? null
+                    : this.editForm.scheduleData.hour + ':' + this.editForm.scheduleData.minute + ':00'
+                const description = !!this.editForm.scheduleData.description ? this.editForm.scheduleData.description : null
+                const data = {
+                    time: time,
+                    title: this.editForm.scheduleData.title,
+                    description: description
+                }
+
+                const response = await axios.patch('/api/shared-calendars/' + this.sharedCalendarId + '/schedules/' + this.editForm.scheduleData.id, data)
+
+                if(response.status === SUCCESS) {
+                    const deletedSchedules = this.removeScheduleData(this.editForm.scheduleData, this.dates, this.sharedSchedulesData.schedules)
+                    const newSchedules = this.addScheduleData(response.data, this.dates, deletedSchedules)
+
+                    this.$emit('changeSchedulesData', {schedules: newSchedules})
+                    this.hideModal()
+                    return false
+                }
+
+                this.$store.commit('error/setCode', response.status)
+            },
             /**
              * カレンダーデータとスケジュールリストデータにスケジュールデータを追加する
              * @param additionalSchedule 追加するスケジュールデータ
@@ -468,6 +598,28 @@
                 // 変更したスケジュールリストデータを返却
                 return newSchedules
             },
+            showEditModal(schedule){
+                this.modalFlg = true
+                this.editForm.showFlg = true
+
+                let hour, minute
+
+                if (schedule.time) {
+                    hour = schedule.time.substr(0, 2)
+                    minute = schedule.time.substr(3, 2)
+                }else{
+                    hour = 'unspecified'
+                    minute = 'unspecified'
+                }
+                this.editForm.scheduleData = {
+                    id: schedule.id,
+                    date: schedule.date,
+                    hour: hour,
+                    minute: minute,
+                    title: schedule.title,
+                    description: schedule.description
+                }
+            },
             showDeleteModal(schedule) {
                 this.modalFlg = true
                 this.deleteForm.showFlg = true
@@ -478,6 +630,21 @@
 
                 this.deleteForm.showFlg = false
                 this.deleteForm.scheduleData = null
+
+                this.editForm.showFlg = false
+                this.editForm.scheduleData = {
+                    id: null,
+                    date: '',
+                    hour: 'unspecified',
+                    minute: 'unspecified',
+                    title: '',
+                    description: ''
+                }
+
+                this.editError = {
+                    errorFlg: false,
+                    errors: {}
+                }
             }
         },
         created() {

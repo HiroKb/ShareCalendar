@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateScheduleRequest;
+use App\Http\Requests\UpdateScheduleRequest;
 use App\SharedCalendar;
 use App\SharedSchedule;
 use Carbon\Carbon;
@@ -55,5 +56,18 @@ class SharedScheduleController extends Controller
         $sharedSchedule->delete();
 
         return response([], 200);
+    }
+
+    public function update(UpdateScheduleRequest $request, SharedCalendar $sharedCalendar, SharedSchedule $sharedSchedule)
+    {
+        if (!$sharedCalendar->members()->where('user_id', Auth::id())->exists()){
+            abort(404);
+        }
+        $sharedSchedule->time = $request->time;
+        $sharedSchedule->title = $request->title;
+        $sharedSchedule->description = $request->description;
+
+        $sharedSchedule->save();
+        return $sharedSchedule;
     }
 }
