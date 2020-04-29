@@ -12,6 +12,9 @@
                 <router-link :to="{name: 'sharedCalendarApplicants', params:{sharedCalendarId: sharedCalendarId}}" v-if="adminFlg" class="shared-calendar-link">
                     共有申請者一覧
                 </router-link>
+                <router-link :to="{name: 'sharedCalendarInfo'}" v-if="adminFlg">
+                    共有カレンダー情報/変更
+                </router-link>
 
                 <router-link :to="{name: 'unShareCalendar'}" v-if="!adminFlg" class="shared-calendar-link">
                     共有解除
@@ -26,6 +29,7 @@
                      @unShareMember="removeMember"
                      @allowApplication="allowApplications"
                      @rejectApplication="removeApplicants"
+                     @changeCalendarData="changeCalendarData"
                      @changeSchedulesData="changeSchedulesData"
         >
         </router-view>
@@ -128,7 +132,9 @@
                     }
                 })
             },
-            // 以下スケジュール部分
+            changeCalendarData(data) {
+                this.sharedCalendarData = data
+            },
             changeSchedulesData(data) {
                 if (data.schedulesYear){
                     this.sharedSchedulesData.schedulesYear = data.schedulesYear

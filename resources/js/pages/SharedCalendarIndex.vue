@@ -4,8 +4,6 @@
             <div class="shared-calendar">
 
                 <div class="calendar">
-                    <p>{{ sharedCalendarData.calendar_name }}</p>
-                    <p>{{ invitationUrl }}</p>
                     <table>
                         <caption><span @click="changeSelectedMonth(-1)"><  </span><span>{{ dateLabel }}</span><span @click="changeSelectedMonth(1)">  ></span></caption>
                         <thead>
@@ -250,11 +248,6 @@
             }
         },
         computed: {
-            invitationUrl: function () {
-                return this.sharedCalendarData.search_id ?
-                        location.protocol + '//' + location.host + '/shared-calendar/' + this.sharedCalendarData.search_id + '/application'
-                        : ''
-            },
             selectDateSchedules: function () {
                 for (let i = 0; i < this.dates.length; i++){
                     if (this.selectedDate === this.dates[i].date){
@@ -668,9 +661,6 @@
 </script>
 
 <style scoped>
-    .sidebar-wrap{
-        display: flex;
-    }
     .shared-calendar{
         margin: 0 auto;
         display: flex;

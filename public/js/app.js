@@ -3847,6 +3847,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -4018,7 +4022,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       });
     },
-    // 以下スケジュール部分
+    changeCalendarData: function changeCalendarData(data) {
+      this.sharedCalendarData = data;
+    },
     changeSchedulesData: function changeSchedulesData(data) {
       if (data.schedulesYear) {
         this.sharedSchedulesData.schedulesYear = data.schedulesYear;
@@ -4517,8 +4523,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4563,9 +4567,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   computed: {
-    invitationUrl: function invitationUrl() {
-      return this.sharedCalendarData.search_id ? location.protocol + '//' + location.host + '/shared-calendar/' + this.sharedCalendarData.search_id + '/application' : '';
-    },
     selectDateSchedules: function selectDateSchedules() {
       for (var i = 0; i < this.dates.length; i++) {
         if (this.selectedDate === this.dates[i].date) {
@@ -5126,6 +5127,129 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return selectedMonth;
     }()
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/SharedCalendarInfo.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/SharedCalendarInfo.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "SharedCalendarInfo.vue",
+  data: function data() {
+    return {
+      modalFlg: false,
+      updateSearchIdForm: {
+        showFlg: false
+      }
+    };
+  },
+  props: {
+    sharedCalendarData: {
+      type: Object,
+      required: true,
+      "default": {}
+    }
+  },
+  computed: {
+    invitationUrl: function invitationUrl() {
+      return this.sharedCalendarData.search_id ? location.protocol + '//' + location.host + '/shared-calendar/' + this.sharedCalendarData.search_id + '/application' : '';
+    }
+  },
+  methods: {
+    updateSearchId: function updateSearchId() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return axios.patch('/api/shared-calendars/' + _this.sharedCalendarData.id + '/search-id');
+
+              case 2:
+                response = _context.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
+                  _context.next = 7;
+                  break;
+                }
+
+                _this.$emit('changeCalendarData', response.data);
+
+                _this.hideModal();
+
+                return _context.abrupt("return", false);
+
+              case 7:
+                _this.$store.commit('error/setCode', response.status);
+
+              case 8:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    showUpdateSearchIdModal: function showUpdateSearchIdModal() {
+      this.modalFlg = true;
+      this.updateSearchIdForm.showFlg = true;
+    },
+    hideModal: function hideModal() {
+      this.modalFlg = false;
+    }
   }
 });
 
@@ -5703,7 +5827,26 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.sidebar-wrap[data-v-63cb6354]{\n    display: flex;\n}\n.shared-calendar[data-v-63cb6354]{\n    margin: 0 auto;\n    display: flex;\n}\ntable[data-v-63cb6354]{\n    border-collapse: collapse;\n}\nth[data-v-63cb6354],td[data-v-63cb6354]{\n    width: 80px;\n    height: 80px;\n    border: solid 1px black;\n    text-align: center;\n}\nlabel[data-v-63cb6354]{\n    display: block;\n    margin-top: 16px;\n}\ninput[data-v-63cb6354]{\n    width: 100%;\n}\ntextarea[data-v-63cb6354]{\n    width: 100%;\n}\nbutton[data-v-63cb6354]{\n    margin-top: 16px;\n}\n.calendar-menu[data-v-63cb6354]{\n    margin-left: 20px;\n}\n.schedules[data-v-63cb6354]{\n    margin-top: 20px;\n}\n.schedule[data-v-63cb6354]{\n    padding: 8px 0;\n    border-top: 1px solid black;\n}\n.modal-background[data-v-63cb6354]{\n    position: fixed;\n    top: 0;\n    left: 0;\n    height: 100vh;\n    width: 100vw ;\n    z-index: 10;\n    background: rgba(0, 0, 0, .1);\n}\n.modal[data-v-63cb6354]{\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    height: 100vh;\n    width: 100vw ;\n}\n.modal-inner[data-v-63cb6354]{\n    background: #ffffff;\n}\n", ""]);
+exports.push([module.i, "\n.shared-calendar[data-v-63cb6354]{\n    margin: 0 auto;\n    display: flex;\n}\ntable[data-v-63cb6354]{\n    border-collapse: collapse;\n}\nth[data-v-63cb6354],td[data-v-63cb6354]{\n    width: 80px;\n    height: 80px;\n    border: solid 1px black;\n    text-align: center;\n}\nlabel[data-v-63cb6354]{\n    display: block;\n    margin-top: 16px;\n}\ninput[data-v-63cb6354]{\n    width: 100%;\n}\ntextarea[data-v-63cb6354]{\n    width: 100%;\n}\nbutton[data-v-63cb6354]{\n    margin-top: 16px;\n}\n.calendar-menu[data-v-63cb6354]{\n    margin-left: 20px;\n}\n.schedules[data-v-63cb6354]{\n    margin-top: 20px;\n}\n.schedule[data-v-63cb6354]{\n    padding: 8px 0;\n    border-top: 1px solid black;\n}\n.modal-background[data-v-63cb6354]{\n    position: fixed;\n    top: 0;\n    left: 0;\n    height: 100vh;\n    width: 100vw ;\n    z-index: 10;\n    background: rgba(0, 0, 0, .1);\n}\n.modal[data-v-63cb6354]{\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    height: 100vh;\n    width: 100vw ;\n}\n.modal-inner[data-v-63cb6354]{\n    background: #ffffff;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/SharedCalendarInfo.vue?vue&type=style&index=0&id=3d9c924c&scoped=true&lang=css&":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/SharedCalendarInfo.vue?vue&type=style&index=0&id=3d9c924c&scoped=true&lang=css& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.modal-background[data-v-3d9c924c]{\n    position: fixed;\n    top: 0;\n    left: 0;\n    height: 100vh;\n    width: 100vw ;\n    z-index: 10;\n    background: rgba(0, 0, 0, .1);\n}\n.modal[data-v-3d9c924c]{\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    height: 100vh;\n    width: 100vw ;\n}\n.modal-inner[data-v-3d9c924c]{\n    background: #ffffff;\n}\n", ""]);
 
 // exports
 
@@ -41907,6 +42050,36 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/SharedCalendarInfo.vue?vue&type=style&index=0&id=3d9c924c&scoped=true&lang=css&":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/SharedCalendarInfo.vue?vue&type=style&index=0&id=3d9c924c&scoped=true&lang=css& ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./SharedCalendarInfo.vue?vue&type=style&index=0&id=3d9c924c&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/SharedCalendarInfo.vue?vue&type=style&index=0&id=3d9c924c&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/SharedCalendarMembers.vue?vue&type=style&index=0&id=19a9afc6&scoped=true&lang=css&":
 /*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/SharedCalendarMembers.vue?vue&type=style&index=0&id=19a9afc6&scoped=true&lang=css& ***!
@@ -44121,6 +44294,18 @@ var render = function() {
                   )
                 : _vm._e(),
               _vm._v(" "),
+              _vm.adminFlg
+                ? _c(
+                    "router-link",
+                    { attrs: { to: { name: "sharedCalendarInfo" } } },
+                    [
+                      _vm._v(
+                        "\n                共有カレンダー情報/変更\n            "
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
               !_vm.adminFlg
                 ? _c(
                     "router-link",
@@ -44150,6 +44335,7 @@ var render = function() {
           unShareMember: _vm.removeMember,
           allowApplication: _vm.allowApplications,
           rejectApplication: _vm.removeApplicants,
+          changeCalendarData: _vm.changeCalendarData,
           changeSchedulesData: _vm.changeSchedulesData
         }
       })
@@ -44420,10 +44606,6 @@ var render = function() {
     _c("div", { staticClass: "contents" }, [
       _c("div", { staticClass: "shared-calendar" }, [
         _c("div", { staticClass: "calendar" }, [
-          _c("p", [_vm._v(_vm._s(_vm.sharedCalendarData.calendar_name))]),
-          _vm._v(" "),
-          _c("p", [_vm._v(_vm._s(_vm.invitationUrl))]),
-          _vm._v(" "),
           _c("table", [
             _c("caption", [
               _c(
@@ -45148,6 +45330,120 @@ var staticRenderFns = [
     ])
   }
 ]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/SharedCalendarInfo.vue?vue&type=template&id=3d9c924c&scoped=true&":
+/*!****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/SharedCalendarInfo.vue?vue&type=template&id=3d9c924c&scoped=true& ***!
+  \****************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "contents" }, [
+      _c("p", [_vm._v("共有カレンダー名")]),
+      _vm._v(" "),
+      _c("p", [_vm._v(_vm._s(_vm.sharedCalendarData.calendar_name))]),
+      _vm._v(" "),
+      _c("p", [_vm._v("カレンダー検索ID/招待URL")]),
+      _vm._v(" "),
+      _c("p", [_vm._v(_vm._s(_vm.sharedCalendarData.search_id))]),
+      _vm._v(" "),
+      _c("p", [_vm._v(_vm._s(_vm.invitationUrl))]),
+      _vm._v(" "),
+      _c("button", { on: { click: _vm.showUpdateSearchIdModal } }, [
+        _vm._v("変更")
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.modalFlg,
+            expression: "modalFlg"
+          }
+        ],
+        staticClass: "modal-background",
+        on: { click: _vm.hideModal }
+      },
+      [
+        _c("div", { staticClass: "modal" }, [
+          _c(
+            "div",
+            {
+              staticClass: "modal-inner",
+              on: {
+                click: function($event) {
+                  $event.stopPropagation()
+                }
+              }
+            },
+            [
+              _c("i", {
+                staticClass: "fas fa-times",
+                on: { click: _vm.hideModal }
+              }),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.updateSearchIdForm.showFlg,
+                      expression: "updateSearchIdForm.showFlg"
+                    }
+                  ],
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.updateSearchId($event)
+                    }
+                  }
+                },
+                [
+                  _c("p", [_vm._v("カレンダー検索ID")]),
+                  _vm._v(" "),
+                  _c("p", [_vm._v(_vm._s(_vm.sharedCalendarData.search_id))]),
+                  _vm._v(" "),
+                  _c("p", [_vm._v("招待URL")]),
+                  _vm._v(" "),
+                  _c("p", [_vm._v(_vm._s(_vm.invitationUrl))]),
+                  _vm._v(" "),
+                  _c("p", [
+                    _vm._v(
+                      "カレンダー検索IDとカレンダー招待URLを変更しますか？"
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("button", [_vm._v("変更")])
+                ]
+              )
+            ]
+          )
+        ])
+      ]
+    )
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -62900,6 +63196,93 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/pages/SharedCalendarInfo.vue":
+/*!***************************************************!*\
+  !*** ./resources/js/pages/SharedCalendarInfo.vue ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SharedCalendarInfo_vue_vue_type_template_id_3d9c924c_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SharedCalendarInfo.vue?vue&type=template&id=3d9c924c&scoped=true& */ "./resources/js/pages/SharedCalendarInfo.vue?vue&type=template&id=3d9c924c&scoped=true&");
+/* harmony import */ var _SharedCalendarInfo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SharedCalendarInfo.vue?vue&type=script&lang=js& */ "./resources/js/pages/SharedCalendarInfo.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _SharedCalendarInfo_vue_vue_type_style_index_0_id_3d9c924c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SharedCalendarInfo.vue?vue&type=style&index=0&id=3d9c924c&scoped=true&lang=css& */ "./resources/js/pages/SharedCalendarInfo.vue?vue&type=style&index=0&id=3d9c924c&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _SharedCalendarInfo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _SharedCalendarInfo_vue_vue_type_template_id_3d9c924c_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _SharedCalendarInfo_vue_vue_type_template_id_3d9c924c_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "3d9c924c",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/pages/SharedCalendarInfo.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/pages/SharedCalendarInfo.vue?vue&type=script&lang=js&":
+/*!****************************************************************************!*\
+  !*** ./resources/js/pages/SharedCalendarInfo.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedCalendarInfo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./SharedCalendarInfo.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/SharedCalendarInfo.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedCalendarInfo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/pages/SharedCalendarInfo.vue?vue&type=style&index=0&id=3d9c924c&scoped=true&lang=css&":
+/*!************************************************************************************************************!*\
+  !*** ./resources/js/pages/SharedCalendarInfo.vue?vue&type=style&index=0&id=3d9c924c&scoped=true&lang=css& ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedCalendarInfo_vue_vue_type_style_index_0_id_3d9c924c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./SharedCalendarInfo.vue?vue&type=style&index=0&id=3d9c924c&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/SharedCalendarInfo.vue?vue&type=style&index=0&id=3d9c924c&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedCalendarInfo_vue_vue_type_style_index_0_id_3d9c924c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedCalendarInfo_vue_vue_type_style_index_0_id_3d9c924c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedCalendarInfo_vue_vue_type_style_index_0_id_3d9c924c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedCalendarInfo_vue_vue_type_style_index_0_id_3d9c924c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedCalendarInfo_vue_vue_type_style_index_0_id_3d9c924c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/js/pages/SharedCalendarInfo.vue?vue&type=template&id=3d9c924c&scoped=true&":
+/*!**********************************************************************************************!*\
+  !*** ./resources/js/pages/SharedCalendarInfo.vue?vue&type=template&id=3d9c924c&scoped=true& ***!
+  \**********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedCalendarInfo_vue_vue_type_template_id_3d9c924c_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./SharedCalendarInfo.vue?vue&type=template&id=3d9c924c&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/SharedCalendarInfo.vue?vue&type=template&id=3d9c924c&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedCalendarInfo_vue_vue_type_template_id_3d9c924c_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SharedCalendarInfo_vue_vue_type_template_id_3d9c924c_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/pages/SharedCalendarList.vue":
 /*!***************************************************!*\
   !*** ./resources/js/pages/SharedCalendarList.vue ***!
@@ -63428,15 +63811,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pages_SharedCalendarIndex_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./pages/SharedCalendarIndex.vue */ "./resources/js/pages/SharedCalendarIndex.vue");
 /* harmony import */ var _pages_SharedCalendarMembers_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./pages/SharedCalendarMembers.vue */ "./resources/js/pages/SharedCalendarMembers.vue");
 /* harmony import */ var _pages_SharedCalendarApplicants_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./pages/SharedCalendarApplicants.vue */ "./resources/js/pages/SharedCalendarApplicants.vue");
-/* harmony import */ var _pages_UnShareCalendar_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./pages/UnShareCalendar.vue */ "./resources/js/pages/UnShareCalendar.vue");
-/* harmony import */ var _pages_EditUserName__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./pages/EditUserName */ "./resources/js/pages/EditUserName.vue");
-/* harmony import */ var _pages_EditUserPassword__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./pages/EditUserPassword */ "./resources/js/pages/EditUserPassword.vue");
-/* harmony import */ var _pages_EditUserEmail__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./pages/EditUserEmail */ "./resources/js/pages/EditUserEmail.vue");
-/* harmony import */ var _pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./pages/errors/SystemError.vue */ "./resources/js/pages/errors/SystemError.vue");
-/* harmony import */ var _pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./pages/errors/NotFound.vue */ "./resources/js/pages/errors/NotFound.vue");
+/* harmony import */ var _pages_SharedCalendarInfo_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./pages/SharedCalendarInfo.vue */ "./resources/js/pages/SharedCalendarInfo.vue");
+/* harmony import */ var _pages_UnShareCalendar_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./pages/UnShareCalendar.vue */ "./resources/js/pages/UnShareCalendar.vue");
+/* harmony import */ var _pages_EditUserName__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./pages/EditUserName */ "./resources/js/pages/EditUserName.vue");
+/* harmony import */ var _pages_EditUserPassword__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./pages/EditUserPassword */ "./resources/js/pages/EditUserPassword.vue");
+/* harmony import */ var _pages_EditUserEmail__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./pages/EditUserEmail */ "./resources/js/pages/EditUserEmail.vue");
+/* harmony import */ var _pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./pages/errors/SystemError.vue */ "./resources/js/pages/errors/SystemError.vue");
+/* harmony import */ var _pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./pages/errors/NotFound.vue */ "./resources/js/pages/errors/NotFound.vue");
 
 
  // ページコンポーネント
+
 
 
 
@@ -63502,7 +63887,7 @@ var routes = [{
   }
 }, {
   path: '/edit-user-name',
-  component: _pages_EditUserName__WEBPACK_IMPORTED_MODULE_17__["default"],
+  component: _pages_EditUserName__WEBPACK_IMPORTED_MODULE_18__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
     if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['user/loginCheck']) {
       next();
@@ -63512,7 +63897,7 @@ var routes = [{
   }
 }, {
   path: '/edit-user-email',
-  component: _pages_EditUserEmail__WEBPACK_IMPORTED_MODULE_19__["default"],
+  component: _pages_EditUserEmail__WEBPACK_IMPORTED_MODULE_20__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
     if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['user/loginCheck']) {
       next();
@@ -63522,7 +63907,7 @@ var routes = [{
   }
 }, {
   path: '/edit-user-password',
-  component: _pages_EditUserPassword__WEBPACK_IMPORTED_MODULE_18__["default"],
+  component: _pages_EditUserPassword__WEBPACK_IMPORTED_MODULE_19__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
     if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['user/loginCheck']) {
       next();
@@ -63605,29 +63990,20 @@ var routes = [{
     name: 'sharedCalendarApplicants',
     component: _pages_SharedCalendarApplicants_vue__WEBPACK_IMPORTED_MODULE_15__["default"]
   }, {
+    path: 'info',
+    name: 'sharedCalendarInfo',
+    component: _pages_SharedCalendarInfo_vue__WEBPACK_IMPORTED_MODULE_16__["default"]
+  }, {
     path: 'unshare',
     name: 'unShareCalendar',
-    component: _pages_UnShareCalendar_vue__WEBPACK_IMPORTED_MODULE_16__["default"]
+    component: _pages_UnShareCalendar_vue__WEBPACK_IMPORTED_MODULE_17__["default"]
   }]
-}, // {
-// //     path: '/shared-calendar/applicants/:sharedCalendarId',
-//     name: 'sharedCalendarApplicants',
-//     component: SharedCalendarApplicants,
-//     props: true,
-//     beforeEnter (to, from, next) {
-//         if (store.getters['user/loginCheck']){
-//             next()
-//         } else {
-//             next('/')
-//         }
-//     }
-// },
-{
+}, {
   path: '/500',
-  component: _pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_20__["default"]
+  component: _pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_21__["default"]
 }, {
   path: '/404',
-  component: _pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_21__["default"]
+  component: _pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_22__["default"]
 }]; // VueRouterインスタンスを作成
 
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({

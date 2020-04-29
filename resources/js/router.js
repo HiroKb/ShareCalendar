@@ -16,6 +16,7 @@ import SharedCalendar from "./pages/SharedCalendar.vue"
 import SharedCalendarIndex from "./pages/SharedCalendarIndex.vue"
 import SharedCalendarMembers from "./pages/SharedCalendarMembers.vue"
 import SharedCalendarApplicants from "./pages/SharedCalendarApplicants.vue"
+import SharedCalendarInfo from "./pages/SharedCalendarInfo.vue"
 import UnShareCalendar from "./pages/UnShareCalendar.vue"
 
 import EditUserName from "./pages/EditUserName"
@@ -191,25 +192,17 @@ const routes = [
                 component: SharedCalendarApplicants,
             },
             {
+                path: 'info',
+                name: 'sharedCalendarInfo',
+                component: SharedCalendarInfo,
+            },
+            {
                 path: 'unshare',
                 name: 'unShareCalendar',
                 component: UnShareCalendar,
             },
         ]
     },
-    // {
-    // //     path: '/shared-calendar/applicants/:sharedCalendarId',
-    //     name: 'sharedCalendarApplicants',
-    //     component: SharedCalendarApplicants,
-    //     props: true,
-    //     beforeEnter (to, from, next) {
-    //         if (store.getters['user/loginCheck']){
-    //             next()
-    //         } else {
-    //             next('/')
-    //         }
-    //     }
-    // },
     {
         path: '/500',
         component: SystemError
