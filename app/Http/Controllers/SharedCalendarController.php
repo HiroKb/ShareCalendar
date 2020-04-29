@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Ramsey\Uuid\Uuid;
 use function Psy\debug;
 
 class SharedCalendarController extends Controller
@@ -30,6 +31,18 @@ class SharedCalendarController extends Controller
 
             return $calendar;
         });
+    }
+
+    public function updateSearchId(SharedCalendar $sharedCalendar)
+    {
+        // カレンダー管理者以外のアクセスの場合
+        if ($sharedCalendar->admin_id !== Auth::id()) {
+            abort(404);
+        }
+        $sharedCalendar->search_id = Uuid::uuid4()->toString();
+        $sharedCalendar->save();
+
+        return $sharedCalendar;
     }
 
     /**
