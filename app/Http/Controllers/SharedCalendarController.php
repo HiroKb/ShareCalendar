@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateSharedCalendarRequest;
+use App\Http\Requests\SharedCalendarNameRequest;
 use App\Http\Requests\ProcessingApplicationToSharingCalendarRequest;
 use App\SharedCalendar;
 use Illuminate\Http\Request;
@@ -16,10 +16,10 @@ class SharedCalendarController extends Controller
 {
     /**
      * 共有カレンダー作成
-     * @param CreateSharedCalendarRequest $request
+     * @param SharedCalendarNameRequest $request
      * @return mixed
      */
-    public function create(CreateSharedCalendarRequest $request)
+    public function create(SharedCalendarNameRequest $request)
     {
         return DB::transaction(function () use($request){
             $calendar = new SharedCalendar();
@@ -31,6 +31,18 @@ class SharedCalendarController extends Controller
 
             return $calendar;
         });
+    }
+
+    public function updateName(SharedCalendar $sharedCalendar, SharedCalendarNameRequest $request)
+    {
+        // カレンダー管理者以外のアクセスの場合
+        if ($sharedCalendar->admin_id !== Auth::id()) {
+            abort(404);
+        }
+        $sharedCalendar->calendar_name = $request->calendar_name;
+        $sharedCalendar->save();
+
+        return $sharedCalendar;
     }
 
     public function updateSearchId(SharedCalendar $sharedCalendar)

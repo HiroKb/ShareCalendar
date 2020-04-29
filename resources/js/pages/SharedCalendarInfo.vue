@@ -62,7 +62,7 @@
                 const response = await axios.patch('/api/shared-calendars/' + this.sharedCalendarData.id + '/search-id')
 
                 if(response.status === SUCCESS) {
-                    
+
                     this.$emit('changeCalendarData', response.data)
                     this.hideModal()
                     return false

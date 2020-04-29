@@ -37,6 +37,8 @@ Route::post('/shared-calendars', 'SharedCalendarController@create');
 Route::get('/shared-calendars/list', 'SharedCalendarController@list');
 // 共有カレンダーデータ
 Route::get('/shared-calendars/{sharedCalendar}', 'SharedCalendarController@index');
+// 共有カレンダー名変更
+Route::patch('/shared-calendars/{sharedCalendar}/name', 'SharedCalendarController@updateName');
 // 共有カレンダー検索ID変更
 Route::patch('/shared-calendars/{sharedCalendar}/search-id', 'SharedCalendarController@updateSearchId');
 // カレンダー共有メンバー
