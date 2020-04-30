@@ -3851,6 +3851,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -5182,12 +5183,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SharedCalendarInfo.vue",
   data: function data() {
     return {
       modalFlg: false,
+      updateCalendarNameForm: {
+        showFlg: false,
+        data: {
+          calendar_name: ''
+        },
+        errors: {}
+      },
       updateSearchIdForm: {
         showFlg: false
       }
@@ -5206,7 +5218,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
-    updateSearchId: function updateSearchId() {
+    updateCalendarName: function updateCalendarName() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
@@ -5216,7 +5228,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios.patch('/api/shared-calendars/' + _this.sharedCalendarData.id + '/search-id');
+                return axios.patch('/api/shared-calendars/' + _this.sharedCalendarData.id + '/name', _this.updateCalendarNameForm.data);
 
               case 2:
                 response = _context.sent;
@@ -5233,15 +5245,65 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 7:
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["VALIDATION_ERROR"])) {
+                  _context.next = 10;
+                  break;
+                }
+
+                _this.updateCalendarNameForm.errors = response.data.errors;
+                return _context.abrupt("return", false);
+
+              case 10:
                 _this.$store.commit('error/setCode', response.status);
 
-              case 8:
+              case 11:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
       }))();
+    },
+    updateSearchId: function updateSearchId() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios.patch('/api/shared-calendars/' + _this2.sharedCalendarData.id + '/search-id');
+
+              case 2:
+                response = _context2.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
+                  _context2.next = 7;
+                  break;
+                }
+
+                _this2.$emit('changeCalendarData', response.data);
+
+                _this2.hideModal();
+
+                return _context2.abrupt("return", false);
+
+              case 7:
+                _this2.$store.commit('error/setCode', response.status);
+
+              case 8:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
+    showUpdateCalendarNameModal: function showUpdateCalendarNameModal() {
+      this.modalFlg = true;
+      this.updateCalendarNameForm.showFlg = true;
     },
     showUpdateSearchIdModal: function showUpdateSearchIdModal() {
       this.modalFlg = true;
@@ -44250,6 +44312,8 @@ var render = function() {
             "div",
             { staticClass: "shared-calendar-menu" },
             [
+              _c("p", [_vm._v(_vm._s(_vm.sharedCalendarData.calendar_name))]),
+              _vm._v(" "),
               _c(
                 "router-link",
                 {
@@ -45357,6 +45421,10 @@ var render = function() {
       _vm._v(" "),
       _c("p", [_vm._v(_vm._s(_vm.sharedCalendarData.calendar_name))]),
       _vm._v(" "),
+      _c("button", { on: { click: _vm.showUpdateCalendarNameModal } }, [
+        _vm._v("変更")
+      ]),
+      _vm._v(" "),
       _c("p", [_vm._v("カレンダー検索ID/招待URL")]),
       _vm._v(" "),
       _c("p", [_vm._v(_vm._s(_vm.sharedCalendarData.search_id))]),
@@ -45399,6 +45467,70 @@ var render = function() {
                 staticClass: "fas fa-times",
                 on: { click: _vm.hideModal }
               }),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.updateCalendarNameForm.showFlg,
+                      expression: "updateCalendarNameForm.showFlg"
+                    }
+                  ],
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.updateCalendarName($event)
+                    }
+                  }
+                },
+                [
+                  _c("label", { attrs: { for: "calendar-name" } }, [
+                    _vm._v("新しい共有カレンダー名")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.updateCalendarNameForm.data.calendar_name,
+                        expression: "updateCalendarNameForm.data.calendar_name"
+                      }
+                    ],
+                    attrs: { id: "calendar-name", type: "text" },
+                    domProps: {
+                      value: _vm.updateCalendarNameForm.data.calendar_name
+                    },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.updateCalendarNameForm.data,
+                          "calendar_name",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.updateCalendarNameForm.errors.calendar_name
+                    ? _c("p", [
+                        _vm._v(
+                          _vm._s(
+                            _vm.updateCalendarNameForm.errors.calendar_name[0]
+                          )
+                        )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("button", [_vm._v("変更")])
+                ]
+              ),
               _vm._v(" "),
               _c(
                 "form",

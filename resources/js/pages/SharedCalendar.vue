@@ -3,6 +3,7 @@
         <div class="sidebar-wrap">
             <SideBar/>
             <div class="shared-calendar-menu">
+                <p>{{ sharedCalendarData.calendar_name }}</p>
                 <router-link :to="{name: 'sharedCalendarIndex', params:{sharedCalendarId: sharedCalendarId}}" class="shared-calendar-link">
                     カレンダー
                 </router-link>

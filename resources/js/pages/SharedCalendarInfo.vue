@@ -3,6 +3,7 @@
         <div class="contents">
             <p>共有カレンダー名</p>
             <p>{{ sharedCalendarData.calendar_name }}</p>
+            <button @click="showUpdateCalendarNameModal">変更</button>
             <p>カレンダー検索ID/招待URL</p>
             <p>{{ sharedCalendarData.search_id }}</p>
             <p>{{ invitationUrl }}</p>
@@ -13,9 +14,12 @@
                 <div class="modal-inner" @click.stop>
 
                     <i class="fas fa-times" @click="hideModal"></i>
-<!--                    <form @submit.prevent="updateSchedule" v-show="editForm.showFlg">-->
-<!--                        <p v-if="editError.errors.schedule">{{ editError.errors.schedule[0] }}</p>-->
-<!--                    </form>-->
+                    <form @submit.prevent="updateCalendarName" v-show="updateCalendarNameForm.showFlg">
+                        <label for="calendar-name">新しい共有カレンダー名</label>
+                        <input id="calendar-name" type="text" v-model="updateCalendarNameForm.data.calendar_name">
+                        <p v-if="updateCalendarNameForm.errors.calendar_name">{{ updateCalendarNameForm.errors.calendar_name[0] }}</p>
+                        <button>変更</button>
+                    </form>
                     <form @submit.prevent="updateSearchId" v-show="updateSearchIdForm.showFlg">
                         <p>カレンダー検索ID</p>
                         <p>{{ sharedCalendarData.search_id }}</p>
@@ -31,13 +35,19 @@
 </template>
 
 <script>
-    import {SUCCESS} from "../util";
-
+    import {SUCCESS, VALIDATION_ERROR} from "../util";
     export default {
         name: "SharedCalendarInfo.vue",
         data () {
             return {
                 modalFlg: false,
+                updateCalendarNameForm: {
+                    showFlg: false,
+                    data: {
+                        calendar_name: ''
+                    },
+                    errors: {}
+                } ,
                 updateSearchIdForm: {
                     showFlg: false
                 }
@@ -58,6 +68,19 @@
             }
         },
         methods: {
+            async updateCalendarName() {
+                const response = await axios.patch('/api/shared-calendars/' + this.sharedCalendarData.id + '/name', this.updateCalendarNameForm.data)
+                if (response.status === SUCCESS) {
+                    this.$emit('changeCalendarData', response.data)
+                    this.hideModal()
+                    return false
+                }
+                if (response.status === VALIDATION_ERROR) {
+                    this.updateCalendarNameForm.errors = response.data.errors
+                    return false
+                }
+                this.$store.commit('error/setCode', response.status)
+            },
             async updateSearchId(){
                 const response = await axios.patch('/api/shared-calendars/' + this.sharedCalendarData.id + '/search-id')
 
@@ -68,6 +91,10 @@
                     return false
                 }
                 this.$store.commit('error/setCode', response.status)
+            },
+            showUpdateCalendarNameModal() {
+                this.modalFlg = true;
+                this.updateCalendarNameForm.showFlg = true;
             },
             showUpdateSearchIdModal() {
                 this.modalFlg = true;
