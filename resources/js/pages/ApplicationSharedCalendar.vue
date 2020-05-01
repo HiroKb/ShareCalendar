@@ -41,7 +41,7 @@
             async applicationSharedCalendar () {
                 const response = await axios.put('/api/shared-calendars/' + this.sharedCalendarData.search_id + '/applications')
                 if (response.status === CREATED) {
-                    this.$router.push('/my-calendar')
+                    this.$router.push({name: 'myCalendar'})
                     return false
                 }
                 this.$store.commit('error/setCode', response.status)

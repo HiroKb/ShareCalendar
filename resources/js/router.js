@@ -6,12 +6,18 @@ import store from "./store";
 import Welcome from "./pages/Welcome.vue"
 import Register from "./pages/Register.vue"
 import Login from "./pages/Login.vue"
-import UserInfo from "./pages/UserInfo"
+
+import PersonalPages from "./pages/PersonalPages.vue"
+import UserInfo from "./pages/UserInfo.vue"
 import MyCalendar from "./pages/MyCalendar.vue"
 import SharedCalendarList from "./pages/SharedCalendarList.vue"
 import CreateSharedCalendar from "./pages/CreateSharedCalendar.vue"
 import SearchSharedCalendar from "./pages/SearchSharedCalendar.vue"
 import ApplicationSharedCalendar from "./pages/ApplicationSharedCalendar.vue"
+import EditUserName from "./pages/EditUserName.vue"
+import EditUserPassword from "./pages/EditUserPassword.vue"
+import EditUserEmail from "./pages/EditUserEmail.vue"
+
 import SharedCalendar from "./pages/SharedCalendar.vue"
 import SharedCalendarIndex from "./pages/SharedCalendarIndex.vue"
 import SharedCalendarMembers from "./pages/SharedCalendarMembers.vue"
@@ -19,9 +25,6 @@ import SharedCalendarApplicants from "./pages/SharedCalendarApplicants.vue"
 import SharedCalendarInfo from "./pages/SharedCalendarInfo.vue"
 import UnShareCalendar from "./pages/UnShareCalendar.vue"
 
-import EditUserName from "./pages/EditUserName"
-import EditUserPassword from "./pages/EditUserPassword"
-import EditUserEmail from "./pages/EditUserEmail"
 
 import SystemError from "./pages/errors/SystemError.vue"
 import NotFound from "./pages/errors/NotFound.vue"
@@ -33,10 +36,11 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/',
+        name: 'welcome',
         component: Welcome,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
-                next('/my-calendar')
+                next({name: 'myCalendar'})
             } else {
                 next()
             }
@@ -44,10 +48,11 @@ const routes = [
     },
     {
         path: '/register',
+        name: 'register',
         component: Register,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
-                next('/my-calendar')
+                next({name: 'myCalendar'})
             } else {
                 next()
             }
@@ -55,25 +60,53 @@ const routes = [
     },
     {
         path: '/login',
+        name: 'login',
         component: Login,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
-                next('/my-calendar')
+                next({name: 'myCalendar'})
             } else {
                 next()
             }
         }
     },
     {
-        path: '/user-info',
-        component: UserInfo,
+        path: '/personal-pages',
+        component: PersonalPages,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
                 next()
             } else {
-                next('/')
+                next({name: 'welcome'})
             }
-        }
+        },
+        children: [
+            {
+                path: 'my-calendar',
+                name: 'myCalendar',
+                component: MyCalendar,
+            },
+            {
+                path: 'shared-calendar/list',
+                name: 'sharedCalendarList',
+                component: SharedCalendarList,
+            },
+            {
+                path: 'shared-calendar/create',
+                name: 'createSharedCalendar',
+                component: CreateSharedCalendar,
+            },
+            {
+                path: 'shared-calendar/search',
+                name: 'searchSharedCalendar',
+                component: SearchSharedCalendar,
+            },
+            {
+                path: 'user-info',
+                name: 'userInfo',
+                component: UserInfo,
+            },
+        ]
     },
     {
         path: '/edit-user-name',
@@ -100,50 +133,6 @@ const routes = [
     {
         path: '/edit-user-password',
         component: EditUserPassword,
-        beforeEnter (to, from, next) {
-            if (store.getters['user/loginCheck']){
-                next()
-            } else {
-                next('/')
-            }
-        }
-    },
-    {
-        path: '/my-calendar',
-        component: MyCalendar,
-        beforeEnter (to, from, next) {
-            if (store.getters['user/loginCheck']){
-                next()
-            } else {
-                next('/')
-            }
-        }
-    },
-    {
-        path: '/shared-calendar/create',
-        component: CreateSharedCalendar,
-        beforeEnter (to, from, next) {
-            if (store.getters['user/loginCheck']){
-                next()
-            } else {
-                next('/')
-            }
-        }
-    },
-    {
-        path: '/shared-calendar/list',
-        component: SharedCalendarList,
-        beforeEnter (to, from, next) {
-            if (store.getters['user/loginCheck']){
-                next()
-            } else {
-                next('/')
-            }
-        }
-    },
-    {
-        path: '/shared-calendar/search',
-        component: SearchSharedCalendar,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
                 next()

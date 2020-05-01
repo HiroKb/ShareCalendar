@@ -41,7 +41,7 @@
 
                 // 通信成功時
                 if (this.apiStatus) {
-                    this.$router.push('/user-info')
+                    this.$router.push({name: 'userInfo'})
                 }
             }
         },

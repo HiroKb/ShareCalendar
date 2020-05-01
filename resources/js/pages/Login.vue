@@ -37,7 +37,7 @@
 
                 // 通信成功時
                 if (this.apiStatus) {
-                    this.$router.push('/my-calendar')
+                    this.$router.push({name: 'myCalendar'})
                 }
             }
         },
