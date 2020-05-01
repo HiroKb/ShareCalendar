@@ -298,6 +298,11 @@
                 this.selectedDate = e.currentTarget.dataset.date
             },
             changeDatesData() {
+                if (moment(this.selectedMonth).format('YYYY-MM') === moment().format('YYYY-MM')){
+                    this.selectedDate = moment().format('YYYY-MM-DD')
+                } else {
+                    this.selectedDate = moment(this.selectedMonth).startOf('month').format('YYYY-MM-DD')
+                }
                 this.dates = []
                 this.dateLabel = moment(this.selectedMonth).format('YYYY年MM月')
 

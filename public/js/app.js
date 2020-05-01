@@ -4620,6 +4620,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     changeDatesData: function changeDatesData() {
       var _this = this;
 
+      if (moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).format('YYYY-MM') === moment__WEBPACK_IMPORTED_MODULE_1___default()().format('YYYY-MM')) {
+        this.selectedDate = moment__WEBPACK_IMPORTED_MODULE_1___default()().format('YYYY-MM-DD');
+      } else {
+        this.selectedDate = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).startOf('month').format('YYYY-MM-DD');
+      }
+
       this.dates = [];
       this.dateLabel = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).format('YYYY年MM月'); // 選択月の日数
 
