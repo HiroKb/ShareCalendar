@@ -102,6 +102,12 @@ const routes = [
                 component: SearchSharedCalendar,
             },
             {
+                path: 'shared-calendar/:searchId/application',
+                name: 'applicationSharedCalendar',
+                props:true,
+                component: ApplicationSharedCalendar,
+            },
+            {
                 path: 'user-info',
                 name: 'userInfo',
                 component: UserInfo,
@@ -141,18 +147,18 @@ const routes = [
             }
         }
     },
-    {
-        path: '/shared-calendar/:searchId/application',
-        props:true,
-        component: ApplicationSharedCalendar,
-        beforeEnter (to, from, next) {
-            if (store.getters['user/loginCheck']){
-                next()
-            } else {
-                next('/')
-            }
-        }
-    },
+    // {
+    //     path: '/shared-calendar/:searchId/application',
+    //     props:true,
+    //     component: ApplicationSharedCalendar,
+    //     beforeEnter (to, from, next) {
+    //         if (store.getters['user/loginCheck']){
+    //             next()
+    //         } else {
+    //             next('/')
+    //         }
+    //     }
+    // },
     {
         path: '/shared-calendar/:sharedCalendarId',
         component: SharedCalendar,

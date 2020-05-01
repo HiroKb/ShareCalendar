@@ -3822,7 +3822,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 5:
-                _this.$router.push('/shared-calendar/application/' + _this.searchSharedCalendarData.search_id);
+                _this.$router.push({
+                  name: 'applicationSharedCalendar',
+                  params: {
+                    searchId: _this.searchSharedCalendarData.search_id
+                  }
+                });
 
               case 6:
               case "end":
@@ -64106,6 +64111,11 @@ var routes = [{
     name: 'searchSharedCalendar',
     component: _components_pages_personalPages_SearchSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_11__["default"]
   }, {
+    path: 'shared-calendar/:searchId/application',
+    name: 'applicationSharedCalendar',
+    props: true,
+    component: _components_pages_personalPages_ApplicationSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_12__["default"]
+  }, {
     path: 'user-info',
     name: 'userInfo',
     component: _components_pages_personalPages_UserInfo_vue__WEBPACK_IMPORTED_MODULE_7__["default"]
@@ -64140,18 +64150,19 @@ var routes = [{
       next('/');
     }
   }
-}, {
-  path: '/shared-calendar/:searchId/application',
-  props: true,
-  component: _components_pages_personalPages_ApplicationSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_12__["default"],
-  beforeEnter: function beforeEnter(to, from, next) {
-    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['user/loginCheck']) {
-      next();
-    } else {
-      next('/');
-    }
-  }
-}, {
+}, // {
+//     path: '/shared-calendar/:searchId/application',
+//     props:true,
+//     component: ApplicationSharedCalendar,
+//     beforeEnter (to, from, next) {
+//         if (store.getters['user/loginCheck']){
+//             next()
+//         } else {
+//             next('/')
+//         }
+//     }
+// },
+{
   path: '/shared-calendar/:sharedCalendarId',
   component: _components_pages_sharedCalendarPages_SharedCalendar_vue__WEBPACK_IMPORTED_MODULE_16__["default"],
   props: true,

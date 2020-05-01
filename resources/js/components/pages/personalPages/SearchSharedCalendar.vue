@@ -41,7 +41,7 @@
                     return false
                 }
 
-                this.$router.push('/shared-calendar/application/' + this.searchSharedCalendarData.search_id)
+                this.$router.push({name: 'applicationSharedCalendar', params: {searchId: this.searchSharedCalendarData.search_id}})
             }
         }
     }
