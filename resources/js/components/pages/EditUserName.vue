@@ -1,8 +1,5 @@
 <template>
     <div>
-        <div class="sidebar-wrap">
-            <SideBar />
-        </div>
         <div class="contents">
             <h1>EditUserName</h1>
             <form @submit.prevent="updateName">
@@ -18,11 +15,9 @@
 </template>
 
 <script>
-    import SideBar from "../components/SideBar";
     import {mapState} from "vuex";
     export default {
         name: "EditUserName",
-        components: {SideBar},
         data(){
             return {
                 name: this.$store.getters['user/userName']

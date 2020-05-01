@@ -205,7 +205,7 @@
 
 <script>
     import moment from "moment"
-    import {CREATED, SUCCESS, VALIDATION_ERROR} from "../util";
+    import {CREATED, SUCCESS, VALIDATION_ERROR} from "../../../util";
     export default {
         name: "SharedCalendarIndex",
         data () {

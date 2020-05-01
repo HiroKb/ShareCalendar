@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import {SUCCESS} from "../util";
+    import {SUCCESS} from "../../../util";
 
     export default {
         name: "UnShareCalendar",

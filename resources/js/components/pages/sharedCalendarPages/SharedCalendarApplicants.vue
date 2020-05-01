@@ -58,7 +58,7 @@
 </template>
 
 <script>
-    import {CREATED, SUCCESS} from "../util"
+    import {CREATED, SUCCESS} from "../../../util"
     export default {
         name: "SharedCalendarApplicants",
         data () {

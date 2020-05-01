@@ -19,11 +19,9 @@
 </template>
 
 <script>
-    import SideBar from "../components/SideBar";
     import {mapGetters} from "vuex";
     export default {
         name: "UserInfo",
-        components: {SideBar},
         computed : {
             ...mapGetters({
                 userName: 'user/userName',

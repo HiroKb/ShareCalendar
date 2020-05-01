@@ -3,31 +3,31 @@ import VueRouter from "vue-router"
 import store from "./store";
 
 // ページコンポーネント
-import Welcome from "./pages/Welcome.vue"
-import Register from "./pages/Register.vue"
-import Login from "./pages/Login.vue"
+import Welcome from "./components/pages/Welcome.vue"
+import Register from "./components/pages/Register.vue"
+import Login from "./components/pages/Login.vue"
 
-import PersonalPages from "./pages/PersonalPages.vue"
-import UserInfo from "./pages/UserInfo.vue"
-import MyCalendar from "./pages/MyCalendar.vue"
-import SharedCalendarList from "./pages/SharedCalendarList.vue"
-import CreateSharedCalendar from "./pages/CreateSharedCalendar.vue"
-import SearchSharedCalendar from "./pages/SearchSharedCalendar.vue"
-import ApplicationSharedCalendar from "./pages/ApplicationSharedCalendar.vue"
-import EditUserName from "./pages/EditUserName.vue"
-import EditUserPassword from "./pages/EditUserPassword.vue"
-import EditUserEmail from "./pages/EditUserEmail.vue"
+import PersonalPages from "./components/pages/personalPages/PersonalPages.vue"
+import UserInfo from "./components/pages/personalPages/UserInfo.vue"
+import MyCalendar from "./components/pages/personalPages/MyCalendar.vue"
+import SharedCalendarList from "./components/pages/personalPages/SharedCalendarList.vue"
+import CreateSharedCalendar from "./components/pages/personalPages/CreateSharedCalendar.vue"
+import SearchSharedCalendar from "./components/pages/personalPages/SearchSharedCalendar.vue"
+import ApplicationSharedCalendar from "./components/pages/personalPages/ApplicationSharedCalendar.vue"
+import EditUserName from "./components/pages/EditUserName.vue"
+import EditUserPassword from "./components/pages/EditUserPassword.vue"
+import EditUserEmail from "./components/pages/EditUserEmail.vue"
 
-import SharedCalendar from "./pages/SharedCalendar.vue"
-import SharedCalendarIndex from "./pages/SharedCalendarIndex.vue"
-import SharedCalendarMembers from "./pages/SharedCalendarMembers.vue"
-import SharedCalendarApplicants from "./pages/SharedCalendarApplicants.vue"
-import SharedCalendarInfo from "./pages/SharedCalendarInfo.vue"
-import UnShareCalendar from "./pages/UnShareCalendar.vue"
+import SharedCalendar from "./components/pages/sharedCalendarPages/SharedCalendar.vue"
+import SharedCalendarIndex from "./components/pages/sharedCalendarPages/SharedCalendarIndex.vue"
+import SharedCalendarMembers from "./components/pages/sharedCalendarPages/SharedCalendarMembers.vue"
+import SharedCalendarApplicants from "./components/pages/sharedCalendarPages/SharedCalendarApplicants.vue"
+import SharedCalendarInfo from "./components/pages/sharedCalendarPages/SharedCalendarInfo.vue"
+import UnShareCalendar from "./components/pages/sharedCalendarPages/UnShareCalendar.vue"
 
 
-import SystemError from "./pages/errors/SystemError.vue"
-import NotFound from "./pages/errors/NotFound.vue"
+import SystemError from "./components/pages/errors/SystemError.vue"
+import NotFound from "./components/pages/errors/NotFound.vue"
 
 // VueRouterの使用を宣言
 Vue.use(VueRouter)

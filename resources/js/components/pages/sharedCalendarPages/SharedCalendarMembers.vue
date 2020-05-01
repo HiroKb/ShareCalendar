@@ -26,11 +26,9 @@
 </template>
 
 <script>
-    import {CREATED, SUCCESS} from "../util"
-    import SideBar from "../components/SideBar";
+    import {CREATED, SUCCESS} from "../../../util"
     export default {
         name: "SharedCalendarMembers",
-        components: {SideBar},
         data () {
             return {
                 modalFlg: false,

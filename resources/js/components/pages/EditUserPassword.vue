@@ -1,8 +1,5 @@
 <template>
     <div>
-        <div class="sidebar-wrap">
-            <SideBar />
-        </div>
         <div class="contents">
             <h1>EditUserPassword</h1>
             <form @submit.prevent="updatePassword">
@@ -23,11 +20,9 @@
 </template>
 
 <script>
-    import SideBar from "../components/SideBar";
     import {mapState} from "vuex";
     export default {
         name: "EditUserPassword",
-        components: {SideBar},
         data(){
             return {
                 current_password: '',

@@ -39,8 +39,8 @@
 </template>
 
 <script>
-    import SideBar from "../components/SideBar";
-    import {SUCCESS} from "../util";
+    import SideBar from "../../modules/SideBar"
+    import {SUCCESS} from "../../../util";
     import {mapGetters} from "vuex";
     import moment from "moment";
     export default {

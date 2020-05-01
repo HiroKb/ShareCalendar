@@ -15,10 +15,8 @@
 </template>
 
 <script>
-    import SideBar from "../components/SideBar"
     export default {
         name: "SearchSharedCalendar",
-        components: {SideBar},
         data() {
             return {
                 searchSharedCalendarData: {

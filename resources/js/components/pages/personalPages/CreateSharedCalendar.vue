@@ -15,11 +15,9 @@
 </template>
 
 <script>
-    import SideBar from "../components/SideBar"
-    import {CREATED, VALIDATION_ERROR} from "../util"
+    import {CREATED, VALIDATION_ERROR} from "../../../util"
     export default {
         name: "CreateShareCalendar",
-        components: {SideBar},
         data(){
             return {
                 createShareCalendarData: {

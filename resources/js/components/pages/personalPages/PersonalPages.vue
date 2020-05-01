@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    import SideBar from "../components/SideBar"
+    import SideBar from "../../modules/SideBar"
     export default {
         name: "PersonalPages.vue",
         components: {SideBar}

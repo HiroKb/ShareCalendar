@@ -21,11 +21,9 @@
 </template>
 
 <script>
-    import SideBar from "../components/SideBar"
-    import {CREATED, SUCCESS} from "../util";
+    import {CREATED, SUCCESS} from "../../../util";
     export default {
         name: "ApplicationSharedCalendar",
-        components: {SideBar},
         data() {
             return {
                 sharedCalendarData: {}

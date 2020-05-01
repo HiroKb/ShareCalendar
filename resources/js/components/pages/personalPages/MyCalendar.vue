@@ -204,12 +204,10 @@
 </template>
 
 <script>
-    import SideBar from "../components/SideBar"
     import moment from "moment"
-    import {CREATED, NOT_FOUND, SUCCESS, VALIDATION_ERROR} from "../util";
+    import {CREATED, NOT_FOUND, SUCCESS, VALIDATION_ERROR} from "../../../util";
     export default {
         name: "MyCalendar",
-        components: {SideBar},
         data() {
             return {
                 dates: [], // 日付データ配列(選択月前後35日分)

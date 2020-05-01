@@ -35,7 +35,7 @@
 </template>
 
 <script>
-    import {SUCCESS, VALIDATION_ERROR} from "../util";
+    import {SUCCESS, VALIDATION_ERROR} from "../../../util";
     export default {
         name: "SharedCalendarInfo.vue",
         data () {

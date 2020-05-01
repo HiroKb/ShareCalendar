@@ -1,9 +1,6 @@
 <template>
 
     <div>
-        <div class="sidebar-wrap">
-            <SideBar />
-        </div>
         <div class="contents">
             <h1>EditUserEmail</h1>
             <form @submit.prevent="updateEmail">
@@ -23,11 +20,9 @@
 </template>
 
 <script>
-    import SideBar from "../components/SideBar";
     import {mapState} from "vuex";
     export default {
         name: "EditUserEmail",
-        components: {SideBar},
         data(){
             return {
                 email: '',
