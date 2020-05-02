@@ -2,11 +2,9 @@
     <div>
         <div class="contents">
             <h1>SharedCalendarList</h1>
-            <p v-if="loadingFlg">読み込み中</p>
-
-            <template v-else>
-                <ul v-if="sharedCalendarList.length">
-                    <li v-for="sharedCalendar in sharedCalendarList">
+            <template v-if="!sharedCalendarList.loadingFlg">
+                <ul v-if="sharedCalendarList.data.length">
+                    <li v-for="sharedCalendar in sharedCalendarList.data">
                         <router-link :to="{name: 'sharedCalendarIndex', params:{sharedCalendarId: sharedCalendar.id}}">
                             <p>{{sharedCalendar.calendar_name}}</p>
                         </router-link>
@@ -15,7 +13,6 @@
 
                 <p v-else>まだ共有しているカレンダーがありません。</p>
             </template>
-
         </div>
     </div>
 </template>
@@ -23,25 +20,13 @@
 <script>
     export default {
         name: "SharedCalendar",
-        data() {
-            return {
-                sharedCalendarList: [],
-                loadingFlg: false
+        props: {
+            sharedCalendarList: {
+                type: Object,
+                required: true,
+                default: {}
             }
         },
-        methods: {
-            async fetchSharedCalendarList () {
-                this.loadingFlg = true
-
-                const response = await axios.get('/api/shared-calendars/list')
-                this.sharedCalendarList = response.data
-
-                this.loadingFlg = false
-            },
-        },
-        created() {
-            this.fetchSharedCalendarList()
-        }
     }
 </script>
 

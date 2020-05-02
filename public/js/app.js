@@ -3429,7 +3429,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _modules_SideBar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../modules/SideBar */ "./resources/js/components/modules/SideBar.vue");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _modules_SideBar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../modules/SideBar */ "./resources/js/components/modules/SideBar.vue");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../util */ "./resources/js/util.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
 //
 //
 //
@@ -3440,10 +3451,60 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PersonalPages.vue",
   components: {
-    SideBar: _modules_SideBar__WEBPACK_IMPORTED_MODULE_0__["default"]
+    SideBar: _modules_SideBar__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  data: function data() {
+    return {
+      sharedCalendarList: {
+        data: [],
+        loadingFlg: false
+      }
+    };
+  },
+  methods: {
+    fetchSharedCalendarList: function fetchSharedCalendarList() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _this.sharedCalendarList.loadingFlg = true;
+                _context.next = 3;
+                return axios.get('/api/shared-calendars/list');
+
+              case 3:
+                response = _context.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["SUCCESS"])) {
+                  _context.next = 8;
+                  break;
+                }
+
+                _this.sharedCalendarList.data = response.data;
+                _this.sharedCalendarList.loadingFlg = false;
+                return _context.abrupt("return", false);
+
+              case 8:
+                _this.$store.commit('error/setCode', response.status);
+
+              case 9:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    }
+  },
+  created: function created() {
+    this.fetchSharedCalendarList();
   }
 });
 
@@ -3549,17 +3610,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-//
-//
-//
 //
 //
 //
@@ -3581,42 +3631,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SharedCalendar",
-  data: function data() {
-    return {
-      sharedCalendarList: [],
-      loadingFlg: false
-    };
-  },
-  methods: {
-    fetchSharedCalendarList: function fetchSharedCalendarList() {
-      var _this = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _this.loadingFlg = true;
-                _context.next = 3;
-                return axios.get('/api/shared-calendars/list');
-
-              case 3:
-                response = _context.sent;
-                _this.sharedCalendarList = response.data;
-                _this.loadingFlg = false;
-
-              case 6:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+  props: {
+    sharedCalendarList: {
+      type: Object,
+      required: true,
+      "default": {}
     }
-  },
-  created: function created() {
-    this.fetchSharedCalendarList();
   }
 });
 
@@ -43941,7 +43961,9 @@ var render = function() {
     [
       _c("div", { staticClass: "sidebar-wrap" }, [_c("SideBar")], 1),
       _vm._v(" "),
-      _c("router-view")
+      _c("router-view", {
+        attrs: { "shared-calendar-list": _vm.sharedCalendarList }
+      })
     ],
     1
   )
@@ -44049,13 +44071,14 @@ var render = function() {
       [
         _c("h1", [_vm._v("SharedCalendarList")]),
         _vm._v(" "),
-        _vm.loadingFlg
-          ? _c("p", [_vm._v("読み込み中")])
-          : [
-              _vm.sharedCalendarList.length
+        !_vm.sharedCalendarList.loadingFlg
+          ? [
+              _vm.sharedCalendarList.data.length
                 ? _c(
                     "ul",
-                    _vm._l(_vm.sharedCalendarList, function(sharedCalendar) {
+                    _vm._l(_vm.sharedCalendarList.data, function(
+                      sharedCalendar
+                    ) {
                       return _c(
                         "li",
                         [
@@ -44085,6 +44108,7 @@ var render = function() {
                   )
                 : _c("p", [_vm._v("まだ共有しているカレンダーがありません。")])
             ]
+          : _vm._e()
       ],
       2
     )
