@@ -14,7 +14,6 @@ import SharedCalendarList from "./components/pages/personalPages/SharedCalendarL
 import CreateSharedCalendar from "./components/pages/personalPages/CreateSharedCalendar.vue"
 import SearchSharedCalendar from "./components/pages/personalPages/SearchSharedCalendar.vue"
 import ApplicationSharedCalendar from "./components/pages/personalPages/ApplicationSharedCalendar.vue"
-import EditUserName from "./components/pages/EditUserName.vue"
 import EditUserPassword from "./components/pages/EditUserPassword.vue"
 import EditUserEmail from "./components/pages/EditUserEmail.vue"
 
@@ -113,17 +112,6 @@ const routes = [
                 component: UserInfo,
             },
         ]
-    },
-    {
-        path: '/edit-user-name',
-        component: EditUserName,
-        beforeEnter (to, from, next) {
-            if (store.getters['user/loginCheck']){
-                next()
-            } else {
-                next('/')
-            }
-        }
     },
     {
         path: '/edit-user-email',

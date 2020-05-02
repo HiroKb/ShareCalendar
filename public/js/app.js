@@ -2152,102 +2152,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/EditUserName.vue?vue&type=script&lang=js&":
-/*!*****************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/EditUserName.vue?vue&type=script&lang=js& ***!
-  \*****************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  name: "EditUserName",
-  data: function data() {
-    return {
-      name: this.$store.getters['user/userName']
-    };
-  },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])({
-    apiStatus: function apiStatus(state) {
-      return state.user.apiStatus;
-    },
-    // API通信成否
-    errorMessages: function errorMessages(state) {
-      return state.user.errorMessages;
-    } // バリデーションエラーメッセージ
-
-  })),
-  methods: {
-    updateName: function updateName() {
-      var _this = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return _this.$store.dispatch('user/updateName', {
-                  name: _this.name
-                });
-
-              case 2:
-                // 通信成功時
-                if (_this.apiStatus) {
-                  _this.$router.push({
-                    name: 'userInfo'
-                  });
-                }
-
-              case 3:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
-    }
-  },
-  created: function created() {
-    this.$store.commit('user/setErrorMessages', null);
-  }
-});
-
-/***/ }),
-
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/EditUserPassword.vue?vue&type=script&lang=js&":
 /*!*********************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/EditUserPassword.vue?vue&type=script&lang=js& ***!
@@ -3933,7 +3837,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -3960,13 +3872,104 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "UserInfo",
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
+  data: function data() {
+    return {
+      modalFlg: false,
+      updateNameForm: {
+        showFlg: false,
+        data: {
+          name: ''
+        }
+      }
+    };
+  },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])({
     userName: 'user/userName',
     userEmail: 'user/userEmail'
-  }))
+  }), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])({
+    apiStatus: function apiStatus(state) {
+      return state.user.apiStatus;
+    },
+    // API通信成否
+    errorMessages: function errorMessages(state) {
+      return state.user.errorMessages;
+    } // バリデーションエラーメッセージ
+
+  })),
+  methods: {
+    updateName: function updateName() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return _this.$store.dispatch('user/updateName', _this.updateNameForm.data);
+
+              case 2:
+                // 通信成功時
+                if (_this.apiStatus) {
+                  _this.hideModal();
+                }
+
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    showUpdateNameForm: function showUpdateNameForm() {
+      this.modalFlg = true;
+      this.updateNameForm.showFlg = true;
+    },
+    hideModal: function hideModal() {
+      this.modalFlg = false;
+      this.updateNameForm.showFlg = false;
+      this.updateNameForm.data.name = '';
+      this.$store.commit('user/setErrorMessages', null);
+    }
+  }
 });
 
 /***/ }),
@@ -5813,6 +5816,25 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 // module
 exports.push([module.i, "\n.my-calendar[data-v-56feb7ab]{\n    max-width: 800px;\n    margin: 0 auto;\n    display: flex;\n}\ntable[data-v-56feb7ab]{\n    border-collapse: collapse;\n}\nth[data-v-56feb7ab],td[data-v-56feb7ab]{\n    width: 80px;\n    height: 80px;\n    border: solid 1px black;\n    text-align: center;\n}\nlabel[data-v-56feb7ab]{\n        display: block;\n        margin-top: 16px;\n}\ninput[data-v-56feb7ab]{\n        width: 100%;\n}\ntextarea[data-v-56feb7ab]{\n        width: 100%;\n}\nbutton[data-v-56feb7ab]{\n        margin-top: 16px;\n}\n.calendar-menu[data-v-56feb7ab]{\n        margin-left: 20px;\n}\n.schedules[data-v-56feb7ab]{\n        margin-top: 20px;\n}\n.schedule[data-v-56feb7ab]{\n        padding: 8px 0;\n        border-top: 1px solid black;\n}\n.modal-background[data-v-56feb7ab]{\n        position: fixed;\n        top: 0;\n        left: 0;\n        height: 100vh;\n        width: 100vw ;\n        z-index: 10;\n        background: rgba(0, 0, 0, .1);\n}\n.modal[data-v-56feb7ab]{\n        display: flex;\n        justify-content: center;\n        align-items: center;\n        height: 100vh;\n        width: 100vw ;\n}\n.modal-inner[data-v-56feb7ab]{\n        background: #ffffff;\n}\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/personalPages/UserInfo.vue?vue&type=style&index=0&id=5ae5ac7a&scoped=true&lang=css&":
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/personalPages/UserInfo.vue?vue&type=style&index=0&id=5ae5ac7a&scoped=true&lang=css& ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.modal-background[data-v-5ae5ac7a]{\n    position: fixed;\n    top: 0;\n    left: 0;\n    height: 100vh;\n    width: 100vw ;\n    z-index: 10;\n    background: rgba(0, 0, 0, .1);\n}\n.modal[data-v-5ae5ac7a]{\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    height: 100vh;\n    width: 100vw ;\n}\n.modal-inner[data-v-5ae5ac7a]{\n    background: #ffffff;\n}\n", ""]);
 
 // exports
 
@@ -42002,6 +42024,36 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/personalPages/UserInfo.vue?vue&type=style&index=0&id=5ae5ac7a&scoped=true&lang=css&":
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/personalPages/UserInfo.vue?vue&type=style&index=0&id=5ae5ac7a&scoped=true&lang=css& ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../../node_modules/css-loader??ref--6-1!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/src??ref--6-2!../../../../../node_modules/vue-loader/lib??vue-loader-options!./UserInfo.vue?vue&type=style&index=0&id=5ae5ac7a&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/personalPages/UserInfo.vue?vue&type=style&index=0&id=5ae5ac7a&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/sharedCalendarPages/SharedCalendar.vue?vue&type=style&index=0&id=60ebd532&scoped=true&lang=css&":
 /*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/sharedCalendarPages/SharedCalendar.vue?vue&type=style&index=0&id=60ebd532&scoped=true&lang=css& ***!
@@ -42897,76 +42949,6 @@ var render = function() {
           _vm._v(" "),
           _vm.errorMessages && _vm.errorMessages.password
             ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.password[0]))])
-            : _vm._e(),
-          _vm._v(" "),
-          _c("button", { attrs: { type: "submit" } }, [_vm._v("更新")])
-        ]
-      )
-    ])
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/EditUserName.vue?vue&type=template&id=5a6fe9b6&scoped=true&":
-/*!*********************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/EditUserName.vue?vue&type=template&id=5a6fe9b6&scoped=true& ***!
-  \*********************************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "contents" }, [
-      _c("h1", [_vm._v("EditUserName")]),
-      _vm._v(" "),
-      _c(
-        "form",
-        {
-          on: {
-            submit: function($event) {
-              $event.preventDefault()
-              return _vm.updateName($event)
-            }
-          }
-        },
-        [
-          _c("label", { attrs: { for: "name" } }, [_vm._v("ユーザー名")]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.name,
-                expression: "name"
-              }
-            ],
-            attrs: { type: "text", id: "name" },
-            domProps: { value: _vm.name },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.name = $event.target.value
-              }
-            }
-          }),
-          _vm._v(" "),
-          _vm.errorMessages && _vm.errorMessages.name
-            ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.name[0]))])
             : _vm._e(),
           _vm._v(" "),
           _c("button", { attrs: { type: "submit" } }, [_vm._v("更新")])
@@ -44462,7 +44444,7 @@ var render = function() {
         _vm._v(" "),
         _c("p", [_vm._v(_vm._s(_vm.userName))]),
         _vm._v(" "),
-        _c("router-link", { attrs: { to: "edit-user-name" } }, [
+        _c("button", { on: { click: _vm.showUpdateNameForm } }, [
           _vm._v("編集")
         ]),
         _vm._v(" "),
@@ -44483,6 +44465,99 @@ var render = function() {
         ])
       ],
       1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.modalFlg,
+            expression: "modalFlg"
+          }
+        ],
+        staticClass: "modal-background",
+        on: { click: _vm.hideModal }
+      },
+      [
+        _c("div", { staticClass: "modal" }, [
+          _c(
+            "div",
+            {
+              staticClass: "modal-inner",
+              on: {
+                click: function($event) {
+                  $event.stopPropagation()
+                }
+              }
+            },
+            [
+              _c("i", {
+                staticClass: "fas fa-times",
+                on: { click: _vm.hideModal }
+              }),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.updateNameForm.showFlg,
+                      expression: "updateNameForm.showFlg"
+                    }
+                  ],
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.updateName($event)
+                    }
+                  }
+                },
+                [
+                  _c("label", { attrs: { for: "name" } }, [
+                    _vm._v("ユーザー名")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.updateNameForm.data.name,
+                        expression: "updateNameForm.data.name"
+                      }
+                    ],
+                    attrs: { type: "text", id: "name" },
+                    domProps: { value: _vm.updateNameForm.data.name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.updateNameForm.data,
+                          "name",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.errorMessages && _vm.errorMessages.name
+                    ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.name[0]))])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("button", { attrs: { type: "submit" } }, [_vm._v("更新")])
+                ]
+              )
+            ]
+          )
+        ])
+      ]
     )
   ])
 }
@@ -62457,75 +62532,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/pages/EditUserName.vue":
-/*!********************************************************!*\
-  !*** ./resources/js/components/pages/EditUserName.vue ***!
-  \********************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _EditUserName_vue_vue_type_template_id_5a6fe9b6_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EditUserName.vue?vue&type=template&id=5a6fe9b6&scoped=true& */ "./resources/js/components/pages/EditUserName.vue?vue&type=template&id=5a6fe9b6&scoped=true&");
-/* harmony import */ var _EditUserName_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EditUserName.vue?vue&type=script&lang=js& */ "./resources/js/components/pages/EditUserName.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _EditUserName_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _EditUserName_vue_vue_type_template_id_5a6fe9b6_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _EditUserName_vue_vue_type_template_id_5a6fe9b6_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  "5a6fe9b6",
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/pages/EditUserName.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/pages/EditUserName.vue?vue&type=script&lang=js&":
-/*!*********************************************************************************!*\
-  !*** ./resources/js/components/pages/EditUserName.vue?vue&type=script&lang=js& ***!
-  \*********************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditUserName_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./EditUserName.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/EditUserName.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditUserName_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/pages/EditUserName.vue?vue&type=template&id=5a6fe9b6&scoped=true&":
-/*!***************************************************************************************************!*\
-  !*** ./resources/js/components/pages/EditUserName.vue?vue&type=template&id=5a6fe9b6&scoped=true& ***!
-  \***************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditUserName_vue_vue_type_template_id_5a6fe9b6_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./EditUserName.vue?vue&type=template&id=5a6fe9b6&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/EditUserName.vue?vue&type=template&id=5a6fe9b6&scoped=true&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditUserName_vue_vue_type_template_id_5a6fe9b6_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditUserName_vue_vue_type_template_id_5a6fe9b6_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
-
-/***/ }),
-
 /***/ "./resources/js/components/pages/EditUserPassword.vue":
 /*!************************************************************!*\
   !*** ./resources/js/components/pages/EditUserPassword.vue ***!
@@ -63419,7 +63425,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UserInfo_vue_vue_type_template_id_5ae5ac7a_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UserInfo.vue?vue&type=template&id=5ae5ac7a&scoped=true& */ "./resources/js/components/pages/personalPages/UserInfo.vue?vue&type=template&id=5ae5ac7a&scoped=true&");
 /* harmony import */ var _UserInfo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UserInfo.vue?vue&type=script&lang=js& */ "./resources/js/components/pages/personalPages/UserInfo.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _UserInfo_vue_vue_type_style_index_0_id_5ae5ac7a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UserInfo.vue?vue&type=style&index=0&id=5ae5ac7a&scoped=true&lang=css& */ "./resources/js/components/pages/personalPages/UserInfo.vue?vue&type=style&index=0&id=5ae5ac7a&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
 
 
 
@@ -63427,7 +63435,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _UserInfo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _UserInfo_vue_vue_type_template_id_5ae5ac7a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
   _UserInfo_vue_vue_type_template_id_5ae5ac7a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -63456,6 +63464,22 @@ component.options.__file = "resources/js/components/pages/personalPages/UserInfo
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UserInfo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./UserInfo.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/personalPages/UserInfo.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UserInfo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/pages/personalPages/UserInfo.vue?vue&type=style&index=0&id=5ae5ac7a&scoped=true&lang=css&":
+/*!***************************************************************************************************************************!*\
+  !*** ./resources/js/components/pages/personalPages/UserInfo.vue?vue&type=style&index=0&id=5ae5ac7a&scoped=true&lang=css& ***!
+  \***************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_UserInfo_vue_vue_type_style_index_0_id_5ae5ac7a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader!../../../../../node_modules/css-loader??ref--6-1!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/src??ref--6-2!../../../../../node_modules/vue-loader/lib??vue-loader-options!./UserInfo.vue?vue&type=style&index=0&id=5ae5ac7a&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/personalPages/UserInfo.vue?vue&type=style&index=0&id=5ae5ac7a&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_UserInfo_vue_vue_type_style_index_0_id_5ae5ac7a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_UserInfo_vue_vue_type_style_index_0_id_5ae5ac7a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_UserInfo_vue_vue_type_style_index_0_id_5ae5ac7a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_UserInfo_vue_vue_type_style_index_0_id_5ae5ac7a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_UserInfo_vue_vue_type_style_index_0_id_5ae5ac7a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -64004,21 +64028,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_pages_personalPages_CreateSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/pages/personalPages/CreateSharedCalendar.vue */ "./resources/js/components/pages/personalPages/CreateSharedCalendar.vue");
 /* harmony import */ var _components_pages_personalPages_SearchSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/pages/personalPages/SearchSharedCalendar.vue */ "./resources/js/components/pages/personalPages/SearchSharedCalendar.vue");
 /* harmony import */ var _components_pages_personalPages_ApplicationSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/pages/personalPages/ApplicationSharedCalendar.vue */ "./resources/js/components/pages/personalPages/ApplicationSharedCalendar.vue");
-/* harmony import */ var _components_pages_EditUserName_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/pages/EditUserName.vue */ "./resources/js/components/pages/EditUserName.vue");
-/* harmony import */ var _components_pages_EditUserPassword_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/pages/EditUserPassword.vue */ "./resources/js/components/pages/EditUserPassword.vue");
-/* harmony import */ var _components_pages_EditUserEmail_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/pages/EditUserEmail.vue */ "./resources/js/components/pages/EditUserEmail.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendar_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendar.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendar.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarIndex_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarIndex.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarIndex.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarMembers_vue__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarMembers.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarMembers.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarApplicants_vue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarApplicants.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarApplicants.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarInfo_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarInfo.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarInfo.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_UnShareCalendar_vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/UnShareCalendar.vue */ "./resources/js/components/pages/sharedCalendarPages/UnShareCalendar.vue");
-/* harmony import */ var _components_pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/pages/errors/SystemError.vue */ "./resources/js/components/pages/errors/SystemError.vue");
-/* harmony import */ var _components_pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./components/pages/errors/NotFound.vue */ "./resources/js/components/pages/errors/NotFound.vue");
+/* harmony import */ var _components_pages_EditUserPassword_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/pages/EditUserPassword.vue */ "./resources/js/components/pages/EditUserPassword.vue");
+/* harmony import */ var _components_pages_EditUserEmail_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/pages/EditUserEmail.vue */ "./resources/js/components/pages/EditUserEmail.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendar_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendar.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendar.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarIndex_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarIndex.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarIndex.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarMembers_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarMembers.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarMembers.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarApplicants_vue__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarApplicants.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarApplicants.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarInfo_vue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarInfo.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarInfo.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_UnShareCalendar_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/UnShareCalendar.vue */ "./resources/js/components/pages/sharedCalendarPages/UnShareCalendar.vue");
+/* harmony import */ var _components_pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/pages/errors/SystemError.vue */ "./resources/js/components/pages/errors/SystemError.vue");
+/* harmony import */ var _components_pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/pages/errors/NotFound.vue */ "./resources/js/components/pages/errors/NotFound.vue");
 
 
  // ページコンポーネント
-
 
 
 
@@ -64121,18 +64143,8 @@ var routes = [{
     component: _components_pages_personalPages_UserInfo_vue__WEBPACK_IMPORTED_MODULE_7__["default"]
   }]
 }, {
-  path: '/edit-user-name',
-  component: _components_pages_EditUserName_vue__WEBPACK_IMPORTED_MODULE_13__["default"],
-  beforeEnter: function beforeEnter(to, from, next) {
-    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['user/loginCheck']) {
-      next();
-    } else {
-      next('/');
-    }
-  }
-}, {
   path: '/edit-user-email',
-  component: _components_pages_EditUserEmail_vue__WEBPACK_IMPORTED_MODULE_15__["default"],
+  component: _components_pages_EditUserEmail_vue__WEBPACK_IMPORTED_MODULE_14__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
     if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['user/loginCheck']) {
       next();
@@ -64142,7 +64154,7 @@ var routes = [{
   }
 }, {
   path: '/edit-user-password',
-  component: _components_pages_EditUserPassword_vue__WEBPACK_IMPORTED_MODULE_14__["default"],
+  component: _components_pages_EditUserPassword_vue__WEBPACK_IMPORTED_MODULE_13__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
     if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['user/loginCheck']) {
       next();
@@ -64164,7 +64176,7 @@ var routes = [{
 // },
 {
   path: '/shared-calendar/:sharedCalendarId',
-  component: _components_pages_sharedCalendarPages_SharedCalendar_vue__WEBPACK_IMPORTED_MODULE_16__["default"],
+  component: _components_pages_sharedCalendarPages_SharedCalendar_vue__WEBPACK_IMPORTED_MODULE_15__["default"],
   props: true,
   beforeEnter: function beforeEnter(to, from, next) {
     if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['user/loginCheck']) {
@@ -64176,30 +64188,30 @@ var routes = [{
   children: [{
     path: 'calendar',
     name: 'sharedCalendarIndex',
-    component: _components_pages_sharedCalendarPages_SharedCalendarIndex_vue__WEBPACK_IMPORTED_MODULE_17__["default"]
+    component: _components_pages_sharedCalendarPages_SharedCalendarIndex_vue__WEBPACK_IMPORTED_MODULE_16__["default"]
   }, {
     path: 'members',
     name: 'sharedCalendarMembers',
-    component: _components_pages_sharedCalendarPages_SharedCalendarMembers_vue__WEBPACK_IMPORTED_MODULE_18__["default"]
+    component: _components_pages_sharedCalendarPages_SharedCalendarMembers_vue__WEBPACK_IMPORTED_MODULE_17__["default"]
   }, {
     path: 'applicants',
     name: 'sharedCalendarApplicants',
-    component: _components_pages_sharedCalendarPages_SharedCalendarApplicants_vue__WEBPACK_IMPORTED_MODULE_19__["default"]
+    component: _components_pages_sharedCalendarPages_SharedCalendarApplicants_vue__WEBPACK_IMPORTED_MODULE_18__["default"]
   }, {
     path: 'info',
     name: 'sharedCalendarInfo',
-    component: _components_pages_sharedCalendarPages_SharedCalendarInfo_vue__WEBPACK_IMPORTED_MODULE_20__["default"]
+    component: _components_pages_sharedCalendarPages_SharedCalendarInfo_vue__WEBPACK_IMPORTED_MODULE_19__["default"]
   }, {
     path: 'unshare',
     name: 'unShareCalendar',
-    component: _components_pages_sharedCalendarPages_UnShareCalendar_vue__WEBPACK_IMPORTED_MODULE_21__["default"]
+    component: _components_pages_sharedCalendarPages_UnShareCalendar_vue__WEBPACK_IMPORTED_MODULE_20__["default"]
   }]
 }, {
   path: '/500',
-  component: _components_pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_22__["default"]
+  component: _components_pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_21__["default"]
 }, {
   path: '/404',
-  component: _components_pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_23__["default"]
+  component: _components_pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_22__["default"]
 }]; // VueRouterインスタンスを作成
 
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
