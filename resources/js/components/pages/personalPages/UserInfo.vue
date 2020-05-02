@@ -13,7 +13,7 @@
 
             <p>パスワード</p>
             <p>********</p>
-            <router-link to="edit-user-password">編集</router-link>
+            <button @click="showUpdatePasswordModal">変更</button>
         </div>
         <div class="modal-background" v-show="modalFlg" @click="hideModal">
             <div class="modal" >
@@ -25,7 +25,7 @@
                         <input type="text" id="name" v-model="updateNameForm.data.name">
                         <p v-if="errorMessages && errorMessages.name">{{ errorMessages.name [0]}}</p>
 
-                        <button type="submit">更新</button>
+                        <button type="submit">変更</button>
 
                     </form>
 
@@ -38,27 +38,21 @@
                         <input type="text" id="password" v-model="updateEmailForm.data.password">
                         <p v-if="errorMessages && errorMessages.password">{{ errorMessages.password[0] }}</p>
 
-                        <button type="submit">更新</button>
+                        <button type="submit">変更</button>
 
                     </form>
-<!--                    <form @submit.prevent="updateSchedule" v-show="editForm.showFlg">-->
-<!--                        <p v-if="editError.errors.schedule">{{ editError.errors.schedule[0] }}</p>-->
 
-<!--                        <button type="submit">スケジュール更新</button>-->
-<!--                    </form>-->
+                    <form @submit.prevent="updatePassword" v-show="updatePasswordForm.showFlg">
+                        <label for="current-password">現在のパスワード</label>
+                        <input type="text" id="current-password" v-model="updatePasswordForm.data.current_password">
+                        <p v-if="errorMessages && errorMessages.current_password">{{ errorMessages.current_password[0] }}</p>
 
-<!--                    <form @submit.prevent="deleteSchedule" v-show="deleteForm.showFlg">-->
-<!--                        <p>このスケジュールを削除しますか？</p>-->
-<!--                        <p>日付</p>-->
-<!--                        <p>{{ deleteData.date}}</p>-->
-<!--                        <p>時間</p>-->
-<!--                        <p>{{ deleteData.time }}</p>-->
-<!--                        <p>スケジュール名</p>-->
-<!--                        <p>{{ deleteData.title }}</p>-->
-<!--                        <p>詳細</p>-->
-<!--                        <p>{{ deleteData.description }}</p>-->
-<!--                        <button>削除</button>-->
-<!--                    </form>-->
+                        <label for="new-password">新しいパスワード</label>
+                        <input type="text" id="new-password" v-model="updatePasswordForm.data.new_password">
+                        <p v-if="errorMessages && errorMessages.new_password">{{ errorMessages.new_password[0] }}</p>
+
+                        <button type="submit">変更</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -81,6 +75,13 @@
                     data: {
                         email: '',
                         password: ''
+                    }
+                },
+                updatePasswordForm: {
+                    showFlg: false,
+                    data: {
+                        current_password: '',
+                        new_password: '',
                     }
                 }
             }
@@ -114,6 +115,15 @@
                     this.hideModal()
                 }
             },
+            async updatePassword () {
+                // userストアのupdatePasswordアクション呼び出し
+                await this.$store.dispatch('user/updatePassword', this.updatePasswordForm.data)
+
+                // 通信成功時
+                if (this.apiStatus) {
+                    this.hideModal()
+                }
+            },
             showUpdateNameModal () {
                 this.modalFlg = true
                 this.updateNameForm.showFlg = true
@@ -121,6 +131,10 @@
             showUpdateEmailModal () {
                 this.modalFlg = true
                 this.updateEmailForm.showFlg = true
+            },
+            showUpdatePasswordModal () {
+                this.modalFlg = true
+                this.updatePasswordForm.showFlg = true
             },
             hideModal() {
                 this.modalFlg = false
@@ -131,6 +145,9 @@
                 this.updateEmailForm.data.email = ''
                 this.updateEmailForm.data.password = ''
 
+                this.updatePasswordForm.showFlg = false
+                this.updatePasswordForm.data.current_password = ''
+                this.updatePasswordForm.data.new_password = ''
 
                 this.$store.commit('user/setErrorMessages', null)
             }
