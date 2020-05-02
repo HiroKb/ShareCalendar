@@ -5,11 +5,11 @@
 
             <p>ユーザー名</p>
             <p>{{ userName }}</p>
-            <button @click="showUpdateNameForm">編集</button>
+            <button @click="showUpdateNameModal">変更</button>
 
             <p>メールアドレス</p>
             <p>{{ userEmail }}</p>
-            <router-link to="edit-user-email">編集</router-link>
+            <button @click="showUpdateEmailModal">変更</button>
 
             <p>パスワード</p>
             <p>********</p>
@@ -24,6 +24,19 @@
                         <label for="name">ユーザー名</label>
                         <input type="text" id="name" v-model="updateNameForm.data.name">
                         <p v-if="errorMessages && errorMessages.name">{{ errorMessages.name [0]}}</p>
+
+                        <button type="submit">更新</button>
+
+                    </form>
+
+                    <form @submit.prevent="updateEmail" v-show="updateEmailForm.showFlg">
+                        <label for="email">新しいメールアドレス</label>
+                        <input type="text" id="email" v-model="updateEmailForm.data.email">
+                        <p v-if="errorMessages && errorMessages.email">{{ errorMessages.email [0]}}</p>
+
+                        <label for="password">パスワード</label>
+                        <input type="text" id="password" v-model="updateEmailForm.data.password">
+                        <p v-if="errorMessages && errorMessages.password">{{ errorMessages.password[0] }}</p>
 
                         <button type="submit">更新</button>
 
@@ -62,6 +75,13 @@
                 updateNameForm: {
                     showFlg: false,
                     data: {name: ''}
+                },
+                updateEmailForm: {
+                    showFlg: false,
+                    data: {
+                        email: '',
+                        password: ''
+                    }
                 }
             }
         },
@@ -85,14 +105,33 @@
                     this.hideModal()
                 }
             },
-            showUpdateNameForm () {
+            async updateEmail () {
+                // userストアのupdateEmailアクション呼び出し
+                await this.$store.dispatch('user/updateEmail', this.updateEmailForm.data)
+
+                // 通信成功時
+                if (this.apiStatus) {
+                    this.hideModal()
+                }
+            },
+            showUpdateNameModal () {
                 this.modalFlg = true
                 this.updateNameForm.showFlg = true
+            },
+            showUpdateEmailModal () {
+                this.modalFlg = true
+                this.updateEmailForm.showFlg = true
             },
             hideModal() {
                 this.modalFlg = false
                 this.updateNameForm.showFlg = false
                 this.updateNameForm.data.name = ''
+
+                this.updateEmailForm.showFlg = false
+                this.updateEmailForm.data.email = ''
+                this.updateEmailForm.data.password = ''
+
+
                 this.$store.commit('user/setErrorMessages', null)
             }
         },

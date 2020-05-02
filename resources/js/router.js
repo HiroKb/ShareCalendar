@@ -15,7 +15,6 @@ import CreateSharedCalendar from "./components/pages/personalPages/CreateSharedC
 import SearchSharedCalendar from "./components/pages/personalPages/SearchSharedCalendar.vue"
 import ApplicationSharedCalendar from "./components/pages/personalPages/ApplicationSharedCalendar.vue"
 import EditUserPassword from "./components/pages/EditUserPassword.vue"
-import EditUserEmail from "./components/pages/EditUserEmail.vue"
 
 import SharedCalendar from "./components/pages/sharedCalendarPages/SharedCalendar.vue"
 import SharedCalendarIndex from "./components/pages/sharedCalendarPages/SharedCalendarIndex.vue"
@@ -114,17 +113,6 @@ const routes = [
         ]
     },
     {
-        path: '/edit-user-email',
-        component: EditUserEmail,
-        beforeEnter (to, from, next) {
-            if (store.getters['user/loginCheck']){
-                next()
-            } else {
-                next('/')
-            }
-        }
-    },
-    {
         path: '/edit-user-password',
         component: EditUserPassword,
         beforeEnter (to, from, next) {
@@ -135,18 +123,6 @@ const routes = [
             }
         }
     },
-    // {
-    //     path: '/shared-calendar/:searchId/application',
-    //     props:true,
-    //     component: ApplicationSharedCalendar,
-    //     beforeEnter (to, from, next) {
-    //         if (store.getters['user/loginCheck']){
-    //             next()
-    //         } else {
-    //             next('/')
-    //         }
-    //     }
-    // },
     {
         path: '/shared-calendar/:sharedCalendarId',
         component: SharedCalendar,
