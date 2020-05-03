@@ -210,11 +210,15 @@
         name: "MyCalendar",
         data() {
             return {
-                dates: [], // 日付データ配列(選択月前後35日分)
+                calendarData: [], // 日付データ配列(選択月前後35日分)
                 dateLabel: '', // 選択中の年月表示用(YYYY年MM月)
                 selectedMonth: null, // 選択中の月(momentオブジェクト)
                 selectedDate: null, // 選択中の日付
                 weeks: 0, // 選択月が何週を跨ぐか
+                schedulesData: {
+                    schedulesYear: null,
+                    schedules: []
+                },
                 createScheduleData: {
                     hour: 'unspecified',
                     minute: 'unspecified',
@@ -250,14 +254,14 @@
         computed: {
             // 選択日のスケジュールデータ
             selectDateSchedules: function() {
-                for (let i = 0; i < this.dates.length; i++){
-                    if (this.selectedDate === this.dates[i].date){
-                        return this.dates[i].schedules
+                for (let i = 0; i < this.calendarData.length; i++){
+                    if (this.selectedDate === this.calendarData[i].date){
+                        return this.calendarData[i].schedules
                     }
                 }
             },
             datesData: function() {
-                return this.dates
+                return this.calendarData
             },
             deleteData: function () {
                 return {
@@ -280,6 +284,75 @@
             // 選択日の変更
             changeSelectDate(e) {
                 this.selectedDate = e.currentTarget.dataset.date
+            },
+            async changeCalendarData() {
+                this.calendarData = []
+                this.schedules = []
+                this.dateLabel = moment(this.selectedMonth).format('YYYY年MM月')
+
+                // 選択月の日数
+                const monthDays = moment(this.selectedMonth).daysInMonth()
+                // 選択月初日の曜日
+                const firstDay = moment(this.selectedMonth).startOf('month').day()
+
+                this.weeks = Math.ceil((monthDays + firstDay) / 7)
+
+
+
+                // 選択月初日より前の日付データ(選択月前月)を配列へ追加
+                for(let i = 0; i < firstDay; i++){
+                    const day = moment(this.selectedMonth).startOf('month').subtract(i + 1, 'days')
+                    this.calendarData.unshift({
+                        date: day.format('YYYY-MM-DD'),
+                        dateNum: day.date(),
+                        schedules: []
+                    })
+                }
+
+
+                // 選択月の日付データを配列へ追加
+                for (let i = 0; i < monthDays; i++) {
+                    const day = moment(this.selectedMonth).startOf('month').add(i, 'days')
+                    this.calendarData.push({
+                        date: day.format('YYYY-MM-DD'),
+                        dateNum: day.date(),
+                        schedules: []
+                    })
+                }
+
+
+                // 選択月末日より後の日付データを配列へ追加
+                for (let length = this.calendarData.length, i = 1; length < this.weeks * 7; length++, i++){
+                    const day = moment(this.selectedMonth).endOf('month').add(i, 'days')
+                    this.calendarData.push({
+                        date: day.format('YYYY-MM-DD'),
+                        dateNum : day.date(),
+                        schedules: []
+                    })
+                }
+
+                // 日付データ配列にスケジュールデータを追加
+                this.calendarData.forEach((dateData) => {
+                    if (this.schedulesData.schedules[dateData.date]){
+                        dateData.schedules = _.cloneDeep(this.schedulesData.schedules[dateData.date])
+                    }
+                })
+            },
+            async fetchSchedules(year){
+                const firstDay = moment().year(year).startOf('year')
+                const firstDayWeek = firstDay.day()
+                const lastDay = moment().year(year).endOf('year')
+                const lastDayWeek = lastDay.day()
+                const from = firstDay.subtract(firstDayWeek, 'day').format('YYYY-MM-DD')
+                const until = lastDay.add(6 - lastDayWeek, 'day').format('YYYY-MM-D')
+
+                const response = await axios.get('/api/schedules/' + from + '/' + until)
+
+                if (response.status === SUCCESS) {
+                    return response.data
+                }
+
+                this.$store.commit('error/setCode', response.status)
             },
             // スケジュール登録
             async createSchedule(){
@@ -320,36 +393,11 @@
                 const response = await axios.post('/api/schedules', data)
 
                 if (response.status === CREATED) {
-                    // 登録したスケジュールデータを追加
-                    outer: for (let i = 0; i < this.dates.length; i++) {
-                        if (response.data.date === this.dates[i].date){
-                            // スケジュール登録数0の日付か
-                            // 登録したスケジュールに時間情報がない場合
-                            // 配列の先頭にデータを追加
-                            if (!this.dates[i].schedules.length || response.data.time === null) {
-                                this.dates[i].schedules.unshift(response.data)
-                                break
-                            }
+                    // カレンダーデータとスケジュールリストデータを更新
+                    const newSchedules = this.addScheduleData(response.data, this.calendarData, this.schedulesData.schedules)
 
-                            // 前後スケジュールが登録されている場合
-                            // 時間順に並ぶようにデータを追加
-                            for (let t = 0; t < this.dates[i].schedules.length; t++) {
+                    this.schedulesData.schedules = newSchedules
 
-                                if (this.dates[i].schedules[t].time === null) {
-                                    continue
-                                }
-
-                                if(response.data.time <= this.dates[i].schedules[t].time) {
-                                    this.dates[i].schedules.splice(t, 0, response.data)
-                                    break outer
-                                }
-                            }
-
-                            // 上記以外の場合最後にデータを追加
-                            this.dates[i].schedules.push(response.data)
-                            break
-                        }
-                    }
                     this.createScheduleData = {
                         hour: 'unspecified',
                         minute: 'unspecified',
@@ -404,49 +452,11 @@
                 const response = await axios.patch('/api/schedules/' + this.editForm.scheduleData.id, data)
 
                 if (response.status === SUCCESS) {
-                    // 更新前のデータを削除
-                    outer: for (let i = 0; i < this.dates.length; i++){
-                        if (response.data.date === this.dates[i].date){
-                            for (let t = 0 ; t < this.dates[i].schedules.length; t++) {
-                                if (response.data.id === this.dates[i].schedules[t].id) {
-                                    this.dates[i].schedules.splice(t, 1)
-                                    break outer
-                                }
-                            }
-                        }
-                    }
 
-                    // 更新後のデータを時間順に並ぶように追加
-                    outer: for (let i = 0; i < this.dates.length; i++) {
-                        if (response.data.date === this.dates[i].date){
-                            // スケジュール登録数0の日付か
-                            // 登録したスケジュールに時間情報がない場合
-                            // 配列の先頭にデータを追加
-                            if (!this.dates[i].schedules.length || response.data.time === null) {
-                                this.dates[i].schedules.unshift(response.data)
-                                break
-                            }
-
-                            // 前後スケジュールが登録されている場合
-                            // 時間順に並ぶようにデータを追加
-                            for (let t = 0; t < this.dates[i].schedules.length; t++) {
-
-                                if (this.dates[i].schedules[t].time === null) {
-                                    continue
-                                }
-
-                                if(response.data.time <= this.dates[i].schedules[t].time) {
-                                    this.dates[i].schedules.splice(t, 0, response.data)
-                                    break outer
-                                }
-                            }
-
-                            // 上記以外の場合最後にデータを追加
-                            this.dates[i].schedules.push(response.data)
-                            break
-                        }
-                    }
-
+                    const deletedSchedules = this.removeScheduleData(this.editForm.scheduleData, this.calendarData, this.schedulesData.schedules)
+                    const newSchedules = this.addScheduleData(response.data, this.calendarData, deletedSchedules)
+                    
+                    this.schedulesData.schedules = newSchedules
                     this.hideModal()
                     return false
                 }
@@ -468,21 +478,114 @@
                 const response = await axios.delete('/api/schedules/' + this.deleteForm.scheduleData.id)
 
                 if (response.status === SUCCESS) {
-                    outer: for (let i = 0; i < this.dates.length; i++){
-                        if (response.data.date === this.dates[i].date){
-                            for (let t = 0 ; t < this.dates[i].schedules.length; t++) {
-                                if (response.data.id === this.dates[i].schedules[t].id) {
-                                    this.dates[i].schedules.splice(t, 1)
-                                    break outer
-                                }
-                            }
-                        }
-                    }
+                    // カレンダーデータとスケジュールリストデータを更新
+                    const newSchedules = this.removeScheduleData(this.deleteForm.scheduleData, this.calendarData, this.schedulesData.schedules)
+                    this.schedulesData.schedules = newSchedules
                     this.hideModal()
                     return false
                 }
 
                 this.$store.commit('error/setCode', response.status)
+            },
+            addScheduleData(additionalSchedule, calendarData, schedulesList){
+                const additionalScheduleDate = additionalSchedule.date
+                const additionalScheduleTime = additionalSchedule.time
+
+                outer: for (let i = 0; i < calendarData.length; i++) {
+                    if (additionalScheduleDate === calendarData[i].date){
+                        // スケジュール登録数0の日付か
+                        // 登録したスケジュールに時間情報がない場合
+                        // 配列の先頭にデータを追加
+                        if (calendarData[i].schedules.length || additionalScheduleTime === null) {
+                            calendarData[i].schedules.unshift(additionalSchedule)
+                            break
+                        }
+
+                        // 前後スケジュールが登録されている場合
+                        // 時間順に並ぶようにデータを追加
+                        for (let t = 0; t < calendarData[i].schedules.length; t++) {
+
+                            if (calendarData[i].schedules[t].time === null) {
+                                continue
+                            }
+
+                            if(additionalScheduleTime <= calendarData[i].schedules[t].time) {
+                                calendarData[i].schedules.splice(t, 0, additionalSchedule)
+                                break outer
+                            }
+                        }
+
+                        // 上記以外の場合最後にデータを追加
+                        calendarData[i].schedules.push(additionalSchedule)
+                        break
+                    }
+                }
+
+                // スケジュールをスケジュールリストデータに追加
+                const newSchedules = _.cloneDeep(schedulesList)
+                // 登録した日にスケジュールがない場合
+                if (!newSchedules[additionalScheduleDate]){
+                    newSchedules[additionalScheduleDate] = [additionalSchedule]
+                    return newSchedules
+                }
+
+                // 登録したしたスケジュールに時間指定がない場合先頭に追加
+                if(additionalScheduleTime === null) {
+                    newSchedules[additionalScheduleDate].unshift(additionalSchedule)
+                    return newSchedules
+                }
+
+                // 前後スケジュールが登録されている場合
+                // 時間順に並ぶようにデータを追加
+                for (let i = 0; i < newSchedules[additionalScheduleDate].length; i++) {
+                    if (newSchedules[additionalScheduleDate][i].time === null) {
+                        continue
+                    }
+                    if(newSchedules[additionalScheduleDate][i].time >= additionalScheduleTime) {
+                        newSchedules[additionalScheduleDate].splice(i, 0, additionalSchedule)
+                        return  newSchedules
+                    }
+                }
+                // 上記以外の場合最後にデータを追加
+                newSchedules[additionalScheduleDate].push(additionalSchedule)
+
+                // 変更したスケジュールリストデータを返却
+                return newSchedules
+            },
+            /**
+             * カレンダーデータとスケジュールリストデータからスケジュールを削除
+             * @param removalSchedule 削除するスケジュールデータ
+             * @param calendarData カレンダーデータ(破壊的)
+             * @param schedulesList スケジュールリストデータ(非破壊的)
+             * @returns {*} (変更後のスケジュールリストデータ)
+             */
+            removeScheduleData(removalSchedule, calendarData, schedulesList){
+                // 削除するスケジュールの日にち
+                const removalScheduleDate = removalSchedule.date
+                // 削除するスケジュールのID
+                const removalScheduleId = removalSchedule.id
+                // カレンダーデータからスケジュールを削除
+                outer: for (let i = 0; i < calendarData.length; i++) {
+                    if (removalScheduleDate === calendarData[i].date) {
+                        for (let t = 0 ; t < calendarData[i].schedules.length; t++) {
+                            if (removalScheduleId === calendarData[i].schedules[t].id) {
+                                calendarData[i].schedules.splice(t, 1)
+                                break outer
+                            }
+                        }
+                    }
+                }
+
+                // スケジュールリストデータからスケジュールを削除
+                const newSchedules = _.cloneDeep(schedulesList)
+                for(let i = 0; i < newSchedules[removalScheduleDate].length; i++) {
+                    if (newSchedules[removalScheduleDate][i].id === removalScheduleId){
+                        newSchedules[removalScheduleDate].splice(i, 1)
+                        break
+                    }
+                }
+                // 変更したスケジュールリストデータを返却
+                return newSchedules
             },
             showEditModal(schedule){
                 this.modalFlg = true
@@ -541,69 +644,13 @@
         },
         watch: {
             selectedMonth: async function() {
-                // データの初期化、選択中の年月日設定
-                this.dates = []
-                this.schedules = []
-                this.dateLabel = moment(this.selectedMonth).format('YYYY年MM月')
-
-                // 選択月の日数
-                const monthDays = moment(this.selectedMonth).daysInMonth()
-                // 選択月初日の曜日
-                const firstDay = moment(this.selectedMonth).startOf('month').day()
-
-                this.weeks = Math.ceil((monthDays + firstDay) / 7)
-
-
-
-                // 選択月初日より前の日付データ(選択月前月)を配列へ追加
-                for(let i = 0; i < firstDay; i++){
-                    const day = moment(this.selectedMonth).startOf('month').subtract(i + 1, 'days')
-                    this.dates.unshift({
-                        date: day.format('YYYY-MM-DD'),
-                        dateNum: day.date(),
-                        schedules: []
-                        })
+                const selectedYear = moment(this.selectedMonth).format('YYYY')
+                if(this.schedulesData.schedulesYear !== selectedYear){
+                    const schedules = await this.fetchSchedules(selectedYear)
+                    this.schedulesData.schedulesYear = selectedYear
+                    this.schedulesData.schedules = schedules
                 }
-
-
-                // 選択月の日付データを配列へ追加
-                for (let i = 0; i < monthDays; i++) {
-                    const day = moment(this.selectedMonth).startOf('month').add(i, 'days')
-                    this.dates.push({
-                        date: day.format('YYYY-MM-DD'),
-                        dateNum: day.date(),
-                        schedules: []
-                    })
-                }
-
-
-                // 選択月末日より後の日付データを配列へ追加
-                for (let length = this.dates.length, i = 1; length < this.weeks * 7; length++, i++){
-                    const day = moment(this.selectedMonth).endOf('month').add(i, 'days')
-                    this.dates.push({
-                        date: day.format('YYYY-MM-DD'),
-                        dateNum : day.date(),
-                        schedules: []
-                    })
-                }
-
-                // カレンダーの初日の日付
-                const from = this.dates[0].date
-                // カレンダーの最終日の日付
-                const until = this.dates[this.dates.length - 1].date
-
-                // 登録スケジュール取得API
-                const schedules = await axios.get('/api/schedules/' + from + '/' + until)
-
-                // 日付データ配列にスケジュールデータを追加
-                this.dates.forEach(function(dateData){
-                    schedules.data.forEach(function (scheduleData) {
-                        if (dateData.date === scheduleData.date){
-                            dateData.schedules.push(scheduleData)
-                        }
-                    })
-                })
-
+                this.changeCalendarData()
             },
         },
     }

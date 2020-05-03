@@ -365,7 +365,6 @@
                 }
 
                 this.$store.commit('error/setCode', response.status)
-                return []
             },
             async createSchedule (){
                 this.createError.errorFlg = false
@@ -578,7 +577,7 @@
                     if (removalScheduleDate === dates[i].date) {
                         for (let t = 0 ; t < dates[i].schedules.length; t++) {
                             if (removalScheduleId === dates[i].schedules[t].id) {
-                                this.dates[i].schedules.splice(t, 1)
+                                dates[i].schedules.splice(t, 1)
                                 break outer
                             }
                         }
@@ -652,7 +651,7 @@
         watch: {
             selectedMonth: async function () {
                 const selectedYear = moment(this.selectedMonth).format('YYYY')
-                if (this.sharedSchedulesData.schedulesYear !== moment(this.selectedMonth).format('YYYY')){
+                if (this.sharedSchedulesData.schedulesYear !== selectedYear){
                     const schedules= await this.fetchSharedSchedules(selectedYear)
                     this.$emit('changeSchedulesData', {
                         schedulesYear: selectedYear,

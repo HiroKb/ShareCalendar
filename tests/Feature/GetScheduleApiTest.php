@@ -53,11 +53,9 @@ class GetScheduleApiTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJsonPath('0.title', 'test3')
-            ->assertJsonPath('1.title', 'test2')
-            ->assertJsonPath('2.title', 'test1');
-
-
+            ->assertJsonPath('2020-04-20.0.title', 'test3')
+            ->assertJsonPath('2020-04-20.1.title', 'test2')
+            ->assertJsonPath('2020-04-30.0.title', 'test1');
 
     }
 }

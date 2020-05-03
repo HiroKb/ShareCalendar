@@ -15,8 +15,9 @@ class ScheduleController extends Controller
     {
         $schedules = Auth::user()->schedules()
                                  ->whereBetween('date', [$from, $until])
-                                 ->orderBy('date', 'asc')
-                                 ->orderBy('time', 'asc')->get();
+                                 ->orderBy('time', 'asc')
+                                 ->get()
+                                 ->groupBy('date');
 
         return response($schedules);
     }

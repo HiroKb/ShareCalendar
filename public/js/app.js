@@ -2788,7 +2788,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   name: "MyCalendar",
   data: function data() {
     return {
-      dates: [],
+      calendarData: [],
       // 日付データ配列(選択月前後35日分)
       dateLabel: '',
       // 選択中の年月表示用(YYYY年MM月)
@@ -2798,6 +2798,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       // 選択中の日付
       weeks: 0,
       // 選択月が何週を跨ぐか
+      schedulesData: {
+        schedulesYear: null,
+        schedules: []
+      },
       createScheduleData: {
         hour: 'unspecified',
         minute: 'unspecified',
@@ -2833,14 +2837,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   computed: {
     // 選択日のスケジュールデータ
     selectDateSchedules: function selectDateSchedules() {
-      for (var i = 0; i < this.dates.length; i++) {
-        if (this.selectedDate === this.dates[i].date) {
-          return this.dates[i].schedules;
+      for (var i = 0; i < this.calendarData.length; i++) {
+        if (this.selectedDate === this.calendarData[i].date) {
+          return this.calendarData[i].schedules;
         }
       }
     },
     datesData: function datesData() {
-      return this.dates;
+      return this.calendarData;
     },
     deleteData: function deleteData() {
       return {
@@ -2864,148 +2868,65 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     changeSelectDate: function changeSelectDate(e) {
       this.selectedDate = e.currentTarget.dataset.date;
     },
-    // スケジュール登録
-    createSchedule: function createSchedule() {
+    changeCalendarData: function changeCalendarData() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var time, description, data, response, i, t;
+        var monthDays, firstDay, i, day, _i, _day, length, _i2, _day2;
+
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _this.createError.errorFlg = false;
-                _this.createError.errors = {}; // 入力値が不正な場合
+                _this.calendarData = [];
+                _this.schedules = [];
+                _this.dateLabel = moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.selectedMonth).format('YYYY年MM月'); // 選択月の日数
 
-                if (!_this.selectedDate) {
-                  _this.createError.errors.date = ['日付を選択してください。'];
-                  _this.createError.errorFlg = true;
-                }
+                monthDays = moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.selectedMonth).daysInMonth(); // 選択月初日の曜日
 
-                if (_this.createScheduleData.hour === 'unspecified' && _this.createScheduleData.minute !== 'unspecified' || _this.createScheduleData.hour !== 'unspecified' && _this.createScheduleData.minute === 'unspecified') {
-                  _this.createError.errors.time = ['時間の形式を確認してください。'];
-                  _this.createError.errorFlg = true;
-                }
+                firstDay = moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.selectedMonth).startOf('month').day();
+                _this.weeks = Math.ceil((monthDays + firstDay) / 7); // 選択月初日より前の日付データ(選択月前月)を配列へ追加
 
-                if (!_this.createScheduleData.title) {
-                  _this.createError.errors.title = ['スケジュール名は必須です。'];
-                  _this.createError.errorFlg = true;
-                }
+                for (i = 0; i < firstDay; i++) {
+                  day = moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.selectedMonth).startOf('month').subtract(i + 1, 'days');
 
-                if (!_this.createError.errorFlg) {
-                  _context.next = 7;
-                  break;
-                }
+                  _this.calendarData.unshift({
+                    date: day.format('YYYY-MM-DD'),
+                    dateNum: day.date(),
+                    schedules: []
+                  });
+                } // 選択月の日付データを配列へ追加
 
-                return _context.abrupt("return", false);
 
-              case 7:
-                // postするデータを作成
-                time = _this.createScheduleData.hour === 'unspecified' ? null : _this.createScheduleData.hour + ':' + _this.createScheduleData.minute + ':00';
-                description = !!_this.createScheduleData.description ? _this.createScheduleData.description : null;
-                data = {
-                  date: _this.selectedDate,
-                  time: time,
-                  title: _this.createScheduleData.title,
-                  description: description
-                };
-                _context.next = 12;
-                return axios.post('/api/schedules', data);
+                for (_i = 0; _i < monthDays; _i++) {
+                  _day = moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.selectedMonth).startOf('month').add(_i, 'days');
 
-              case 12:
-                response = _context.sent;
+                  _this.calendarData.push({
+                    date: _day.format('YYYY-MM-DD'),
+                    dateNum: _day.date(),
+                    schedules: []
+                  });
+                } // 選択月末日より後の日付データを配列へ追加
 
-                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["CREATED"])) {
-                  _context.next = 37;
-                  break;
-                }
 
-                i = 0;
+                for (length = _this.calendarData.length, _i2 = 1; length < _this.weeks * 7; length++, _i2++) {
+                  _day2 = moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.selectedMonth).endOf('month').add(_i2, 'days');
 
-              case 15:
-                if (!(i < _this.dates.length)) {
-                  _context.next = 35;
-                  break;
-                }
+                  _this.calendarData.push({
+                    date: _day2.format('YYYY-MM-DD'),
+                    dateNum: _day2.date(),
+                    schedules: []
+                  });
+                } // 日付データ配列にスケジュールデータを追加
 
-                if (!(response.data.date === _this.dates[i].date)) {
-                  _context.next = 32;
-                  break;
-                }
 
-                if (!(!_this.dates[i].schedules.length || response.data.time === null)) {
-                  _context.next = 20;
-                  break;
-                }
+                _this.calendarData.forEach(function (dateData) {
+                  if (_this.schedulesData.schedules[dateData.date]) {
+                    dateData.schedules = _.cloneDeep(_this.schedulesData.schedules[dateData.date]);
+                  }
+                });
 
-                _this.dates[i].schedules.unshift(response.data);
-
-                return _context.abrupt("break", 35);
-
-              case 20:
-                t = 0;
-
-              case 21:
-                if (!(t < _this.dates[i].schedules.length)) {
-                  _context.next = 30;
-                  break;
-                }
-
-                if (!(_this.dates[i].schedules[t].time === null)) {
-                  _context.next = 24;
-                  break;
-                }
-
-                return _context.abrupt("continue", 27);
-
-              case 24:
-                if (!(response.data.time <= _this.dates[i].schedules[t].time)) {
-                  _context.next = 27;
-                  break;
-                }
-
-                _this.dates[i].schedules.splice(t, 0, response.data);
-
-                return _context.abrupt("break", 35);
-
-              case 27:
-                t++;
-                _context.next = 21;
-                break;
-
-              case 30:
-                // 上記以外の場合最後にデータを追加
-                _this.dates[i].schedules.push(response.data);
-
-                return _context.abrupt("break", 35);
-
-              case 32:
-                i++;
-                _context.next = 15;
-                break;
-
-              case 35:
-                _this.createScheduleData = {
-                  hour: 'unspecified',
-                  minute: 'unspecified',
-                  title: '',
-                  description: ''
-                };
-                return _context.abrupt("return", false);
-
-              case 37:
-                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["VALIDATION_ERROR"])) {
-                  _context.next = 40;
-                  break;
-                }
-
-                _this.createError.errors = response.data.errors;
-                return _context.abrupt("return", false);
-
-              case 40:
-                _this.$store.commit('error/setCode', response.status);
-
-              case 41:
+              case 10:
               case "end":
                 return _context.stop();
             }
@@ -3013,184 +2934,38 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
-    updateSchedule: function updateSchedule() {
+    fetchSchedules: function fetchSchedules(year) {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var time, description, data, response, i, t, _i, _t;
-
+        var firstDay, firstDayWeek, lastDay, lastDayWeek, from, until, response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _this2.editError.errorFlg = false;
-                _this2.editError.errors = {}; // 入力値が不正な場合
+                firstDay = moment__WEBPACK_IMPORTED_MODULE_1___default()().year(year).startOf('year');
+                firstDayWeek = firstDay.day();
+                lastDay = moment__WEBPACK_IMPORTED_MODULE_1___default()().year(year).endOf('year');
+                lastDayWeek = lastDay.day();
+                from = firstDay.subtract(firstDayWeek, 'day').format('YYYY-MM-DD');
+                until = lastDay.add(6 - lastDayWeek, 'day').format('YYYY-MM-D');
+                _context2.next = 8;
+                return axios.get('/api/schedules/' + from + '/' + until);
 
-                if (!_this2.editForm.scheduleData.id) {
-                  _this2.editError.errors.schedule = ['スケジュールを選択してください。'];
-                  _this2.editError.errorFlg = true;
-                }
-
-                if (_this2.editForm.scheduleData.hour === 'unspecified' && _this2.editForm.scheduleData.minute !== 'unspecified' || _this2.editForm.scheduleData.hour !== 'unspecified' && _this2.editForm.scheduleData.minute === 'unspecified') {
-                  _this2.editError.errors.time = ['時間の形式を確認してください。'];
-                  _this2.editError.errorFlg = true;
-                }
-
-                if (!_this2.editForm.scheduleData.title) {
-                  _this2.editError.errors.title = ['スケジュール名は必須です。'];
-                  _this2.editError.errorFlg = true;
-                }
-
-                if (!_this2.editError.errorFlg) {
-                  _context2.next = 7;
-                  break;
-                }
-
-                return _context2.abrupt("return", false);
-
-              case 7:
-                // postするデータを作成
-                time = _this2.editForm.scheduleData.hour === 'unspecified' ? null : _this2.editForm.scheduleData.hour + ':' + _this2.editForm.scheduleData.minute + ':00';
-                description = !!_this2.editForm.scheduleData.description ? _this2.editForm.scheduleData.description : null;
-                data = {
-                  time: time,
-                  title: _this2.editForm.scheduleData.title,
-                  description: description
-                };
-                _context2.next = 12;
-                return axios.patch('/api/schedules/' + _this2.editForm.scheduleData.id, data);
-
-              case 12:
+              case 8:
                 response = _context2.sent;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["SUCCESS"])) {
-                  _context2.next = 51;
+                  _context2.next = 11;
                   break;
                 }
 
-                i = 0;
+                return _context2.abrupt("return", response.data);
 
-              case 15:
-                if (!(i < _this2.dates.length)) {
-                  _context2.next = 28;
-                  break;
-                }
-
-                if (!(response.data.date === _this2.dates[i].date)) {
-                  _context2.next = 25;
-                  break;
-                }
-
-                t = 0;
-
-              case 18:
-                if (!(t < _this2.dates[i].schedules.length)) {
-                  _context2.next = 25;
-                  break;
-                }
-
-                if (!(response.data.id === _this2.dates[i].schedules[t].id)) {
-                  _context2.next = 22;
-                  break;
-                }
-
-                _this2.dates[i].schedules.splice(t, 1);
-
-                return _context2.abrupt("break", 28);
-
-              case 22:
-                t++;
-                _context2.next = 18;
-                break;
-
-              case 25:
-                i++;
-                _context2.next = 15;
-                break;
-
-              case 28:
-                _i = 0;
-
-              case 29:
-                if (!(_i < _this2.dates.length)) {
-                  _context2.next = 49;
-                  break;
-                }
-
-                if (!(response.data.date === _this2.dates[_i].date)) {
-                  _context2.next = 46;
-                  break;
-                }
-
-                if (!(!_this2.dates[_i].schedules.length || response.data.time === null)) {
-                  _context2.next = 34;
-                  break;
-                }
-
-                _this2.dates[_i].schedules.unshift(response.data);
-
-                return _context2.abrupt("break", 49);
-
-              case 34:
-                _t = 0;
-
-              case 35:
-                if (!(_t < _this2.dates[_i].schedules.length)) {
-                  _context2.next = 44;
-                  break;
-                }
-
-                if (!(_this2.dates[_i].schedules[_t].time === null)) {
-                  _context2.next = 38;
-                  break;
-                }
-
-                return _context2.abrupt("continue", 41);
-
-              case 38:
-                if (!(response.data.time <= _this2.dates[_i].schedules[_t].time)) {
-                  _context2.next = 41;
-                  break;
-                }
-
-                _this2.dates[_i].schedules.splice(_t, 0, response.data);
-
-                return _context2.abrupt("break", 49);
-
-              case 41:
-                _t++;
-                _context2.next = 35;
-                break;
-
-              case 44:
-                // 上記以外の場合最後にデータを追加
-                _this2.dates[_i].schedules.push(response.data);
-
-                return _context2.abrupt("break", 49);
-
-              case 46:
-                _i++;
-                _context2.next = 29;
-                break;
-
-              case 49:
-                _this2.hideModal();
-
-                return _context2.abrupt("return", false);
-
-              case 51:
-                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["VALIDATION_ERROR"])) {
-                  _context2.next = 54;
-                  break;
-                }
-
-                _this2.editError.errors = response.data.errors;
-                return _context2.abrupt("return", false);
-
-              case 54:
+              case 11:
                 _this2.$store.commit('error/setCode', response.status);
 
-              case 55:
+              case 12:
               case "end":
                 return _context2.stop();
             }
@@ -3198,90 +2973,326 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
-    // スケジュールの削除
-    deleteSchedule: function deleteSchedule() {
+    // スケジュール登録
+    createSchedule: function createSchedule() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        var response, i, t;
+        var time, description, data, response, newSchedules;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                if (_this3.deleteForm.scheduleData) {
-                  _context3.next = 2;
+                _this3.createError.errorFlg = false;
+                _this3.createError.errors = {}; // 入力値が不正な場合
+
+                if (!_this3.selectedDate) {
+                  _this3.createError.errors.date = ['日付を選択してください。'];
+                  _this3.createError.errorFlg = true;
+                }
+
+                if (_this3.createScheduleData.hour === 'unspecified' && _this3.createScheduleData.minute !== 'unspecified' || _this3.createScheduleData.hour !== 'unspecified' && _this3.createScheduleData.minute === 'unspecified') {
+                  _this3.createError.errors.time = ['時間の形式を確認してください。'];
+                  _this3.createError.errorFlg = true;
+                }
+
+                if (!_this3.createScheduleData.title) {
+                  _this3.createError.errors.title = ['スケジュール名は必須です。'];
+                  _this3.createError.errorFlg = true;
+                }
+
+                if (!_this3.createError.errorFlg) {
+                  _context3.next = 7;
                   break;
                 }
 
                 return _context3.abrupt("return", false);
-
-              case 2:
-                _context3.next = 4;
-                return axios["delete"]('/api/schedules/' + _this3.deleteForm.scheduleData.id);
-
-              case 4:
-                response = _context3.sent;
-
-                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["SUCCESS"])) {
-                  _context3.next = 22;
-                  break;
-                }
-
-                i = 0;
 
               case 7:
-                if (!(i < _this3.dates.length)) {
-                  _context3.next = 20;
+                // postするデータを作成
+                time = _this3.createScheduleData.hour === 'unspecified' ? null : _this3.createScheduleData.hour + ':' + _this3.createScheduleData.minute + ':00';
+                description = !!_this3.createScheduleData.description ? _this3.createScheduleData.description : null;
+                data = {
+                  date: _this3.selectedDate,
+                  time: time,
+                  title: _this3.createScheduleData.title,
+                  description: description
+                };
+                _context3.next = 12;
+                return axios.post('/api/schedules', data);
+
+              case 12:
+                response = _context3.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["CREATED"])) {
+                  _context3.next = 18;
                   break;
                 }
 
-                if (!(response.data.date === _this3.dates[i].date)) {
-                  _context3.next = 17;
-                  break;
-                }
-
-                t = 0;
-
-              case 10:
-                if (!(t < _this3.dates[i].schedules.length)) {
-                  _context3.next = 17;
-                  break;
-                }
-
-                if (!(response.data.id === _this3.dates[i].schedules[t].id)) {
-                  _context3.next = 14;
-                  break;
-                }
-
-                _this3.dates[i].schedules.splice(t, 1);
-
-                return _context3.abrupt("break", 20);
-
-              case 14:
-                t++;
-                _context3.next = 10;
-                break;
-
-              case 17:
-                i++;
-                _context3.next = 7;
-                break;
-
-              case 20:
-                _this3.hideModal();
-
+                // カレンダーデータとスケジュールリストデータを更新
+                newSchedules = _this3.addScheduleData(response.data, _this3.calendarData, _this3.schedulesData.schedules);
+                _this3.schedulesData.schedules = newSchedules;
+                _this3.createScheduleData = {
+                  hour: 'unspecified',
+                  minute: 'unspecified',
+                  title: '',
+                  description: ''
+                };
                 return _context3.abrupt("return", false);
 
-              case 22:
+              case 18:
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["VALIDATION_ERROR"])) {
+                  _context3.next = 21;
+                  break;
+                }
+
+                _this3.createError.errors = response.data.errors;
+                return _context3.abrupt("return", false);
+
+              case 21:
                 _this3.$store.commit('error/setCode', response.status);
 
-              case 23:
+              case 22:
               case "end":
                 return _context3.stop();
             }
           }
         }, _callee3);
       }))();
+    },
+    updateSchedule: function updateSchedule() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        var time, description, data, response, deletedSchedules, newSchedules;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _this4.editError.errorFlg = false;
+                _this4.editError.errors = {}; // 入力値が不正な場合
+
+                if (!_this4.editForm.scheduleData.id) {
+                  _this4.editError.errors.schedule = ['スケジュールを選択してください。'];
+                  _this4.editError.errorFlg = true;
+                }
+
+                if (_this4.editForm.scheduleData.hour === 'unspecified' && _this4.editForm.scheduleData.minute !== 'unspecified' || _this4.editForm.scheduleData.hour !== 'unspecified' && _this4.editForm.scheduleData.minute === 'unspecified') {
+                  _this4.editError.errors.time = ['時間の形式を確認してください。'];
+                  _this4.editError.errorFlg = true;
+                }
+
+                if (!_this4.editForm.scheduleData.title) {
+                  _this4.editError.errors.title = ['スケジュール名は必須です。'];
+                  _this4.editError.errorFlg = true;
+                }
+
+                if (!_this4.editError.errorFlg) {
+                  _context4.next = 7;
+                  break;
+                }
+
+                return _context4.abrupt("return", false);
+
+              case 7:
+                // postするデータを作成
+                time = _this4.editForm.scheduleData.hour === 'unspecified' ? null : _this4.editForm.scheduleData.hour + ':' + _this4.editForm.scheduleData.minute + ':00';
+                description = !!_this4.editForm.scheduleData.description ? _this4.editForm.scheduleData.description : null;
+                data = {
+                  time: time,
+                  title: _this4.editForm.scheduleData.title,
+                  description: description
+                };
+                _context4.next = 12;
+                return axios.patch('/api/schedules/' + _this4.editForm.scheduleData.id, data);
+
+              case 12:
+                response = _context4.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["SUCCESS"])) {
+                  _context4.next = 19;
+                  break;
+                }
+
+                deletedSchedules = _this4.removeScheduleData(_this4.editForm.scheduleData, _this4.calendarData, _this4.schedulesData.schedules);
+                newSchedules = _this4.addScheduleData(response.data, _this4.calendarData, deletedSchedules);
+                _this4.schedulesData.schedules = newSchedules;
+
+                _this4.hideModal();
+
+                return _context4.abrupt("return", false);
+
+              case 19:
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["VALIDATION_ERROR"])) {
+                  _context4.next = 22;
+                  break;
+                }
+
+                _this4.editError.errors = response.data.errors;
+                return _context4.abrupt("return", false);
+
+              case 22:
+                _this4.$store.commit('error/setCode', response.status);
+
+              case 23:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
+    },
+    // スケジュールの削除
+    deleteSchedule: function deleteSchedule() {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        var response, newSchedules;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                if (_this5.deleteForm.scheduleData) {
+                  _context5.next = 2;
+                  break;
+                }
+
+                return _context5.abrupt("return", false);
+
+              case 2:
+                _context5.next = 4;
+                return axios["delete"]('/api/schedules/' + _this5.deleteForm.scheduleData.id);
+
+              case 4:
+                response = _context5.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["SUCCESS"])) {
+                  _context5.next = 10;
+                  break;
+                }
+
+                // カレンダーデータとスケジュールリストデータを更新
+                newSchedules = _this5.removeScheduleData(_this5.deleteForm.scheduleData, _this5.calendarData, _this5.schedulesData.schedules);
+                _this5.schedulesData.schedules = newSchedules;
+
+                _this5.hideModal();
+
+                return _context5.abrupt("return", false);
+
+              case 10:
+                _this5.$store.commit('error/setCode', response.status);
+
+              case 11:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }))();
+    },
+    addScheduleData: function addScheduleData(additionalSchedule, calendarData, schedulesList) {
+      var additionalScheduleDate = additionalSchedule.date;
+      var additionalScheduleTime = additionalSchedule.time;
+
+      outer: for (var i = 0; i < calendarData.length; i++) {
+        if (additionalScheduleDate === calendarData[i].date) {
+          // スケジュール登録数0の日付か
+          // 登録したスケジュールに時間情報がない場合
+          // 配列の先頭にデータを追加
+          if (calendarData[i].schedules.length || additionalScheduleTime === null) {
+            calendarData[i].schedules.unshift(additionalSchedule);
+            break;
+          } // 前後スケジュールが登録されている場合
+          // 時間順に並ぶようにデータを追加
+
+
+          for (var t = 0; t < calendarData[i].schedules.length; t++) {
+            if (calendarData[i].schedules[t].time === null) {
+              continue;
+            }
+
+            if (additionalScheduleTime <= calendarData[i].schedules[t].time) {
+              calendarData[i].schedules.splice(t, 0, additionalSchedule);
+              break outer;
+            }
+          } // 上記以外の場合最後にデータを追加
+
+
+          calendarData[i].schedules.push(additionalSchedule);
+          break;
+        }
+      } // スケジュールをスケジュールリストデータに追加
+
+
+      var newSchedules = _.cloneDeep(schedulesList); // 登録した日にスケジュールがない場合
+
+
+      if (!newSchedules[additionalScheduleDate]) {
+        newSchedules[additionalScheduleDate] = [additionalSchedule];
+        return newSchedules;
+      } // 登録したしたスケジュールに時間指定がない場合先頭に追加
+
+
+      if (additionalScheduleTime === null) {
+        newSchedules[additionalScheduleDate].unshift(additionalSchedule);
+        return newSchedules;
+      } // 前後スケジュールが登録されている場合
+      // 時間順に並ぶようにデータを追加
+
+
+      for (var _i3 = 0; _i3 < newSchedules[additionalScheduleDate].length; _i3++) {
+        if (newSchedules[additionalScheduleDate][_i3].time === null) {
+          continue;
+        }
+
+        if (newSchedules[additionalScheduleDate][_i3].time >= additionalScheduleTime) {
+          newSchedules[additionalScheduleDate].splice(_i3, 0, additionalSchedule);
+          return newSchedules;
+        }
+      } // 上記以外の場合最後にデータを追加
+
+
+      newSchedules[additionalScheduleDate].push(additionalSchedule); // 変更したスケジュールリストデータを返却
+
+      return newSchedules;
+    },
+
+    /**
+     * カレンダーデータとスケジュールリストデータからスケジュールを削除
+     * @param removalSchedule 削除するスケジュールデータ
+     * @param calendarData カレンダーデータ(破壊的)
+     * @param schedulesList スケジュールリストデータ(非破壊的)
+     * @returns {*} (変更後のスケジュールリストデータ)
+     */
+    removeScheduleData: function removeScheduleData(removalSchedule, calendarData, schedulesList) {
+      // 削除するスケジュールの日にち
+      var removalScheduleDate = removalSchedule.date; // 削除するスケジュールのID
+
+      var removalScheduleId = removalSchedule.id; // カレンダーデータからスケジュールを削除
+
+      outer: for (var i = 0; i < calendarData.length; i++) {
+        if (removalScheduleDate === calendarData[i].date) {
+          for (var t = 0; t < calendarData[i].schedules.length; t++) {
+            if (removalScheduleId === calendarData[i].schedules[t].id) {
+              calendarData[i].schedules.splice(t, 1);
+              break outer;
+            }
+          }
+        }
+      } // スケジュールリストデータからスケジュールを削除
+
+
+      var newSchedules = _.cloneDeep(schedulesList);
+
+      for (var _i4 = 0; _i4 < newSchedules[removalScheduleDate].length; _i4++) {
+        if (newSchedules[removalScheduleDate][_i4].id === removalScheduleId) {
+          newSchedules[removalScheduleDate].splice(_i4, 1);
+          break;
+        }
+      } // 変更したスケジュールリストデータを返却
+
+
+      return newSchedules;
     },
     showEditModal: function showEditModal(schedule) {
       this.modalFlg = true;
@@ -3336,77 +3347,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   watch: {
     selectedMonth: function () {
-      var _selectedMonth = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        var monthDays, firstDay, i, day, _i2, _day, length, _i3, _day2, from, until, schedules;
-
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+      var _selectedMonth = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+        var selectedYear, schedules;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context6.prev = _context6.next) {
               case 0:
-                // データの初期化、選択中の年月日設定
-                this.dates = [];
-                this.schedules = [];
-                this.dateLabel = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).format('YYYY年MM月'); // 選択月の日数
+                selectedYear = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).format('YYYY');
 
-                monthDays = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).daysInMonth(); // 選択月初日の曜日
+                if (!(this.schedulesData.schedulesYear !== selectedYear)) {
+                  _context6.next = 7;
+                  break;
+                }
 
-                firstDay = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).startOf('month').day();
-                this.weeks = Math.ceil((monthDays + firstDay) / 7); // 選択月初日より前の日付データ(選択月前月)を配列へ追加
+                _context6.next = 4;
+                return this.fetchSchedules(selectedYear);
 
-                for (i = 0; i < firstDay; i++) {
-                  day = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).startOf('month').subtract(i + 1, 'days');
-                  this.dates.unshift({
-                    date: day.format('YYYY-MM-DD'),
-                    dateNum: day.date(),
-                    schedules: []
-                  });
-                } // 選択月の日付データを配列へ追加
+              case 4:
+                schedules = _context6.sent;
+                this.schedulesData.schedulesYear = selectedYear;
+                this.schedulesData.schedules = schedules;
 
+              case 7:
+                this.changeCalendarData();
 
-                for (_i2 = 0; _i2 < monthDays; _i2++) {
-                  _day = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).startOf('month').add(_i2, 'days');
-                  this.dates.push({
-                    date: _day.format('YYYY-MM-DD'),
-                    dateNum: _day.date(),
-                    schedules: []
-                  });
-                } // 選択月末日より後の日付データを配列へ追加
-
-
-                for (length = this.dates.length, _i3 = 1; length < this.weeks * 7; length++, _i3++) {
-                  _day2 = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).endOf('month').add(_i3, 'days');
-                  this.dates.push({
-                    date: _day2.format('YYYY-MM-DD'),
-                    dateNum: _day2.date(),
-                    schedules: []
-                  });
-                } // カレンダーの初日の日付
-
-
-                from = this.dates[0].date; // カレンダーの最終日の日付
-
-                until = this.dates[this.dates.length - 1].date; // 登録スケジュール取得API
-
-                _context4.next = 13;
-                return axios.get('/api/schedules/' + from + '/' + until);
-
-              case 13:
-                schedules = _context4.sent;
-                // 日付データ配列にスケジュールデータを追加
-                this.dates.forEach(function (dateData) {
-                  schedules.data.forEach(function (scheduleData) {
-                    if (dateData.date === scheduleData.date) {
-                      dateData.schedules.push(scheduleData);
-                    }
-                  });
-                });
-
-              case 15:
+              case 8:
               case "end":
-                return _context4.stop();
+                return _context6.stop();
             }
           }
-        }, _callee4, this);
+        }, _callee6, this);
       }));
 
       function selectedMonth() {
@@ -4791,9 +4761,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 11:
                 _this2.$store.commit('error/setCode', response.status);
 
-                return _context.abrupt("return", []);
-
-              case 13:
+              case 12:
               case "end":
                 return _context.stop();
             }
@@ -5111,7 +5079,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         if (removalScheduleDate === dates[i].date) {
           for (var t = 0; t < dates[i].schedules.length; t++) {
             if (removalScheduleId === dates[i].schedules[t].id) {
-              this.dates[i].schedules.splice(t, 1);
+              dates[i].schedules.splice(t, 1);
               break outer;
             }
           }
@@ -5191,7 +5159,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 selectedYear = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).format('YYYY');
 
-                if (!(this.sharedSchedulesData.schedulesYear !== moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).format('YYYY'))) {
+                if (!(this.sharedSchedulesData.schedulesYear !== selectedYear)) {
                   _context5.next = 6;
                   break;
                 }
