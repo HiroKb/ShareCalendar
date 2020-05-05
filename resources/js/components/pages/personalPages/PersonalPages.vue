@@ -4,6 +4,8 @@
             <SideBar />
         </div>
         <router-view :shared-calendar-list="sharedCalendarList"
+                     :schedulesData="schedulesData"
+                     @changeSchedulesData="changeSchedulesData"
         >
         </router-view>
     </div>
@@ -12,11 +14,16 @@
 <script>
     import SideBar from "../../modules/SideBar"
     import {SUCCESS} from "../../../util";
+    import moment from "moment";
     export default {
         name: "PersonalPages.vue",
         components: {SideBar},
         data() {
             return {
+                schedulesData: {
+                    schedulesYear: null,
+                    schedules: []
+                },
                 sharedCalendarList: {
                     data: [],
                     loadingFlg: false
@@ -36,6 +43,14 @@
                 }
 
                 this.$store.commit('error/setCode', response.status)
+            },
+            changeSchedulesData(data) {
+                if (data.schedulesYear){
+                    this.schedulesData.schedulesYear = data.schedulesYear
+                }
+                if (data.schedules){
+                    this.schedulesData.schedules = data.schedules
+                }
             },
         },
         created() {

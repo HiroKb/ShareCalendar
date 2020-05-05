@@ -2798,10 +2798,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       // 選択中の日付
       weeks: 0,
       // 選択月が何週を跨ぐか
-      schedulesData: {
-        schedulesYear: null,
-        schedules: []
-      },
       createScheduleData: {
         hour: 'unspecified',
         minute: 'unspecified',
@@ -2834,6 +2830,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
     };
   },
+  props: {
+    schedulesData: {
+      type: Object,
+      required: true,
+      "default": {
+        schedulesYear: null,
+        schedules: []
+      }
+    }
+  },
   computed: {
     // 選択日のスケジュールデータ
     selectDateSchedules: function selectDateSchedules() {
@@ -2856,6 +2862,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
+    test: function test() {},
     // 選択月の変更
     changeSelectedMonth: function changeSelectedMonth(num) {
       if (num === -1) {
@@ -2956,16 +2963,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 response = _context2.sent;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["SUCCESS"])) {
-                  _context2.next = 11;
+                  _context2.next = 12;
                   break;
                 }
 
-                return _context2.abrupt("return", response.data);
+                _this2.$emit('changeSchedulesData', {
+                  schedulesYear: year,
+                  schedules: response.data
+                });
 
-              case 11:
-                _this2.$store.commit('error/setCode', response.status);
+                return _context2.abrupt("return", false);
 
               case 12:
+                _this2.$store.commit('error/setCode', response.status);
+
+              case 13:
               case "end":
                 return _context2.stop();
             }
@@ -3031,7 +3043,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 // カレンダーデータとスケジュールリストデータを更新
                 newSchedules = _this3.addScheduleData(response.data, _this3.calendarData, _this3.schedulesData.schedules);
-                _this3.schedulesData.schedules = newSchedules;
+
+                _this3.$emit('changeSchedulesData', {
+                  schedules: newSchedules
+                });
+
                 _this3.createScheduleData = {
                   hour: 'unspecified',
                   minute: 'unspecified',
@@ -3116,7 +3132,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 deletedSchedules = _this4.removeScheduleData(_this4.editForm.scheduleData, _this4.calendarData, _this4.schedulesData.schedules);
                 newSchedules = _this4.addScheduleData(response.data, _this4.calendarData, deletedSchedules);
-                _this4.schedulesData.schedules = newSchedules;
+
+                _this4.$emit('changeSchedulesData', {
+                  schedules: newSchedules
+                });
 
                 _this4.hideModal();
 
@@ -3173,7 +3192,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 // カレンダーデータとスケジュールリストデータを更新
                 newSchedules = _this5.removeScheduleData(_this5.deleteForm.scheduleData, _this5.calendarData, _this5.schedulesData.schedules);
-                _this5.schedulesData.schedules = newSchedules;
+
+                _this5.$emit('changeSchedulesData', {
+                  schedules: newSchedules
+                });
 
                 _this5.hideModal();
 
@@ -3348,7 +3370,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   watch: {
     selectedMonth: function () {
       var _selectedMonth = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
-        var selectedYear, schedules;
+        var selectedYear;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
@@ -3356,7 +3378,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 selectedYear = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).format('YYYY');
 
                 if (!(this.schedulesData.schedulesYear !== selectedYear)) {
-                  _context6.next = 7;
+                  _context6.next = 4;
                   break;
                 }
 
@@ -3364,14 +3386,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return this.fetchSchedules(selectedYear);
 
               case 4:
-                schedules = _context6.sent;
-                this.schedulesData.schedulesYear = selectedYear;
-                this.schedulesData.schedules = schedules;
-
-              case 7:
                 this.changeCalendarData();
 
-              case 8:
+              case 5:
               case "end":
                 return _context6.stop();
             }
@@ -3403,6 +3420,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _modules_SideBar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../modules/SideBar */ "./resources/js/components/modules/SideBar.vue");
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../util */ "./resources/js/util.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_3__);
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -3420,6 +3439,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3429,6 +3451,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
+      schedulesData: {
+        schedulesYear: null,
+        schedules: []
+      },
       sharedCalendarList: {
         data: [],
         loadingFlg: false
@@ -3471,6 +3497,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee);
       }))();
+    },
+    changeSchedulesData: function changeSchedulesData(data) {
+      if (data.schedulesYear) {
+        this.schedulesData.schedulesYear = data.schedulesYear;
+      }
+
+      if (data.schedules) {
+        this.schedulesData.schedules = data.schedules;
+      }
     }
   },
   created: function created() {
@@ -43930,7 +43965,11 @@ var render = function() {
       _c("div", { staticClass: "sidebar-wrap" }, [_c("SideBar")], 1),
       _vm._v(" "),
       _c("router-view", {
-        attrs: { "shared-calendar-list": _vm.sharedCalendarList }
+        attrs: {
+          "shared-calendar-list": _vm.sharedCalendarList,
+          schedulesData: _vm.schedulesData
+        },
+        on: { changeSchedulesData: _vm.changeSchedulesData }
       })
     ],
     1

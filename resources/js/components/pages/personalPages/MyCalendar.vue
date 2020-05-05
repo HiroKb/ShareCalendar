@@ -215,10 +215,6 @@
                 selectedMonth: null, // 選択中の月(momentオブジェクト)
                 selectedDate: null, // 選択中の日付
                 weeks: 0, // 選択月が何週を跨ぐか
-                schedulesData: {
-                    schedulesYear: null,
-                    schedules: []
-                },
                 createScheduleData: {
                     hour: 'unspecified',
                     minute: 'unspecified',
@@ -251,6 +247,16 @@
                 },
             }
         },
+        props: {
+            schedulesData: {
+                type: Object,
+                required: true,
+                default: {
+                    schedulesYear: null,
+                    schedules: [],
+                }
+            }
+        },
         computed: {
             // 選択日のスケジュールデータ
             selectDateSchedules: function() {
@@ -273,6 +279,9 @@
             }
         },
         methods: {
+            test(){
+
+            },
             // 選択月の変更
             changeSelectedMonth(num) {
                 if (num === -1) {
@@ -349,7 +358,11 @@
                 const response = await axios.get('/api/schedules/' + from + '/' + until)
 
                 if (response.status === SUCCESS) {
-                    return response.data
+                    this.$emit('changeSchedulesData',{
+                        schedulesYear: year,
+                        schedules: response.data
+                    })
+                    return false
                 }
 
                 this.$store.commit('error/setCode', response.status)
@@ -396,7 +409,7 @@
                     // カレンダーデータとスケジュールリストデータを更新
                     const newSchedules = this.addScheduleData(response.data, this.calendarData, this.schedulesData.schedules)
 
-                    this.schedulesData.schedules = newSchedules
+                    this.$emit('changeSchedulesData',{schedules: newSchedules})
 
                     this.createScheduleData = {
                         hour: 'unspecified',
@@ -455,8 +468,8 @@
 
                     const deletedSchedules = this.removeScheduleData(this.editForm.scheduleData, this.calendarData, this.schedulesData.schedules)
                     const newSchedules = this.addScheduleData(response.data, this.calendarData, deletedSchedules)
-                    
-                    this.schedulesData.schedules = newSchedules
+
+                    this.$emit('changeSchedulesData',{schedules: newSchedules})
                     this.hideModal()
                     return false
                 }
@@ -480,7 +493,8 @@
                 if (response.status === SUCCESS) {
                     // カレンダーデータとスケジュールリストデータを更新
                     const newSchedules = this.removeScheduleData(this.deleteForm.scheduleData, this.calendarData, this.schedulesData.schedules)
-                    this.schedulesData.schedules = newSchedules
+                    this.$emit('changeSchedulesData',{schedules: newSchedules})
+
                     this.hideModal()
                     return false
                 }
@@ -634,8 +648,7 @@
                     errorFlg: false,
                     errors: {}
                 }
-            }
-
+            },
         },
         created() {
             // 現在月を設定
@@ -646,9 +659,7 @@
             selectedMonth: async function() {
                 const selectedYear = moment(this.selectedMonth).format('YYYY')
                 if(this.schedulesData.schedulesYear !== selectedYear){
-                    const schedules = await this.fetchSchedules(selectedYear)
-                    this.schedulesData.schedulesYear = selectedYear
-                    this.schedulesData.schedules = schedules
+                    await this.fetchSchedules(selectedYear)
                 }
                 this.changeCalendarData()
             },
