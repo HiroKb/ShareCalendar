@@ -105,8 +105,15 @@
                     <li class="schedule" v-for="schedule in selectDateSchedules" :key="schedule.id">
                         <p>{{ schedule.time}}</p>
                         <p>{{ schedule.title }}</p>
-                        <button @click="showEditModal(schedule)"><i class="far fa-file-alt"></i></button>
-                        <button @click="showDeleteModal(schedule)"><i class="far fa-trash-alt"></i></button>
+                        <template v-if="schedule.calendar_id">
+                            <router-link :to="{name: 'sharedCalendarIndex', params:{sharedCalendarId: schedule.calendar_id}}">
+                                <p>共有カレンダー : {{schedule.calendar_name}}</p>
+                            </router-link>
+                        </template>
+                        <template v-else>
+                            <button @click="showEditModal(schedule)"><i class="far fa-file-alt"></i></button>
+                            <button @click="showDeleteModal(schedule)"><i class="far fa-trash-alt"></i></button>
+                        </template>
                     </li>
                 </ul>
             </div>
@@ -279,9 +286,6 @@
             }
         },
         methods: {
-            test(){
-
-            },
             // 選択月の変更
             changeSelectedMonth(num) {
                 if (num === -1) {

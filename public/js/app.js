@@ -2782,6 +2782,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2862,7 +2869,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
-    test: function test() {},
     // 選択月の変更
     changeSelectedMonth: function changeSelectedMonth(num) {
       if (num === -1) {
@@ -43534,35 +43540,64 @@ var render = function() {
           "ul",
           { staticClass: "schedules" },
           _vm._l(_vm.selectDateSchedules, function(schedule) {
-            return _c("li", { key: schedule.id, staticClass: "schedule" }, [
-              _c("p", [_vm._v(_vm._s(schedule.time))]),
-              _vm._v(" "),
-              _c("p", [_vm._v(_vm._s(schedule.title))]),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  on: {
-                    click: function($event) {
-                      return _vm.showEditModal(schedule)
-                    }
-                  }
-                },
-                [_c("i", { staticClass: "far fa-file-alt" })]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  on: {
-                    click: function($event) {
-                      return _vm.showDeleteModal(schedule)
-                    }
-                  }
-                },
-                [_c("i", { staticClass: "far fa-trash-alt" })]
-              )
-            ])
+            return _c(
+              "li",
+              { key: schedule.id, staticClass: "schedule" },
+              [
+                _c("p", [_vm._v(_vm._s(schedule.time))]),
+                _vm._v(" "),
+                _c("p", [_vm._v(_vm._s(schedule.title))]),
+                _vm._v(" "),
+                schedule.calendar_id
+                  ? [
+                      _c(
+                        "router-link",
+                        {
+                          attrs: {
+                            to: {
+                              name: "sharedCalendarIndex",
+                              params: { sharedCalendarId: schedule.calendar_id }
+                            }
+                          }
+                        },
+                        [
+                          _c("p", [
+                            _vm._v(
+                              "共有カレンダー : " +
+                                _vm._s(schedule.calendar_name)
+                            )
+                          ])
+                        ]
+                      )
+                    ]
+                  : [
+                      _c(
+                        "button",
+                        {
+                          on: {
+                            click: function($event) {
+                              return _vm.showEditModal(schedule)
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "far fa-file-alt" })]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          on: {
+                            click: function($event) {
+                              return _vm.showDeleteModal(schedule)
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "far fa-trash-alt" })]
+                      )
+                    ]
+              ],
+              2
+            )
           }),
           0
         )
