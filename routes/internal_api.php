@@ -23,7 +23,7 @@ Route::patch('/users/password', 'UserController@updatePassword');
 
 
 //登録スケジュール取得
-Route::get('/schedules/{from}/{until}', 'ScheduleController@index');
+Route::get('/schedules/{from}/{until}', 'ScheduleController@list');
 // スケジュール登録
 Route::post('/schedules', 'ScheduleController@create');
 // スケジュール更新

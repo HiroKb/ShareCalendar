@@ -5,21 +5,42 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateScheduleRequest;
 use App\Http\Requests\UpdateScheduleRequest;
 use App\Schedule;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ScheduleController extends Controller
 {
-    public function index($from, $until)
+    public function list($from, $until)
     {
-        $schedules = Auth::user()->schedules()
-                                 ->whereBetween('date', [$from, $until])
-                                 ->orderBy('time', 'asc')
-                                 ->get()
-                                 ->groupBy('date');
+        $personalSchedules = Auth::user()->schedules()
+            ->whereBetween('date', [$from, $until])
+            ->get()
+            ->toArray();
+        $sharedSchedules = [];
 
-        return response($schedules);
+        $sharedDataCollection = User::with([
+            'sharedCalendars.schedules' => function($query) use($from, $until){
+            $query->whereBetween('date', [$from, $until]);
+            }])->find(Auth::id());
+        $sharedCalendars = $sharedDataCollection->toArray()['shared_calendars'];
+
+        foreach ($sharedCalendars as $sharedCalendar){
+            foreach ($sharedCalendar['schedules'] as $sharedSchedule){
+                $sharedSchedule['calendar_name'] = $sharedCalendar['calendar_name'];
+                $sharedSchedules[] = $sharedSchedule;
+            }
+        }
+
+        $schedulesCollection = collect(array_merge($personalSchedules, $sharedSchedules));
+
+        $sortedSchedules = $schedulesCollection
+                            ->sortBy('time' )
+                            ->groupBy('date');
+
+        return response($sortedSchedules);
     }
 
     /**
