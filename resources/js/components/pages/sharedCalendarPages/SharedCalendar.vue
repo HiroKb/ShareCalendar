@@ -20,6 +20,9 @@
                 <router-link :to="{name: 'unShareCalendar'}" v-if="!adminFlg" class="shared-calendar-link">
                     共有解除
                 </router-link>
+                <router-link :to="{name: 'deleteSharedCalendar'}" v-if="adminFlg" class="shared-calendar-link">
+                    共有カレンダー削除
+                </router-link>
             </div>
         </div>
         <router-view :shared-calendar-id="sharedCalendarId"

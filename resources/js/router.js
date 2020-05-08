@@ -21,6 +21,7 @@ import SharedCalendarMembers from "./components/pages/sharedCalendarPages/Shared
 import SharedCalendarApplicants from "./components/pages/sharedCalendarPages/SharedCalendarApplicants.vue"
 import SharedCalendarInfo from "./components/pages/sharedCalendarPages/SharedCalendarInfo.vue"
 import UnShareCalendar from "./components/pages/sharedCalendarPages/UnShareCalendar.vue"
+import DeleteSharedCalendar from "./components/pages/sharedCalendarPages/DeleteSharedCalendar.vue"
 
 
 import SystemError from "./components/pages/errors/SystemError.vue"
@@ -147,6 +148,11 @@ const routes = [
                 path: 'unshare',
                 name: 'unShareCalendar',
                 component: UnShareCalendar,
+            },
+            {
+                path: 'delete',
+                name: 'deleteSharedCalendar',
+                component: DeleteSharedCalendar,
             },
         ]
     },

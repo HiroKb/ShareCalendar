@@ -1,9 +1,9 @@
 <template>
     <div class="contents">
-        <form @submit.prevent="unShareCalendar">
+        <form @submit.prevent="deleteSharedCalendar">
             <p>{{ sharedCalendarData.calendar_name }}</p>
-            <p>共有を解除しますか？</p>
-            <button>解除</button>
+            <p>この共有カレンダーを削除しますか？</p>
+            <button>削除</button>
         </form>
     </div>
 </template>
@@ -12,26 +12,22 @@
     import {SUCCESS} from "../../../util";
 
     export default {
-        name: "UnShareCalendar",
+        name: "DeleteSharedCalendar",
         props: {
             sharedCalendarData: {
                 type: Object,
                 required: true,
-            },
+                default: {}
+            }
         },
         methods: {
-            async unShareCalendar () {
-                if (!this.sharedCalendarData.id) {
-                    return false
-                }
+            async deleteSharedCalendar() {
+                const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarData.id)
 
-                const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarData.id + '/members')
-
-                if (response.status === SUCCESS) {
+                if(response.status === SUCCESS) {
                     this.$router.push({name: 'myCalendar'})
                     return false
                 }
-
                 this.$store.commit('error/setCode', response.status)
             }
         }
