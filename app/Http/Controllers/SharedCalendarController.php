@@ -33,6 +33,18 @@ class SharedCalendarController extends Controller
         });
     }
 
+    public function destroy(SharedCalendar $sharedCalendar)
+    {
+        // カレンダー管理者以外のアクセスの場合
+        if ($sharedCalendar->admin_id !== Auth::id()) {
+            abort(404);
+        }
+
+        $sharedCalendar->delete();
+
+        return response([], 200);
+    }
+
     public function updateName(SharedCalendar $sharedCalendar, SharedCalendarNameRequest $request)
     {
         // カレンダー管理者以外のアクセスの場合
