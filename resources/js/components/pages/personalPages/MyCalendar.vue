@@ -20,17 +20,21 @@
                         <tr v-for="row in weeks">
                             <td
                                 v-for="column in 7"
-                                :data-date="datesData[(row - 1) * 7 + column - 1].date"
+                                :data-date="calendarData[(row - 1) * 7 + column - 1].date"
                                 @click="changeSelectDate"
                             >
-                                <p>{{ datesData[(row - 1) * 7  + column - 1 ].dateNum }}</p>
-                                <p>{{ datesData[(row - 1) * 7 + column - 1 ].schedules.length}}</p>
+                                <p>{{ calendarData[(row - 1) * 7  + column - 1 ].dateNum }}</p>
+                                <p>{{ scheduleNumberData[(row - 1) * 7 + column - 1 ].schedules.length}}</p>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="calendar-menu">
+                <p>表示スケジュール</p>
+                <label><input type="radio" value="all" v-model="showSchedules">全て</label>
+                <label><input type="radio" value="personal" v-model="showSchedules">個人スケジュールのみ</label>
+                <label><input type="radio" value="shared" v-model="showSchedules">共有スケジュールのみ</label>
 
                 <form @submit.prevent="createSchedule">
                     <p>{{ selectedDate }}</p>
@@ -222,6 +226,7 @@
                 selectedMonth: null, // 選択中の月(momentオブジェクト)
                 selectedDate: null, // 選択中の日付
                 weeks: 0, // 選択月が何週を跨ぐか
+                showSchedules: 'all', // 表示するスケジュールの種類
                 createScheduleData: {
                     hour: 'unspecified',
                     minute: 'unspecified',
@@ -265,16 +270,49 @@
             }
         },
         computed: {
-            // 選択日のスケジュールデータ
-            selectDateSchedules: function() {
-                for (let i = 0; i < this.calendarData.length; i++){
-                    if (this.selectedDate === this.calendarData[i].date){
-                        return this.calendarData[i].schedules
-                    }
+            // スケジュール数表示用の配列
+            scheduleNumberData: function() {
+                if(this.showSchedules === 'personal'){
+                    return this.calendarData.map((dateData) => {
+                        return {schedules: dateData.schedules.filter((schedule) => {
+                                return schedule.user_id
+                            })}
+                    })
+                } else if(this.showSchedules === 'shared') {
+                    return this.calendarData.map((dateData) => {
+                        return {schedules: dateData.schedules.filter((schedule) => {
+                                return schedule.calendar_name
+                            })}
+                    })
+                } else {
+                    return this.calendarData
                 }
             },
-            datesData: function() {
-                return this.calendarData
+            // 選択日のスケジュールデータ
+            selectDateSchedules: function() {
+                if(this.showSchedules === 'personal'){
+                    for (let i = 0; i < this.calendarData.length; i++){
+                        if (this.selectedDate === this.calendarData[i].date){
+                            return this.calendarData[i].schedules.filter((schedule) =>{
+                                return schedule.user_id
+                            })
+                        }
+                    }
+                } else if(this.showSchedules === 'shared') {
+                    for (let i = 0; i < this.calendarData.length; i++){
+                        if (this.selectedDate === this.calendarData[i].date){
+                            return this.calendarData[i].schedules.filter((schedule) =>{
+                                return schedule.calendar_name
+                            })
+                        }
+                    }
+                } else {
+                    for (let i = 0; i < this.calendarData.length; i++){
+                        if (this.selectedDate === this.calendarData[i].date){
+                            return this.calendarData[i].schedules
+                        }
+                    }
+                }
             },
             deleteData: function () {
                 return {
@@ -300,7 +338,6 @@
             },
             async changeCalendarData() {
                 this.calendarData = []
-                this.schedules = []
                 this.dateLabel = moment(this.selectedMonth).format('YYYY年MM月')
 
                 // 選択月の日数

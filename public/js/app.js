@@ -2789,6 +2789,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2805,6 +2809,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       // 選択中の日付
       weeks: 0,
       // 選択月が何週を跨ぐか
+      showSchedules: 'all',
+      // 表示するスケジュールの種類
       createScheduleData: {
         hour: 'unspecified',
         minute: 'unspecified',
@@ -2848,16 +2854,53 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   computed: {
-    // 選択日のスケジュールデータ
-    selectDateSchedules: function selectDateSchedules() {
-      for (var i = 0; i < this.calendarData.length; i++) {
-        if (this.selectedDate === this.calendarData[i].date) {
-          return this.calendarData[i].schedules;
-        }
+    // スケジュール数表示用の配列
+    scheduleNumberData: function scheduleNumberData() {
+      if (this.showSchedules === 'personal') {
+        return this.calendarData.map(function (dateData) {
+          return {
+            schedules: dateData.schedules.filter(function (schedule) {
+              return schedule.user_id;
+            })
+          };
+        });
+      } else if (this.showSchedules === 'shared') {
+        return this.calendarData.map(function (dateData) {
+          return {
+            schedules: dateData.schedules.filter(function (schedule) {
+              return schedule.calendar_name;
+            })
+          };
+        });
+      } else {
+        return this.calendarData;
       }
     },
-    datesData: function datesData() {
-      return this.calendarData;
+    // 選択日のスケジュールデータ
+    selectDateSchedules: function selectDateSchedules() {
+      if (this.showSchedules === 'personal') {
+        for (var i = 0; i < this.calendarData.length; i++) {
+          if (this.selectedDate === this.calendarData[i].date) {
+            return this.calendarData[i].schedules.filter(function (schedule) {
+              return schedule.user_id;
+            });
+          }
+        }
+      } else if (this.showSchedules === 'shared') {
+        for (var _i = 0; _i < this.calendarData.length; _i++) {
+          if (this.selectedDate === this.calendarData[_i].date) {
+            return this.calendarData[_i].schedules.filter(function (schedule) {
+              return schedule.calendar_name;
+            });
+          }
+        }
+      } else {
+        for (var _i2 = 0; _i2 < this.calendarData.length; _i2++) {
+          if (this.selectedDate === this.calendarData[_i2].date) {
+            return this.calendarData[_i2].schedules;
+          }
+        }
+      }
     },
     deleteData: function deleteData() {
       return {
@@ -2885,14 +2928,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var monthDays, firstDay, i, day, _i, _day, length, _i2, _day2;
+        var monthDays, firstDay, i, day, _i3, _day, length, _i4, _day2;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _this.calendarData = [];
-                _this.schedules = [];
                 _this.dateLabel = moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.selectedMonth).format('YYYY年MM月'); // 選択月の日数
 
                 monthDays = moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.selectedMonth).daysInMonth(); // 選択月初日の曜日
@@ -2911,8 +2953,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 } // 選択月の日付データを配列へ追加
 
 
-                for (_i = 0; _i < monthDays; _i++) {
-                  _day = moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.selectedMonth).startOf('month').add(_i, 'days');
+                for (_i3 = 0; _i3 < monthDays; _i3++) {
+                  _day = moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.selectedMonth).startOf('month').add(_i3, 'days');
 
                   _this.calendarData.push({
                     date: _day.format('YYYY-MM-DD'),
@@ -2922,8 +2964,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 } // 選択月末日より後の日付データを配列へ追加
 
 
-                for (length = _this.calendarData.length, _i2 = 1; length < _this.weeks * 7; length++, _i2++) {
-                  _day2 = moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.selectedMonth).endOf('month').add(_i2, 'days');
+                for (length = _this.calendarData.length, _i4 = 1; length < _this.weeks * 7; length++, _i4++) {
+                  _day2 = moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.selectedMonth).endOf('month').add(_i4, 'days');
 
                   _this.calendarData.push({
                     date: _day2.format('YYYY-MM-DD'),
@@ -2939,7 +2981,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   }
                 });
 
-              case 10:
+              case 9:
               case "end":
                 return _context.stop();
             }
@@ -3268,13 +3310,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       // 時間順に並ぶようにデータを追加
 
 
-      for (var _i3 = 0; _i3 < newSchedules[additionalScheduleDate].length; _i3++) {
-        if (newSchedules[additionalScheduleDate][_i3].time === null) {
+      for (var _i5 = 0; _i5 < newSchedules[additionalScheduleDate].length; _i5++) {
+        if (newSchedules[additionalScheduleDate][_i5].time === null) {
           continue;
         }
 
-        if (newSchedules[additionalScheduleDate][_i3].time >= additionalScheduleTime) {
-          newSchedules[additionalScheduleDate].splice(_i3, 0, additionalSchedule);
+        if (newSchedules[additionalScheduleDate][_i5].time >= additionalScheduleTime) {
+          newSchedules[additionalScheduleDate].splice(_i5, 0, additionalSchedule);
           return newSchedules;
         }
       } // 上記以外の場合最後にデータを追加
@@ -3312,9 +3354,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       var newSchedules = _.cloneDeep(schedulesList);
 
-      for (var _i4 = 0; _i4 < newSchedules[removalScheduleDate].length; _i4++) {
-        if (newSchedules[removalScheduleDate][_i4].id === removalScheduleId) {
-          newSchedules[removalScheduleDate].splice(_i4, 1);
+      for (var _i6 = 0; _i6 < newSchedules[removalScheduleDate].length; _i6++) {
+        if (newSchedules[removalScheduleDate][_i6].id === removalScheduleId) {
+          newSchedules[removalScheduleDate].splice(_i6, 1);
           break;
         }
       } // 変更したスケジュールリストデータを返却
@@ -43266,7 +43308,7 @@ var render = function() {
                     {
                       attrs: {
                         "data-date":
-                          _vm.datesData[(row - 1) * 7 + column - 1].date
+                          _vm.calendarData[(row - 1) * 7 + column - 1].date
                       },
                       on: { click: _vm.changeSelectDate }
                     },
@@ -43274,7 +43316,7 @@ var render = function() {
                       _c("p", [
                         _vm._v(
                           _vm._s(
-                            _vm.datesData[(row - 1) * 7 + column - 1].dateNum
+                            _vm.calendarData[(row - 1) * 7 + column - 1].dateNum
                           )
                         )
                       ]),
@@ -43282,8 +43324,8 @@ var render = function() {
                       _c("p", [
                         _vm._v(
                           _vm._s(
-                            _vm.datesData[(row - 1) * 7 + column - 1].schedules
-                              .length
+                            _vm.scheduleNumberData[(row - 1) * 7 + column - 1]
+                              .schedules.length
                           )
                         )
                       ])
@@ -43299,6 +43341,71 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "calendar-menu" }, [
+        _c("p", [_vm._v("表示スケジュール")]),
+        _vm._v(" "),
+        _c("label", [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.showSchedules,
+                expression: "showSchedules"
+              }
+            ],
+            attrs: { type: "radio", value: "all" },
+            domProps: { checked: _vm._q(_vm.showSchedules, "all") },
+            on: {
+              change: function($event) {
+                _vm.showSchedules = "all"
+              }
+            }
+          }),
+          _vm._v("全て")
+        ]),
+        _vm._v(" "),
+        _c("label", [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.showSchedules,
+                expression: "showSchedules"
+              }
+            ],
+            attrs: { type: "radio", value: "personal" },
+            domProps: { checked: _vm._q(_vm.showSchedules, "personal") },
+            on: {
+              change: function($event) {
+                _vm.showSchedules = "personal"
+              }
+            }
+          }),
+          _vm._v("個人スケジュールのみ")
+        ]),
+        _vm._v(" "),
+        _c("label", [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.showSchedules,
+                expression: "showSchedules"
+              }
+            ],
+            attrs: { type: "radio", value: "shared" },
+            domProps: { checked: _vm._q(_vm.showSchedules, "shared") },
+            on: {
+              change: function($event) {
+                _vm.showSchedules = "shared"
+              }
+            }
+          }),
+          _vm._v("共有スケジュールのみ")
+        ]),
+        _vm._v(" "),
         _c(
           "form",
           {
