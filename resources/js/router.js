@@ -14,6 +14,7 @@ import SharedCalendarList from "./components/pages/personalPages/SharedCalendarL
 import CreateSharedCalendar from "./components/pages/personalPages/CreateSharedCalendar.vue"
 import SearchSharedCalendar from "./components/pages/personalPages/SearchSharedCalendar.vue"
 import ApplicationSharedCalendar from "./components/pages/personalPages/ApplicationSharedCalendar.vue"
+import DeleteAccount from "./components/pages/personalPages/DeleteAccount.vue"
 
 import SharedCalendar from "./components/pages/sharedCalendarPages/SharedCalendar.vue"
 import SharedCalendarIndex from "./components/pages/sharedCalendarPages/SharedCalendarIndex.vue"
@@ -106,10 +107,15 @@ const routes = [
                 component: ApplicationSharedCalendar,
             },
             {
-                path: 'user-info',
+                path: 'account/info',
                 name: 'userInfo',
                 component: UserInfo,
             },
+            {
+                path: 'account/delete',
+                name: 'deleteAccount',
+                component: DeleteAccount,
+            }
         ]
     },
     {

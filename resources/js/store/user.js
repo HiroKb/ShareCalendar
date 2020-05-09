@@ -187,6 +187,22 @@ const actions = {
             context.commit('error/setCode', response.status, { root: true})
         }
     },
+    async deleteAccount(context){
+        // apiStatusの初期化
+        context.commit('setApiStatus', null)
+        const response = await axios.delete('/api/users')
+
+        // 通信成功時
+        if(response.status === SUCCESS) {
+            context.commit('setApiStatus', true)
+            context.commit('setUser', null)
+            return false
+        }
+
+        // エラー時
+        context.commit('setApiStatus', false)
+        context.commit('error/setCode', response.status, {root: true })
+    }
 
 }
 

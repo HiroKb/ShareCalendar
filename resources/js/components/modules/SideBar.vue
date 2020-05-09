@@ -12,6 +12,7 @@
         <router-link :to="{name: 'searchSharedCalendar'}">共有カレンダー検索</router-link>
 
         <router-link :to="{name: 'userInfo'}">ユーザー情報/変更</router-link>
+        <router-link :to="{name: 'deleteAccount'}">アカウント削除</router-link>
         <button @click="logout">Logout</button>
     </div>
 </template>

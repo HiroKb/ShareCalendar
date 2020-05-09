@@ -2005,6 +2005,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SideBar",
@@ -2553,6 +2554,81 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   created: function created() {}
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/personalPages/DeleteAccount.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/personalPages/DeleteAccount.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "DeleteAccount",
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])({
+    apiStatus: function apiStatus(state) {
+      return state.user.apiStatus;
+    } // API通信成否
+
+  })),
+  methods: {
+    deleteAccount: function deleteAccount() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return _this.$store.dispatch('user/deleteAccount');
+
+              case 2:
+                // 通信成功時
+                if (_this.apiStatus) {
+                  _this.$router.push({
+                    name: 'welcome'
+                  });
+                }
+
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    }
+  }
 });
 
 /***/ }),
@@ -42889,6 +42965,10 @@ var render = function() {
         _vm._v("ユーザー情報/変更")
       ]),
       _vm._v(" "),
+      _c("router-link", { attrs: { to: { name: "deleteAccount" } } }, [
+        _vm._v("アカウント削除")
+      ]),
+      _vm._v(" "),
       _c("button", { on: { click: _vm.logout } }, [_vm._v("Logout")])
     ],
     1
@@ -43327,6 +43407,47 @@ var render = function() {
         ]
       )
     ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/personalPages/DeleteAccount.vue?vue&type=template&id=0c8bb5f1&scoped=true&":
+/*!************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/personalPages/DeleteAccount.vue?vue&type=template&id=0c8bb5f1&scoped=true& ***!
+  \************************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "contents" }, [
+    _c(
+      "form",
+      {
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.deleteAccount($event)
+          }
+        }
+      },
+      [
+        _c("p", [_vm._v("アカウントを削除しますか？")]),
+        _vm._v(" "),
+        _c("button", [_vm._v("削除")])
+      ]
+    )
   ])
 }
 var staticRenderFns = []
@@ -63159,6 +63280,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/pages/personalPages/DeleteAccount.vue":
+/*!***********************************************************************!*\
+  !*** ./resources/js/components/pages/personalPages/DeleteAccount.vue ***!
+  \***********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DeleteAccount_vue_vue_type_template_id_0c8bb5f1_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DeleteAccount.vue?vue&type=template&id=0c8bb5f1&scoped=true& */ "./resources/js/components/pages/personalPages/DeleteAccount.vue?vue&type=template&id=0c8bb5f1&scoped=true&");
+/* harmony import */ var _DeleteAccount_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DeleteAccount.vue?vue&type=script&lang=js& */ "./resources/js/components/pages/personalPages/DeleteAccount.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _DeleteAccount_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _DeleteAccount_vue_vue_type_template_id_0c8bb5f1_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _DeleteAccount_vue_vue_type_template_id_0c8bb5f1_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "0c8bb5f1",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/pages/personalPages/DeleteAccount.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/pages/personalPages/DeleteAccount.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************!*\
+  !*** ./resources/js/components/pages/personalPages/DeleteAccount.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DeleteAccount_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./DeleteAccount.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/personalPages/DeleteAccount.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DeleteAccount_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/pages/personalPages/DeleteAccount.vue?vue&type=template&id=0c8bb5f1&scoped=true&":
+/*!******************************************************************************************************************!*\
+  !*** ./resources/js/components/pages/personalPages/DeleteAccount.vue?vue&type=template&id=0c8bb5f1&scoped=true& ***!
+  \******************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DeleteAccount_vue_vue_type_template_id_0c8bb5f1_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./DeleteAccount.vue?vue&type=template&id=0c8bb5f1&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/personalPages/DeleteAccount.vue?vue&type=template&id=0c8bb5f1&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DeleteAccount_vue_vue_type_template_id_0c8bb5f1_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DeleteAccount_vue_vue_type_template_id_0c8bb5f1_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/pages/personalPages/MyCalendar.vue":
 /*!********************************************************************!*\
   !*** ./resources/js/components/pages/personalPages/MyCalendar.vue ***!
@@ -64136,18 +64326,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_pages_personalPages_CreateSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/pages/personalPages/CreateSharedCalendar.vue */ "./resources/js/components/pages/personalPages/CreateSharedCalendar.vue");
 /* harmony import */ var _components_pages_personalPages_SearchSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/pages/personalPages/SearchSharedCalendar.vue */ "./resources/js/components/pages/personalPages/SearchSharedCalendar.vue");
 /* harmony import */ var _components_pages_personalPages_ApplicationSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/pages/personalPages/ApplicationSharedCalendar.vue */ "./resources/js/components/pages/personalPages/ApplicationSharedCalendar.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendar_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendar.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendar.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarIndex_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarIndex.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarIndex.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarMembers_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarMembers.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarMembers.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarApplicants_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarApplicants.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarApplicants.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarInfo_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarInfo.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarInfo.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_UnShareCalendar_vue__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/UnShareCalendar.vue */ "./resources/js/components/pages/sharedCalendarPages/UnShareCalendar.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_DeleteSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/DeleteSharedCalendar.vue */ "./resources/js/components/pages/sharedCalendarPages/DeleteSharedCalendar.vue");
-/* harmony import */ var _components_pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/pages/errors/SystemError.vue */ "./resources/js/components/pages/errors/SystemError.vue");
-/* harmony import */ var _components_pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/pages/errors/NotFound.vue */ "./resources/js/components/pages/errors/NotFound.vue");
+/* harmony import */ var _components_pages_personalPages_DeleteAccount_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/pages/personalPages/DeleteAccount.vue */ "./resources/js/components/pages/personalPages/DeleteAccount.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendar_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendar.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendar.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarIndex_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarIndex.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarIndex.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarMembers_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarMembers.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarMembers.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarApplicants_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarApplicants.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarApplicants.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarInfo_vue__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarInfo.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarInfo.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_UnShareCalendar_vue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/UnShareCalendar.vue */ "./resources/js/components/pages/sharedCalendarPages/UnShareCalendar.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_DeleteSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/DeleteSharedCalendar.vue */ "./resources/js/components/pages/sharedCalendarPages/DeleteSharedCalendar.vue");
+/* harmony import */ var _components_pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/pages/errors/SystemError.vue */ "./resources/js/components/pages/errors/SystemError.vue");
+/* harmony import */ var _components_pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/pages/errors/NotFound.vue */ "./resources/js/components/pages/errors/NotFound.vue");
 
 
  // ページコンポーネント
+
 
 
 
@@ -64244,13 +64436,17 @@ var routes = [{
     props: true,
     component: _components_pages_personalPages_ApplicationSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_12__["default"]
   }, {
-    path: 'user-info',
+    path: 'account/info',
     name: 'userInfo',
     component: _components_pages_personalPages_UserInfo_vue__WEBPACK_IMPORTED_MODULE_7__["default"]
+  }, {
+    path: 'account/delete',
+    name: 'deleteAccount',
+    component: _components_pages_personalPages_DeleteAccount_vue__WEBPACK_IMPORTED_MODULE_13__["default"]
   }]
 }, {
   path: '/shared-calendar/:sharedCalendarId',
-  component: _components_pages_sharedCalendarPages_SharedCalendar_vue__WEBPACK_IMPORTED_MODULE_13__["default"],
+  component: _components_pages_sharedCalendarPages_SharedCalendar_vue__WEBPACK_IMPORTED_MODULE_14__["default"],
   props: true,
   beforeEnter: function beforeEnter(to, from, next) {
     if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['user/loginCheck']) {
@@ -64262,34 +64458,34 @@ var routes = [{
   children: [{
     path: 'calendar',
     name: 'sharedCalendarIndex',
-    component: _components_pages_sharedCalendarPages_SharedCalendarIndex_vue__WEBPACK_IMPORTED_MODULE_14__["default"]
+    component: _components_pages_sharedCalendarPages_SharedCalendarIndex_vue__WEBPACK_IMPORTED_MODULE_15__["default"]
   }, {
     path: 'members',
     name: 'sharedCalendarMembers',
-    component: _components_pages_sharedCalendarPages_SharedCalendarMembers_vue__WEBPACK_IMPORTED_MODULE_15__["default"]
+    component: _components_pages_sharedCalendarPages_SharedCalendarMembers_vue__WEBPACK_IMPORTED_MODULE_16__["default"]
   }, {
     path: 'applicants',
     name: 'sharedCalendarApplicants',
-    component: _components_pages_sharedCalendarPages_SharedCalendarApplicants_vue__WEBPACK_IMPORTED_MODULE_16__["default"]
+    component: _components_pages_sharedCalendarPages_SharedCalendarApplicants_vue__WEBPACK_IMPORTED_MODULE_17__["default"]
   }, {
     path: 'info',
     name: 'sharedCalendarInfo',
-    component: _components_pages_sharedCalendarPages_SharedCalendarInfo_vue__WEBPACK_IMPORTED_MODULE_17__["default"]
+    component: _components_pages_sharedCalendarPages_SharedCalendarInfo_vue__WEBPACK_IMPORTED_MODULE_18__["default"]
   }, {
     path: 'unshare',
     name: 'unShareCalendar',
-    component: _components_pages_sharedCalendarPages_UnShareCalendar_vue__WEBPACK_IMPORTED_MODULE_18__["default"]
+    component: _components_pages_sharedCalendarPages_UnShareCalendar_vue__WEBPACK_IMPORTED_MODULE_19__["default"]
   }, {
     path: 'delete',
     name: 'deleteSharedCalendar',
-    component: _components_pages_sharedCalendarPages_DeleteSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_19__["default"]
+    component: _components_pages_sharedCalendarPages_DeleteSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_20__["default"]
   }]
 }, {
   path: '/500',
-  component: _components_pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_20__["default"]
+  component: _components_pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_21__["default"]
 }, {
   path: '/404',
-  component: _components_pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_21__["default"]
+  component: _components_pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_22__["default"]
 }]; // VueRouterインスタンスを作成
 
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
@@ -64720,6 +64916,45 @@ var actions = {
           }
         }
       }, _callee7);
+    }))();
+  },
+  deleteAccount: function deleteAccount(context) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8() {
+      var response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
+        while (1) {
+          switch (_context8.prev = _context8.next) {
+            case 0:
+              // apiStatusの初期化
+              context.commit('setApiStatus', null);
+              _context8.next = 3;
+              return axios["delete"]('/api/users');
+
+            case 3:
+              response = _context8.sent;
+
+              if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
+                _context8.next = 8;
+                break;
+              }
+
+              context.commit('setApiStatus', true);
+              context.commit('setUser', null);
+              return _context8.abrupt("return", false);
+
+            case 8:
+              // エラー時
+              context.commit('setApiStatus', false);
+              context.commit('error/setCode', response.status, {
+                root: true
+              });
+
+            case 10:
+            case "end":
+              return _context8.stop();
+          }
+        }
+      }, _callee8);
     }))();
   }
 };
