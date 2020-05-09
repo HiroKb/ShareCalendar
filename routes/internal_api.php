@@ -20,6 +20,8 @@ Route::patch('/users/name', 'UserController@updateName');
 Route::patch('/users/email', 'UserController@updateEmail');
 // ユーザーパスワード変更
 Route::patch('/users/password', 'UserController@updatePassword');
+// ユーザーデータ削除(退会)
+Route::delete('/users', 'UserController@destroy');
 
 
 //登録スケジュール取得
