@@ -7,6 +7,9 @@
                 <router-link :to="{name: 'sharedCalendarIndex', params:{sharedCalendarId: sharedCalendarId}}" class="shared-calendar-link">
                     カレンダー
                 </router-link>
+                <router-link :to="{name: 'sharedCalendarChat', params:{sharedCalendarId: sharedCalendarId}}" class="shared-calendar-link">
+                    チャット
+                </router-link>
                 <router-link :to="{name: 'sharedCalendarMembers', params:{sharedCalendarId: sharedCalendarId}}" class="shared-calendar-link">
                     共有メンバー一覧
                 </router-link>
@@ -27,6 +30,7 @@
         </div>
         <router-view :shared-calendar-id="sharedCalendarId"
                      :shared-calendar-data="sharedCalendarData"
+                     :chat-messages="chatMessages"
                      :shared-calendar-members="sharedCalendarMembers"
                      :shared-calendar-applicants="sharedCalendarApplicants"
                      :shared-schedules-data="sharedSchedulesData"
@@ -35,6 +39,7 @@
                      @rejectApplication="removeApplicants"
                      @changeCalendarData="changeCalendarData"
                      @changeSchedulesData="changeSchedulesData"
+                     @changeChatMessagesData="changeChatMessagesData"
         >
         </router-view>
     </div>
@@ -56,6 +61,7 @@
                     admin_id: '',
                     calendar_name: ''
                 },
+                chatMessages: [],
                 sharedCalendarMembers: [],
                 sharedCalendarApplicants: [],
                 sharedSchedulesData: {
@@ -83,6 +89,16 @@
 
                 if(response.status === SUCCESS) {
                     this.sharedCalendarData = response.data
+                    return false
+                }
+
+                this.$store.commit('error/setCode', response.status)
+            },
+            async fetchChatMessages() {
+                const response = await axios.get('/api/shared-calendars/' + this.sharedCalendarId + '/chat/messages')
+
+                if(response.status === SUCCESS) {
+                    this.chatMessages = response.data
                     return false
                 }
 
@@ -147,10 +163,14 @@
                     this.sharedSchedulesData.schedules = data.schedules
                 }
             },
+            changeChatMessagesData(data) {
+                this.chatMessages = data
+            },
         },
         created() {
             Promise.all([
                 this.fetchSharedCalendar(),
+                this.fetchChatMessages(),
                 this.fetchSharedCalendarMembers()
             ]).then(x => {
                 if (this.adminFlg) {

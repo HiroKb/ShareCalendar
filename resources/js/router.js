@@ -18,6 +18,7 @@ import DeleteAccount from "./components/pages/personalPages/DeleteAccount.vue"
 
 import SharedCalendar from "./components/pages/sharedCalendarPages/SharedCalendar.vue"
 import SharedCalendarIndex from "./components/pages/sharedCalendarPages/SharedCalendarIndex.vue"
+import SharedCalendarChat from "./components/pages/sharedCalendarPages/SharedCalendarChat.vue"
 import SharedCalendarMembers from "./components/pages/sharedCalendarPages/SharedCalendarMembers.vue"
 import SharedCalendarApplicants from "./components/pages/sharedCalendarPages/SharedCalendarApplicants.vue"
 import SharedCalendarInfo from "./components/pages/sharedCalendarPages/SharedCalendarInfo.vue"
@@ -134,6 +135,11 @@ const routes = [
                 path: 'calendar',
                 name: 'sharedCalendarIndex',
                 component: SharedCalendarIndex,
+            },
+            {
+                path: 'chat',
+                name: 'sharedCalendarChat',
+                component: SharedCalendarChat
             },
             {
                 path: 'members',

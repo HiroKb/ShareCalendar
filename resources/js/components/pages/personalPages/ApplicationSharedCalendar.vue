@@ -1,22 +1,17 @@
 <template>
-    <div>
-        <div class="sidebar-wrap">
-            <SideBar />
-        </div>
-        <div class="contents">
-            <h1>JoinSharedCalendar</h1>
-            <template v-if="sharedCalendarData.status">
+    <div class="contents">
+        <h1>JoinSharedCalendar</h1>
+        <template v-if="sharedCalendarData.status">
 
-                <form v-if="sharedCalendarData.status === 'NotShared'" @submit.prevent="applicationSharedCalendar">
-                    <p>管理者: {{sharedCalendarData.admin_name}}</p>
-                    <button type="submit">共有申請</button>
-                </form>
-                <p v-else-if="sharedCalendarData.status === 'Shared'">共有済みのカレンダーです。</p>
-                <p v-else-if="sharedCalendarData.status === 'Applied'">共有申請済みのカレンダーです。</p>
-                <p v-else>共有カレンダーが見つかりません。</p>
-            </template>
-            <p v-else>読み込み中</p>
-        </div>
+            <form v-if="sharedCalendarData.status === 'NotShared'" @submit.prevent="applicationSharedCalendar">
+                <p>管理者: {{sharedCalendarData.admin_name}}</p>
+                <button type="submit">共有申請</button>
+            </form>
+            <p v-else-if="sharedCalendarData.status === 'Shared'">共有済みのカレンダーです。</p>
+            <p v-else-if="sharedCalendarData.status === 'Applied'">共有申請済みのカレンダーです。</p>
+            <p v-else>共有カレンダーが見つかりません。</p>
+        </template>
+        <p v-else>読み込み中</p>
     </div>
 </template>
 
