@@ -41,4 +41,9 @@ class SharedCalendar extends Model
     {
         return $this->hasMany('App\SharedSchedule', 'calendar_id', 'id');
     }
+
+    public function chatMessages()
+    {
+        return $this->hasMany('App\ChatMessage', 'calendar_id', 'id');
+    }
 }

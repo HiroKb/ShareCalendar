@@ -68,3 +68,6 @@ Route::delete('/shared-calendars/{sharedCalendar}/schedules/{sharedSchedule}', '
 Route::patch('/shared-calendars/{sharedCalendar}/schedules/{sharedSchedule}', 'SharedScheduleController@update');
 // 共有スケジュールリスト取得
 Route::get('/shared-calendars/{sharedCalendar}/schedules/{from}/{until}', 'SharedScheduleController@list');
+
+// チャットメッセージ作成
+Route::post('/shared-calendars/{sharedCalendar}/chat/messages', 'ChatMessageController@create');
