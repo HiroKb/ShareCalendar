@@ -1,17 +1,23 @@
 <template>
     <div>
         <RouterView />
+        <loading-screen v-show="loadingFlg"></loading-screen>
     </div>
 </template>
 
 <script>
     import { mapState } from 'vuex'
     import {INTERNAL_SERVER_ERROR, NOT_FOUND} from './util'
+    import LoadingScreen from "./components/modules/LoadingScreen.vue"
 
     export default {
+        components: {
+            LoadingScreen
+        },
         computed: {
             ...mapState({
-                errorCode: state => state.error.code
+                errorCode: state => state.error.code,
+                loadingFlg: state => state.loading.loadingFlg
             })
         },
         watch: {
