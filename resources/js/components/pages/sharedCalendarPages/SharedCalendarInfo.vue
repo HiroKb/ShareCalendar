@@ -69,7 +69,10 @@
         },
         methods: {
             async updateCalendarName() {
+                this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.patch('/api/shared-calendars/' + this.sharedCalendarData.id + '/name', this.updateCalendarNameForm.data)
+                this.$store.commit('loading/setLoadingFlg', false)
+
                 if (response.status === SUCCESS) {
                     this.$emit('changeCalendarData', response.data)
                     this.hideModal()
@@ -82,7 +85,9 @@
                 this.$store.commit('error/setCode', response.status)
             },
             async updateSearchId(){
+                this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.patch('/api/shared-calendars/' + this.sharedCalendarData.id + '/search-id')
+                this.$store.commit('loading/setLoadingFlg', false)
 
                 if(response.status === SUCCESS) {
 

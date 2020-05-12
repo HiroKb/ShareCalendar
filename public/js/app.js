@@ -2410,14 +2410,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
+                _this.$store.commit('loading/setLoadingFlg', true);
+
+                _context.next = 3;
                 return axios.put('/api/shared-calendars/' + _this.sharedCalendarData.search_id + '/applications');
 
-              case 2:
+              case 3:
                 response = _context.sent;
 
+                _this.$store.commit('loading/setLoadingFlg', false);
+
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context.next = 6;
+                  _context.next = 8;
                   break;
                 }
 
@@ -2427,10 +2431,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 6:
+              case 8:
                 _this.$store.commit('error/setCode', response.status);
 
-              case 7:
+              case 9:
               case "end":
                 return _context.stop();
             }
@@ -2447,24 +2451,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
+                _this2.$store.commit('loading/setLoadingFlg', true);
+
+                _context2.next = 3;
                 return axios.get('/api/shared-calendars/' + _this2.searchId + '/search');
 
-              case 2:
+              case 3:
                 response = _context2.sent;
 
+                _this2.$store.commit('loading/setLoadingFlg', false);
+
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                  _context2.next = 6;
+                  _context2.next = 8;
                   break;
                 }
 
                 _this2.sharedCalendarData = response.data;
                 return _context2.abrupt("return", false);
 
-              case 6:
+              case 8:
                 _this2.$store.commit('error/setCode', response.status);
 
-              case 7:
+              case 9:
               case "end":
                 return _context2.stop();
             }
@@ -2554,14 +2562,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 5:
-                _context.next = 7;
+                _this.$store.commit('loading/setLoadingFlg', true);
+
+                _context.next = 8;
                 return axios.post('/api/shared-calendars', _this.createShareCalendarData);
 
-              case 7:
+              case 8:
                 response = _context.sent;
 
+                _this.$store.commit('loading/setLoadingFlg', false);
+
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context.next = 11;
+                  _context.next = 13;
                   break;
                 }
 
@@ -2574,14 +2586,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 11:
+              case 13:
                 if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["VALIDATION_ERROR"]) {
                   _this.createError.errors = response.data.errors;
                 }
 
                 _this.$store.commit('error/setCode', response.status);
 
-              case 13:
+              case 15:
               case "end":
                 return _context.stop();
             }
@@ -3040,76 +3052,60 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     changeCalendarData: function changeCalendarData() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var monthDays, firstDay, i, day, _i3, _day, length, _i4, _day2;
+      this.calendarData = [];
+      this.dateLabel = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).format('YYYY年MM月'); // 選択月の日数
 
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _this.calendarData = [];
-                _this.dateLabel = moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.selectedMonth).format('YYYY年MM月'); // 選択月の日数
+      var monthDays = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).daysInMonth(); // 選択月初日の曜日
 
-                monthDays = moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.selectedMonth).daysInMonth(); // 選択月初日の曜日
+      var firstDay = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).startOf('month').day();
+      this.weeks = Math.ceil((monthDays + firstDay) / 7); // 選択月初日より前の日付データ(選択月前月)を配列へ追加
 
-                firstDay = moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.selectedMonth).startOf('month').day();
-                _this.weeks = Math.ceil((monthDays + firstDay) / 7); // 選択月初日より前の日付データ(選択月前月)を配列へ追加
-
-                for (i = 0; i < firstDay; i++) {
-                  day = moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.selectedMonth).startOf('month').subtract(i + 1, 'days');
-
-                  _this.calendarData.unshift({
-                    date: day.format('YYYY-MM-DD'),
-                    dateNum: day.date(),
-                    schedules: []
-                  });
-                } // 選択月の日付データを配列へ追加
+      for (var i = 0; i < firstDay; i++) {
+        var day = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).startOf('month').subtract(i + 1, 'days');
+        this.calendarData.unshift({
+          date: day.format('YYYY-MM-DD'),
+          dateNum: day.date(),
+          schedules: []
+        });
+      } // 選択月の日付データを配列へ追加
 
 
-                for (_i3 = 0; _i3 < monthDays; _i3++) {
-                  _day = moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.selectedMonth).startOf('month').add(_i3, 'days');
+      for (var _i3 = 0; _i3 < monthDays; _i3++) {
+        var _day = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).startOf('month').add(_i3, 'days');
 
-                  _this.calendarData.push({
-                    date: _day.format('YYYY-MM-DD'),
-                    dateNum: _day.date(),
-                    schedules: []
-                  });
-                } // 選択月末日より後の日付データを配列へ追加
-
-
-                for (length = _this.calendarData.length, _i4 = 1; length < _this.weeks * 7; length++, _i4++) {
-                  _day2 = moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.selectedMonth).endOf('month').add(_i4, 'days');
-
-                  _this.calendarData.push({
-                    date: _day2.format('YYYY-MM-DD'),
-                    dateNum: _day2.date(),
-                    schedules: []
-                  });
-                } // 日付データ配列にスケジュールデータを追加
+        this.calendarData.push({
+          date: _day.format('YYYY-MM-DD'),
+          dateNum: _day.date(),
+          schedules: []
+        });
+      } // 選択月末日より後の日付データを配列へ追加
 
 
-                _this.calendarData.forEach(function (dateData) {
-                  if (_this.schedulesData.schedules[dateData.date]) {
-                    dateData.schedules = _.cloneDeep(_this.schedulesData.schedules[dateData.date]);
-                  }
-                });
+      for (var length = this.calendarData.length, _i4 = 1; length < this.weeks * 7; length++, _i4++) {
+        var _day2 = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).endOf('month').add(_i4, 'days');
 
-              case 9:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+        this.calendarData.push({
+          date: _day2.format('YYYY-MM-DD'),
+          dateNum: _day2.date(),
+          schedules: []
+        });
+      } // 日付データ配列にスケジュールデータを追加
+
+
+      this.calendarData.forEach(function (dateData) {
+        if (_this.schedulesData.schedules[dateData.date]) {
+          dateData.schedules = _.cloneDeep(_this.schedulesData.schedules[dateData.date]);
+        }
+      });
     },
     fetchSchedules: function fetchSchedules(year) {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
         var firstDay, firstDayWeek, lastDay, lastDayWeek, from, until, response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context.prev = _context.next) {
               case 0:
                 firstDay = moment__WEBPACK_IMPORTED_MODULE_1___default()().year(year).startOf('year');
                 firstDayWeek = firstDay.day();
@@ -3117,14 +3113,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 lastDayWeek = lastDay.day();
                 from = firstDay.subtract(firstDayWeek, 'day').format('YYYY-MM-DD');
                 until = lastDay.add(6 - lastDayWeek, 'day').format('YYYY-MM-D');
-                _context2.next = 8;
+
+                _this2.$store.commit('loading/setLoadingFlg', true);
+
+                _context.next = 9;
                 return axios.get('/api/schedules/' + from + '/' + until);
 
-              case 8:
-                response = _context2.sent;
+              case 9:
+                response = _context.sent;
+
+                _this2.$store.commit('loading/setLoadingFlg', false);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["SUCCESS"])) {
-                  _context2.next = 12;
+                  _context.next = 14;
                   break;
                 }
 
@@ -3133,28 +3134,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   schedules: response.data
                 });
 
-                return _context2.abrupt("return", false);
+                return _context.abrupt("return", false);
 
-              case 12:
+              case 14:
                 _this2.$store.commit('error/setCode', response.status);
 
-              case 13:
+              case 15:
               case "end":
-                return _context2.stop();
+                return _context.stop();
             }
           }
-        }, _callee2);
+        }, _callee);
       }))();
     },
     // スケジュール登録
     createSchedule: function createSchedule() {
       var _this3 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
         var time, description, data, response, newSchedules;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
                 _this3.createError.errorFlg = false;
                 _this3.createError.errors = {}; // 入力値が不正な場合
@@ -3175,11 +3176,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }
 
                 if (!_this3.createError.errorFlg) {
-                  _context3.next = 7;
+                  _context2.next = 7;
                   break;
                 }
 
-                return _context3.abrupt("return", false);
+                return _context2.abrupt("return", false);
 
               case 7:
                 // postするデータを作成
@@ -3191,14 +3192,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   title: _this3.createScheduleData.title,
                   description: description
                 };
-                _context3.next = 12;
+
+                _this3.$store.commit('loading/setLoadingFlg', true);
+
+                _context2.next = 13;
                 return axios.post('/api/schedules', data);
 
-              case 12:
-                response = _context3.sent;
+              case 13:
+                response = _context2.sent;
+
+                _this3.$store.commit('loading/setLoadingFlg', false);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["CREATED"])) {
-                  _context3.next = 18;
+                  _context2.next = 20;
                   break;
                 }
 
@@ -3215,36 +3221,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   title: '',
                   description: ''
                 };
-                return _context3.abrupt("return", false);
+                return _context2.abrupt("return", false);
 
-              case 18:
+              case 20:
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["VALIDATION_ERROR"])) {
-                  _context3.next = 21;
+                  _context2.next = 23;
                   break;
                 }
 
                 _this3.createError.errors = response.data.errors;
-                return _context3.abrupt("return", false);
+                return _context2.abrupt("return", false);
 
-              case 21:
+              case 23:
                 _this3.$store.commit('error/setCode', response.status);
 
-              case 22:
+              case 24:
               case "end":
-                return _context3.stop();
+                return _context2.stop();
             }
           }
-        }, _callee3);
+        }, _callee2);
       }))();
     },
     updateSchedule: function updateSchedule() {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
         var time, description, data, response, deletedSchedules, newSchedules;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
                 _this4.editError.errorFlg = false;
                 _this4.editError.errors = {}; // 入力値が不正な場合
@@ -3265,11 +3271,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }
 
                 if (!_this4.editError.errorFlg) {
-                  _context4.next = 7;
+                  _context3.next = 7;
                   break;
                 }
 
-                return _context4.abrupt("return", false);
+                return _context3.abrupt("return", false);
 
               case 7:
                 // postするデータを作成
@@ -3280,14 +3286,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   title: _this4.editForm.scheduleData.title,
                   description: description
                 };
-                _context4.next = 12;
+
+                _this4.$store.commit('loading/setLoadingFlg', true);
+
+                _context3.next = 13;
                 return axios.patch('/api/schedules/' + _this4.editForm.scheduleData.id, data);
 
-              case 12:
-                response = _context4.sent;
+              case 13:
+                response = _context3.sent;
+
+                _this4.$store.commit('loading/setLoadingFlg', false);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["SUCCESS"])) {
-                  _context4.next = 19;
+                  _context3.next = 21;
                   break;
                 }
 
@@ -3300,54 +3311,58 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this4.hideModal();
 
-                return _context4.abrupt("return", false);
+                return _context3.abrupt("return", false);
 
-              case 19:
+              case 21:
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["VALIDATION_ERROR"])) {
-                  _context4.next = 22;
+                  _context3.next = 24;
                   break;
                 }
 
                 _this4.editError.errors = response.data.errors;
-                return _context4.abrupt("return", false);
+                return _context3.abrupt("return", false);
 
-              case 22:
+              case 24:
                 _this4.$store.commit('error/setCode', response.status);
 
-              case 23:
+              case 25:
               case "end":
-                return _context4.stop();
+                return _context3.stop();
             }
           }
-        }, _callee4);
+        }, _callee3);
       }))();
     },
     // スケジュールの削除
     deleteSchedule: function deleteSchedule() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
         var response, newSchedules;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
           while (1) {
-            switch (_context5.prev = _context5.next) {
+            switch (_context4.prev = _context4.next) {
               case 0:
                 if (_this5.deleteForm.scheduleData) {
-                  _context5.next = 2;
+                  _context4.next = 2;
                   break;
                 }
 
-                return _context5.abrupt("return", false);
+                return _context4.abrupt("return", false);
 
               case 2:
-                _context5.next = 4;
+                _this5.$store.commit('loading/setLoadingFlg', true);
+
+                _context4.next = 5;
                 return axios["delete"]('/api/schedules/' + _this5.deleteForm.scheduleData.id);
 
-              case 4:
-                response = _context5.sent;
+              case 5:
+                response = _context4.sent;
+
+                _this5.$store.commit('loading/setLoadingFlg', false);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["SUCCESS"])) {
-                  _context5.next = 10;
+                  _context4.next = 12;
                   break;
                 }
 
@@ -3360,17 +3375,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this5.hideModal();
 
-                return _context5.abrupt("return", false);
+                return _context4.abrupt("return", false);
 
-              case 10:
+              case 12:
                 _this5.$store.commit('error/setCode', response.status);
 
-              case 11:
+              case 13:
               case "end":
-                return _context5.stop();
+                return _context4.stop();
             }
           }
-        }, _callee5);
+        }, _callee4);
       }))();
     },
     addScheduleData: function addScheduleData(additionalSchedule, calendarData, schedulesList) {
@@ -3530,20 +3545,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   watch: {
     selectedMonth: function () {
-      var _selectedMonth = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+      var _selectedMonth = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
         var selectedYear;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context6.prev = _context6.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
                 selectedYear = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.selectedMonth).format('YYYY');
 
                 if (!(this.schedulesData.schedulesYear !== selectedYear)) {
-                  _context6.next = 4;
+                  _context5.next = 4;
                   break;
                 }
 
-                _context6.next = 4;
+                _context5.next = 4;
                 return this.fetchSchedules(selectedYear);
 
               case 4:
@@ -3551,10 +3566,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 5:
               case "end":
-                return _context6.stop();
+                return _context5.stop();
             }
           }
-        }, _callee6, this);
+        }, _callee5, this);
       }));
 
       function selectedMonth() {
@@ -3685,14 +3700,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -3724,43 +3731,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   methods: {
     searchSharedCalendar: function searchSharedCalendar() {
-      var _this = this;
+      this.searchError.errors = {};
+      this.searchError.errorFlg = false;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _this.searchError.errors = {};
-                _this.searchError.errorFlg = false;
+      if (!this.searchSharedCalendarData.search_id) {
+        this.searchError.errors.search_id = ['検索IDを入力してください。'];
+        this.searchError.errorFlg = true;
+      }
 
-                if (!_this.searchSharedCalendarData.search_id) {
-                  _this.searchError.errors.search_id = ['検索IDを入力してください。'];
-                  _this.searchError.errorFlg = true;
-                }
+      if (this.searchError.errorFlg) {
+        return false;
+      }
 
-                if (!_this.searchError.errorFlg) {
-                  _context.next = 5;
-                  break;
-                }
-
-                return _context.abrupt("return", false);
-
-              case 5:
-                _this.$router.push({
-                  name: 'applicationSharedCalendar',
-                  params: {
-                    searchId: _this.searchSharedCalendarData.search_id
-                  }
-                });
-
-              case 6:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      this.$router.push({
+        name: 'applicationSharedCalendar',
+        params: {
+          searchId: this.searchSharedCalendarData.search_id
+        }
+      });
     }
   }
 });
@@ -4087,14 +4075,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
+                _this.$store.commit('loading/setLoadingFlg', true);
+
+                _context.next = 3;
                 return axios["delete"]('/api/shared-calendars/' + _this.sharedCalendarData.id);
 
-              case 2:
+              case 3:
                 response = _context.sent;
 
+                _this.$store.commit('loading/setLoadingFlg', false);
+
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                  _context.next = 6;
+                  _context.next = 8;
                   break;
                 }
 
@@ -4104,10 +4096,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 6:
+              case 8:
                 _this.$store.commit('error/setCode', response.status);
 
-              case 7:
+              case 9:
               case "end":
                 return _context.stop();
             }
@@ -4568,16 +4560,21 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 idList = applicantsList.map(function (applicant) {
                   return applicant.id;
                 });
-                _context.next = 5;
+
+                _this.$store.commit('loading/setLoadingFlg', true);
+
+                _context.next = 6;
                 return axios.put('/api/shared-calendars/' + _this.sharedCalendarData.id + '/members', {
                   'id_list': idList
                 });
 
-              case 5:
+              case 6:
                 response = _context.sent;
 
+                _this.$store.commit('loading/setLoadingFlg', false);
+
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context.next = 10;
+                  _context.next = 12;
                   break;
                 }
 
@@ -4587,10 +4584,10 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
                 return _context.abrupt("return", false);
 
-              case 10:
+              case 12:
                 _this.$store.commit('error/setCode', response.status);
 
-              case 11:
+              case 13:
               case "end":
                 return _context.stop();
             }
@@ -4620,16 +4617,21 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                     return applicant.id;
                   })
                 };
-                _context2.next = 5;
+
+                _this2.$store.commit('loading/setLoadingFlg', true);
+
+                _context2.next = 6;
                 return axios["delete"]('/api/shared-calendars/' + _this2.sharedCalendarData.id + '/applications', {
                   data: idList
                 });
 
-              case 5:
+              case 6:
                 response = _context2.sent;
 
+                _this2.$store.commit('loading/setLoadingFlg', false);
+
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                  _context2.next = 10;
+                  _context2.next = 12;
                   break;
                 }
 
@@ -4639,10 +4641,10 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
                 return _context2.abrupt("return", false);
 
-              case 10:
+              case 12:
                 _this2.$store.commit('error/setCode', response.status);
 
-              case 11:
+              case 13:
               case "end":
                 return _context2.stop();
             }
@@ -4784,14 +4786,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 return _context.abrupt("return", false);
 
               case 2:
-                _context.next = 4;
+                _this.$store.commit('loading/setLoadingFlg', true);
+
+                _context.next = 5;
                 return axios.post('/api/shared-calendars/' + _this.sharedCalendarId + '/chat/messages', _this.createMessageForm.data);
 
-              case 4:
+              case 5:
                 response = _context.sent;
 
+                _this.$store.commit('loading/setLoadingFlg', false);
+
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context.next = 13;
+                  _context.next = 15;
                   break;
                 }
 
@@ -4805,19 +4811,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _this.createMessageForm.data.message = '';
                 return _context.abrupt("return", false);
 
-              case 13:
+              case 15:
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["VALIDATION_ERROR"])) {
-                  _context.next = 16;
+                  _context.next = 18;
                   break;
                 }
 
                 _this.createMessageForm.errors = response.data.errors;
                 return _context.abrupt("return", false);
 
-              case 16:
+              case 18:
                 _this.$store.commit('error/setCode', response.status);
 
-              case 17:
+              case 19:
               case "end":
                 return _context.stop();
             }
@@ -5220,23 +5226,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 lastDayWeek = lastDay.day();
                 from = firstDay.subtract(firstDayWeek, 'day').format('YYYY-MM-DD');
                 until = lastDay.add(6 - lastDayWeek, 'day').format('YYYY-MM-D');
-                _context.next = 8;
+
+                _this2.$store.commit('loading/setLoadingFlg', true);
+
+                _context.next = 9;
                 return axios.get('/api/shared-calendars/' + _this2.sharedCalendarId + '/schedules/' + from + '/' + until);
 
-              case 8:
+              case 9:
                 response = _context.sent;
 
+                _this2.$store.commit('loading/setLoadingFlg', false);
+
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["SUCCESS"])) {
-                  _context.next = 11;
+                  _context.next = 13;
                   break;
                 }
 
                 return _context.abrupt("return", response.data);
 
-              case 11:
+              case 13:
                 _this2.$store.commit('error/setCode', response.status);
 
-              case 12:
+              case 14:
               case "end":
                 return _context.stop();
             }
@@ -5288,14 +5299,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   title: _this3.createScheduleData.title,
                   description: description
                 };
-                _context2.next = 12;
+
+                _this3.$store.commit('loading/setLoadingFlg', true);
+
+                _context2.next = 13;
                 return axios.post('/api/shared-calendars/' + _this3.sharedCalendarId + '/schedules', data);
 
-              case 12:
+              case 13:
                 response = _context2.sent;
 
+                _this3.$store.commit('loading/setLoadingFlg', false);
+
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["CREATED"])) {
-                  _context2.next = 18;
+                  _context2.next = 20;
                   break;
                 }
 
@@ -5314,19 +5330,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 };
                 return _context2.abrupt("return", false);
 
-              case 18:
+              case 20:
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["VALIDATION_ERROR"])) {
-                  _context2.next = 21;
+                  _context2.next = 23;
                   break;
                 }
 
                 _this3.createError.errors = response.data.errors;
                 return _context2.abrupt("return", false);
 
-              case 21:
+              case 23:
                 _this3.$store.commit('error/setCode', response.status);
 
-              case 22:
+              case 24:
               case "end":
                 return _context2.stop();
             }
@@ -5351,14 +5367,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context3.abrupt("return", false);
 
               case 2:
-                _context3.next = 4;
+                _this4.$store.commit('loading/setLoadingFlg', true);
+
+                _context3.next = 5;
                 return axios["delete"]('/api/shared-calendars/' + _this4.sharedCalendarId + '/schedules/' + _this4.deleteForm.scheduleData.id);
 
-              case 4:
+              case 5:
                 response = _context3.sent;
 
+                _this4.$store.commit('loading/setLoadingFlg', false);
+
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["SUCCESS"])) {
-                  _context3.next = 10;
+                  _context3.next = 12;
                   break;
                 }
 
@@ -5373,10 +5393,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context3.abrupt("return", false);
 
-              case 10:
+              case 12:
                 _this4.$store.commit('error/setCode', response.status);
 
-              case 11:
+              case 13:
               case "end":
                 return _context3.stop();
             }
@@ -5427,14 +5447,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   title: _this5.editForm.scheduleData.title,
                   description: description
                 };
-                _context4.next = 12;
+
+                _this5.$store.commit('loading/setLoadingFlg', true);
+
+                _context4.next = 13;
                 return axios.patch('/api/shared-calendars/' + _this5.sharedCalendarId + '/schedules/' + _this5.editForm.scheduleData.id, data);
 
-              case 12:
+              case 13:
                 response = _context4.sent;
 
+                _this5.$store.commit('loading/setLoadingFlg', false);
+
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["SUCCESS"])) {
-                  _context4.next = 19;
+                  _context4.next = 21;
                   break;
                 }
 
@@ -5449,10 +5474,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context4.abrupt("return", false);
 
-              case 19:
+              case 21:
                 _this5.$store.commit('error/setCode', response.status);
 
-              case 20:
+              case 22:
               case "end":
                 return _context4.stop();
             }
@@ -5765,14 +5790,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
+                _this.$store.commit('loading/setLoadingFlg', true);
+
+                _context.next = 3;
                 return axios.patch('/api/shared-calendars/' + _this.sharedCalendarData.id + '/name', _this.updateCalendarNameForm.data);
 
-              case 2:
+              case 3:
                 response = _context.sent;
 
+                _this.$store.commit('loading/setLoadingFlg', false);
+
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                  _context.next = 7;
+                  _context.next = 9;
                   break;
                 }
 
@@ -5782,19 +5811,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 7:
+              case 9:
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["VALIDATION_ERROR"])) {
-                  _context.next = 10;
+                  _context.next = 12;
                   break;
                 }
 
                 _this.updateCalendarNameForm.errors = response.data.errors;
                 return _context.abrupt("return", false);
 
-              case 10:
+              case 12:
                 _this.$store.commit('error/setCode', response.status);
 
-              case 11:
+              case 13:
               case "end":
                 return _context.stop();
             }
@@ -5811,14 +5840,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
+                _this2.$store.commit('loading/setLoadingFlg', true);
+
+                _context2.next = 3;
                 return axios.patch('/api/shared-calendars/' + _this2.sharedCalendarData.id + '/search-id');
 
-              case 2:
+              case 3:
                 response = _context2.sent;
 
+                _this2.$store.commit('loading/setLoadingFlg', false);
+
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                  _context2.next = 7;
+                  _context2.next = 9;
                   break;
                 }
 
@@ -5828,10 +5861,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context2.abrupt("return", false);
 
-              case 7:
+              case 9:
                 _this2.$store.commit('error/setCode', response.status);
 
-              case 8:
+              case 10:
               case "end":
                 return _context2.stop();
             }
@@ -5873,6 +5906,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
 //
 //
 //
@@ -5942,14 +5976,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 2:
-                _context.next = 4;
+                _this.$store.commit('loading/setLoadingFlg', true);
+
+                _context.next = 5;
                 return axios["delete"]('/api/shared-calendars/' + _this.sharedCalendarData.id + '/members/' + _this.selectMemberData.id);
 
-              case 4:
+              case 5:
                 response = _context.sent;
 
+                _this.$store.commit('loading/setLoadingFlg', false);
+
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                  _context.next = 9;
+                  _context.next = 11;
                   break;
                 }
 
@@ -5959,10 +5997,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 9:
+              case 11:
                 _this.$store.commit('error/setCode', response.status);
 
-              case 10:
+              case 12:
               case "end":
                 return _context.stop();
             }
@@ -6038,14 +6076,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 2:
-                _context.next = 4;
+                _this.$store.commit('loading/setLoadingFlg', true);
+
+                _context.next = 5;
                 return axios["delete"]('/api/shared-calendars/' + _this.sharedCalendarData.id + '/members');
 
-              case 4:
+              case 5:
                 response = _context.sent;
 
+                _this.$store.commit('loading/setLoadingFlg', false);
+
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                  _context.next = 8;
+                  _context.next = 10;
                   break;
                 }
 
@@ -6055,10 +6097,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 8:
+              case 10:
                 _this.$store.commit('error/setCode', response.status);
 
-              case 9:
+              case 11:
               case "end":
                 return _context.stop();
             }
@@ -46682,21 +46724,23 @@ var render = function() {
     _c(
       "div",
       { staticClass: "contents" },
-      _vm._l(_vm.sharedCalendarMembers, function(Member) {
+      _vm._l(_vm.sharedCalendarMembers, function(member) {
         return _c("div", [
-          _c("p", [_vm._v(_vm._s(Member.name))]),
+          _c("p", [_vm._v(_vm._s(member.name))]),
           _vm._v(" "),
-          _c(
-            "button",
-            {
-              on: {
-                click: function($event) {
-                  return _vm.showUnShareModal(Member)
-                }
-              }
-            },
-            [_c("i", { staticClass: "fas fa-times" })]
-          )
+          member.id === _vm.sharedCalendarData.admin_id
+            ? _c("p", [_vm._v("管理者")])
+            : _c(
+                "button",
+                {
+                  on: {
+                    click: function($event) {
+                      return _vm.showUnShareModal(member)
+                    }
+                  }
+                },
+                [_c("i", { staticClass: "fas fa-times" })]
+              )
         ])
       }),
       0
@@ -68251,16 +68295,22 @@ var actions = {
           switch (_context.prev = _context.next) {
             case 0:
               // apiStatusの初期化
-              context.commit('setApiStatus', null); // 会員登録APIの呼び出し
+              context.commit('setApiStatus', null);
+              context.commit('loading/setLoadingFlg', true, {
+                root: true
+              }); // 会員登録APIの呼び出し
 
-              _context.next = 3;
+              _context.next = 4;
               return axios.post('/api/register', data);
 
-            case 3:
+            case 4:
               response = _context.sent;
+              context.commit('loading/setLoadingFlg', false, {
+                root: true
+              }); // 通信成功時
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                _context.next = 8;
+                _context.next = 10;
                 break;
               }
 
@@ -68268,7 +68318,7 @@ var actions = {
               context.commit('setUser', response.data);
               return _context.abrupt("return", false);
 
-            case 8:
+            case 10:
               // エラー時
               context.commit('setApiStatus', false); // バリデーションエラーの場合
 
@@ -68280,7 +68330,7 @@ var actions = {
                 });
               }
 
-            case 10:
+            case 12:
             case "end":
               return _context.stop();
           }
@@ -68297,16 +68347,22 @@ var actions = {
           switch (_context2.prev = _context2.next) {
             case 0:
               // apiStatusの初期化
-              context.commit('setApiStatus', null); // ログインAPIの呼び出し
+              context.commit('setApiStatus', null);
+              context.commit('loading/setLoadingFlg', true, {
+                root: true
+              }); // ログインAPIの呼び出し
 
-              _context2.next = 3;
+              _context2.next = 4;
               return axios.post('/api/login', data);
 
-            case 3:
+            case 4:
               response = _context2.sent;
+              context.commit('loading/setLoadingFlg', false, {
+                root: true
+              }); // 通信成功時
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                _context2.next = 8;
+                _context2.next = 10;
                 break;
               }
 
@@ -68314,7 +68370,7 @@ var actions = {
               context.commit('setUser', response.data);
               return _context2.abrupt("return", false);
 
-            case 8:
+            case 10:
               // エラー時
               context.commit('setApiStatus', false); // バリデーションエラーの場合
 
@@ -68326,7 +68382,7 @@ var actions = {
                 });
               }
 
-            case 10:
+            case 12:
             case "end":
               return _context2.stop();
           }
@@ -68343,16 +68399,22 @@ var actions = {
           switch (_context3.prev = _context3.next) {
             case 0:
               // apiStatusの初期化
-              context.commit('setApiStatus', null); // ログアウトAPIの呼び出し
+              context.commit('setApiStatus', null);
+              context.commit('loading/setLoadingFlg', true, {
+                root: true
+              }); // ログアウトAPIの呼び出し
 
-              _context3.next = 3;
+              _context3.next = 4;
               return axios.post('/api/logout');
 
-            case 3:
+            case 4:
               response = _context3.sent;
+              context.commit('loading/setLoadingFlg', false, {
+                root: true
+              }); // 通信成功時
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                _context3.next = 8;
+                _context3.next = 10;
                 break;
               }
 
@@ -68360,14 +68422,14 @@ var actions = {
               context.commit('setUser', null);
               return _context3.abrupt("return", false);
 
-            case 8:
+            case 10:
               // エラー時
               context.commit('setApiStatus', false);
               context.commit('error/setCode', response.status, {
                 root: true
               });
 
-            case 10:
+            case 12:
             case "end":
               return _context3.stop();
           }
@@ -68424,16 +68486,22 @@ var actions = {
           switch (_context5.prev = _context5.next) {
             case 0:
               // apiStatusの初期化
-              context.commit('setApiStatus', null); // ユーザー名変更APIの呼び出し
+              context.commit('setApiStatus', null);
+              context.commit('loading/setLoadingFlg', true, {
+                root: true
+              }); // ユーザー名変更APIの呼び出し
 
-              _context5.next = 3;
+              _context5.next = 4;
               return axios.patch('/api/users/name', data);
 
-            case 3:
+            case 4:
               response = _context5.sent;
+              context.commit('loading/setLoadingFlg', false, {
+                root: true
+              }); // 通信成功時
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                _context5.next = 8;
+                _context5.next = 10;
                 break;
               }
 
@@ -68441,7 +68509,7 @@ var actions = {
               context.commit('setUser', response.data);
               return _context5.abrupt("return", false);
 
-            case 8:
+            case 10:
               // エラー時
               context.commit('setApiStatus', false); // バリデーションエラーの場合
 
@@ -68453,7 +68521,7 @@ var actions = {
                 });
               }
 
-            case 10:
+            case 12:
             case "end":
               return _context5.stop();
           }
@@ -68470,16 +68538,22 @@ var actions = {
           switch (_context6.prev = _context6.next) {
             case 0:
               // apiStatusの初期化
-              context.commit('setApiStatus', null); // メールアドレス変更APIの呼び出し
+              context.commit('setApiStatus', null);
+              context.commit('loading/setLoadingFlg', true, {
+                root: true
+              }); // メールアドレス変更APIの呼び出し
 
-              _context6.next = 3;
+              _context6.next = 4;
               return axios.patch('/api/users/email', data);
 
-            case 3:
+            case 4:
               response = _context6.sent;
+              context.commit('loading/setLoadingFlg', false, {
+                root: true
+              }); // 通信成功時
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                _context6.next = 8;
+                _context6.next = 10;
                 break;
               }
 
@@ -68487,7 +68561,7 @@ var actions = {
               context.commit('setUser', response.data);
               return _context6.abrupt("return", false);
 
-            case 8:
+            case 10:
               // エラー時
               context.commit('setApiStatus', false); // バリデーションエラーの場合
 
@@ -68499,7 +68573,7 @@ var actions = {
                 });
               }
 
-            case 10:
+            case 12:
             case "end":
               return _context6.stop();
           }
@@ -68516,23 +68590,29 @@ var actions = {
           switch (_context7.prev = _context7.next) {
             case 0:
               // apiStatusの初期化
-              context.commit('setApiStatus', null); // パスワード変更APIの呼び出し
+              context.commit('setApiStatus', null);
+              context.commit('loading/setLoadingFlg', true, {
+                root: true
+              }); // パスワード変更APIの呼び出し
 
-              _context7.next = 3;
+              _context7.next = 4;
               return axios.patch('/api/users/password', data);
 
-            case 3:
+            case 4:
               response = _context7.sent;
+              context.commit('loading/setLoadingFlg', false, {
+                root: true
+              }); // 通信成功時
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                _context7.next = 7;
+                _context7.next = 9;
                 break;
               }
 
               context.commit('setApiStatus', true);
               return _context7.abrupt("return", false);
 
-            case 7:
+            case 9:
               // エラー時
               context.commit('setApiStatus', false); // バリデーションエラーの場合
 
@@ -68544,7 +68624,7 @@ var actions = {
                 });
               }
 
-            case 9:
+            case 11:
             case "end":
               return _context7.stop();
           }
@@ -68561,14 +68641,20 @@ var actions = {
             case 0:
               // apiStatusの初期化
               context.commit('setApiStatus', null);
-              _context8.next = 3;
+              context.commit('loading/setLoadingFlg', true, {
+                root: true
+              });
+              _context8.next = 4;
               return axios["delete"]('/api/users');
 
-            case 3:
+            case 4:
               response = _context8.sent;
+              context.commit('loading/setLoadingFlg', false, {
+                root: true
+              }); // 通信成功時
 
               if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                _context8.next = 8;
+                _context8.next = 10;
                 break;
               }
 
@@ -68576,14 +68662,14 @@ var actions = {
               context.commit('setUser', null);
               return _context8.abrupt("return", false);
 
-            case 8:
+            case 10:
               // エラー時
               context.commit('setApiStatus', false);
               context.commit('error/setCode', response.status, {
                 root: true
               });
 
-            case 10:
+            case 12:
             case "end":
               return _context8.stop();
           }

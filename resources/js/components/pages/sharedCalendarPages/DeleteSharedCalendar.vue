@@ -22,7 +22,9 @@
         },
         methods: {
             async deleteSharedCalendar() {
+                this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarData.id)
+                this.$store.commit('loading/setLoadingFlg', false)
 
                 if(response.status === SUCCESS) {
                     this.$router.push({name: 'myCalendar'})

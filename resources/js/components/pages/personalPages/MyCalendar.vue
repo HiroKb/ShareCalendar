@@ -336,7 +336,7 @@
             changeSelectDate(e) {
                 this.selectedDate = e.currentTarget.dataset.date
             },
-            async changeCalendarData() {
+           changeCalendarData() {
                 this.calendarData = []
                 this.dateLabel = moment(this.selectedMonth).format('YYYY年MM月')
 
@@ -396,7 +396,9 @@
                 const from = firstDay.subtract(firstDayWeek, 'day').format('YYYY-MM-DD')
                 const until = lastDay.add(6 - lastDayWeek, 'day').format('YYYY-MM-D')
 
+                this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.get('/api/schedules/' + from + '/' + until)
+                this.$store.commit('loading/setLoadingFlg', false)
 
                 if (response.status === SUCCESS) {
                     this.$emit('changeSchedulesData',{
@@ -444,7 +446,9 @@
                     description: description
                 }
 
+                this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.post('/api/schedules', data)
+                this.$store.commit('loading/setLoadingFlg', false)
 
                 if (response.status === CREATED) {
                     // カレンダーデータとスケジュールリストデータを更新
@@ -503,7 +507,9 @@
                     description: description
                 }
 
+                this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.patch('/api/schedules/' + this.editForm.scheduleData.id, data)
+                this.$store.commit('loading/setLoadingFlg', false)
 
                 if (response.status === SUCCESS) {
 
@@ -529,7 +535,9 @@
                     return false
                 }
 
+                this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.delete('/api/schedules/' + this.deleteForm.scheduleData.id)
+                this.$store.commit('loading/setLoadingFlg', false)
 
                 if (response.status === SUCCESS) {
                     // カレンダーデータとスケジュールリストデータを更新

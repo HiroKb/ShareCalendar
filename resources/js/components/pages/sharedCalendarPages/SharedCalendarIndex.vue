@@ -358,7 +358,9 @@
                 const from = firstDay.subtract(firstDayWeek, 'day').format('YYYY-MM-DD')
                 const until = lastDay.add(6 - lastDayWeek, 'day').format('YYYY-MM-D')
 
+                this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.get('/api/shared-calendars/' + this.sharedCalendarId + '/schedules/' + from + '/' + until)
+                this.$store.commit('loading/setLoadingFlg', false)
 
                 if (response.status === SUCCESS) {
                     return response.data
@@ -399,8 +401,11 @@
                     title: this.createScheduleData.title,
                     description: description
                 }
+
+                this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.post('/api/shared-calendars/' + this.sharedCalendarId + '/schedules', data)
-                //
+                this.$store.commit('loading/setLoadingFlg', false)
+
                 if (response.status === CREATED) {
                     // カレンダーデータとスケジュールリストデータを更新
                     const newSchedules = this.addScheduleData(response.data, this.dates, this.sharedSchedulesData.schedules)
@@ -425,7 +430,11 @@
                 if (!this.deleteForm.scheduleData){
                     return false
                 }
+
+                this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarId + '/schedules/' + this.deleteForm.scheduleData.id)
+                this.$store.commit('loading/setLoadingFlg', false)
+
                 if(response.status === SUCCESS) {
                     // カレンダーデータとスケジュールリストデータを更新
                     const newSchedules = this.removeScheduleData(this.deleteForm.scheduleData, this.dates, this.sharedSchedulesData.schedules)
@@ -470,7 +479,9 @@
                     description: description
                 }
 
+                this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.patch('/api/shared-calendars/' + this.sharedCalendarId + '/schedules/' + this.editForm.scheduleData.id, data)
+                this.$store.commit('loading/setLoadingFlg', false)
 
                 if(response.status === SUCCESS) {
                     const deletedSchedules = this.removeScheduleData(this.editForm.scheduleData, this.dates, this.sharedSchedulesData.schedules)

@@ -1,9 +1,10 @@
 <template>
     <div>
         <div class="contents">
-            <div v-for="Member in sharedCalendarMembers" >
-                <p>{{ Member.name }}</p>
-                <button @click="showUnShareModal(Member)">
+            <div v-for="member in sharedCalendarMembers" >
+                <p>{{ member.name }}</p>
+                <p v-if="member.id === sharedCalendarData.admin_id">管理者</p>
+                <button @click="showUnShareModal(member)" v-else>
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -55,7 +56,10 @@
                 if (!this.sharedCalendarData.id || !this.selectMemberData.id) {
                     return false
                 }
+                
+                this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarData.id + '/members/' + this.selectMemberData.id)
+                this.$store.commit('loading/setLoadingFlg', false)
 
                 if (response.status === SUCCESS) {
                     this.$emit('unShareMember', this.selectMemberData.id)

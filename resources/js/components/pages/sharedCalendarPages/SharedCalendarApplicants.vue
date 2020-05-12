@@ -98,9 +98,11 @@
                     return applicant.id
                 })
 
+                this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.put('/api/shared-calendars/' + this.sharedCalendarData.id + '/members', {
                     'id_list': idList
                 })
+                this.$store.commit('loading/setLoadingFlg', false)
 
                 if (response.status === CREATED) {
                     this.$emit('allowApplication', applicantsList)
@@ -119,7 +121,9 @@
                     return applicant.id
                 })}
 
+                this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarData.id + '/applications', {data: idList})
+                this.$store.commit('loading/setLoadingFlg', false)
 
                 if (response.status === SUCCESS) {
                     this.$emit('rejectApplication', applicantsList)

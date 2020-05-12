@@ -29,7 +29,7 @@
             }
         },
         methods: {
-            async searchSharedCalendar () {
+            searchSharedCalendar () {
                 this.searchError.errors = {}
                 this.searchError.errorFlg = false
 

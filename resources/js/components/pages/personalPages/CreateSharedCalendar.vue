@@ -42,7 +42,9 @@
                 }
 
 
+                this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.post('/api/shared-calendars', this.createShareCalendarData)
+                this.$store.commit('loading/setLoadingFlg', false)
 
 
                 if (response.status === CREATED) {

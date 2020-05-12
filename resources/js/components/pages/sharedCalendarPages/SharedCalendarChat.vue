@@ -66,7 +66,9 @@
                     return false
                 }
 
+                this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.post('/api/shared-calendars/' + this.sharedCalendarId + '/chat/messages', this.createMessageForm.data)
+                this.$store.commit('loading/setLoadingFlg', false)
 
                 if (response.status === CREATED) {
 

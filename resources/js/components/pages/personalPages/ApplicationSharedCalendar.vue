@@ -32,7 +32,10 @@
         },
         methods: {
             async applicationSharedCalendar () {
+                this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.put('/api/shared-calendars/' + this.sharedCalendarData.search_id + '/applications')
+                this.$store.commit('loading/setLoadingFlg', false)
+
                 if (response.status === CREATED) {
                     this.$router.push({name: 'myCalendar'})
                     return false
@@ -40,7 +43,9 @@
                 this.$store.commit('error/setCode', response.status)
             },
             async searchSharedCalendar () {
+                this.$store.commit('loading/setLoadingFlg', true)
                 const response =  await axios.get('/api/shared-calendars/' + this.searchId + '/search')
+                this.$store.commit('loading/setLoadingFlg', false)
 
                 if (response.status === SUCCESS) {
 
