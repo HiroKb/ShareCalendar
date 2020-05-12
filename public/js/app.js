@@ -2086,7 +2086,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SideBar",
@@ -2099,9 +2098,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     userName: 'user/userName'
   })),
   methods: {
-    test: function test() {
-      this.$store.commit('flashMessage/setMessage', 'test');
-    },
     logout: function logout() {
       var _this = this;
 
@@ -2463,9 +2459,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.$store.commit('loading/setLoadingFlg', false);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context.next = 8;
+                  _context.next = 9;
                   break;
                 }
+
+                _this.$store.commit('flashMessage/setMessage', 'カレンダーの共有申請を行いました。');
 
                 _this.$router.push({
                   name: 'myCalendar'
@@ -2473,10 +2471,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 8:
+              case 9:
                 _this.$store.commit('error/setCode', response.status);
 
-              case 9:
+              case 10:
               case "end":
                 return _context.stop();
             }
@@ -2615,9 +2613,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.$store.commit('loading/setLoadingFlg', false);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context.next = 13;
+                  _context.next = 14;
                   break;
                 }
+
+                _this.$store.commit('flashMessage/setMessage', '共有カレンダーを作成しました。');
 
                 _this.$router.push({
                   name: 'sharedCalendarIndex',
@@ -2628,14 +2628,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 13:
+              case 14:
                 if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["VALIDATION_ERROR"]) {
                   _this.createError.errors = response.data.errors;
                 }
 
                 _this.$store.commit('error/setCode', response.status);
 
-              case 15:
+              case 16:
               case "end":
                 return _context.stop();
             }
@@ -2643,8 +2643,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     }
-  },
-  created: function created() {}
+  }
 });
 
 /***/ }),
@@ -3246,7 +3245,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this3.$store.commit('loading/setLoadingFlg', false);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["CREATED"])) {
-                  _context2.next = 20;
+                  _context2.next = 21;
                   break;
                 }
 
@@ -3263,21 +3262,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   title: '',
                   description: ''
                 };
+
+                _this3.$store.commit('flashMessage/setMessage', 'スケジュールを追加しました');
+
                 return _context2.abrupt("return", false);
 
-              case 20:
+              case 21:
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["VALIDATION_ERROR"])) {
-                  _context2.next = 23;
+                  _context2.next = 24;
                   break;
                 }
 
                 _this3.createError.errors = response.data.errors;
                 return _context2.abrupt("return", false);
 
-              case 23:
+              case 24:
                 _this3.$store.commit('error/setCode', response.status);
 
-              case 24:
+              case 25:
               case "end":
                 return _context2.stop();
             }
@@ -3340,7 +3342,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this4.$store.commit('loading/setLoadingFlg', false);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["SUCCESS"])) {
-                  _context3.next = 21;
+                  _context3.next = 22;
                   break;
                 }
 
@@ -3353,21 +3355,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this4.hideModal();
 
+                _this4.$store.commit('flashMessage/setMessage', 'スケジュールを更新しました');
+
                 return _context3.abrupt("return", false);
 
-              case 21:
+              case 22:
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["VALIDATION_ERROR"])) {
-                  _context3.next = 24;
+                  _context3.next = 25;
                   break;
                 }
 
                 _this4.editError.errors = response.data.errors;
                 return _context3.abrupt("return", false);
 
-              case 24:
+              case 25:
                 _this4.$store.commit('error/setCode', response.status);
 
-              case 25:
+              case 26:
               case "end":
                 return _context3.stop();
             }
@@ -3404,7 +3408,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this5.$store.commit('loading/setLoadingFlg', false);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["SUCCESS"])) {
-                  _context4.next = 12;
+                  _context4.next = 13;
                   break;
                 }
 
@@ -3417,12 +3421,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this5.hideModal();
 
+                _this5.$store.commit('flashMessage/setMessage', 'スケジュールを削除しました');
+
                 return _context4.abrupt("return", false);
 
-              case 12:
+              case 13:
                 _this5.$store.commit('error/setCode', response.status);
 
-              case 13:
+              case 14:
               case "end":
                 return _context4.stop();
             }
@@ -3980,6 +3986,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 // 通信成功時
                 if (_this.apiStatus) {
                   _this.hideModal();
+
+                  _this.$store.commit('flashMessage/setMessage', 'ユーザー名を変更しました。');
                 }
 
               case 3:
@@ -4005,6 +4013,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 // 通信成功時
                 if (_this2.apiStatus) {
                   _this2.hideModal();
+
+                  _this2.$store.commit('flashMessage/setMessage', 'メールアドレスを変更しました。');
                 }
 
               case 3:
@@ -4030,6 +4040,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 // 通信成功時
                 if (_this3.apiStatus) {
                   _this3.hideModal();
+
+                  _this3.$store.commit('flashMessage/setMessage', 'パスワードを変更しました。');
                 }
 
               case 3:
@@ -4128,9 +4140,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.$store.commit('loading/setLoadingFlg', false);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                  _context.next = 8;
+                  _context.next = 9;
                   break;
                 }
+
+                _this.$store.commit('flashMessage/setMessage', _this.sharedCalendarData.name + 'カレンダーを削除しました。');
 
                 _this.$router.push({
                   name: 'myCalendar'
@@ -4138,10 +4152,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 8:
+              case 9:
                 _this.$store.commit('error/setCode', response.status);
 
-              case 9:
+              case 10:
               case "end":
                 return _context.stop();
             }
@@ -4616,7 +4630,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 _this.$store.commit('loading/setLoadingFlg', false);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context.next = 12;
+                  _context.next = 13;
                   break;
                 }
 
@@ -4624,12 +4638,14 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
                 _this.hideModal();
 
+                _this.$store.commit('flashMessage/setMessage', '共有申請を許可しました。');
+
                 return _context.abrupt("return", false);
 
-              case 12:
+              case 13:
                 _this.$store.commit('error/setCode', response.status);
 
-              case 13:
+              case 14:
               case "end":
                 return _context.stop();
             }
@@ -4673,7 +4689,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 _this2.$store.commit('loading/setLoadingFlg', false);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                  _context2.next = 12;
+                  _context2.next = 13;
                   break;
                 }
 
@@ -4681,12 +4697,14 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
                 _this2.hideModal();
 
+                _this2.$store.commit('flashMessage/setMessage', '共有申請を拒否しました。');
+
                 return _context2.abrupt("return", false);
 
-              case 12:
+              case 13:
                 _this2.$store.commit('error/setCode', response.status);
 
-              case 13:
+              case 14:
               case "end":
                 return _context2.stop();
             }
@@ -5353,7 +5371,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this3.$store.commit('loading/setLoadingFlg', false);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["CREATED"])) {
-                  _context2.next = 20;
+                  _context2.next = 21;
                   break;
                 }
 
@@ -5370,21 +5388,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   title: '',
                   description: ''
                 };
+
+                _this3.$store.commit('flashMessage/setMessage', '共有スケジュールを追加しました');
+
                 return _context2.abrupt("return", false);
 
-              case 20:
+              case 21:
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["VALIDATION_ERROR"])) {
-                  _context2.next = 23;
+                  _context2.next = 24;
                   break;
                 }
 
                 _this3.createError.errors = response.data.errors;
                 return _context2.abrupt("return", false);
 
-              case 23:
+              case 24:
                 _this3.$store.commit('error/setCode', response.status);
 
-              case 24:
+              case 25:
               case "end":
                 return _context2.stop();
             }
@@ -5420,7 +5441,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this4.$store.commit('loading/setLoadingFlg', false);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["SUCCESS"])) {
-                  _context3.next = 12;
+                  _context3.next = 13;
                   break;
                 }
 
@@ -5433,12 +5454,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this4.hideModal();
 
+                _this4.$store.commit('flashMessage/setMessage', '共有スケジュールを削除しました');
+
                 return _context3.abrupt("return", false);
 
-              case 12:
+              case 13:
                 _this4.$store.commit('error/setCode', response.status);
 
-              case 13:
+              case 14:
               case "end":
                 return _context3.stop();
             }
@@ -5501,7 +5524,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this5.$store.commit('loading/setLoadingFlg', false);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["SUCCESS"])) {
-                  _context4.next = 21;
+                  _context4.next = 22;
                   break;
                 }
 
@@ -5514,12 +5537,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this5.hideModal();
 
+                _this5.$store.commit('flashMessage/setMessage', '共有スケジュールを更新しました');
+
                 return _context4.abrupt("return", false);
 
-              case 21:
+              case 22:
                 _this5.$store.commit('error/setCode', response.status);
 
-              case 22:
+              case 23:
               case "end":
                 return _context4.stop();
             }
@@ -5843,7 +5868,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.$store.commit('loading/setLoadingFlg', false);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                  _context.next = 9;
+                  _context.next = 10;
                   break;
                 }
 
@@ -5851,21 +5876,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this.hideModal();
 
+                _this.$store.commit('flashMessage/setMessage', '共有カレンダー名を変更しました');
+
                 return _context.abrupt("return", false);
 
-              case 9:
+              case 10:
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["VALIDATION_ERROR"])) {
-                  _context.next = 12;
+                  _context.next = 13;
                   break;
                 }
 
                 _this.updateCalendarNameForm.errors = response.data.errors;
                 return _context.abrupt("return", false);
 
-              case 12:
+              case 13:
                 _this.$store.commit('error/setCode', response.status);
 
-              case 13:
+              case 14:
               case "end":
                 return _context.stop();
             }
@@ -5893,7 +5920,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this2.$store.commit('loading/setLoadingFlg', false);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                  _context2.next = 9;
+                  _context2.next = 10;
                   break;
                 }
 
@@ -5901,12 +5928,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this2.hideModal();
 
+                _this2.$store.commit('flashMessage/setMessage', 'カレンダー検索ID/招待URLを変更しました');
+
                 return _context2.abrupt("return", false);
 
-              case 9:
+              case 10:
                 _this2.$store.commit('error/setCode', response.status);
 
-              case 10:
+              case 11:
               case "end":
                 return _context2.stop();
             }
@@ -6029,7 +6058,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.$store.commit('loading/setLoadingFlg', false);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                  _context.next = 11;
+                  _context.next = 12;
                   break;
                 }
 
@@ -6037,12 +6066,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this.hideModal();
 
+                _this.$store.commit('flashMessage/setMessage', _this.selectMemberData.name + 'さんとの共有を解除しました');
+
                 return _context.abrupt("return", false);
 
-              case 11:
+              case 12:
                 _this.$store.commit('error/setCode', response.status);
 
-              case 12:
+              case 13:
               case "end":
                 return _context.stop();
             }
@@ -6129,7 +6160,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.$store.commit('loading/setLoadingFlg', false);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
-                  _context.next = 10;
+                  _context.next = 11;
                   break;
                 }
 
@@ -6137,12 +6168,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   name: 'myCalendar'
                 });
 
+                _this.$store.commit('flashMessage/setMessage', _this.sharedCalendarData.name + 'カレンダーの共有を解除しました');
+
                 return _context.abrupt("return", false);
 
-              case 10:
+              case 11:
                 _this.$store.commit('error/setCode', response.status);
 
-              case 11:
+              case 12:
               case "end":
                 return _context.stop();
             }
@@ -43530,9 +43563,7 @@ var render = function() {
         _vm._v("アカウント削除")
       ]),
       _vm._v(" "),
-      _c("button", { on: { click: _vm.logout } }, [_vm._v("Logout")]),
-      _vm._v(" "),
-      _c("button", { on: { click: _vm.test } }, [_vm._v("test")])
+      _c("button", { on: { click: _vm.logout } }, [_vm._v("Logout")])
     ],
     1
   )
@@ -68411,7 +68442,7 @@ var mutations = {
     state.message = message;
     setTimeout(function () {
       state.message = null;
-    }, 3000);
+    }, 4000);
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = ({

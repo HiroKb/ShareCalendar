@@ -27,6 +27,7 @@
                 this.$store.commit('loading/setLoadingFlg', false)
 
                 if(response.status === SUCCESS) {
+                    this.$store.commit('flashMessage/setMessage',  this.sharedCalendarData.name + 'カレンダーを削除しました。')
                     this.$router.push({name: 'myCalendar'})
                     return false
                 }

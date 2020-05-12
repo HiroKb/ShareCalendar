@@ -56,7 +56,7 @@
                 if (!this.sharedCalendarData.id || !this.selectMemberData.id) {
                     return false
                 }
-                
+
                 this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarData.id + '/members/' + this.selectMemberData.id)
                 this.$store.commit('loading/setLoadingFlg', false)
@@ -64,6 +64,7 @@
                 if (response.status === SUCCESS) {
                     this.$emit('unShareMember', this.selectMemberData.id)
                     this.hideModal()
+                    this.$store.commit('flashMessage/setMessage', this.selectMemberData.name + 'さんとの共有を解除しました')
                     return false
                 }
 

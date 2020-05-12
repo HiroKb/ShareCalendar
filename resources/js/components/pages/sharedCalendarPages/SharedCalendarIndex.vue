@@ -417,6 +417,7 @@
                         title: '',
                         description: ''
                     }
+                    this.$store.commit('flashMessage/setMessage', '共有スケジュールを追加しました')
                     return false
                 }
                 if (response.status === VALIDATION_ERROR) {
@@ -440,6 +441,7 @@
                     const newSchedules = this.removeScheduleData(this.deleteForm.scheduleData, this.dates, this.sharedSchedulesData.schedules)
                     this.$emit('changeSchedulesData', {schedules: newSchedules})
                     this.hideModal()
+                    this.$store.commit('flashMessage/setMessage', '共有スケジュールを削除しました')
                     return false
                 }
                 this.$store.commit('error/setCode', response.status)
@@ -489,6 +491,7 @@
 
                     this.$emit('changeSchedulesData', {schedules: newSchedules})
                     this.hideModal()
+                    this.$store.commit('flashMessage/setMessage', '共有スケジュールを更新しました')
                     return false
                 }
 

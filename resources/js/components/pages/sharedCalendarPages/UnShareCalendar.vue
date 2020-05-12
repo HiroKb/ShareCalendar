@@ -31,6 +31,7 @@
 
                 if (response.status === SUCCESS) {
                     this.$router.push({name: 'myCalendar'})
+                    this.$store.commit('flashMessage/setMessage', this.sharedCalendarData.name + 'カレンダーの共有を解除しました')
                     return false
                 }
 

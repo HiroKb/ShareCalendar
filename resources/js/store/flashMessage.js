@@ -8,7 +8,7 @@ const mutations = {
 
         setTimeout(() => {
             state.message = null
-        }, 3000)
+        }, 4000)
     }
 }
 

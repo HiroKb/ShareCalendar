@@ -48,6 +48,7 @@
 
 
                 if (response.status === CREATED) {
+                    this.$store.commit('flashMessage/setMessage', '共有カレンダーを作成しました。')
                     this.$router.push({name: 'sharedCalendarIndex', params: {sharedCalendarId: response.data.id}})
                     return false
                 }
@@ -58,8 +59,6 @@
 
                 this.$store.commit('error/setCode', response.status)
             }
-        },
-        created() {
         }
     }
 </script>

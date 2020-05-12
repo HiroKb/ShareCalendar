@@ -37,6 +37,7 @@
                 this.$store.commit('loading/setLoadingFlg', false)
 
                 if (response.status === CREATED) {
+                    this.$store.commit('flashMessage/setMessage', 'カレンダーの共有申請を行いました。')
                     this.$router.push({name: 'myCalendar'})
                     return false
                 }

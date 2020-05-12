@@ -462,6 +462,7 @@
                         title: '',
                         description: ''
                     }
+                    this.$store.commit('flashMessage/setMessage', 'スケジュールを追加しました')
                     return false
                 }
 
@@ -518,6 +519,7 @@
 
                     this.$emit('changeSchedulesData',{schedules: newSchedules})
                     this.hideModal()
+                    this.$store.commit('flashMessage/setMessage', 'スケジュールを更新しました')
                     return false
                 }
 
@@ -545,6 +547,7 @@
                     this.$emit('changeSchedulesData',{schedules: newSchedules})
 
                     this.hideModal()
+                    this.$store.commit('flashMessage/setMessage', 'スケジュールを削除しました')
                     return false
                 }
 

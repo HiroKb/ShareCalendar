@@ -107,6 +107,7 @@
                 if (response.status === CREATED) {
                     this.$emit('allowApplication', applicantsList)
                     this.hideModal()
+                    this.$store.commit('flashMessage/setMessage', '共有申請を許可しました。')
                     return false
                 }
 
@@ -128,6 +129,7 @@
                 if (response.status === SUCCESS) {
                     this.$emit('rejectApplication', applicantsList)
                     this.hideModal()
+                    this.$store.commit('flashMessage/setMessage', '共有申請を拒否しました。')
                     return false
                 }
 

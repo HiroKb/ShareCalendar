@@ -76,6 +76,7 @@
                 if (response.status === SUCCESS) {
                     this.$emit('changeCalendarData', response.data)
                     this.hideModal()
+                    this.$store.commit('flashMessage/setMessage', '共有カレンダー名を変更しました')
                     return false
                 }
                 if (response.status === VALIDATION_ERROR) {
@@ -93,6 +94,7 @@
 
                     this.$emit('changeCalendarData', response.data)
                     this.hideModal()
+                    this.$store.commit('flashMessage/setMessage', 'カレンダー検索ID/招待URLを変更しました')
                     return false
                 }
                 this.$store.commit('error/setCode', response.status)

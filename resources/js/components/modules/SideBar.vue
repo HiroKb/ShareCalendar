@@ -14,7 +14,6 @@
         <router-link :to="{name: 'userInfo'}">ユーザー情報/変更</router-link>
         <router-link :to="{name: 'deleteAccount'}">アカウント削除</router-link>
         <button @click="logout">Logout</button>
-        <button @click="test">test</button>
     </div>
 </template>
 
@@ -31,9 +30,6 @@
             })
         },
         methods: {
-            test (){
-                this.$store.commit('flashMessage/setMessage', 'test')
-            },
             async logout () {
                 // userストアのlogoutアクション呼び出し
                 await this.$store.dispatch('user/logout')

@@ -104,6 +104,7 @@
                 // 通信成功時
                 if (this.apiStatus) {
                     this.hideModal()
+                    this.$store.commit('flashMessage/setMessage', 'ユーザー名を変更しました。')
                 }
             },
             async updateEmail () {
@@ -113,6 +114,7 @@
                 // 通信成功時
                 if (this.apiStatus) {
                     this.hideModal()
+                    this.$store.commit('flashMessage/setMessage', 'メールアドレスを変更しました。')
                 }
             },
             async updatePassword () {
@@ -122,6 +124,7 @@
                 // 通信成功時
                 if (this.apiStatus) {
                     this.hideModal()
+                    this.$store.commit('flashMessage/setMessage', 'パスワードを変更しました。')
                 }
             },
             showUpdateNameModal () {
