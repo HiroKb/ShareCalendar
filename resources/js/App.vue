@@ -1,23 +1,27 @@
 <template>
     <div>
         <RouterView />
-        <loading-screen v-show="loadingFlg"></loading-screen>
+        <loading-screen v-show="loadingFlg"/>
+        <flash-message :message="message"/>
     </div>
 </template>
 
 <script>
+    import LoadingScreen from "./components/modules/LoadingScreen.vue"
+    import FlashMessage from "./components/modules/FlashMessage"
     import { mapState } from 'vuex'
     import {INTERNAL_SERVER_ERROR, NOT_FOUND} from './util'
-    import LoadingScreen from "./components/modules/LoadingScreen.vue"
 
     export default {
         components: {
-            LoadingScreen
+            LoadingScreen,
+            FlashMessage
         },
         computed: {
             ...mapState({
                 errorCode: state => state.error.code,
-                loadingFlg: state => state.loading.loadingFlg
+                loadingFlg: state => state.loading.loadingFlg,
+                message: state => state.flashMessage.message
             })
         },
         watch: {
