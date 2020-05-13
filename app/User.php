@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Notifications\ResetPasswordJp;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -38,6 +39,16 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * パスワード再設定メールのオーバーライド
+     *
+     * @param string $token
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordJp($token));
+    }
 
     /**
      * The attributes that should be cast to native types.
