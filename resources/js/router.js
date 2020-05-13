@@ -6,6 +6,8 @@ import store from "./store";
 import Welcome from "./components/pages/Welcome.vue"
 import Register from "./components/pages/Register.vue"
 import Login from "./components/pages/Login.vue"
+import SendResetPasswordLink from "./components/pages/SendResetPasswordLink.vue"
+import ResetPassword from "./components/pages/ResetPassword.vue"
 
 import PersonalPages from "./components/pages/personalPages/PersonalPages.vue"
 import UserInfo from "./components/pages/personalPages/UserInfo.vue"
@@ -62,6 +64,30 @@ const routes = [
         path: '/login',
         name: 'login',
         component: Login,
+        beforeEnter (to, from, next) {
+            if (store.getters['user/loginCheck']){
+                next({name: 'myCalendar'})
+            } else {
+                next()
+            }
+        }
+    },
+    {
+        path: '/password/reset/link',
+        name: 'sendResetPasswordLink',
+        component: SendResetPasswordLink,
+        beforeEnter (to, from, next) {
+            if (store.getters['user/loginCheck']){
+                next({name: 'myCalendar'})
+            } else {
+                next()
+            }
+        }
+    },
+    {
+        path: '/password/reset',
+        name: 'resetPassword',
+        component: ResetPassword,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
                 next({name: 'myCalendar'})

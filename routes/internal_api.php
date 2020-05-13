@@ -12,8 +12,13 @@ Route::post('/register', 'Auth\RegisterController@register')->name('register');
 Route::post('/login', 'Auth\LoginController@login')->name('login');
 // ログアウト
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+// パスワードリセットメール送信
+Route::post('/password/reset/link', 'ResetPassword\ForgotPasswordController@sendResetLinkEmail');
+// パスワードリセット
+Route::post('/password/reset', 'ResetPassword\ResetPasswordController@reset');
 // ログインユーザー返却
 Route::get('/users', fn() => Auth::user())->name('user');
+
 // ユーザーネーム変更
 Route::patch('/users/name', 'UserController@updateName');
 // メールアドレス変更

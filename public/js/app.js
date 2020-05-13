@@ -2168,6 +2168,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Login",
@@ -2321,6 +2324,166 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   created: function created() {
     this.$store.commit('user/setErrorMessages', null);
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/ResetPassword.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/ResetPassword.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../util */ "./resources/js/util.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "ResetPassword",
+  data: function data() {
+    return {
+      form: {
+        token: this.$route.query.token,
+        email: this.$route.query.email,
+        password: ''
+      },
+      responseFlg: false
+    };
+  },
+  methods: {
+    resetPassword: function resetPassword() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _this.$store.commit('loading/setLoadingFlg', true);
+
+                _context.next = 3;
+                return axios.post('/api/password/reset', _this.form);
+
+              case 3:
+                response = _context.sent;
+
+                _this.$store.commit('loading/setLoadingFlg', false);
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["SUCCESS"])) {
+                  _context.next = 8;
+                  break;
+                }
+
+                _this.responseFlg = true;
+                return _context.abrupt("return", false);
+
+              case 8:
+                _this.$store.commit('error/setCode', response.status);
+
+              case 9:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/SendResetPasswordLink.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/SendResetPasswordLink.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "SendResetPasswordLink",
+  data: function data() {
+    return {
+      form: {
+        email: ''
+      },
+      responseFlg: false
+    };
+  },
+  methods: {
+    sendLink: function sendLink() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _this.$store.commit('loading/setLoadingFlg', true);
+
+                _context.next = 3;
+                return axios.post('/api/password/reset/link', _this.form);
+
+              case 3:
+                _this.$store.commit('loading/setLoadingFlg', false);
+
+                _this.responseFlg = true;
+
+              case 5:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    }
   }
 });
 
@@ -43591,72 +43754,82 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "form",
-    {
-      on: {
-        submit: function($event) {
-          $event.preventDefault()
-          return _vm.login($event)
-        }
-      }
-    },
+    "div",
     [
-      _c("label", { attrs: { for: "email" } }, [_vm._v("メールアドレス")]),
-      _vm._v(" "),
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.loginData.email,
-            expression: "loginData.email"
-          }
-        ],
-        attrs: { type: "text", id: "email" },
-        domProps: { value: _vm.loginData.email },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
+      _c(
+        "form",
+        {
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.login($event)
             }
-            _vm.$set(_vm.loginData, "email", $event.target.value)
           }
-        }
-      }),
-      _vm._v(" "),
-      _vm.errorMessages && _vm.errorMessages.email
-        ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.email[0]))])
-        : _vm._e(),
-      _vm._v(" "),
-      _c("label", { attrs: { for: "password" } }, [_vm._v("パスワード")]),
-      _vm._v(" "),
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.loginData.password,
-            expression: "loginData.password"
-          }
-        ],
-        attrs: { type: "text", id: "password" },
-        domProps: { value: _vm.loginData.password },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
+        },
+        [
+          _c("label", { attrs: { for: "email" } }, [_vm._v("メールアドレス")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.loginData.email,
+                expression: "loginData.email"
+              }
+            ],
+            attrs: { type: "text", id: "email" },
+            domProps: { value: _vm.loginData.email },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.loginData, "email", $event.target.value)
+              }
             }
-            _vm.$set(_vm.loginData, "password", $event.target.value)
-          }
-        }
-      }),
+          }),
+          _vm._v(" "),
+          _vm.errorMessages && _vm.errorMessages.email
+            ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.email[0]))])
+            : _vm._e(),
+          _vm._v(" "),
+          _c("label", { attrs: { for: "password" } }, [_vm._v("パスワード")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.loginData.password,
+                expression: "loginData.password"
+              }
+            ],
+            attrs: { type: "text", id: "password" },
+            domProps: { value: _vm.loginData.password },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.loginData, "password", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _vm.errorMessages && _vm.errorMessages.password
+            ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.password[0]))])
+            : _vm._e(),
+          _vm._v(" "),
+          _c("button", { attrs: { type: "submit" } }, [_vm._v("ログイン")])
+        ]
+      ),
       _vm._v(" "),
-      _vm.errorMessages && _vm.errorMessages.password
-        ? _c("p", [_vm._v(_vm._s(_vm.errorMessages.password[0]))])
-        : _vm._e(),
-      _vm._v(" "),
-      _c("button", { attrs: { type: "submit" } }, [_vm._v("ログイン")])
-    ]
+      _c("router-link", { attrs: { to: { name: "sendResetPasswordLink" } } }, [
+        _vm._v("パスワードリセット")
+      ])
+    ],
+    1
   )
 }
 var staticRenderFns = []
@@ -43776,6 +43949,159 @@ var render = function() {
       _c("button", { attrs: { type: "submit" } }, [_vm._v("登録")])
     ]
   )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/ResetPassword.vue?vue&type=template&id=f0a18f38&scoped=true&":
+/*!**********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/ResetPassword.vue?vue&type=template&id=f0a18f38&scoped=true& ***!
+  \**********************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      !_vm.responseFlg
+        ? _c(
+            "form",
+            {
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.resetPassword($event)
+                }
+              }
+            },
+            [
+              _c("label", { attrs: { for: "password" } }, [
+                _vm._v("新しいパスワード")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.form.password,
+                    expression: "form.password"
+                  }
+                ],
+                attrs: { type: "text", id: "password" },
+                domProps: { value: _vm.form.password },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.form, "password", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("button", { attrs: { type: "submit" } }, [_vm._v("送信")])
+            ]
+          )
+        : [
+            _c("p", [_vm._v("パスワードを変更しました")]),
+            _vm._v(" "),
+            _c(
+              "p",
+              [
+                _c("router-link", { attrs: { to: { name: "login" } } }, [
+                  _vm._v("ログインページ")
+                ]),
+                _vm._v("からログインしてください。")
+              ],
+              1
+            )
+          ]
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/SendResetPasswordLink.vue?vue&type=template&id=82d46454&scoped=true&":
+/*!******************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/SendResetPasswordLink.vue?vue&type=template&id=82d46454&scoped=true& ***!
+  \******************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    !_vm.responseFlg
+      ? _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.sendLink($event)
+              }
+            }
+          },
+          [
+            _c("label", { attrs: { for: "email" } }, [
+              _vm._v("メールアドレス")
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.form.email,
+                  expression: "form.email"
+                }
+              ],
+              attrs: { type: "text", id: "email" },
+              domProps: { value: _vm.form.email },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.form, "email", $event.target.value)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("button", { attrs: { type: "submit" } }, [_vm._v("送信")])
+          ]
+        )
+      : _c("p", [
+          _vm._v(
+            "パスワードリセット用のURLを送信しました。メールを確認してください。"
+          )
+        ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -66745,6 +67071,144 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/pages/ResetPassword.vue":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/pages/ResetPassword.vue ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ResetPassword_vue_vue_type_template_id_f0a18f38_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ResetPassword.vue?vue&type=template&id=f0a18f38&scoped=true& */ "./resources/js/components/pages/ResetPassword.vue?vue&type=template&id=f0a18f38&scoped=true&");
+/* harmony import */ var _ResetPassword_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ResetPassword.vue?vue&type=script&lang=js& */ "./resources/js/components/pages/ResetPassword.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ResetPassword_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ResetPassword_vue_vue_type_template_id_f0a18f38_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ResetPassword_vue_vue_type_template_id_f0a18f38_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "f0a18f38",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/pages/ResetPassword.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/pages/ResetPassword.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/pages/ResetPassword.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPassword_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./ResetPassword.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/ResetPassword.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPassword_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/pages/ResetPassword.vue?vue&type=template&id=f0a18f38&scoped=true&":
+/*!****************************************************************************************************!*\
+  !*** ./resources/js/components/pages/ResetPassword.vue?vue&type=template&id=f0a18f38&scoped=true& ***!
+  \****************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPassword_vue_vue_type_template_id_f0a18f38_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./ResetPassword.vue?vue&type=template&id=f0a18f38&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/ResetPassword.vue?vue&type=template&id=f0a18f38&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPassword_vue_vue_type_template_id_f0a18f38_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPassword_vue_vue_type_template_id_f0a18f38_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/pages/SendResetPasswordLink.vue":
+/*!*****************************************************************!*\
+  !*** ./resources/js/components/pages/SendResetPasswordLink.vue ***!
+  \*****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SendResetPasswordLink_vue_vue_type_template_id_82d46454_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SendResetPasswordLink.vue?vue&type=template&id=82d46454&scoped=true& */ "./resources/js/components/pages/SendResetPasswordLink.vue?vue&type=template&id=82d46454&scoped=true&");
+/* harmony import */ var _SendResetPasswordLink_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SendResetPasswordLink.vue?vue&type=script&lang=js& */ "./resources/js/components/pages/SendResetPasswordLink.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _SendResetPasswordLink_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _SendResetPasswordLink_vue_vue_type_template_id_82d46454_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _SendResetPasswordLink_vue_vue_type_template_id_82d46454_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "82d46454",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/pages/SendResetPasswordLink.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/pages/SendResetPasswordLink.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/pages/SendResetPasswordLink.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SendResetPasswordLink_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./SendResetPasswordLink.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/SendResetPasswordLink.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SendResetPasswordLink_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/pages/SendResetPasswordLink.vue?vue&type=template&id=82d46454&scoped=true&":
+/*!************************************************************************************************************!*\
+  !*** ./resources/js/components/pages/SendResetPasswordLink.vue?vue&type=template&id=82d46454&scoped=true& ***!
+  \************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SendResetPasswordLink_vue_vue_type_template_id_82d46454_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./SendResetPasswordLink.vue?vue&type=template&id=82d46454&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/SendResetPasswordLink.vue?vue&type=template&id=82d46454&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SendResetPasswordLink_vue_vue_type_template_id_82d46454_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SendResetPasswordLink_vue_vue_type_template_id_82d46454_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/pages/Welcome.vue":
 /*!***************************************************!*\
   !*** ./resources/js/components/pages/Welcome.vue ***!
@@ -68216,27 +68680,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_pages_Welcome_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/pages/Welcome.vue */ "./resources/js/components/pages/Welcome.vue");
 /* harmony import */ var _components_pages_Register_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/pages/Register.vue */ "./resources/js/components/pages/Register.vue");
 /* harmony import */ var _components_pages_Login_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/pages/Login.vue */ "./resources/js/components/pages/Login.vue");
-/* harmony import */ var _components_pages_personalPages_PersonalPages_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/pages/personalPages/PersonalPages.vue */ "./resources/js/components/pages/personalPages/PersonalPages.vue");
-/* harmony import */ var _components_pages_personalPages_UserInfo_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/pages/personalPages/UserInfo.vue */ "./resources/js/components/pages/personalPages/UserInfo.vue");
-/* harmony import */ var _components_pages_personalPages_MyCalendar_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/pages/personalPages/MyCalendar.vue */ "./resources/js/components/pages/personalPages/MyCalendar.vue");
-/* harmony import */ var _components_pages_personalPages_SharedCalendarList_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/pages/personalPages/SharedCalendarList.vue */ "./resources/js/components/pages/personalPages/SharedCalendarList.vue");
-/* harmony import */ var _components_pages_personalPages_CreateSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/pages/personalPages/CreateSharedCalendar.vue */ "./resources/js/components/pages/personalPages/CreateSharedCalendar.vue");
-/* harmony import */ var _components_pages_personalPages_SearchSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/pages/personalPages/SearchSharedCalendar.vue */ "./resources/js/components/pages/personalPages/SearchSharedCalendar.vue");
-/* harmony import */ var _components_pages_personalPages_ApplicationSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/pages/personalPages/ApplicationSharedCalendar.vue */ "./resources/js/components/pages/personalPages/ApplicationSharedCalendar.vue");
-/* harmony import */ var _components_pages_personalPages_DeleteAccount_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/pages/personalPages/DeleteAccount.vue */ "./resources/js/components/pages/personalPages/DeleteAccount.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendar_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendar.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendar.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarIndex_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarIndex.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarIndex.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarChat_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarChat.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarChat.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarMembers_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarMembers.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarMembers.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarApplicants_vue__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarApplicants.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarApplicants.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarInfo_vue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarInfo.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarInfo.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_UnShareCalendar_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/UnShareCalendar.vue */ "./resources/js/components/pages/sharedCalendarPages/UnShareCalendar.vue");
-/* harmony import */ var _components_pages_sharedCalendarPages_DeleteSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/DeleteSharedCalendar.vue */ "./resources/js/components/pages/sharedCalendarPages/DeleteSharedCalendar.vue");
-/* harmony import */ var _components_pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/pages/errors/SystemError.vue */ "./resources/js/components/pages/errors/SystemError.vue");
-/* harmony import */ var _components_pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./components/pages/errors/NotFound.vue */ "./resources/js/components/pages/errors/NotFound.vue");
+/* harmony import */ var _components_pages_SendResetPasswordLink_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/pages/SendResetPasswordLink.vue */ "./resources/js/components/pages/SendResetPasswordLink.vue");
+/* harmony import */ var _components_pages_ResetPassword_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/pages/ResetPassword.vue */ "./resources/js/components/pages/ResetPassword.vue");
+/* harmony import */ var _components_pages_personalPages_PersonalPages_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/pages/personalPages/PersonalPages.vue */ "./resources/js/components/pages/personalPages/PersonalPages.vue");
+/* harmony import */ var _components_pages_personalPages_UserInfo_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/pages/personalPages/UserInfo.vue */ "./resources/js/components/pages/personalPages/UserInfo.vue");
+/* harmony import */ var _components_pages_personalPages_MyCalendar_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/pages/personalPages/MyCalendar.vue */ "./resources/js/components/pages/personalPages/MyCalendar.vue");
+/* harmony import */ var _components_pages_personalPages_SharedCalendarList_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/pages/personalPages/SharedCalendarList.vue */ "./resources/js/components/pages/personalPages/SharedCalendarList.vue");
+/* harmony import */ var _components_pages_personalPages_CreateSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/pages/personalPages/CreateSharedCalendar.vue */ "./resources/js/components/pages/personalPages/CreateSharedCalendar.vue");
+/* harmony import */ var _components_pages_personalPages_SearchSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/pages/personalPages/SearchSharedCalendar.vue */ "./resources/js/components/pages/personalPages/SearchSharedCalendar.vue");
+/* harmony import */ var _components_pages_personalPages_ApplicationSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/pages/personalPages/ApplicationSharedCalendar.vue */ "./resources/js/components/pages/personalPages/ApplicationSharedCalendar.vue");
+/* harmony import */ var _components_pages_personalPages_DeleteAccount_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/pages/personalPages/DeleteAccount.vue */ "./resources/js/components/pages/personalPages/DeleteAccount.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendar_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendar.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendar.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarIndex_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarIndex.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarIndex.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarChat_vue__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarChat.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarChat.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarMembers_vue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarMembers.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarMembers.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarApplicants_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarApplicants.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarApplicants.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_SharedCalendarInfo_vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/SharedCalendarInfo.vue */ "./resources/js/components/pages/sharedCalendarPages/SharedCalendarInfo.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_UnShareCalendar_vue__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/UnShareCalendar.vue */ "./resources/js/components/pages/sharedCalendarPages/UnShareCalendar.vue");
+/* harmony import */ var _components_pages_sharedCalendarPages_DeleteSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./components/pages/sharedCalendarPages/DeleteSharedCalendar.vue */ "./resources/js/components/pages/sharedCalendarPages/DeleteSharedCalendar.vue");
+/* harmony import */ var _components_pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./components/pages/errors/SystemError.vue */ "./resources/js/components/pages/errors/SystemError.vue");
+/* harmony import */ var _components_pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./components/pages/errors/NotFound.vue */ "./resources/js/components/pages/errors/NotFound.vue");
 
 
  // ページコンポーネント
+
+
 
 
 
@@ -68302,8 +68770,34 @@ var routes = [{
     }
   }
 }, {
+  path: '/password/reset/link',
+  name: 'sendResetPasswordLink',
+  component: _components_pages_SendResetPasswordLink_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
+  beforeEnter: function beforeEnter(to, from, next) {
+    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['user/loginCheck']) {
+      next({
+        name: 'myCalendar'
+      });
+    } else {
+      next();
+    }
+  }
+}, {
+  path: '/password/reset',
+  name: 'resetPassword',
+  component: _components_pages_ResetPassword_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
+  beforeEnter: function beforeEnter(to, from, next) {
+    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['user/loginCheck']) {
+      next({
+        name: 'myCalendar'
+      });
+    } else {
+      next();
+    }
+  }
+}, {
   path: '/personal-pages',
-  component: _components_pages_personalPages_PersonalPages_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
+  component: _components_pages_personalPages_PersonalPages_vue__WEBPACK_IMPORTED_MODULE_8__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
     if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['user/loginCheck']) {
       next();
@@ -68316,36 +68810,36 @@ var routes = [{
   children: [{
     path: 'my-calendar',
     name: 'myCalendar',
-    component: _components_pages_personalPages_MyCalendar_vue__WEBPACK_IMPORTED_MODULE_8__["default"]
+    component: _components_pages_personalPages_MyCalendar_vue__WEBPACK_IMPORTED_MODULE_10__["default"]
   }, {
     path: 'shared-calendar/list',
     name: 'sharedCalendarList',
-    component: _components_pages_personalPages_SharedCalendarList_vue__WEBPACK_IMPORTED_MODULE_9__["default"]
+    component: _components_pages_personalPages_SharedCalendarList_vue__WEBPACK_IMPORTED_MODULE_11__["default"]
   }, {
     path: 'shared-calendar/create',
     name: 'createSharedCalendar',
-    component: _components_pages_personalPages_CreateSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_10__["default"]
+    component: _components_pages_personalPages_CreateSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_12__["default"]
   }, {
     path: 'shared-calendar/search',
     name: 'searchSharedCalendar',
-    component: _components_pages_personalPages_SearchSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_11__["default"]
+    component: _components_pages_personalPages_SearchSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_13__["default"]
   }, {
     path: 'shared-calendar/:searchId/application',
     name: 'applicationSharedCalendar',
     props: true,
-    component: _components_pages_personalPages_ApplicationSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_12__["default"]
+    component: _components_pages_personalPages_ApplicationSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_14__["default"]
   }, {
     path: 'account/info',
     name: 'userInfo',
-    component: _components_pages_personalPages_UserInfo_vue__WEBPACK_IMPORTED_MODULE_7__["default"]
+    component: _components_pages_personalPages_UserInfo_vue__WEBPACK_IMPORTED_MODULE_9__["default"]
   }, {
     path: 'account/delete',
     name: 'deleteAccount',
-    component: _components_pages_personalPages_DeleteAccount_vue__WEBPACK_IMPORTED_MODULE_13__["default"]
+    component: _components_pages_personalPages_DeleteAccount_vue__WEBPACK_IMPORTED_MODULE_15__["default"]
   }]
 }, {
   path: '/shared-calendar/:sharedCalendarId',
-  component: _components_pages_sharedCalendarPages_SharedCalendar_vue__WEBPACK_IMPORTED_MODULE_14__["default"],
+  component: _components_pages_sharedCalendarPages_SharedCalendar_vue__WEBPACK_IMPORTED_MODULE_16__["default"],
   props: true,
   beforeEnter: function beforeEnter(to, from, next) {
     if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['user/loginCheck']) {
@@ -68357,38 +68851,38 @@ var routes = [{
   children: [{
     path: 'calendar',
     name: 'sharedCalendarIndex',
-    component: _components_pages_sharedCalendarPages_SharedCalendarIndex_vue__WEBPACK_IMPORTED_MODULE_15__["default"]
+    component: _components_pages_sharedCalendarPages_SharedCalendarIndex_vue__WEBPACK_IMPORTED_MODULE_17__["default"]
   }, {
     path: 'chat',
     name: 'sharedCalendarChat',
-    component: _components_pages_sharedCalendarPages_SharedCalendarChat_vue__WEBPACK_IMPORTED_MODULE_16__["default"]
+    component: _components_pages_sharedCalendarPages_SharedCalendarChat_vue__WEBPACK_IMPORTED_MODULE_18__["default"]
   }, {
     path: 'members',
     name: 'sharedCalendarMembers',
-    component: _components_pages_sharedCalendarPages_SharedCalendarMembers_vue__WEBPACK_IMPORTED_MODULE_17__["default"]
+    component: _components_pages_sharedCalendarPages_SharedCalendarMembers_vue__WEBPACK_IMPORTED_MODULE_19__["default"]
   }, {
     path: 'applicants',
     name: 'sharedCalendarApplicants',
-    component: _components_pages_sharedCalendarPages_SharedCalendarApplicants_vue__WEBPACK_IMPORTED_MODULE_18__["default"]
+    component: _components_pages_sharedCalendarPages_SharedCalendarApplicants_vue__WEBPACK_IMPORTED_MODULE_20__["default"]
   }, {
     path: 'info',
     name: 'sharedCalendarInfo',
-    component: _components_pages_sharedCalendarPages_SharedCalendarInfo_vue__WEBPACK_IMPORTED_MODULE_19__["default"]
+    component: _components_pages_sharedCalendarPages_SharedCalendarInfo_vue__WEBPACK_IMPORTED_MODULE_21__["default"]
   }, {
     path: 'unshare',
     name: 'unShareCalendar',
-    component: _components_pages_sharedCalendarPages_UnShareCalendar_vue__WEBPACK_IMPORTED_MODULE_20__["default"]
+    component: _components_pages_sharedCalendarPages_UnShareCalendar_vue__WEBPACK_IMPORTED_MODULE_22__["default"]
   }, {
     path: 'delete',
     name: 'deleteSharedCalendar',
-    component: _components_pages_sharedCalendarPages_DeleteSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_21__["default"]
+    component: _components_pages_sharedCalendarPages_DeleteSharedCalendar_vue__WEBPACK_IMPORTED_MODULE_23__["default"]
   }]
 }, {
   path: '/500',
-  component: _components_pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_22__["default"]
+  component: _components_pages_errors_SystemError_vue__WEBPACK_IMPORTED_MODULE_24__["default"]
 }, {
   path: '/404',
-  component: _components_pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_23__["default"]
+  component: _components_pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_25__["default"]
 }]; // VueRouterインスタンスを作成
 
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({

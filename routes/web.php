@@ -11,5 +11,8 @@
 |
 */
 
+
+Route::get('/password/reset', fn() => view('index'))->name('password.reset');
+
 //API以外のリクエストに対してはindexビューを返す
 Route::get('/{any?}', fn() => view('index'))->where('any', '.+');
