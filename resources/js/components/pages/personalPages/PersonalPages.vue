@@ -1,8 +1,31 @@
 <template>
     <div>
-        <div class="sidebar-wrap">
-            <SideBar />
-        </div>
+        <v-navigation-drawer app  clipped
+            :value="drawer" @input="$emit('changeDrawer', $event)"
+        >
+            <v-list dense nav>
+                <v-list-item :to="{name: 'myCalendar'}">
+                    <v-list-item-content>
+                        マイカレンダー
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item :to="{name: 'sharedCalendarList'}">
+                    <v-list-item-content>
+                        共有カレンダー一覧
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item :to="{name: 'createSharedCalendar'}">
+                    <v-list-item-content>
+                        共有カレンダー作成
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item :to="{name: 'searchSharedCalendar'}">
+                    <v-list-item-content>
+                        共有カレンダー検索
+                    </v-list-item-content>
+                </v-list-item>
+            </v-list>
+        </v-navigation-drawer>
         <router-view :shared-calendar-list="sharedCalendarList"
                      :schedulesData="schedulesData"
                      @changeSchedulesData="changeSchedulesData"
@@ -28,6 +51,11 @@
                     data: [],
                     loadingFlg: false
                 },
+            }
+        },
+        props:{
+            drawer:{
+                type: Boolean,
             }
         },
         methods: {

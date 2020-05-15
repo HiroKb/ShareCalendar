@@ -1,26 +1,15 @@
 <template>
-    <div class="sidebar">
-        <p>{{ userName }}</p>
-
-
-        <router-link :to="{name: 'myCalendar'}">マイカレンダー</router-link>
-
-        <router-link :to="{name: 'sharedCalendarList'}">共有カレンダー一覧</router-link>
-
-        <router-link :to="{name: 'createSharedCalendar'}">共有カレンダー作成</router-link>
-
-        <router-link :to="{name: 'searchSharedCalendar'}">共有カレンダー検索</router-link>
-
-        <router-link :to="{name: 'userInfo'}">ユーザー情報/変更</router-link>
-        <router-link :to="{name: 'deleteAccount'}">アカウント削除</router-link>
-        <button @click="logout">Logout</button>
-    </div>
 </template>
 
 <script>
     import {mapGetters, mapState} from 'vuex'
     export default {
         name: "SideBar",
+        props:{
+            drawer:{
+                type: Boolean,
+            }
+        },
         computed: {
             ...mapState({
                 apiStatus: state => state.user.apiStatus, // API通信成否

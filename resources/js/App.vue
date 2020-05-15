@@ -1,7 +1,12 @@
 <template>
     <v-app>
-        <v-app-bar color="indigo darken-1" dark app>
-            <v-toolbar-title>Share Calendar</v-toolbar-title>
+        <v-app-bar color="indigo darken-1" dark app clipped-left>
+            <v-app-bar-nav-icon @click="drawer = !drawer" v-if="isLogin"></v-app-bar-nav-icon>
+            <v-toolbar-title>
+                <router-link :to="{name: 'myCalendar'}" class="toolbar-title">
+                    SHARE CALENDAR
+                </router-link>
+            </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
                 <v-menu bottom :offset-y="true" v-if="isLogin">
@@ -25,7 +30,9 @@
             </v-toolbar-items>
         </v-app-bar>
         <v-content>
-            <router-view />
+            <router-view :drawer="drawer"
+                         @changeDrawer="drawer = $event"
+            />
         </v-content>
         <loading-screen v-show="loadingFlg"/>
         <flash-message :message="message"/>
@@ -42,6 +49,11 @@
         components: {
             LoadingScreen,
             FlashMessage
+        },
+        data() {
+            return {
+                drawer: null
+            }
         },
         computed: {
             ...mapState({
@@ -83,6 +95,12 @@
         }
     }
 </script>
+<style scoped>
+    .toolbar-title{
+        color: inherit;
+        text-decoration: inherit;
+    }
+</style>
 
 <style>
     html, body, div, span, object, iframe,

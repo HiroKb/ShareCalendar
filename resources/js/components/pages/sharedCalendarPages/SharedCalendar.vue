@@ -1,33 +1,63 @@
 <template>
     <div>
-        <div class="sidebar-wrap">
-            <SideBar/>
-            <div class="shared-calendar-menu">
-                <p>{{ sharedCalendarData.calendar_name }}</p>
-                <router-link :to="{name: 'sharedCalendarIndex', params:{sharedCalendarId: sharedCalendarId}}" class="shared-calendar-link">
-                    カレンダー
-                </router-link>
-                <router-link :to="{name: 'sharedCalendarChat', params:{sharedCalendarId: sharedCalendarId}}" class="shared-calendar-link">
-                    チャット
-                </router-link>
-                <router-link :to="{name: 'sharedCalendarMembers', params:{sharedCalendarId: sharedCalendarId}}" class="shared-calendar-link">
-                    共有メンバー一覧
-                </router-link>
-                <router-link :to="{name: 'sharedCalendarApplicants', params:{sharedCalendarId: sharedCalendarId}}" v-if="adminFlg" class="shared-calendar-link">
-                    共有申請者一覧
-                </router-link>
-                <router-link :to="{name: 'sharedCalendarInfo'}" v-if="adminFlg">
-                    共有カレンダー情報/変更
-                </router-link>
+        <v-navigation-drawer
+            :value="drawer"
+            @input="$emit('changeDrawer', $event)"
+            app clipped
+        >
+            <v-list-item>
+                <v-list-item-content>
+                    <v-list-item-title class="title">
+                        {{ sharedCalendarData.calendar_name }}
+                    </v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
 
-                <router-link :to="{name: 'unShareCalendar'}" v-if="!adminFlg" class="shared-calendar-link">
-                    共有解除
-                </router-link>
-                <router-link :to="{name: 'deleteSharedCalendar'}" v-if="adminFlg" class="shared-calendar-link">
-                    共有カレンダー削除
-                </router-link>
-            </div>
-        </div>
+            <v-divider></v-divider>
+            <v-list dense nav>
+
+                <v-list-item :to="{name: 'sharedCalendarIndex', params: {sharedCalendarId: sharedCalendarId}}">
+                    <v-list-item-content>
+                        共有カレンダー
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item :to="{name: 'sharedCalendarChat', params: {sharedCalendarId: sharedCalendarId}}">
+                    <v-list-item-content>
+                        チャット
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item :to="{name: 'sharedCalendarMembers', params: {sharedCalendarId: sharedCalendarId}}">
+                    <v-list-item-content>
+                        共有メンバー一覧
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item :to="{name: 'sharedCalendarApplicants', params:{sharedCalendarId: sharedCalendarId}}" v-if="adminFlg === 'admin'">
+                    <v-list-item-content>
+                        共有申請者一覧
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item :to="{name: 'sharedCalendarInfo', params:{sharedCalendarId: sharedCalendarId}}" v-if="adminFlg === 'admin'">
+                    <v-list-item-content>
+                        共有カレンダー情報/変更
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item :to="{name: 'unShareCalendar', params:{sharedCalendarId: sharedCalendarId}}" v-if="adminFlg === 'notAdmin'">
+                    <v-list-item-content>
+                        共有解除
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item :to="{name: 'deleteSharedCalendar', params:{sharedCalendarId: sharedCalendarId}}" v-if="adminFlg === 'admin'">
+                    <v-list-item-content>
+                        カレンダー削除
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item :to="{name: 'myCalendar'}">
+                    <v-list-item-content>
+                        マイページ
+                    </v-list-item-content>
+                </v-list-item>
+            </v-list>
+        </v-navigation-drawer>
         <router-view :shared-calendar-id="sharedCalendarId"
                      :shared-calendar-data="sharedCalendarData"
                      :chat-messages="chatMessages"
@@ -71,6 +101,9 @@
             }
         },
         props: {
+            drawer:{
+                type: Boolean,
+            },
             sharedCalendarId: {
                 required: true
             },
@@ -80,7 +113,10 @@
                 userId: 'user/userId'
             }),
             adminFlg: function () {
-                return this.sharedCalendarData.admin_id === this.userId
+                if (this.sharedCalendarData.admin_id){
+                    return this.sharedCalendarData.admin_id === this.userId ? 'admin' : 'notAdmin'
+                }
+                return null
             }
         },
         methods: {
@@ -173,7 +209,7 @@
                 this.fetchChatMessages(),
                 this.fetchSharedCalendarMembers()
             ]).then(x => {
-                if (this.adminFlg) {
+                if (this.adminFlg === 'admin') {
                     this.fetchSharedCalendarApplicants()
                 }
             })
