@@ -1,6 +1,32 @@
 <template>
     <v-app>
-        <RouterView />
+        <v-app-bar color="indigo darken-1" dark app>
+            <v-toolbar-title>Share Calendar</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+                <v-menu bottom :offset-y="true" v-if="isLogin">
+                    <template v-slot:activator="{ on }">
+                        <v-btn v-on="on" text style="text-transform: none">
+                            {{ userName }}<v-icon>mdi-menu-down</v-icon>
+                        </v-btn>
+                    </template>
+                    <v-list>
+                        <v-list-item :to="{name: 'myCalendar'}">
+                            <v-list-item-content>マイページ</v-list-item-content>
+                        </v-list-item>
+                        <v-list-item :to="{name: 'userInfo'}">
+                            <v-list-item-content>アカウント情報/変更</v-list-item-content>
+                        </v-list-item>
+                        <v-list-item @click="logout">
+                            <v-list-item-content>ログアウト</v-list-item-content>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
+            </v-toolbar-items>
+        </v-app-bar>
+        <v-content>
+            <router-view />
+        </v-content>
         <loading-screen v-show="loadingFlg"/>
         <flash-message :message="message"/>
     </v-app>
@@ -9,7 +35,7 @@
 <script>
     import LoadingScreen from "./components/modules/LoadingScreen.vue"
     import FlashMessage from "./components/modules/FlashMessage"
-    import { mapState } from 'vuex'
+    import {mapGetters, mapState} from 'vuex'
     import {INTERNAL_SERVER_ERROR, NOT_FOUND} from './util'
 
     export default {
@@ -21,8 +47,24 @@
             ...mapState({
                 errorCode: state => state.error.code,
                 loadingFlg: state => state.loading.loadingFlg,
-                message: state => state.flashMessage.message
+                message: state => state.flashMessage.message,
+                authApiStatus: state => state.user.apiStatus
+            }),
+            ...mapGetters({
+                userName: 'user/userName',
+                isLogin: 'user/loginCheck'
             })
+        },
+        methods: {
+            async logout () {
+                // userストアのlogoutアクション呼び出し
+                await this.$store.dispatch('user/logout')
+
+                // 通信成功時
+                if (this.authApiStatus){
+                    this.$router.push({name: 'welcome'})
+                }
+            }
         },
         watch: {
             errorCode: { // エラーコードに変化があった場合
