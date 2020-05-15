@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <v-app>
         <RouterView />
         <loading-screen v-show="loadingFlg"/>
         <flash-message :message="message"/>
-    </div>
+    </v-app>
 </template>
 
 <script>

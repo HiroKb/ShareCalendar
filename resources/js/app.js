@@ -6,12 +6,17 @@ import router from "./router"
 import store from "./store";
 // ルートコンポーネント
 import App from './App.vue'
+// Vuetify
+import Vuetify from "vuetify"
+import 'vuetify/dist/vuetify.min.css'
+Vue.use(Vuetify)
 
 const createApp = async () => {
     await store.dispatch('user/getLoginUser')
 
     new Vue({
         el:'#app',
+        vuetify: new Vuetify(),
         router,
         store,
         components: { App },
