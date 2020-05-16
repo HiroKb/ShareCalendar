@@ -5,8 +5,7 @@ export const VALIDATION_ERROR= 422
 export const NOT_FOUND = 404
 export const INTERNAL_SERVER_ERROR = 500
 
-
-/**
+    /**
  * クッキーの値を取得
  * @param {string} searchKey 検索するキー
  * @returns {string} キーに対応する値

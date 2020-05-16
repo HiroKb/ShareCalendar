@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-app-bar color="indigo darken-1" dark app clipped-left>
+        <v-app-bar :color="colors.themeColor" dark app clipped-left>
             <v-app-bar-nav-icon @click="drawer = !drawer" v-if="isLogin"></v-app-bar-nav-icon>
             <v-toolbar-title>
                 <router-link :to="{name: 'myCalendar'}" class="toolbar-title">
@@ -42,6 +42,7 @@
 <script>
     import LoadingScreen from "./components/modules/LoadingScreen.vue"
     import FlashMessage from "./components/modules/FlashMessage"
+    import colorsMixin from "./mixins/colorsMixin"
     import {mapGetters, mapState} from 'vuex'
     import {INTERNAL_SERVER_ERROR, NOT_FOUND} from './util'
 
@@ -50,6 +51,7 @@
             LoadingScreen,
             FlashMessage
         },
+        mixins: [colorsMixin],
         data() {
             return {
                 drawer: null

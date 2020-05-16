@@ -3,10 +3,10 @@
         <v-tabs class="elevation-1" v-model="tab">
             <v-tab href="#login-tab">ログイン</v-tab>
             <v-tab href="#register-tab">新規登録</v-tab>
-            <v-tabs-slider></v-tabs-slider>
+            <v-tabs-slider :color="colors.themeColor"></v-tabs-slider>
 
             <v-tabs-items v-model="tab">
-                <v-divider></v-divider>
+                <v-divider ></v-divider>
                 <v-tab-item value="login-tab">
                     <v-card flat tile>
                         <v-card-text>
@@ -33,7 +33,7 @@
                                     :error="errorMessages ? !!errorMessages.password : false"
                                     :error-messages="errorMessages ? errorMessages.password ? errorMessages.password : [] : []"
                                 ></v-text-field>
-                                <v-btn class="mb-4" block elevation="1" color="white" type="submit">ログイン</v-btn>
+                                <v-btn class="mb-4" block  :color="colors.themeColor" dark type="submit">ログイン</v-btn>
                                 <router-link :to="{name: 'sendResetPasswordLink'}">パスワードをお忘れの方</router-link>
                             </v-form>
                         </v-card-text>
@@ -72,7 +72,7 @@
                                     :error="errorMessages ? !!errorMessages.password : false"
                                     :error-messages="errorMessages ? errorMessages.password ? errorMessages.password : [] : []"
                                 ></v-text-field>
-                                <v-btn block elevation="1" color="white" type="submit">登録</v-btn>
+                                <v-btn block :color="colors.themeColor" dark type="submit">登録</v-btn>
                             </v-form>
                         </v-card-text>
                     </v-card>
@@ -85,10 +85,11 @@
 
 <script>
     import validationRulesMixin from "../../mixins/validationRulesMixin"
+    import colorsMixin from "../../mixins/colorsMixin"
     import {mapState} from 'vuex'
     export default {
         name: "Authentication",
-        mixins: [validationRulesMixin],
+        mixins: [validationRulesMixin, colorsMixin],
         data() {
             return {
                 tab: 'login-tab',
