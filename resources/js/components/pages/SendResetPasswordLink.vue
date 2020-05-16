@@ -36,7 +36,12 @@
             }
         },
         methods: {
+            /**
+             * メール送信処理
+             * @returns {Promise<boolean>}
+             */
             async sendLink(){
+                // バリデーションチェック
                 if (!this.$refs.form.validate()){
                     return false
                 }
