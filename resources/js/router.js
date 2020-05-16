@@ -3,9 +3,7 @@ import VueRouter from "vue-router"
 import store from "./store";
 
 // ページコンポーネント
-import Welcome from "./components/pages/Welcome.vue"
-import Register from "./components/pages/Register.vue"
-import Login from "./components/pages/Login.vue"
+import Authentication from "./components/pages/Authentication.vue"
 import SendResetPasswordLink from "./components/pages/SendResetPasswordLink.vue"
 import ResetPassword from "./components/pages/ResetPassword.vue"
 
@@ -38,32 +36,8 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/',
-        name: 'welcome',
-        component: Welcome,
-        beforeEnter (to, from, next) {
-            if (store.getters['user/loginCheck']){
-                next({name: 'myCalendar'})
-            } else {
-                next()
-            }
-        }
-    },
-    {
-        path: '/register',
-        name: 'register',
-        component: Register,
-        beforeEnter (to, from, next) {
-            if (store.getters['user/loginCheck']){
-                next({name: 'myCalendar'})
-            } else {
-                next()
-            }
-        }
-    },
-    {
-        path: '/login',
-        name: 'login',
-        component: Login,
+        name: 'authentication',
+        component: Authentication,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
                 next({name: 'myCalendar'})
@@ -103,7 +77,7 @@ const routes = [
             if (store.getters['user/loginCheck']){
                 next()
             } else {
-                next({name: 'welcome'})
+                next({name: 'authentication'})
             }
         },
         children: [
@@ -153,7 +127,7 @@ const routes = [
             if (store.getters['user/loginCheck']){
                 next()
             } else {
-                next('/')
+                next({name: 'authentication'})
             }
         },
         children: [

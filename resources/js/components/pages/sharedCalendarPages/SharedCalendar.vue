@@ -77,13 +77,10 @@
 </template>
 
 <script>
-    import SideBar from "../../modules/SideBar"
     import {SUCCESS} from "../../../util";
     import {mapGetters} from "vuex";
-    import moment from "moment";
     export default {
         name: "SharedCalendar",
-        components: {SideBar},
         data () {
             return {
                 sharedCalendarData: {
@@ -218,10 +215,4 @@
 </script>
 
 <style scoped>
-    .sidebar-wrap{
-        display: flex;
-    }
-    .shared-calendar-link{
-        display: block;
-    }
 </style>

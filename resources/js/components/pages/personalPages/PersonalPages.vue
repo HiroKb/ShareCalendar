@@ -35,12 +35,9 @@
 </template>
 
 <script>
-    import SideBar from "../../modules/SideBar"
     import {SUCCESS} from "../../../util";
-    import moment from "moment";
     export default {
         name: "PersonalPages.vue",
-        components: {SideBar},
         data() {
             return {
                 schedulesData: {
