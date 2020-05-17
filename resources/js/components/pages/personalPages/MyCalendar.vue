@@ -1,126 +1,116 @@
 <template>
-    <div>
+    <div style="background: #0E9A00">
         <div class="my-calendar">
-            <div class="calendar">
-                <table>
-                    <caption><span @click="changeSelectedMonth(-1)"><  </span><span>{{ dateLabel }}</span><span @click="changeSelectedMonth(1)">  ></span></caption>
-                    <thead>
-                        <tr>
-                            <th>日</th>
-                            <th>月</th>
-                            <th>火</th>
-                            <th>水</th>
-                            <th>木</th>
-                            <th>金</th>
-                            <th>土</th>
-                        </tr>
-                    </thead>
+        <v-container>
+            <v-row>
+                <v-col cols="7">
+                    <div class="calendar">
+                        <calendar
+                            :date-label="dateLabel"
+                            :weeks="weeks"
+                            :calendar-data="calendarData"
+                            :schedule-number-data="scheduleNumberData"
+                            @changeSelectedMonthRequest="changeSelectedMonth"
+                            @changeSelectedDateRequest="changeSelectedDate"
+                        />
+                    </div>
+                </v-col>
+                <v-col cols="5">
+                    <div class="calendar-menu">
+                        <p>表示スケジュール</p>
+                        <label><input type="radio" value="all" v-model="showSchedules">全て</label>
+                        <label><input type="radio" value="personal" v-model="showSchedules">個人スケジュールのみ</label>
+                        <label><input type="radio" value="shared" v-model="showSchedules">共有スケジュールのみ</label>
 
-                    <tbody>
-                        <tr v-for="row in weeks">
-                            <td
-                                v-for="column in 7"
-                                :data-date="calendarData[(row - 1) * 7 + column - 1].date"
-                                @click="changeSelectDate"
-                            >
-                                <p>{{ calendarData[(row - 1) * 7  + column - 1 ].dateNum }}</p>
-                                <p>{{ scheduleNumberData[(row - 1) * 7 + column - 1 ].schedules.length}}</p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="calendar-menu">
-                <p>表示スケジュール</p>
-                <label><input type="radio" value="all" v-model="showSchedules">全て</label>
-                <label><input type="radio" value="personal" v-model="showSchedules">個人スケジュールのみ</label>
-                <label><input type="radio" value="shared" v-model="showSchedules">共有スケジュールのみ</label>
+                        <form @submit.prevent="createSchedule">
+                            <p>{{ selectedDate }}</p>
 
-                <form @submit.prevent="createSchedule">
-                    <p>{{ selectedDate }}</p>
+                            <p v-if="createError.errors.date">{{ createError.errors.date [0]}}</p>
 
-                    <p v-if="createError.errors.date">{{ createError.errors.date [0]}}</p>
+                            <label for="hour">時間</label>
+                            <select name="hour"
+                                    id="hour"
+                                    v-model="createScheduleData.hour">
+                                <option value="unspecified">指定なし</option>
+                                <option value="00">00</option>
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">06</option>
+                                <option value="07">07</option>
+                                <option value="08">08</option>
+                                <option value="09">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                            </select>
+                            <span> : </span>
 
-                    <label for="hour">時間</label>
-                    <select name="hour"
-                            id="hour"
-                            v-model="createScheduleData.hour">
-                        <option value="unspecified">指定なし</option>
-                        <option value="00">00</option>
-                        <option value="01">01</option>
-                        <option value="02">02</option>
-                        <option value="03">03</option>
-                        <option value="04">04</option>
-                        <option value="05">05</option>
-                        <option value="06">06</option>
-                        <option value="07">07</option>
-                        <option value="08">08</option>
-                        <option value="09">09</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                        <option value="21">21</option>
-                        <option value="22">22</option>
-                        <option value="23">23</option>
-                    </select>
-                    <span> : </span>
+                            <select name="minute"
+                                    id="minute"
+                                    v-model="createScheduleData.minute">
+                                <option value="unspecified">指定なし</option>
+                                <option value="00">00</option>
+                                <option value="05">05</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                                <option value="30">30</option>
+                                <option value="35">35</option>
+                                <option value="40">40</option>
+                                <option value="45">45</option>
+                                <option value="50">50</option>
+                                <option value="55">55</option>
+                            </select>
+                            <p v-if="createError.errors.time">{{ createError.errors.time[0] }}</p>
 
-                    <select name="minute"
-                            id="minute"
-                            v-model="createScheduleData.minute">
-                        <option value="unspecified">指定なし</option>
-                        <option value="00">00</option>
-                        <option value="05">05</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                        <option value="25">25</option>
-                        <option value="30">30</option>
-                        <option value="35">35</option>
-                        <option value="40">40</option>
-                        <option value="45">45</option>
-                        <option value="50">50</option>
-                        <option value="55">55</option>
-                    </select>
-                    <p v-if="createError.errors.time">{{ createError.errors.time[0] }}</p>
+                            <label for="title">スケジュール名 *必須</label>
+                            <input id="title" type="text" v-model="createScheduleData.title">
+                            <p v-if="createError.errors.title">{{ createError.errors.title [0]}}</p>
 
-                    <label for="title">スケジュール名 *必須</label>
-                    <input id="title" type="text" v-model="createScheduleData.title">
-                    <p v-if="createError.errors.title">{{ createError.errors.title [0]}}</p>
-
-                    <label for="description">詳細</label>
-                    <textarea id="description" v-model="createScheduleData.description"></textarea>
-                    <p v-if="createError.errors.description">{{ createError.errors.description[0] }}</p>
+                            <label for="description">詳細</label>
+                            <textarea id="description" v-model="createScheduleData.description"></textarea>
+                            <p v-if="createError.errors.description">{{ createError.errors.description[0] }}</p>
 
 
-                    <button type="submit">スケジュール追加</button>
+                            <button type="submit">スケジュール追加</button>
 
-                </form>
+                        </form>
 
-                <ul class="schedules">
-                    <li class="schedule" v-for="schedule in selectDateSchedules" :key="schedule.id">
-                        <p>{{ schedule.time}}</p>
-                        <p>{{ schedule.title }}</p>
-                        <template v-if="schedule.calendar_id">
-                            <router-link :to="{name: 'sharedCalendarIndex', params:{sharedCalendarId: schedule.calendar_id}}">
-                                <p>共有カレンダー : {{schedule.calendar_name}}</p>
-                            </router-link>
-                        </template>
-                        <template v-else>
-                            <button @click="showEditModal(schedule)"><i class="far fa-file-alt"></i></button>
-                            <button @click="showDeleteModal(schedule)"><i class="far fa-trash-alt"></i></button>
-                        </template>
-                    </li>
-                </ul>
-            </div>
+                        <ul class="schedules">
+                            <li class="schedule" v-for="schedule in selectDateSchedules" :key="schedule.id">
+                                <p>{{ schedule.time}}</p>
+                                <p>{{ schedule.title }}</p>
+                                <template v-if="schedule.calendar_id">
+                                    <router-link :to="{name: 'sharedCalendarIndex', params:{sharedCalendarId: schedule.calendar_id}}">
+                                        <p>共有カレンダー : {{schedule.calendar_name}}</p>
+                                    </router-link>
+                                </template>
+                                <template v-else>
+                                    <button @click="showEditModal(schedule)"><i class="far fa-file-alt"></i></button>
+                                    <button @click="showDeleteModal(schedule)"><i class="far fa-trash-alt"></i></button>
+                                </template>
+                            </li>
+                        </ul>
+                    </div>
+                </v-col>
+            </v-row>
+
+        </v-container>
         </div>
         <div class="modal-background" v-show="modalFlg" @click="hideModal">
             <div class="modal" >
@@ -216,9 +206,13 @@
 
 <script>
     import moment from "moment"
+    import Calendar from "../../modules/Calendar"
     import {CREATED, NOT_FOUND, SUCCESS, VALIDATION_ERROR} from "../../../util";
     export default {
         name: "MyCalendar",
+        components:{
+            Calendar
+        },
         data() {
             return {
                 calendarData: [], // 日付データ配列(選択月前後35日分)
@@ -333,8 +327,8 @@
                 }
             },
             // 選択日の変更
-            changeSelectDate(e) {
-                this.selectedDate = e.currentTarget.dataset.date
+            changeSelectedDate(date) {
+                this.selectedDate = date
             },
            changeCalendarData() {
                 this.calendarData = []
@@ -721,16 +715,19 @@
 
 <style scoped>
 .my-calendar{
-    max-width: 800px;
+    max-width: 100%;
     margin: 0 auto;
     display: flex;
+}
+.calendar{
+    max-width: 100%
 }
 table{
     border-collapse: collapse;
 }
 th,td{
-    width: 80px;
-    height: 80px;
+    /*width: 80px;*/
+    /*height: 80px;*/
     border: solid 1px black;
     text-align: center;
 }
