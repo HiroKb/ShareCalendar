@@ -1,5 +1,5 @@
 <template>
-        <v-card flat tile class="d-flex flex-column align-center">
+        <v-card class="d-flex flex-column align-center">
             <v-card-title>
                 <v-icon x-large class="my-0"@click="changeSelectedMonth(-1)">mdi-menu-left</v-icon>
                 <p class="my-0">{{ dateLabel }}</p>
