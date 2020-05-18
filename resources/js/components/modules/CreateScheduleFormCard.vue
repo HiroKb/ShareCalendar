@@ -110,7 +110,8 @@
                 }
                 return true
             },
-            resetForm(){
+            // フォームのリセット
+            resetForm() {
                 this.form = {
                     hour: {label: '指定なし', value: 'unspecified'},
                     minute: {label: '指定なし', value: 'unspecified'},

@@ -1,5 +1,5 @@
 <template>
-    <div style="height: 100%;">
+    <div>
         <v-navigation-drawer app  clipped
             :value="drawer" @input="$emit('changeDrawer', $event)"
         >

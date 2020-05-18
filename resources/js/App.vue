@@ -103,3 +103,18 @@
         text-decoration: inherit;
     }
 </style>
+<style>
+    .custom-scrollbar::-webkit-scrollbar
+    {
+        width:2px;
+        background:#fafafa;
+    }
+    .custom-scrollbar::-webkit-scrollbar-button
+    {
+        display:none;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb
+    {
+        background: #919191;
+    }
+</style>

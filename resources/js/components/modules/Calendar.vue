@@ -61,12 +61,12 @@
             calendarData: {
                 type: Array,
                 required: true,
-                default: []
+                default: () => ([])
             },
             scheduleNumberData: {
                 type: Array,
                 required: true,
-                default: []
+                default: () => ([])
             }
         },
         methods: {
