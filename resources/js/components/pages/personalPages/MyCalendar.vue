@@ -1,7 +1,8 @@
 <template>
-<div class="content-wrap">
+<!--<div class="content-wrap">-->
     <v-container class="fill-height">
         <v-row class="fill-height">
+<!--            カレンダー-->
             <v-col cols="7">
                 <calendar
                     :date-label="dateLabel"
@@ -12,132 +13,148 @@
                     @changeSelectedDateRequest="changeSelectedDate"
                 />
             </v-col>
+<!--            カレンダーメニュー-->
             <v-col cols="5" class="fill-height">
-<!--                    <create-schedule-form-card-->
-<!--                        style="height: 40%"-->
-<!--                        ref="createForm"-->
-<!--                        :selected-date="selectedDate"-->
-<!--                        :error-messages="createError"-->
-<!--                        @createScheduleRequest="createSchedule"-->
-<!--                    >-->
-<!--                    </create-schedule-form-card>-->
-                    <v-card class="fill-height d-flex flex-column" style="overflow: hidden">
+                <v-card class="fill-height d-flex flex-column" style="overflow: hidden">
+                    <div class="d-flex justify-space-between align-center">
                         <v-card-title class="flex-grow-0 flex-shrink-0">{{ selectedDate}}</v-card-title>
-                        <v-card-text class="pb-0 flex-grow-0 flex-shrink-0" >
-                            <v-radio-group class="my-0" v-model="showSchedules">
-                                <v-radio label="全て" value="all"></v-radio>
-                                <v-radio label="個人スケジュールのみ" value="personal"></v-radio>
-                                <v-radio label="共有スケジュールのみ" value="shared"></v-radio>
-                            </v-radio-group>
-                            <v-divider></v-divider>
-                        </v-card-text>
-                        <v-card-text
-                            style="overflow-y: scroll;"
-                            class="flex-grow-1 flex-shrink-1 custom-scrollbar pt-0"
+                        <v-btn
+                            class="mr-4" small fab :color="colors.themeColor" outlined
+                            @click="createScheduleModal = true"
                         >
-                            <schedule-list
-                                :schedules="selectDateSchedules"
-                                :is-personal="true"
-                                @showEditModalRequest="showEditModal"
-                                @showDeleteModalRequest="showDeleteModal"
-                            >
-                            </schedule-list>
-                        </v-card-text>
-                    </v-card>
+                            <v-icon>mdi-plus</v-icon>
+                        </v-btn>
+
+                    </div>
+                    <v-card-text class="pb-0 flex-grow-0 flex-shrink-0" >
+                        <v-radio-group class="my-0" v-model="showSchedules">
+                            <v-radio label="全て" value="all"></v-radio>
+                            <v-radio label="個人スケジュールのみ" value="personal"></v-radio>
+                            <v-radio label="共有スケジュールのみ" value="shared"></v-radio>
+                        </v-radio-group>
+                        <v-divider></v-divider>
+                    </v-card-text>
+                    <v-card-text
+                        style="overflow-y: scroll;"
+                        class="flex-grow-1 flex-shrink-1 custom-scrollbar pt-0"
+                    >
+                        <schedule-list
+                            :schedules="selectDateSchedules"
+                            :is-personal="true"
+                            @showEditModalRequest="showEditModal"
+                            @showDeleteModalRequest="showDeleteModal"
+                        >
+                        </schedule-list>
+                    </v-card-text>
+                </v-card>
             </v-col>
         </v-row>
 
+<!--        スケジュール作成モーダル-->
+        <v-dialog
+            v-model="createScheduleModal"
+            max-width="500px"
+        >
+            <create-schedule-form-card
+                style="height: 40%"
+                ref="createForm"
+                :selected-date="selectedDate"
+                :error-messages="createError"
+                @createScheduleRequest="createSchedule"
+            >
+            </create-schedule-form-card>
+        </v-dialog>
     </v-container>
-    <div class="modal-background" v-show="modalFlg" @click="hideModal">
-        <div class="modal" >
-            <div class="modal-inner" @click.stop>
+<!--    <div class="modal-background" v-show="modalFlg" @click="hideModal">-->
+<!--        <div class="modal" >-->
+<!--            <div class="modal-inner" @click.stop>-->
 
 
-                <form @submit.prevent="updateSchedule" v-show="editForm.showFlg">
-                    <p v-if="editError.errors.schedule">{{ editError.errors.schedule[0] }}</p>
-                    <p>{{ selectedDate }}</p>
+<!--                <form @submit.prevent="updateSchedule" v-show="editForm.showFlg">-->
+<!--                    <p v-if="editError.errors.schedule">{{ editError.errors.schedule[0] }}</p>-->
+<!--                    <p>{{ selectedDate }}</p>-->
 
-                    <label for="edit-hour">時間</label>
-                    <select name="hour"
-                            id="edit-hour"
-                            v-model="editForm.scheduleData.hour">
-                        <option value="unspecified">指定なし</option>
-                        <option value="00">00</option>
-                        <option value="01">01</option>
-                        <option value="02">02</option>
-                        <option value="03">03</option>
-                        <option value="04">04</option>
-                        <option value="05">05</option>
-                        <option value="06">06</option>
-                        <option value="07">07</option>
-                        <option value="08">08</option>
-                        <option value="09">09</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                        <option value="21">21</option>
-                        <option value="22">22</option>
-                        <option value="23">23</option>
-                    </select>
-                    <span> : </span>
+<!--                    <label for="edit-hour">時間</label>-->
+<!--                    <select name="hour"-->
+<!--                            id="edit-hour"-->
+<!--                            v-model="editForm.scheduleData.hour">-->
+<!--                        <option value="unspecified">指定なし</option>-->
+<!--                        <option value="00">00</option>-->
+<!--                        <option value="01">01</option>-->
+<!--                        <option value="02">02</option>-->
+<!--                        <option value="03">03</option>-->
+<!--                        <option value="04">04</option>-->
+<!--                        <option value="05">05</option>-->
+<!--                        <option value="06">06</option>-->
+<!--                        <option value="07">07</option>-->
+<!--                        <option value="08">08</option>-->
+<!--                        <option value="09">09</option>-->
+<!--                        <option value="10">10</option>-->
+<!--                        <option value="11">11</option>-->
+<!--                        <option value="12">12</option>-->
+<!--                        <option value="13">13</option>-->
+<!--                        <option value="14">14</option>-->
+<!--                        <option value="15">15</option>-->
+<!--                        <option value="16">16</option>-->
+<!--                        <option value="17">17</option>-->
+<!--                        <option value="18">18</option>-->
+<!--                        <option value="19">19</option>-->
+<!--                        <option value="20">20</option>-->
+<!--                        <option value="21">21</option>-->
+<!--                        <option value="22">22</option>-->
+<!--                        <option value="23">23</option>-->
+<!--                    </select>-->
+<!--                    <span> : </span>-->
 
-                    <select name="minute"
-                            id="edit-minute"
-                            v-model="editForm.scheduleData.minute">
-                        <option value="unspecified">指定なし</option>
-                        <option value="00">00</option>
-                        <option value="05">05</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                        <option value="25">25</option>
-                        <option value="30">30</option>
-                        <option value="35">35</option>
-                        <option value="40">40</option>
-                        <option value="45">45</option>
-                        <option value="50">50</option>
-                        <option value="55">55</option>
-                    </select>
-                    <p v-if="editError.errors.time">{{ editError.errors.time[0] }}</p>
+<!--                    <select name="minute"-->
+<!--                            id="edit-minute"-->
+<!--                            v-model="editForm.scheduleData.minute">-->
+<!--                        <option value="unspecified">指定なし</option>-->
+<!--                        <option value="00">00</option>-->
+<!--                        <option value="05">05</option>-->
+<!--                        <option value="10">10</option>-->
+<!--                        <option value="15">15</option>-->
+<!--                        <option value="20">20</option>-->
+<!--                        <option value="25">25</option>-->
+<!--                        <option value="30">30</option>-->
+<!--                        <option value="35">35</option>-->
+<!--                        <option value="40">40</option>-->
+<!--                        <option value="45">45</option>-->
+<!--                        <option value="50">50</option>-->
+<!--                        <option value="55">55</option>-->
+<!--                    </select>-->
+<!--                    <p v-if="editError.errors.time">{{ editError.errors.time[0] }}</p>-->
 
-                    <label for="edit-title">スケジュール名 *必須</label>
-                    <input id="edit-title" type="text" v-model="editForm.scheduleData.title">
-                    <p v-if="editError.errors.title">{{ editError.errors.title[0] }}</p>
+<!--                    <label for="edit-title">スケジュール名 *必須</label>-->
+<!--                    <input id="edit-title" type="text" v-model="editForm.scheduleData.title">-->
+<!--                    <p v-if="editError.errors.title">{{ editError.errors.title[0] }}</p>-->
 
-                    <label for="edit-description">詳細</label>
-                    <textarea id="edit-description" v-model="editForm.scheduleData.description"></textarea>
-                    <p v-if="editError.errors.description">{{ editError.errors.description[0] }}</p>
+<!--                    <label for="edit-description">詳細</label>-->
+<!--                    <textarea id="edit-description" v-model="editForm.scheduleData.description"></textarea>-->
+<!--                    <p v-if="editError.errors.description">{{ editError.errors.description[0] }}</p>-->
 
-                    <button type="submit">スケジュール更新</button>
-                </form>
+<!--                    <button type="submit">スケジュール更新</button>-->
+<!--                </form>-->
 
-                <i class="fas fa-times" @click="hideModal"></i>
-                <div v-show="deleteForm.showFlg">
-                    <p>このスケジュールを削除しますか？</p>
-                    <p>日付</p>
-                    <p>{{ deleteData.date}}</p>
-                    <p>時間</p>
-                    <p>{{ deleteData.time }}</p>
-                    <p>スケジュール名</p>
-                    <p>{{ deleteData.title }}</p>
-                    <p>詳細</p>
-                    <p>{{ deleteData.description }}</p>
-                    <form @submit.prevent="deleteSchedule">
-                        <button>削除</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<!--                <i class="fas fa-times" @click="hideModal"></i>-->
+<!--                <div v-show="deleteForm.showFlg">-->
+<!--                    <p>このスケジュールを削除しますか？</p>-->
+<!--                    <p>日付</p>-->
+<!--                    <p>{{ deleteData.date}}</p>-->
+<!--                    <p>時間</p>-->
+<!--                    <p>{{ deleteData.time }}</p>-->
+<!--                    <p>スケジュール名</p>-->
+<!--                    <p>{{ deleteData.title }}</p>-->
+<!--                    <p>詳細</p>-->
+<!--                    <p>{{ deleteData.description }}</p>-->
+<!--                    <form @submit.prevent="deleteSchedule">-->
+<!--                        <button>削除</button>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 </template>
 
 <script>
@@ -165,6 +182,7 @@
                 selectedDate: null, // 選択中の日付
                 weeks: 0, // 選択月が何週を跨ぐか
                 showSchedules: 'all', // 表示するスケジュールの種類
+                createScheduleModal: false,
                 modalFlg: false,
                 editForm: {
                     showFlg: false,
@@ -354,7 +372,8 @@
 
                     this.$emit('changeSchedulesData',{schedules: newSchedules})
 
-                    this.$refs.createForm.resetForm()
+
+                    this.createScheduleModal = false
 
 
                     this.$store.commit('flashMessage/setMessage', 'スケジュールを追加しました')
@@ -610,6 +629,13 @@
                 }
                 this.changeCalendarData()
             },
+            // モーダルが消えたときにモーダル内のフォームをリセット
+            createScheduleModal:  function (val) {
+                console.log(val)
+                if (val === false){
+                    this.$refs.createForm.resetForm()
+                }
+            }
         },
     }
 </script>

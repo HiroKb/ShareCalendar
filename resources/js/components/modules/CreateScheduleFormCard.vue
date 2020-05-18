@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <v-card-title class="pb-0">{{ selectedDate }}</v-card-title>
+        <v-card-title>{{ selectedDate }}</v-card-title>
         <v-card-text>
             <v-form ref="form" @submit.prevent="createSchedule">
                 <v-container class="pa-0">
@@ -57,7 +57,7 @@
                     label="詳細"
                     outlined
                     dense
-                    rows="2"
+                    rows="4"
                 >
                 </v-textarea>
                 <v-btn class="my-0" block :color="colors.themeColor" dark type="submit">スケジュール追加</v-btn>
