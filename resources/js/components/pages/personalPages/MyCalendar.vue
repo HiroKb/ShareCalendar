@@ -1,5 +1,5 @@
 <template>
-    <v-container class="content-wrap">
+    <v-container class="content-wrap py-12">
         <v-row class="fill-height">
 <!--            カレンダー-->
             <v-col cols="7">
