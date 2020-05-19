@@ -1,36 +1,28 @@
 <template>
-    <div>
-        <div class="loading-background">
-            <vue-loading type="bubbles"
-                         color="#160063"
-                         :size="{ width: '100px', height: '100px'}"
-            >
-            </vue-loading>
-        </div>
-    </div>
+    <v-overlay :value="loadingFlg" z-index="203">
+        <v-progress-circular
+            size="100"
+            width="8"
+            :color="colors.themeColor"
+            indeterminate
+        ></v-progress-circular>
+    </v-overlay>
 </template>
 
 <script>
-    import {VueLoading} from 'vue-loading-template'
+    import colorsMixin from "../../mixins/colorsMixin"
     export default {
         name: "LoadingScreen",
-        components: {
-            VueLoading
+        mixins: [colorsMixin],
+        props: {
+            loadingFlg: {
+                type: Boolean,
+                required: true,
+                default: false
+            }
         }
     }
 </script>
 
 <style scoped>
-    .loading-background{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        width: 100vw ;
-        z-index: 11;
-        background: rgba(0, 0, 0, .1);
-    }
 </style>

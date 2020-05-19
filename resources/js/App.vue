@@ -30,12 +30,12 @@
             </v-toolbar-items>
         </v-app-bar>
         <v-content>
+            <flash-message :message="message"/>
             <router-view :drawer="drawer"
                          @changeDrawer="drawer = $event"
             />
         </v-content>
-        <loading-screen v-show="loadingFlg"/>
-        <flash-message :message="message"/>
+        <loading-screen :loading-flg="loadingFlg"/>
     </v-app>
 </template>
 

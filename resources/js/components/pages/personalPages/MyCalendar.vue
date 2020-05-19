@@ -1,6 +1,5 @@
 <template>
-<!--<div class="content-wrap">-->
-    <v-container class="fill-height">
+    <v-container class="content-wrap">
         <v-row class="fill-height">
 <!--            カレンダー-->
             <v-col cols="7">
@@ -372,9 +371,7 @@
 
                     this.$emit('changeSchedulesData',{schedules: newSchedules})
 
-
                     this.createScheduleModal = false
-
 
                     this.$store.commit('flashMessage/setMessage', 'スケジュールを追加しました')
                     return false
@@ -644,26 +641,4 @@
     .content-wrap{
         height: calc(100vh - 64px);
     }
-
-    .modal-background{
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        width: 100vw ;
-        z-index: 10;
-        background: rgba(0, 0, 0, .1);
-    }
-
-    .modal{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        width: 100vw ;
-    }
-    .modal-inner{
-        background: #ffffff;
-    }
-
 </style>
