@@ -1,8 +1,8 @@
 <template>
     <v-card>
-        <v-card-title>{{ selectedDate }}</v-card-title>
+        <v-card-title>{{ scheduleData.date }}</v-card-title>
         <v-card-text>
-            <v-form ref="form" @submit.prevent="createSchedule">
+            <v-form ref="form" @submit.prevent="updateSchedule">
                 <v-container class="pa-0">
                     <v-row>
                         <v-col cols="6" class="pb-0">
@@ -39,7 +39,6 @@
 
                 <v-text-field
                     v-model="form.title"
-                    :rules="[validationRules.required, validationRules.max50]"
                     :error="errorMessages ? !!errorMessages.title : false"
                     :error-messages="errorMessages ? errorMessages.title ? errorMessages.title : [] : []"
                     counter="50"
@@ -50,7 +49,6 @@
 
                 <v-textarea
                     v-model="form.description"
-                    :rules="[validationRules.max100]"
                     :error="errorMessages ? !!errorMessages.description : false"
                     :error-messages="errorMessages ? errorMessages.description ? errorMessages.description : [] : []"
                     counter="100"
@@ -60,7 +58,7 @@
                     rows="4"
                 >
                 </v-textarea>
-                <v-btn class="my-0" block :color="colors.themeColor" dark type="submit">スケジュール追加</v-btn>
+                <v-btn class="my-0" block :color="colors.themeColor" dark type="submit">スケジュール更新</v-btn>
 
             </v-form>
         </v-card-text>
@@ -72,7 +70,7 @@
     import validationRulesMixin from "../../mixins/validationRulesMixin"
     import colorsMixin from "../../mixins/colorsMixin"
     export default {
-        name: "CreateScheduleFormCard",
+        name: "EditScheduleFormCard",
         mixins: [formTimeMixin, validationRulesMixin, colorsMixin],
         data() {
             return {
@@ -85,11 +83,13 @@
             }
         },
         props: {
-            selectedDate: {
-                type: String,
+            // 更新するスケジュールデータ
+            scheduleData: {
+                type: Object,
                 required: true,
-                default: null
+                default: () => ({})
             },
+            // バックエンドバリデーションエラーメッセージ
             errorMessages: {
                 type: Object,
                 required: true,
@@ -110,42 +110,60 @@
                 }
                 return true
             },
+            // scheduleData(更新するスケジュールデータ)をもとにformの値を変更
+            changeForm() {
+                const schedule = this.scheduleData
+                let hour, minute
+
+                if (schedule.time) {
+                    hour = schedule.time.substr(0, 2)
+                    minute = schedule.time.substr(3, 2)
+                }else{
+                    hour = 'unspecified'
+                    minute = 'unspecified'
+                }
+
+                this.form = {
+                    hour: this.formTimes.hour.find((obj)=> obj.value === hour),
+                    minute: this.formTimes.minute.find((obj)=> obj.value === minute),
+                    title: schedule.title ? schedule.title : '',
+                    description: schedule.description ? schedule.description : ''
+                }
+            },
             // フォームのリセット
             resetForm() {
-                this.form = {
-                    hour: {label: '指定なし', value: 'unspecified'},
-                    minute: {label: '指定なし', value: 'unspecified'},
-                    title: '',
-                    description: ''
-                }
                 this.$refs.form.resetValidation()
             },
-            /**
-             * スケジュール作成リクエストをエミット
-             * @returns {boolean}
-             */
-            createSchedule() {
+            // スケジュール更新リクエストをエミット
+            updateSchedule() {
                 // バリデーション
                 if (!this.$refs.form.validate()){
                     return false
                 }
 
-                // スケジュール作成用のデータを作成
+                // スケジュール更新用のデータを作成
                 const time = this.form.hour.value === 'unspecified'
                     ? null
                     : this.form.hour.value + ':' + this.form.minute.value + ':00'
                 const description = !!this.form.description ? this.form.description : null
                 const data = {
-                    date: this.selectedDate,
                     time: time,
                     title: this.form.title,
                     description: description
                 }
 
-                this.$emit('createScheduleRequest', data)
+                this.$emit('updateScheduleRequest', data)
             }
         },
         watch: {
+            // 更新スケジュールが変更された場合
+            scheduleData: {
+                handler: function (val) {
+                    Object.keys(val).length && this.changeForm()
+                },
+                deep: true,
+                immediate: true
+            },
             'form.hour.value': function (val) {
                 if(val === 'unspecified'){
                     this.form.minute = {label: '指定なし', value: 'unspecified'}
@@ -155,7 +173,8 @@
                 if(val === 'unspecified'){
                     this.form.hour = {label: '指定なし', value: 'unspecified'}
                 }
-            }
+            },
+
         }
     }
 </script>
