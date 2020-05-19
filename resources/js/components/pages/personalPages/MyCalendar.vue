@@ -55,13 +55,27 @@
             max-width="500px"
         >
             <create-schedule-form-card
-                style="height: 40%"
                 ref="createForm"
                 :selected-date="selectedDate"
                 :error-messages="createError"
                 @createScheduleRequest="createSchedule"
+                style="height: 40%"
             >
             </create-schedule-form-card>
+        </v-dialog>
+
+
+<!--        スケジュール削除モーダル-->
+        <v-dialog
+            v-model="deleteScheduleModal"
+            max-width="500px"
+        >
+            <delete-schedule-form-card
+                ref="deleteForm"
+                :schedule-data="scheduleDataToBeDeleted"
+                @deleteScheduleRequest="deleteSchedule"
+                style="height: 40%"
+            ></delete-schedule-form-card>
         </v-dialog>
     </v-container>
 <!--    <div class="modal-background" v-show="modalFlg" @click="hideModal">-->
@@ -135,31 +149,13 @@
 <!--                    <button type="submit">スケジュール更新</button>-->
 <!--                </form>-->
 
-<!--                <i class="fas fa-times" @click="hideModal"></i>-->
-<!--                <div v-show="deleteForm.showFlg">-->
-<!--                    <p>このスケジュールを削除しますか？</p>-->
-<!--                    <p>日付</p>-->
-<!--                    <p>{{ deleteData.date}}</p>-->
-<!--                    <p>時間</p>-->
-<!--                    <p>{{ deleteData.time }}</p>-->
-<!--                    <p>スケジュール名</p>-->
-<!--                    <p>{{ deleteData.title }}</p>-->
-<!--                    <p>詳細</p>-->
-<!--                    <p>{{ deleteData.description }}</p>-->
-<!--                    <form @submit.prevent="deleteSchedule">-->
-<!--                        <button>削除</button>-->
-<!--                    </form>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 </template>
 
 <script>
     import moment from "moment"
     import Calendar from "../../modules/Calendar"
     import CreateScheduleFormCard from "../../modules/CreateScheduleFormCard"
+    import DeleteScheduleFormCard from "../../modules/DeleteScheduleFormCard"
     import ScheduleList from "../../modules/ScheduleList"
     import formTimeMixin from "../../../mixins/formTimeMixin"
     import validationRulesMixin from "../../../mixins/validationRulesMixin"
@@ -170,8 +166,9 @@
         mixins: [formTimeMixin, validationRulesMixin, colorsMixin],
         components:{
             Calendar,
+            ScheduleList,
             CreateScheduleFormCard,
-            ScheduleList
+            DeleteScheduleFormCard
         },
         data() {
             return {
@@ -182,6 +179,7 @@
                 weeks: 0, // 選択月が何週を跨ぐか
                 showSchedules: 'all', // 表示するスケジュールの種類
                 createScheduleModal: false,
+                deleteScheduleModal: false,
                 modalFlg: false,
                 editForm: {
                     showFlg: false,
@@ -193,6 +191,9 @@
                         title: '',
                         description: ''
                     }
+                },
+                scheduleDataToBeDeleted: {
+
                 },
                 deleteForm: {
                     showFlg: false,
@@ -262,14 +263,6 @@
                     }
                 }
             },
-            deleteData: function () {
-                return {
-                    date: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.date : '',
-                    time: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.time ? this.deleteForm.scheduleData.time : '指定なし' : '',
-                    title: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.title : '',
-                    description: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.description ? this.deleteForm.scheduleData.description : 'なし' : '',
-                }
-            }
         },
         methods: {
             // 選択月の変更
@@ -444,20 +437,20 @@
             },
             // スケジュールの削除
             async deleteSchedule(){
-                if (!this.deleteForm.scheduleData) {
+                if (!this.scheduleDataToBeDeleted.id){
                     return false
                 }
 
                 this.$store.commit('loading/setLoadingFlg', true)
-                const response = await axios.delete('/api/schedules/' + this.deleteForm.scheduleData.id)
+                const response = await axios.delete('/api/schedules/' + this.scheduleDataToBeDeleted.id)
                 this.$store.commit('loading/setLoadingFlg', false)
 
                 if (response.status === SUCCESS) {
                     // カレンダーデータとスケジュールリストデータを更新
-                    const newSchedules = this.removeScheduleData(this.deleteForm.scheduleData, this.calendarData, this.schedulesData.schedules)
+                    const newSchedules = this.removeScheduleData(this.scheduleDataToBeDeleted, this.calendarData, this.schedulesData.schedules)
                     this.$emit('changeSchedulesData',{schedules: newSchedules})
 
-                    this.hideModal()
+                    this.deleteScheduleModal = false
                     this.$store.commit('flashMessage/setMessage', 'スケジュールを削除しました')
                     return false
                 }
@@ -587,9 +580,8 @@
                 }
             },
             showDeleteModal(schedule){
-                this.modalFlg = true
-                this.deleteForm.showFlg = true
-                this.deleteForm.scheduleData = schedule
+                this.scheduleDataToBeDeleted = schedule
+                this.deleteScheduleModal = true
             },
             hideModal(){
                 this.modalFlg = false
@@ -628,7 +620,6 @@
             },
             // モーダルが消えたときにモーダル内のフォームをリセット
             createScheduleModal:  function (val) {
-                console.log(val)
                 if (val === false){
                     this.$refs.createForm.resetForm()
                 }

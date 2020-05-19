@@ -3,7 +3,7 @@
             <template v-for="(schedule,index) in schedules">
                 <v-list-item :key="index">
                     <v-list-item-content>
-                        <v-list-item-title v-if="schedule.time">{{timeFormatter(schedule.time)}}</v-list-item-title>
+                        <v-list-item-title v-if="schedule.time">{{utilMethods.timeFormatter(schedule.time)}}</v-list-item-title>
                         <v-list-item-title>{{schedule.title}}</v-list-item-title>
                     </v-list-item-content>
 
@@ -37,9 +37,10 @@
 
 <script>
     import colorsMixin from "../../mixins/colorsMixin"
+    import utilMethodsMixin from "../../mixins/utilMethodsMixin"
     export default {
         name: "ScheduleList",
-        mixins: [colorsMixin],
+        mixins: [colorsMixin, utilMethodsMixin],
         props: {
             schedules: {
                 type: Array,
@@ -53,18 +54,6 @@
             }
         },
         methods: {
-            /**
-             * 時刻フォーマットを変更
-             * '01:02:03'->'1:02', '11:22:33'->'11:22'
-             * @param time
-             * @returns {string}
-             */
-            timeFormatter(time) {
-                if (time.toString().charAt(0) === '0'){
-                    return time.toString().substr(1, 4)
-                }
-                return time.toString().substr(0, 5)
-            },
             showEditModal(schedule) {
                 this.$emit('showEditModalRequest', schedule)
             },
