@@ -4,8 +4,8 @@
 <!--            カレンダー-->
             <v-col cols="7">
                 <calendar
-                    :date-label="dateLabel"
-                    :weeks="weeks"
+                    :date-label="selectedMonthLabel"
+                    :weeks="weeksNum"
                     :calendar-data="calendarData"
                     :schedule-number-data="scheduleNumberData"
                     @changeSelectedMonthRequest="changeSelectedMonth"
@@ -16,7 +16,7 @@
             <v-col cols="5" class="fill-height">
                 <v-card class="fill-height d-flex flex-column" style="overflow: hidden">
                     <div class="d-flex justify-space-between align-center">
-                        <v-card-title class="flex-grow-0 flex-shrink-0">{{ selectedDate}}</v-card-title>
+                        <v-card-title class="flex-grow-0 flex-shrink-0">{{ selectedDateLabel}}</v-card-title>
                         <v-btn
                             class="mr-4" small fab :color="colors.themeColor" outlined
                             @click="createScheduleModal = true"
@@ -56,7 +56,7 @@
         >
             <create-schedule-form-card
                 ref="createForm"
-                :selected-date="selectedDate"
+                :selected-date="selectedDateLabel"
                 :error-messages="createError"
                 @createScheduleRequest="createSchedule"
             >
@@ -93,18 +93,23 @@
 
 <script>
     import moment from "moment"
+
     import Calendar from "../../modules/Calendar"
     import CreateScheduleFormCard from "../../modules/CreateScheduleFormCard"
     import EditScheduleFormCard from "../../modules/EditScheduleFormCard"
     import DeleteScheduleFormCard from "../../modules/DeleteScheduleFormCard"
     import ScheduleList from "../../modules/ScheduleList"
-    import formTimeMixin from "../../../mixins/formTimeMixin"
-    import validationRulesMixin from "../../../mixins/validationRulesMixin"
+
     import colorsMixin from "../../../mixins/colorsMixin"
+    import schedulesAndCalendarMethodsMixin from "../../../mixins/schedulesAndCalendarMethodsMixin"
+
     import {CREATED, SUCCESS, VALIDATION_ERROR} from "../../../util";
     export default {
         name: "MyCalendar",
-        mixins: [formTimeMixin, validationRulesMixin, colorsMixin],
+        mixins: [
+            colorsMixin,
+            schedulesAndCalendarMethodsMixin
+        ],
         components:{
             Calendar,
             ScheduleList,
@@ -114,28 +119,31 @@
         },
         data() {
             return {
-                calendarData: [], // 日付データ配列(選択月前後35日分)
-                dateLabel: '', // 選択中の年月表示用(YYYY年MM月)
-                selectedMonth: null, // 選択中の月(momentオブジェクト)
-                selectedDate: null, // 選択中の日付
-                weeks: 0, // 選択月が何週を跨ぐか
+                calendarData: [], // カレンダーデータ配列
+                selectedMonthLabel: '', // 選択中の年月(YYYY年MM月)
+                selectedMonth: {}, // 選択中の月(momentオブジェクト)
+                selectedDateLabel: '', // 選択中の日付(YYYY-MM-DD)
+                weeksNum: 0, // 選択月が跨ぐ週数
                 showSchedules: 'all', // 表示するスケジュールの種類
-                createScheduleModal: false,
-                editScheduleModal: false,
-                deleteScheduleModal: false,
-                scheduleDataToBeDeleted: {},
-                scheduleDataToBeUpdated: {},
-                createError: {},
-                editError: {},
+                createScheduleModal: false, // スケジュール作成モーダルの表示フラグ
+                editScheduleModal: false, // スケジュール更新モーダルの表示フラグ
+                deleteScheduleModal: false, // スケジュール削除モーダルの表示フラグ
+                scheduleDataToBeUpdated: {}, // 更新するスケジュールデータ
+                scheduleDataToBeDeleted: {}, // 削除するスケジュールデータ
+                createError: {}, // スケジュール作成APIバリデーションエラー
+                editError: {}, // スケジュール更新APIバリデーションエラー
             }
         },
         props: {
+            // スケジュールデータ
             schedulesData: {
                 type: Object,
                 required: true,
                 default: {
+                    // 取得したスケジュール年
                     schedulesYear: null,
-                    schedules: [],
+                    // スケジュールデータオブジェクト {'YYYY-MM-DD': Array, ...}
+                    schedules: {},
                 }
             }
         },
@@ -162,7 +170,7 @@
             selectDateSchedules: function() {
                 if(this.showSchedules === 'personal'){
                     for (let i = 0; i < this.calendarData.length; i++){
-                        if (this.selectedDate === this.calendarData[i].date){
+                        if (this.selectedDateLabel === this.calendarData[i].date){
                             return this.calendarData[i].schedules.filter((schedule) =>{
                                 return schedule.user_id
                             })
@@ -170,7 +178,7 @@
                     }
                 } else if(this.showSchedules === 'shared') {
                     for (let i = 0; i < this.calendarData.length; i++){
-                        if (this.selectedDate === this.calendarData[i].date){
+                        if (this.selectedDateLabel === this.calendarData[i].date){
                             return this.calendarData[i].schedules.filter((schedule) =>{
                                 return schedule.calendar_name
                             })
@@ -178,7 +186,7 @@
                     }
                 } else {
                     for (let i = 0; i < this.calendarData.length; i++){
-                        if (this.selectedDate === this.calendarData[i].date){
+                        if (this.selectedDateLabel === this.calendarData[i].date){
                             return this.calendarData[i].schedules
                         }
                     }
@@ -196,60 +204,16 @@
             },
             // 選択日の変更
             changeSelectedDate(date) {
-                this.selectedDate = date
+                this.selectedDateLabel = date
             },
-            // カレンダーデータの変更
-           changeCalendarData() {
-                this.calendarData = []
-                this.dateLabel = moment(this.selectedMonth).format('YYYY年MM月')
+            // カレンダー関連のデータを変更
+            changeCalendarRelatedData() {
+                const newData = this.schedulesAndCalendarMethods.generateCalendarRelatedData(this.selectedMonth, this.schedulesData.schedules)
 
-                // 選択月の日数
-                const monthDays = moment(this.selectedMonth).daysInMonth()
-                // 選択月初日の曜日
-                const firstDay = moment(this.selectedMonth).startOf('month').day()
-
-                this.weeks = Math.ceil((monthDays + firstDay) / 7)
-
-
-
-                // 選択月初日より前の日付データ(選択月前月)を配列へ追加
-                for(let i = 0; i < firstDay; i++){
-                    const day = moment(this.selectedMonth).startOf('month').subtract(i + 1, 'days')
-                    this.calendarData.unshift({
-                        date: day.format('YYYY-MM-DD'),
-                        dateNum: day.date(),
-                        schedules: []
-                    })
-                }
-
-
-                // 選択月の日付データを配列へ追加
-                for (let i = 0; i < monthDays; i++) {
-                    const day = moment(this.selectedMonth).startOf('month').add(i, 'days')
-                    this.calendarData.push({
-                        date: day.format('YYYY-MM-DD'),
-                        dateNum: day.date(),
-                        schedules: []
-                    })
-                }
-
-
-                // 選択月末日より後の日付データを配列へ追加
-                for (let length = this.calendarData.length, i = 1; length < this.weeks * 7; length++, i++){
-                    const day = moment(this.selectedMonth).endOf('month').add(i, 'days')
-                    this.calendarData.push({
-                        date: day.format('YYYY-MM-DD'),
-                        dateNum : day.date(),
-                        schedules: []
-                    })
-                }
-
-                // 日付データ配列にスケジュールデータを追加
-                this.calendarData.forEach((dateData) => {
-                    if (this.schedulesData.schedules[dateData.date]){
-                        dateData.schedules = _.cloneDeep(this.schedulesData.schedules[dateData.date])
-                    }
-                })
+               this.selectedDateLabel = newData.selectedDateLabel
+               this.selectedMonthLabel = newData.selectedMonthLabel
+               this.weeksNum = newData.weeksNum
+               this.calendarData = newData.calendarData
             },
             // スケジュールの取得
             async fetchSchedules(year){
@@ -274,188 +238,117 @@
 
                 this.$store.commit('error/setCode', response.status)
             },
-            // スケジュール追加
-            async createSchedule(data){
+            /**
+             * スケジュールの作成
+             * @param {Object}schedule 作成するスケジュール
+             * @return {Promise<boolean>}
+             */
+            async createSchedule(schedule){
                 this.createError = {}
 
+                // スケジュール作成APIに作成するスケジュールデータとともにpostリクエスト
+                // レスポンス待ちの間ローディング画面を表示
                 this.$store.commit('loading/setLoadingFlg', true)
-                const response = await axios.post('/api/schedules', data)
+                const response = await axios.post('/api/schedules', schedule)
                 this.$store.commit('loading/setLoadingFlg', false)
 
+                // リクエスト成功の場合
                 if (response.status === CREATED) {
-                    // カレンダーデータとスケジュールリストデータを更新
-                    const newSchedules = this.addScheduleData(response.data, this.calendarData, this.schedulesData.schedules)
+                    // スケジュールリストとカレンダーデータにスケジュールを追加
+                    const newData = this.schedulesAndCalendarMethods.addScheduleToSchedulesListAndCalendarData(response.data, this.schedulesData.schedules, this.calendarData)
+                    this.$emit('changeSchedulesData',{schedules: newData.newScheduleList})
+                    this.calendarData = newData.newCalendarData
 
-                    this.$emit('changeSchedulesData',{schedules: newSchedules})
-
+                    // モーダルを非表示にしフラッシュメッセージを表示
                     this.createScheduleModal = false
-
                     this.$store.commit('flashMessage/setMessage', 'スケジュールを追加しました')
                     return false
                 }
 
+                // バリデーションエラーの場合エラーメッセージを代入
                 if (response.status === VALIDATION_ERROR) {
                     this.createError = response.data.errors
                     return false
                 }
 
+                // 上記以外の場合エラーコードを代入
                 this.$store.commit('error/setCode', response.status)
-
             },
-            // スケジュールの更新
-            async updateSchedule(data){
+            /**
+             * スケジュールの更新
+             * @param {Object} schedule 更新するスケジュール
+             * @return {Promise<boolean>}
+             */
+            async updateSchedule(schedule){
                 this.editError = {}
 
+                // スケジュールが選択されていない場合
                 if (!this.scheduleDataToBeUpdated.id) {
+                    this.$store.commit('flashMessage/setMessage', 'スケジュールを選択してください')
                     return false
                 }
 
+                // スケジュール更新APIに更新するスケジュールデータとともにpatchリクエスト
+                // レスポンス待ちの間ローディング画面を表示
                 this.$store.commit('loading/setLoadingFlg', true)
-                const response = await axios.patch('/api/schedules/' + this.scheduleDataToBeUpdated.id, data)
+                const response = await axios.patch('/api/schedules/' + this.scheduleDataToBeUpdated.id, schedule)
                 this.$store.commit('loading/setLoadingFlg', false)
 
+                // 通信成功の場合
                 if (response.status === SUCCESS) {
+                    // スケジュールリストとカレンダーデータのスケジュールを更新
+                    const newData = this.schedulesAndCalendarMethods.updateScheduleInSchedulesListAndCalendarData(this.scheduleDataToBeUpdated, response.data, this.schedulesData.schedules, this.calendarData)
+                    this.$emit('changeSchedulesData',{schedules: newData.newScheduleList})
+                    this.calendarData = newData.newCalendarData
 
-                    const deletedSchedules = this.removeScheduleData(this.scheduleDataToBeUpdated, this.calendarData, this.schedulesData.schedules)
-                    const newSchedules = this.addScheduleData(response.data, this.calendarData, deletedSchedules)
-
-                    this.$emit('changeSchedulesData',{schedules: newSchedules})
-
+                    // モーダルを非表示にしフラッシュメッセージを表示
                     this.editScheduleModal = false
-
                     this.$store.commit('flashMessage/setMessage', 'スケジュールを更新しました')
                     return false
                 }
 
+                // バリデーションエラーの場合エラーメッセージを代入
                 if (response.status === VALIDATION_ERROR) {
                     this.editError = response.data.errors
                     return false
                 }
 
+                // 上記以外の場合エラーコードを代入
                 this.$store.commit('error/setCode', response.status)
 
             },
-            // スケジュールの削除
+            /**
+             * スケジュールの削除
+             * @return {Promise<boolean>}
+             */
             async deleteSchedule(){
+                // スケジュールが選択されていない場合
                 if (!this.scheduleDataToBeDeleted.id){
+                    this.$store.commit('flashMessage/setMessage', 'スケジュールを選択してください')
                     return false
                 }
 
+                // ルートパラメータに削除するスケジュールIDを加えスケジュール削除APIにdelereリクエスト
+                // レスポンス待ちの間ローディング画面を表示
                 this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.delete('/api/schedules/' + this.scheduleDataToBeDeleted.id)
                 this.$store.commit('loading/setLoadingFlg', false)
 
+                // 通信成功の場合
                 if (response.status === SUCCESS) {
-                    // カレンダーデータとスケジュールリストデータを更新
-                    const newSchedules = this.removeScheduleData(this.scheduleDataToBeDeleted, this.calendarData, this.schedulesData.schedules)
-                    this.$emit('changeSchedulesData',{schedules: newSchedules})
+                    // カレンダーデータとスケジュールリストデータからスケジュールを削除
+                    const newData = this.schedulesAndCalendarMethods.removeScheduleFromSchedulesListAndCalendarData(this.scheduleDataToBeDeleted, this.schedulesData.schedules, this.calendarData)
+                    this.$emit('changeSchedulesData',{schedules: newData.newScheduleList})
+                    this.calendarData = newData.newCalendarData
 
+                    // モーダルを非表示にしフラッシュメッセージを表示
                     this.deleteScheduleModal = false
                     this.$store.commit('flashMessage/setMessage', 'スケジュールを削除しました')
                     return false
                 }
 
+                // 通信エラーの場合エラーコードを代入
                 this.$store.commit('error/setCode', response.status)
-            },
-            addScheduleData(additionalSchedule, calendarData, schedulesList){
-                const additionalScheduleDate = additionalSchedule.date
-                const additionalScheduleTime = additionalSchedule.time
-
-                outer: for (let i = 0; i < calendarData.length; i++) {
-                    if (additionalScheduleDate === calendarData[i].date){
-                        // スケジュール登録数0の日付か
-                        // 登録したスケジュールに時間情報がない場合
-                        // 配列の先頭にデータを追加
-                        if (!calendarData[i].schedules.length || additionalScheduleTime === null) {
-                            calendarData[i].schedules.unshift(additionalSchedule)
-                            break
-                        }
-
-                        // 前後スケジュールが登録されている場合
-                        // 時間順に並ぶようにデータを追加
-                        for (let t = 0; t < calendarData[i].schedules.length; t++) {
-
-                            if (calendarData[i].schedules[t].time === null) {
-                                continue
-                            }
-
-                            if(additionalScheduleTime <= calendarData[i].schedules[t].time) {
-                                calendarData[i].schedules.splice(t, 0, additionalSchedule)
-                                break outer
-                            }
-                        }
-
-                        // 上記以外の場合最後にデータを追加
-                        calendarData[i].schedules.push(additionalSchedule)
-                        break
-                    }
-                }
-
-                // スケジュールをスケジュールリストデータに追加
-                const newSchedules = _.cloneDeep(schedulesList)
-                // 登録した日にスケジュールがない場合
-                if (!newSchedules[additionalScheduleDate]){
-                    newSchedules[additionalScheduleDate] = [additionalSchedule]
-                    return newSchedules
-                }
-
-                // 登録したしたスケジュールに時間指定がない場合先頭に追加
-                if(additionalScheduleTime === null) {
-                    newSchedules[additionalScheduleDate].unshift(additionalSchedule)
-                    return newSchedules
-                }
-
-                // 前後スケジュールが登録されている場合
-                // 時間順に並ぶようにデータを追加
-                for (let i = 0; i < newSchedules[additionalScheduleDate].length; i++) {
-                    if (newSchedules[additionalScheduleDate][i].time === null) {
-                        continue
-                    }
-                    if(newSchedules[additionalScheduleDate][i].time >= additionalScheduleTime) {
-                        newSchedules[additionalScheduleDate].splice(i, 0, additionalSchedule)
-                        return  newSchedules
-                    }
-                }
-                // 上記以外の場合最後にデータを追加
-                newSchedules[additionalScheduleDate].push(additionalSchedule)
-
-                // 変更したスケジュールリストデータを返却
-                return newSchedules
-            },
-            /**
-             * カレンダーデータとスケジュールリストデータからスケジュールを削除
-             * @param removalSchedule 削除するスケジュールデータ
-             * @param calendarData カレンダーデータ(破壊的)
-             * @param schedulesList スケジュールリストデータ(非破壊的)
-             * @returns {*} (変更後のスケジュールリストデータ)
-             */
-            removeScheduleData(removalSchedule, calendarData, schedulesList){
-                // 削除するスケジュールの日にち
-                const removalScheduleDate = removalSchedule.date
-                // 削除するスケジュールのID
-                const removalScheduleId = removalSchedule.id
-                // カレンダーデータからスケジュールを削除
-                outer: for (let i = 0; i < calendarData.length; i++) {
-                    if (removalScheduleDate === calendarData[i].date) {
-                        for (let t = 0 ; t < calendarData[i].schedules.length; t++) {
-                            if (removalScheduleId === calendarData[i].schedules[t].id) {
-                                calendarData[i].schedules.splice(t, 1)
-                                break outer
-                            }
-                        }
-                    }
-                }
-
-                // スケジュールリストデータからスケジュールを削除
-                const newSchedules = _.cloneDeep(schedulesList)
-                for(let i = 0; i < newSchedules[removalScheduleDate].length; i++) {
-                    if (newSchedules[removalScheduleDate][i].id === removalScheduleId){
-                        newSchedules[removalScheduleDate].splice(i, 1)
-                        break
-                    }
-                }
-                // 変更したスケジュールリストデータを返却
-                return newSchedules
             },
             showEditModal(schedule){
                 this.scheduleDataToBeUpdated = schedule
@@ -469,7 +362,7 @@
         created() {
             // 現在月を設定
             this.selectedMonth = moment()
-            this.selectedDate = moment().format('YYYY-MM-DD')
+            this.selectedDateLabel = moment().format('YYYY-MM-DD')
         },
         watch: {
             selectedMonth: async function() {
@@ -477,7 +370,7 @@
                 if(this.schedulesData.schedulesYear !== selectedYear){
                     await this.fetchSchedules(selectedYear)
                 }
-                this.changeCalendarData()
+                this.changeCalendarRelatedData()
             },
             // モーダルが消えたときにモーダル内のフォームをリセット
             createScheduleModal:  function (val) {
