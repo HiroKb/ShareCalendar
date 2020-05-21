@@ -63,7 +63,7 @@
         computed: {
             invitationUrl: function () {
                 return this.sharedCalendarData.search_id ?
-                    location.protocol + '//' + location.host + '/personal-pages/shared-calendar/' + this.sharedCalendarData.search_id + '/application'
+                    location.protocol + '//' + location.host + '/personal/shared-calendar/' + this.sharedCalendarData.search_id + '/application'
                     : ''
             }
         },

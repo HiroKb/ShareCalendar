@@ -131,7 +131,7 @@
 
                 // 通信成功時
                 if (this.authApiStatus) {
-                    this.$router.push({name: 'myCalendar'})
+                    this.$router.push({name: 'personalCalendar'})
                 }
             },
             /**
@@ -149,7 +149,7 @@
 
                 // 通信成功の場合
                 if (this.authApiStatus) {
-                    this.$router.push({name: 'myCalendar'})
+                    this.$router.push({name: 'personalCalendar'})
                 }
             }
         },

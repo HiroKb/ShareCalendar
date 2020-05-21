@@ -30,7 +30,7 @@
                 this.$store.commit('loading/setLoadingFlg', false)
 
                 if (response.status === SUCCESS) {
-                    this.$router.push({name: 'myCalendar'})
+                    this.$router.push({name: 'personalCalendar'})
                     this.$store.commit('flashMessage/setMessage', this.sharedCalendarData.name + 'カレンダーの共有を解除しました')
                     return false
                 }

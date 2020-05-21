@@ -38,7 +38,7 @@
 
                 if (response.status === CREATED) {
                     this.$store.commit('flashMessage/setMessage', 'カレンダーの共有申請を行いました。')
-                    this.$router.push({name: 'myCalendar'})
+                    this.$router.push({name: 'personalCalendar'})
                     return false
                 }
                 this.$store.commit('error/setCode', response.status)

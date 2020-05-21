@@ -28,7 +28,7 @@
 
                 if(response.status === SUCCESS) {
                     this.$store.commit('flashMessage/setMessage',  this.sharedCalendarData.name + 'カレンダーを削除しました。')
-                    this.$router.push({name: 'myCalendar'})
+                    this.$router.push({name: 'personalCalendar'})
                     return false
                 }
                 this.$store.commit('error/setCode', response.status)

@@ -5,7 +5,7 @@
             <template v-if="!sharedCalendarList.loadingFlg">
                 <ul v-if="sharedCalendarList.data.length">
                     <li v-for="sharedCalendar in sharedCalendarList.data">
-                        <router-link :to="{name: 'sharedCalendarIndex', params:{sharedCalendarId: sharedCalendar.id}}">
+                        <router-link :to="{name: 'sharedCalendar', params:{sharedCalendarId: sharedCalendar.id}}">
                             <p>{{sharedCalendar.calendar_name}}</p>
                         </router-link>
                     </li>

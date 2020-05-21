@@ -15,7 +15,7 @@
                     <v-btn block :color="colors.themeColor" dark type="submit">変更</v-btn>
                 </v-form>
                 <template v-else>
-                    <p>パスワードを変更しました。<br/><router-link :to="{name: 'myCalendar'}">こちら</router-link>からマイページへアクセスしてください。</p>
+                    <p>パスワードを変更しました。<br/><router-link :to="{name: 'personalCalendar'}">こちら</router-link>からマイページへアクセスしてください。</p>
                 </template>
             </v-card-text>
         </v-card>

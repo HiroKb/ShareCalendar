@@ -4,7 +4,7 @@
             :value="drawer" @input="$emit('changeDrawer', $event)"
         >
             <v-list dense nav>
-                <v-list-item :to="{name: 'myCalendar'}">
+                <v-list-item :to="{name: 'personalCalendar'}">
                     <v-list-item-content>
                         マイカレンダー
                     </v-list-item-content>

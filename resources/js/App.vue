@@ -3,7 +3,7 @@
         <v-app-bar :color="colors.themeColor" dark app clipped-left>
             <v-app-bar-nav-icon @click="drawer = !drawer" v-if="isLogin"></v-app-bar-nav-icon>
             <v-toolbar-title>
-                <router-link :to="{name: 'myCalendar'}" class="toolbar-title">
+                <router-link :to="{name: 'personalCalendar'}" class="toolbar-title">
                     SHARE CALENDAR
                 </router-link>
             </v-toolbar-title>
@@ -16,7 +16,7 @@
                         </v-btn>
                     </template>
                     <v-list>
-                        <v-list-item :to="{name: 'myCalendar'}">
+                        <v-list-item :to="{name: 'personalCalendar'}">
                             <v-list-item-content>マイページ</v-list-item-content>
                         </v-list-item>
                         <v-list-item :to="{name: 'userInfo'}">

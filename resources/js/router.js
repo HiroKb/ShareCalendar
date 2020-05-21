@@ -9,15 +9,15 @@ import ResetPassword from "./components/pages/ResetPassword.vue"
 
 import PersonalPages from "./components/pages/personalPages/PersonalPages.vue"
 import UserInfo from "./components/pages/personalPages/UserInfo.vue"
-import MyCalendar from "./components/pages/personalPages/MyCalendar.vue"
+import PersonalCalendar from "./components/pages/personalPages/PersonalCalendar.vue"
 import SharedCalendarList from "./components/pages/personalPages/SharedCalendarList.vue"
 import CreateSharedCalendar from "./components/pages/personalPages/CreateSharedCalendar.vue"
 import SearchSharedCalendar from "./components/pages/personalPages/SearchSharedCalendar.vue"
 import ApplicationSharedCalendar from "./components/pages/personalPages/ApplicationSharedCalendar.vue"
 import DeleteAccount from "./components/pages/personalPages/DeleteAccount.vue"
 
+import SharedCalendarPages from "./components/pages/sharedCalendarPages/SharedCalendarPages.vue"
 import SharedCalendar from "./components/pages/sharedCalendarPages/SharedCalendar.vue"
-import SharedCalendarIndex from "./components/pages/sharedCalendarPages/SharedCalendarIndex.vue"
 import SharedCalendarChat from "./components/pages/sharedCalendarPages/SharedCalendarChat.vue"
 import SharedCalendarMembers from "./components/pages/sharedCalendarPages/SharedCalendarMembers.vue"
 import SharedCalendarApplicants from "./components/pages/sharedCalendarPages/SharedCalendarApplicants.vue"
@@ -40,7 +40,7 @@ const routes = [
         component: Authentication,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
-                next({name: 'myCalendar'})
+                next({name: 'personalCalendar'})
             } else {
                 next()
             }
@@ -52,7 +52,7 @@ const routes = [
         component: SendResetPasswordLink,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
-                next({name: 'myCalendar'})
+                next({name: 'personalCalendar'})
             } else {
                 next()
             }
@@ -64,14 +64,14 @@ const routes = [
         component: ResetPassword,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
-                next({name: 'myCalendar'})
+                next({name: 'personalCalendar'})
             } else {
                 next()
             }
         }
     },
     {
-        path: '/personal-pages',
+        path: '/personal',
         component: PersonalPages,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
@@ -82,9 +82,9 @@ const routes = [
         },
         children: [
             {
-                path: 'my-calendar',
-                name: 'myCalendar',
-                component: MyCalendar,
+                path: 'calendar',
+                name: 'personalCalendar',
+                component: PersonalCalendar,
             },
             {
                 path: 'shared-calendar/list',
@@ -121,7 +121,7 @@ const routes = [
     },
     {
         path: '/shared-calendar/:sharedCalendarId',
-        component: SharedCalendar,
+        component: SharedCalendarPages,
         props: true,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
@@ -133,8 +133,8 @@ const routes = [
         children: [
             {
                 path: 'calendar',
-                name: 'sharedCalendarIndex',
-                component: SharedCalendarIndex,
+                name: 'sharedCalendar',
+                component: SharedCalendar,
             },
             {
                 path: 'chat',
