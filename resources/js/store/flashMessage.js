@@ -1,12 +1,15 @@
 const state = {
-    message: null
+    message: null,
+    timerId: null
 }
 
 const mutations = {
     setMessage (state, message) {
         state.message = message
 
-        setTimeout(() => {
+        state.timerId && clearTimeout(state.timerId)
+
+        state.timerId = setTimeout(() => {
             state.message = null
         }, 4000)
     }
