@@ -120,8 +120,8 @@
         data() {
             return {
                 calendarData: [], // カレンダーデータ配列
-                selectedMonthLabel: '', // 選択中の年月(YYYY年MM月)
                 selectedMonth: {}, // 選択中の月(momentオブジェクト)
+                selectedMonthLabel: '', // 選択中の年月(YYYY年MM月)
                 selectedDateLabel: '', // 選択中の日付(YYYY-MM-DD)
                 weeksNum: 0, // 選択月が跨ぐ週数
                 showSchedules: 'all', // 表示するスケジュールの種類
@@ -328,7 +328,7 @@
                     return false
                 }
 
-                // ルートパラメータに削除するスケジュールIDを加えスケジュール削除APIにdelereリクエスト
+                // ルートパラメータに削除するスケジュールIDを加えスケジュール削除APIにdeleteリクエスト
                 // レスポンス待ちの間ローディング画面を表示
                 this.$store.commit('loading/setLoadingFlg', true)
                 const response = await axios.delete('/api/schedules/' + this.scheduleDataToBeDeleted.id)

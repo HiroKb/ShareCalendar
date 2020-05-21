@@ -63,7 +63,7 @@
                      :chat-messages="chatMessages"
                      :shared-calendar-members="sharedCalendarMembers"
                      :shared-calendar-applicants="sharedCalendarApplicants"
-                     :shared-schedules-data="sharedSchedulesData"
+                     :schedules-data="sharedSchedulesData"
                      @unShareMember="removeMember"
                      @allowApplication="allowApplications"
                      @rejectApplication="removeApplicants"

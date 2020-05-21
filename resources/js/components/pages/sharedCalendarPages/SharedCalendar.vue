@@ -1,281 +1,149 @@
 <template>
-    <div>
-        <div class="contents">
-            <div class="shared-calendar">
+    <v-container class="content-wrap py-12">
+        <v-row class="fill-height">
+            <!--            カレンダー-->
+            <v-col cols="7">
+                <calendar
+                    :date-label="selectedMonthLabel"
+                    :weeks="weeksNum"
+                    :calendar-data="calendarData"
+                    :schedule-number-data="calendarData"
+                    @changeSelectedMonthRequest="changeSelectedMonth"
+                    @changeSelectedDateRequest="changeSelectedDateLabel"
+                />
+            </v-col>
+            <!--            カレンダーメニュー-->
+            <v-col cols="5" class="fill-height">
+                <v-card class="fill-height d-flex flex-column" style="overflow: hidden">
+                    <div class="d-flex justify-space-between align-center">
+                        <v-card-title class="flex-grow-0 flex-shrink-0">{{ selectedDateLabel}}</v-card-title>
+                        <v-btn
+                            class="mr-4" small fab :color="colors.themeColor" outlined
+                            @click="createScheduleModal = true"
+                        >
+                            <v-icon>mdi-plus</v-icon>
+                        </v-btn>
+                    </div>
+                    <v-divider class="mx-4"></v-divider>
+                    <v-card-text
+                        style="overflow-y: scroll;"
+                        class="flex-grow-1 flex-shrink-1 custom-scrollbar pt-0"
+                    >
+                        <schedule-list
+                            :schedules="selectDateSchedules"
+                            :is-personal="false"
+                            @showEditModalRequest="showEditModal"
+                            @showDeleteModalRequest="showDeleteModal"
+                        >
+                        </schedule-list>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+        </v-row>
 
-                <div class="calendar">
-                    <table>
-                        <caption><span @click="changeSelectedMonth(-1)"><  </span><span>{{ dateLabel }}</span><span @click="changeSelectedMonth(1)">  ></span></caption>
-                        <thead>
-                        <tr>
-                            <th>日</th>
-                            <th>月</th>
-                            <th>火</th>
-                            <th>水</th>
-                            <th>木</th>
-                            <th>金</th>
-                            <th>土</th>
-                        </tr>
-                        </thead>
+        <!--        スケジュール作成モーダル-->
+        <v-dialog
+            v-model="createScheduleModal"
+            max-width="500px"
+        >
+            <create-schedule-form-card
+                ref="createForm"
+                :selected-date="selectedDateLabel"
+                :error-messages="createError"
+                @createScheduleRequest="createSchedule"
+            >
+            </create-schedule-form-card>
+        </v-dialog>
 
-                        <tbody>
-                        <tr v-for="row in weeks">
-                            <td
-                                v-for="column in 7"
-                                :data-date="dates[(row - 1) * 7 + column - 1].date"
-                                @click="changeSelectDate"
-                            >
-                                <p>{{ dates[(row - 1) * 7  + column - 1 ].dateNum }}</p>
-                                <p>{{ dates[(row - 1) * 7 + column - 1 ].schedules.length}}</p>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="calendar-menu">
-                    <form @submit.prevent="createSchedule">
-                        <p>{{ selectedDate }}</p>
+        <!--        スケジュール更新モーダル-->
+        <v-dialog
+            v-model="editScheduleModal"
+            max-width="500px"
+        >
+            <edit-schedule-form-card
+                ref="editForm"
+                :schedule-data="scheduleDataToBeUpdated"
+                :error-messages="editError"
+                @updateScheduleRequest="updateSchedule"
+            >
+            </edit-schedule-form-card>
+        </v-dialog>
 
-                        <p v-if="createError.errors.date">{{ createError.errors.date [0]}}</p>
-
-                        <label for="hour">時間</label>
-                        <select name="hour"
-                                id="hour"
-                                v-model="createScheduleData.hour">
-                            <option value="unspecified">指定なし</option>
-                            <option value="00">00</option>
-                            <option value="01">01</option>
-                            <option value="02">02</option>
-                            <option value="03">03</option>
-                            <option value="04">04</option>
-                            <option value="05">05</option>
-                            <option value="06">06</option>
-                            <option value="07">07</option>
-                            <option value="08">08</option>
-                            <option value="09">09</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                            <option value="13">13</option>
-                            <option value="14">14</option>
-                            <option value="15">15</option>
-                            <option value="16">16</option>
-                            <option value="17">17</option>
-                            <option value="18">18</option>
-                            <option value="19">19</option>
-                            <option value="20">20</option>
-                            <option value="21">21</option>
-                            <option value="22">22</option>
-                            <option value="23">23</option>
-                        </select>
-                        <span> : </span>
-
-                        <select name="minute"
-                                id="minute"
-                                v-model="createScheduleData.minute">
-                            <option value="unspecified">指定なし</option>
-                            <option value="00">00</option>
-                            <option value="05">05</option>
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="25">25</option>
-                            <option value="30">30</option>
-                            <option value="35">35</option>
-                            <option value="40">40</option>
-                            <option value="45">45</option>
-                            <option value="50">50</option>
-                            <option value="55">55</option>
-                        </select>
-                        <p v-if="createError.errors.time">{{ createError.errors.time[0] }}</p>
-
-                        <label for="title">スケジュール名 *必須</label>
-                        <input id="title" type="text" v-model="createScheduleData.title">
-                        <p v-if="createError.errors.title">{{ createError.errors.title [0]}}</p>
-
-                        <label for="description">詳細</label>
-                        <textarea id="description" v-model="createScheduleData.description"></textarea>
-                        <p v-if="createError.errors.description">{{ createError.errors.description[0] }}</p>
-
-
-                        <button type="submit">スケジュール追加</button>
-
-                    </form>
-
-                    <ul class="schedules">
-                        <li class="schedule" v-for="schedule in selectDateSchedules" :key="schedule.id">
-                            <p>{{ schedule.time}}</p>
-                            <p>{{ schedule.title }}</p>
-                            <button @click="showEditModal(schedule)"><i class="far fa-file-alt"></i></button>
-                            <button @click="showDeleteModal(schedule)"><i class="far fa-trash-alt"></i></button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="modal-background" v-show="modalFlg" @click="hideModal">
-            <div class="modal" >
-                <div class="modal-inner" @click.stop>
-
-                    <i class="fas fa-times" @click="hideModal"></i>
-
-                    <form @submit.prevent="updateSchedule" v-show="editForm.showFlg">
-                        <p v-if="editError.errors.schedule">{{ editError.errors.schedule[0] }}</p>
-                        <p>{{ selectedDate }}</p>
-
-                        <label for="edit-hour">時間</label>
-                        <select name="hour"
-                                id="edit-hour"
-                                v-model="editForm.scheduleData.hour">
-                            <option value="unspecified">指定なし</option>
-                            <option value="00">00</option>
-                            <option value="01">01</option>
-                            <option value="02">02</option>
-                            <option value="03">03</option>
-                            <option value="04">04</option>
-                            <option value="05">05</option>
-                            <option value="06">06</option>
-                            <option value="07">07</option>
-                            <option value="08">08</option>
-                            <option value="09">09</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                            <option value="13">13</option>
-                            <option value="14">14</option>
-                            <option value="15">15</option>
-                            <option value="16">16</option>
-                            <option value="17">17</option>
-                            <option value="18">18</option>
-                            <option value="19">19</option>
-                            <option value="20">20</option>
-                            <option value="21">21</option>
-                            <option value="22">22</option>
-                            <option value="23">23</option>
-                        </select>
-                        <span> : </span>
-
-                        <select name="minute"
-                                id="edit-minute"
-                                v-model="editForm.scheduleData.minute">
-                            <option value="unspecified">指定なし</option>
-                            <option value="00">00</option>
-                            <option value="05">05</option>
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="25">25</option>
-                            <option value="30">30</option>
-                            <option value="35">35</option>
-                            <option value="40">40</option>
-                            <option value="45">45</option>
-                            <option value="50">50</option>
-                            <option value="55">55</option>
-                        </select>
-                        <p v-if="editError.errors.time">{{ editError.errors.time[0] }}</p>
-
-                        <label for="edit-title">スケジュール名 *必須</label>
-                        <input id="edit-title" type="text" v-model="editForm.scheduleData.title">
-                        <p v-if="editError.errors.title">{{ editError.errors.title[0] }}</p>
-
-                        <label for="edit-description">詳細</label>
-                        <textarea id="edit-description" v-model="editForm.scheduleData.description"></textarea>
-                        <p v-if="editError.errors.description">{{ editError.errors.description[0] }}</p>
-
-                        <button type="submit">スケジュール更新</button>
-                    </form>
-
-                    <form @submit.prevent="deleteSchedule" v-show="deleteForm.showFlg">
-                        <p>このスケジュールを削除しますか？</p>
-                        <p>日付</p>
-                        <p>{{ deleteData.date}}</p>
-                        <p>時間</p>
-                        <p>{{ deleteData.time }}</p>
-                        <p>スケジュール名</p>
-                        <p>{{ deleteData.title }}</p>
-                        <p>詳細</p>
-                        <p>{{ deleteData.description }}</p>
-                        <button>削除</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+        <!--        スケジュール削除モーダル-->
+        <v-dialog
+            v-model="deleteScheduleModal"
+            max-width="500px"
+        >
+            <delete-schedule-form-card
+                ref="deleteForm"
+                :schedule-data="scheduleDataToBeDeleted"
+                @deleteScheduleRequest="deleteSchedule"
+            ></delete-schedule-form-card>
+        </v-dialog>
+    </v-container>
 </template>
 
 <script>
     import moment from "moment"
+
+    import Calendar from "../../modules/Calendar"
+    import CreateScheduleFormCard from "../../modules/CreateScheduleFormCard"
+    import EditScheduleFormCard from "../../modules/EditScheduleFormCard"
+    import DeleteScheduleFormCard from "../../modules/DeleteScheduleFormCard"
+    import ScheduleList from "../../modules/ScheduleList"
+
+    import colorsMixin from "../../../mixins/colorsMixin"
+    import schedulesAndCalendarMethodsMixin from "../../../mixins/schedulesAndCalendarMethodsMixin"
+
     import {CREATED, SUCCESS, VALIDATION_ERROR} from "../../../util";
     export default {
         name: "SharedCalendar",
+        mixins: [
+            colorsMixin,
+            schedulesAndCalendarMethodsMixin
+        ],
+        components:{
+            Calendar,
+            ScheduleList,
+            CreateScheduleFormCard,
+            EditScheduleFormCard,
+            DeleteScheduleFormCard
+        },
         data () {
             return {
-                dates: [],
-                selectedMonth: null,
-                selectedDate: null,
-                dateLabel: null,
-                weeks: 0,
-                createScheduleData: {
-                    hour: 'unspecified',
-                    minute: 'unspecified',
-                    title: '',
-                    description: ''
-                },
-                createError: {
-                    errorFlg: false,
-                    errors: {}
-                },
-                modalFlg: false,
-                editForm: {
-                    showFlg: false,
-                    scheduleData: {
-                        id: null,
-                        date: '',
-                        hour: 'unspecified',
-                        minute: 'unspecified',
-                        title: '',
-                        description: ''
-                    }
-                },
-                editError: {
-                    errorFlg: false,
-                    errors: {}
-                },
-                deleteForm: {
-                    showFlg: false,
-                    scheduleData: null
-            }
+                calendarData: [], //カレンダーデータ配列
+                selectedMonth: {}, // 選択中の月(momentオブジェクト)
+                selectedMonthLabel: '', // 選択中の年月(YYYY年MM月)
+                selectedDateLabel: '', // 選択中の日付(YYYY-MM-DD)
+                weeksNum: 0, // 選択月が跨ぐ週数
+                createScheduleModal: false, // スケジュール作成モーダルの表示フラグ
+                editScheduleModal: false, // スケジュール更新モーダルの表示フラグ
+                deleteScheduleModal: false, // スケジュール削除モーダルの表示フラグ
+                scheduleDataToBeUpdated: {}, // 更新するスケジュールデータ
+                scheduleDataToBeDeleted: {}, // 削除するスケジュールデータ
+                createError: {}, // スケジュール作成APIバリデーションエラー
+                editError: {}, // スケジュール更新APIバリデーションエラー
             }
         },
         computed: {
+            // 選択日のスケジュールデータ
             selectDateSchedules: function () {
-                for (let i = 0; i < this.dates.length; i++){
-                    if (this.selectedDate === this.dates[i].date){
-                        return this.dates[i].schedules
+                for (let i = 0; i < this.calendarData.length; i++){
+                    if (this.selectedDateLabel === this.calendarData[i].date){
+                        return this.calendarData[i].schedules
                     }
                 }
             },
-            deleteData: function () {
-                return {
-                    date: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.date : '',
-                    time: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.time ? this.deleteForm.scheduleData.time : '指定なし' : '',
-                    title: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.title : '',
-                    description: this.deleteForm.scheduleData ? this.deleteForm.scheduleData.description ? this.deleteForm.scheduleData.description : 'なし' : '',
-                }
-            }
         },
         props: {
+            // 共有カレンダーID
             sharedCalendarId: {
                 type: String,
                 required: true,
                 default: ''
             },
-            sharedCalendarData: {
-                type: Object,
-                required: true,
-                default: {}
-            },
-            sharedSchedulesData: {
+            // 共有スケジュールデータ
+            schedulesData: {
                 type: Object,
                 required: true,
                 default: {
@@ -294,61 +162,17 @@
                 }
             },
             // 選択日の変更
-            changeSelectDate(e) {
-                this.selectedDate = e.currentTarget.dataset.date
+            changeSelectedDateLabel(date) {
+                this.selectedDateLabel = date
             },
-            changeDatesData() {
-                if (moment(this.selectedMonth).format('YYYY-MM') === moment().format('YYYY-MM')){
-                    this.selectedDate = moment().format('YYYY-MM-DD')
-                } else {
-                    this.selectedDate = moment(this.selectedMonth).startOf('month').format('YYYY-MM-DD')
-                }
-                this.dates = []
-                this.dateLabel = moment(this.selectedMonth).format('YYYY年MM月')
+            // カレンダー関連データを変更
+            changeCalendarRelatedData() {
+                const newData = this.schedulesAndCalendarMethods.generateCalendarRelatedData(this.selectedMonth, this.schedulesData.schedules)
 
-                // 選択月の日数
-                const monthDays = moment(this.selectedMonth).daysInMonth()
-                // 選択月初日の曜日
-                const firstDay = moment(this.selectedMonth).startOf('month').day()
-
-                this.weeks = Math.ceil((monthDays + firstDay) / 7)
-                // 選択月初日より前の日付データ(選択月前月)を配列へ追加
-                for(let i = 0; i < firstDay; i++){
-                    const day = moment(this.selectedMonth).startOf('month').subtract(i + 1, 'days')
-                    this.dates.unshift({
-                        date: day.format('YYYY-MM-DD'),
-                        dateNum: day.date(),
-                        schedules: []
-                    })
-                }
-
-
-                // 選択月の日付データを配列へ追加
-                for (let i = 0; i < monthDays; i++) {
-                    const day = moment(this.selectedMonth).startOf('month').add(i, 'days')
-                    this.dates.push({
-                        date: day.format('YYYY-MM-DD'),
-                        dateNum: day.date(),
-                        schedules: []
-                    })
-                }
-
-
-                // 選択月末日より後の日付データを配列へ追加
-                for (let length = this.dates.length, i = 1; length < this.weeks * 7; length++, i++){
-                    const day = moment(this.selectedMonth).endOf('month').add(i, 'days')
-                    this.dates.push({
-                        date: day.format('YYYY-MM-DD'),
-                        dateNum : day.date(),
-                        schedules: []
-                    })
-                }
-
-                this.dates.forEach((dateData) => {
-                    if (this.sharedSchedulesData.schedules[dateData.date]){
-                        dateData.schedules = _.cloneDeep(this.sharedSchedulesData.schedules[dateData.date])
-                    }
-                })
+                this.selectedDateLabel = newData.selectedDateLabel
+                this.selectedMonthLabel = newData.selectedMonthLabel
+                this.weeksNum = newData.weeksNum
+                this.calendarData = newData.calendarData
             },
             async fetchSharedSchedules(year){
                 const firstDay = moment().year(year).startOf('year')
@@ -368,372 +192,147 @@
 
                 this.$store.commit('error/setCode', response.status)
             },
-            async createSchedule (){
-                this.createError.errorFlg = false
-                this.createError.errors = {}
+            /**
+             * スケジュールの作成
+             * @param {Object}schedule 作成するスケジュール
+             * @return {Promise<boolean>}
+             */
+            async createSchedule (schedule){
+                this.createError = {}
 
-                if (!this.selectedDate) {
-                    this.createError.errors.date = ['日付を選択してください。']
-                    this.createError.errorFlg = true
-                }
-                if ((this.createScheduleData.hour === 'unspecified' && this.createScheduleData.minute !== 'unspecified') ||
-                    (this.createScheduleData.hour !== 'unspecified' && this.createScheduleData.minute === 'unspecified')) {
-                    this.createError.errors.time = ['時間の形式を確認してください。']
-                    this.createError.errorFlg = true
-                }
-                if(!this.createScheduleData.title){
-                    this.createError.errors.title = ['スケジュール名は必須です。']
-                    this.createError.errorFlg = true
-                }
-
-                if (this.createError.errorFlg) {
-                    return false
-                }
-
-                // postするデータを作成
-                const time = this.createScheduleData.hour === 'unspecified'
-                    ? null
-                    : this.createScheduleData.hour + ':' + this.createScheduleData.minute + ':00'
-                const description = !!this.createScheduleData.description ? this.createScheduleData.description : null
-                const data = {
-                    date: this.selectedDate,
-                    time: time,
-                    title: this.createScheduleData.title,
-                    description: description
-                }
-
+                // 共有スケジュール作成APIに作成するスケジュールデータとともにpostリクエスト
+                // レスポンス待ちの間ローディング画面を表示
                 this.$store.commit('loading/setLoadingFlg', true)
-                const response = await axios.post('/api/shared-calendars/' + this.sharedCalendarId + '/schedules', data)
+                const response = await axios.post('/api/shared-calendars/' + this.sharedCalendarId + '/schedules', schedule)
                 this.$store.commit('loading/setLoadingFlg', false)
 
+                // リクエスト成功の場合
                 if (response.status === CREATED) {
                     // カレンダーデータとスケジュールリストデータを更新
-                    const newSchedules = this.addScheduleData(response.data, this.dates, this.sharedSchedulesData.schedules)
-                    this.$emit('changeSchedulesData', {schedules: newSchedules})
+                    const newData = this.schedulesAndCalendarMethods.addScheduleToSchedulesListAndCalendarData(response.data, this.schedulesData.schedules, this.calendarData)
+                    this.$emit('changeSchedulesData',{schedules: newData.newScheduleList})
+                    this.calendarData = newData.newCalendarData
 
-                    this.createScheduleData = {
-                        hour: 'unspecified',
-                        minute: 'unspecified',
-                        title: '',
-                        description: ''
-                    }
+                    // モーダルを非表示にしフラッシュメッセージを表示
+                    this.createScheduleModal = false
                     this.$store.commit('flashMessage/setMessage', '共有スケジュールを追加しました')
                     return false
                 }
+
+                // バリデーションエラーの場合エラーメッセージを代入
                 if (response.status === VALIDATION_ERROR) {
                     this.createError.errors = response.data.errors
                     return false
                 }
 
+                // 上記以外の場合エラーコードを代入
                 this.$store.commit('error/setCode', response.status)
             },
-            async deleteSchedule(){
-                if (!this.deleteForm.scheduleData){
+            /**
+             * スケジュールの更新
+             * @param {Object} schedule 更新するスケジュール
+             * @return {Promise<boolean>}
+             */
+            async updateSchedule(schedule){
+                this.editError = {}
+
+                // スケジュールが選択されていない場合
+                if (!this.scheduleDataToBeUpdated.id) {
+                    this.$store.commit('flashMessage/setMessage', 'スケジュールを選択してください')
                     return false
                 }
 
+                // 共有スケジュール更新APIに更新するスケジュールデータとともにpatchリクエスト
+                // レスポンス待ちの間ローディング画面を表示
                 this.$store.commit('loading/setLoadingFlg', true)
-                const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarId + '/schedules/' + this.deleteForm.scheduleData.id)
+                const response = await axios.patch('/api/shared-calendars/' + this.sharedCalendarId + '/schedules/' + this.scheduleDataToBeUpdated.id, schedule)
                 this.$store.commit('loading/setLoadingFlg', false)
 
+                // 通信成功の場合
                 if(response.status === SUCCESS) {
-                    // カレンダーデータとスケジュールリストデータを更新
-                    const newSchedules = this.removeScheduleData(this.deleteForm.scheduleData, this.dates, this.sharedSchedulesData.schedules)
-                    this.$emit('changeSchedulesData', {schedules: newSchedules})
-                    this.hideModal()
-                    this.$store.commit('flashMessage/setMessage', '共有スケジュールを削除しました')
-                    return false
-                }
-                this.$store.commit('error/setCode', response.status)
-            },
-            async updateSchedule(){
-                this.editError.errorFlg = false
-                this.editError.errors = {}
+                    // スケジュールリストとカレンダーデータのスケジュールを更新
+                    const newData = this.schedulesAndCalendarMethods.updateScheduleInSchedulesListAndCalendarData(this.scheduleDataToBeUpdated, response.data, this.schedulesData.schedules, this.calendarData)
+                    this.$emit('changeSchedulesData',{schedules: newData.newScheduleList})
+                    this.calendarData = newData.newCalendarData
 
-                // 入力値が不正な場合
-                if (!this.editForm.scheduleData.id) {
-                    this.editError.errors.schedule = ['スケジュールを選択してください。']
-                    this.editError.errorFlg = true
-                }
-                if ((this.editForm.scheduleData.hour === 'unspecified' && this.editForm.scheduleData.minute !== 'unspecified') ||
-                    (this.editForm.scheduleData.hour !== 'unspecified' && this.editForm.scheduleData.minute === 'unspecified')) {
-                    this.editError.errors.time = ['時間の形式を確認してください。']
-                    this.editError.errorFlg = true
-                }
-                if(!this.editForm.scheduleData.title){
-                    this.editError.errors.title = ['スケジュール名は必須です。']
-                    this.editError.errorFlg = true
-                }
-
-                if (this.editError.errorFlg) {
-                    return false
-                }
-
-
-                // postするデータを作成
-                const time = this.editForm.scheduleData.hour === 'unspecified'
-                    ? null
-                    : this.editForm.scheduleData.hour + ':' + this.editForm.scheduleData.minute + ':00'
-                const description = !!this.editForm.scheduleData.description ? this.editForm.scheduleData.description : null
-                const data = {
-                    time: time,
-                    title: this.editForm.scheduleData.title,
-                    description: description
-                }
-
-                this.$store.commit('loading/setLoadingFlg', true)
-                const response = await axios.patch('/api/shared-calendars/' + this.sharedCalendarId + '/schedules/' + this.editForm.scheduleData.id, data)
-                this.$store.commit('loading/setLoadingFlg', false)
-
-                if(response.status === SUCCESS) {
-                    const deletedSchedules = this.removeScheduleData(this.editForm.scheduleData, this.dates, this.sharedSchedulesData.schedules)
-                    const newSchedules = this.addScheduleData(response.data, this.dates, deletedSchedules)
-
-                    this.$emit('changeSchedulesData', {schedules: newSchedules})
-                    this.hideModal()
+                    // モーダルを非表示にしフラッシュメッセージを表示
+                    this.editScheduleModal = false
                     this.$store.commit('flashMessage/setMessage', '共有スケジュールを更新しました')
                     return false
                 }
 
+                // 上記以外の場合エラーコードを代入
                 this.$store.commit('error/setCode', response.status)
             },
-            /**
-             * カレンダーデータとスケジュールリストデータにスケジュールデータを追加する
-             * @param additionalSchedule 追加するスケジュールデータ
-             * @param dates カレンダーデータ(破壊的)
-             * @param schedulesList スケジュールリストデータ(非破壊的)
-             * @returns {*} (変更後のスケジュールリストデータ)
-             */
-            addScheduleData(additionalSchedule, dates, schedulesList) {
-                // 追加するスケジュールの日にち
-                const additionalScheduleDate = additionalSchedule.date
-                // 追加するスケジュールの時間
-                const additionalScheduleTime = additionalSchedule.time
-                // スケジュールをカレンダーデータに追加
-
-                outer: for (let i = 0; i < dates.length; i++) {
-                    if (additionalScheduleDate === dates[i].date){
-                        // スケジュール登録数0の日付か
-                        // 登録したスケジュールに時間情報がない場合
-                        // 配列の先頭にデータを追加
-                        if (!dates[i].schedules.length || additionalScheduleTime === null) {
-                            dates[i].schedules.unshift(additionalSchedule)
-                            break
-                        }
-
-                        // 前後スケジュールが登録されている場合
-                        // 時間順に並ぶようにデータを追加
-                        for (let t = 0; t < dates[i].schedules.length; t++) {
-
-                            if (dates[i].schedules[t].time === null) {
-                                continue
-                            }
-
-                            if(additionalScheduleTime <= dates[i].schedules[t].time) {
-                                dates[i].schedules.splice(t, 0, additionalSchedule)
-                                break outer
-                            }
-                        }
-
-                        // 上記以外の場合最後にデータを追加
-                        dates[i].schedules.push(additionalSchedule)
-                        break
-                    }
+            async deleteSchedule(){
+                // スケジュールが選択されていない場合
+                if (!this.scheduleDataToBeDeleted.id){
+                    this.$store.commit('flashMessage/setMessage', 'スケジュールを選択してください')
+                    return false
                 }
 
-                // スケジュールをスケジュールリストデータに追加
-                const newSchedules = _.cloneDeep(schedulesList)
-                // 登録した日にスケジュールがない場合
-                if (!newSchedules[additionalScheduleDate]){
-                    newSchedules[additionalScheduleDate] = [additionalSchedule]
-                    return newSchedules
+                // ルートパラメータに削除するスケジュールIDを加えスケジュール削除APIにdeleteリクエスト
+                // レスポンス待ちの間ローディング画面を表示
+                this.$store.commit('loading/setLoadingFlg', true)
+                const response = await axios.delete('/api/shared-calendars/' + this.sharedCalendarId + '/schedules/' + this.scheduleDataToBeDeleted.id)
+                this.$store.commit('loading/setLoadingFlg', false)
+
+                if(response.status === SUCCESS) {
+                    // カレンダーデータとスケジュールリストデータからスケジュールを削除
+                    const newData = this.schedulesAndCalendarMethods.removeScheduleFromSchedulesListAndCalendarData(this.scheduleDataToBeDeleted, this.schedulesData.schedules, this.calendarData)
+                    this.$emit('changeSchedulesData',{schedules: newData.newScheduleList})
+                    this.calendarData = newData.newCalendarData
+
+                    // モーダルを非表示にしフラッシュメッセージを表示
+                    this.deleteScheduleModal = false
+                    this.$store.commit('flashMessage/setMessage', '共有スケジュールを削除しました')
+                    return false
                 }
 
-                // 登録したしたスケジュールに時間指定がない場合先頭に追加
-                if(additionalScheduleTime === null) {
-                    newSchedules[additionalScheduleDate].unshift(additionalSchedule)
-                    return newSchedules
-                }
-
-                // 前後スケジュールが登録されている場合
-                // 時間順に並ぶようにデータを追加
-                for (let i = 0; i < newSchedules[additionalScheduleDate].length; i++) {
-
-                    if (newSchedules[additionalScheduleDate][i].time === null) {
-                        continue
-                    }
-
-                    if(newSchedules[additionalScheduleDate][i].time >= additionalScheduleTime) {
-                        newSchedules[additionalScheduleDate].splice(i, 0, additionalSchedule)
-                        return  newSchedules
-                    }
-                }
-                // 上記以外の場合最後にデータを追加
-                newSchedules[additionalScheduleDate].push(additionalSchedule)
-
-                // 変更したスケジュールリストデータを返却
-                return newSchedules
-            },
-            /**
-             * カレンダーデータとスケジュールリストデータからスケジュールを削除
-             * @param removalSchedule 削除するスケジュールデータ
-             * @param dates カレンダーデータ(破壊的)
-             * @param schedulesList スケジュールリストデータ(非破壊的)
-             * @returns {*} (変更後のスケジュールリストデータ)
-             */
-            removeScheduleData(removalSchedule, dates, schedulesList){
-                // 削除するスケジュールの日にち
-                const removalScheduleDate = removalSchedule.date
-                // 削除するスケジュールのID
-                const removalScheduleId = removalSchedule.id
-                // カレンダーデータからスケジュールを削除
-                outer: for (let i = 0; i < dates.length; i++) {
-                    if (removalScheduleDate === dates[i].date) {
-                        for (let t = 0 ; t < dates[i].schedules.length; t++) {
-                            if (removalScheduleId === dates[i].schedules[t].id) {
-                                dates[i].schedules.splice(t, 1)
-                                break outer
-                            }
-                        }
-                    }
-                }
-
-                // スケジュールリストデータからスケジュールを削除
-                const newSchedules = _.cloneDeep(schedulesList)
-                for(let i = 0; i < newSchedules[removalScheduleDate].length; i++) {
-                    if (newSchedules[removalScheduleDate][i].id === removalScheduleId){
-                        newSchedules[removalScheduleDate].splice(i, 1)
-                        break
-                    }
-                }
-                // 変更したスケジュールリストデータを返却
-                return newSchedules
+                // 通信エラーの場合エラーコードを代入
+                this.$store.commit('error/setCode', response.status)
             },
             showEditModal(schedule){
-                this.modalFlg = true
-                this.editForm.showFlg = true
-
-                let hour, minute
-
-                if (schedule.time) {
-                    hour = schedule.time.substr(0, 2)
-                    minute = schedule.time.substr(3, 2)
-                }else{
-                    hour = 'unspecified'
-                    minute = 'unspecified'
-                }
-                this.editForm.scheduleData = {
-                    id: schedule.id,
-                    date: schedule.date,
-                    hour: hour,
-                    minute: minute,
-                    title: schedule.title,
-                    description: schedule.description
-                }
+                this.scheduleDataToBeUpdated = schedule
+                this.editScheduleModal = true
             },
             showDeleteModal(schedule) {
-                this.modalFlg = true
-                this.deleteForm.showFlg = true
-                this.deleteForm.scheduleData = schedule
+                this.scheduleDataToBeDeleted = schedule
+                this.deleteScheduleModal = true
             },
-            hideModal() {
-                this.modalFlg = false
-
-                this.deleteForm.showFlg = false
-                this.deleteForm.scheduleData = null
-
-                this.editForm.showFlg = false
-                this.editForm.scheduleData = {
-                    id: null,
-                    date: '',
-                    hour: 'unspecified',
-                    minute: 'unspecified',
-                    title: '',
-                    description: ''
-                }
-
-                this.editError = {
-                    errorFlg: false,
-                    errors: {}
-                }
-            }
         },
         created() {
             this.selectedMonth = moment()
-            this.selectedDate = moment(this.selectedMonth).format('YYYY-MM-DD')
+            this.selectedDateLabel = moment(this.selectedMonth).format('YYYY-MM-DD')
         },
         watch: {
             selectedMonth: async function () {
                 const selectedYear = moment(this.selectedMonth).format('YYYY')
-                if (this.sharedSchedulesData.schedulesYear !== selectedYear){
+                if (this.schedulesData.schedulesYear !== selectedYear){
                     const schedules= await this.fetchSharedSchedules(selectedYear)
                     this.$emit('changeSchedulesData', {
                         schedulesYear: selectedYear,
                         schedules: schedules
                     })
                 }
-                this.changeDatesData()
+                this.changeCalendarRelatedData()
             },
+            // モーダルが消えたときにモーダル内のフォームをリセット
+            createScheduleModal:  function (val) {
+                !val && this.$refs.createForm.resetForm()
+            },
+            editScheduleModal: function (val) {
+                if (!val) {
+                    this.scheduleDataToBeUpdated = {}
+                    this.$refs.editForm.resetForm()
+                }
+            }
         }
     }
 </script>
 
 <style scoped>
-    .shared-calendar{
-        margin: 0 auto;
-        display: flex;
-    }
-    table{
-        border-collapse: collapse;
-    }
-    th,td{
-        width: 80px;
-        height: 80px;
-        border: solid 1px black;
-        text-align: center;
-    }
-    label{
-        display: block;
-        margin-top: 16px;
-    }
-    input{
-        width: 100%;
-    }
-    textarea{
-        width: 100%;
-    }
-    button{
-        margin-top: 16px;
-    }
-    .calendar-menu{
-        margin-left: 20px;
-    }
-    .schedules{
-        margin-top: 20px;
-    }
-    .schedule{
-        padding: 8px 0;
-        border-top: 1px solid black;
-    }
-
-    .modal-background{
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        width: 100vw ;
-        z-index: 10;
-        background: rgba(0, 0, 0, .1);
-    }
-
-    .modal{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        width: 100vw ;
-    }
-    .modal-inner{
-        background: #ffffff;
+    .content-wrap{
+        height: calc(100vh - 64px);
     }
 </style>

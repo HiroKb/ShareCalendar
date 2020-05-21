@@ -27,7 +27,7 @@
                     </template>
 
                     <v-list-item-action class="calendar-link-wrap" v-if="isPersonal && schedule.calendar_id">
-                        <router-link class="calendar-link" :to="{name: 'sharedCalendarIndex', params:{sharedCalendarId: schedule.calendar_id}}">{{ schedule.calendar_name }}</router-link>
+                        <router-link class="calendar-link" :to="{name: 'sharedCalendar', params:{sharedCalendarId: schedule.calendar_id}}">{{ schedule.calendar_name }}</router-link>
                     </v-list-item-action>
                 </v-list-item>
                 <v-divider v-if="index + 1 < schedules.length"></v-divider>
