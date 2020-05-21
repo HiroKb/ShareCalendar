@@ -13,7 +13,6 @@ export default {
                 generateCalendarRelatedData: function(month, schedulesList) {
 
                     let selectedDateLabel ='',
-                        selectedMonthLabel = '',
                         weeksNum = 0,
                         calendarData = []
 
@@ -24,9 +23,6 @@ export default {
                     } else {
                         selectedDateLabel = moment(month).startOf('month').format('YYYY-MM-DD')
                     }
-
-                    selectedMonthLabel = moment(month).format('YYYY年MM月')
-
 
                     // 月の日数
                     const monthDays = moment(month).daysInMonth()
@@ -42,7 +38,8 @@ export default {
                         calendarData.unshift({
                             date: day.format('YYYY-MM-DD'),
                             dateNum: day.date(),
-                            schedules: []
+                            schedules: [],
+                            isSelectedMonth: false,
                         })
                     }
 
@@ -53,18 +50,20 @@ export default {
                         calendarData.push({
                             date: day.format('YYYY-MM-DD'),
                             dateNum: day.date(),
-                            schedules: []
+                            schedules: [],
+                            isSelectedMonth: true
                         })
                     }
 
 
                     // 月末より後の日付データ(週の最後まで)を配列へ追加
                     for (let length = calendarData.length, i = 1; length < weeksNum * 7; length++, i++){
-                        const day = moment(month).endOf('month').add(i, 'days')
+                        const momentObj = moment(month).endOf('month').add(i, 'days')
                         calendarData.push({
-                            date: day.format('YYYY-MM-DD'),
-                            dateNum : day.date(),
-                            schedules: []
+                            date: momentObj.format('YYYY-MM-DD'),
+                            dateNum : momentObj.date(),
+                            schedules: [],
+                            isSelectedMonth: false,
                         })
                     }
 
@@ -77,7 +76,6 @@ export default {
 
                     return {
                         selectedDateLabel: selectedDateLabel,
-                        selectedMonthLabel: selectedMonthLabel,
                         weeksNum: weeksNum,
                         calendarData: calendarData
                     }

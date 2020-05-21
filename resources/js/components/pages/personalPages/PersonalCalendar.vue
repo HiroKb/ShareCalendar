@@ -4,10 +4,9 @@
 <!--            カレンダー-->
             <v-col cols="7">
                 <calendar
-                    :date-label="selectedMonthLabel"
+                    :selected-month="selectedMonth"
                     :weeks="weeksNum"
-                    :calendar-data="calendarData"
-                    :schedule-number-data="scheduleNumberData"
+                    :calendar-data="filteredCalendarData"
                     @changeSelectedMonthRequest="changeSelectedMonth"
                     @changeSelectedDateRequest="changeSelectedDate"
                 />
@@ -148,47 +147,37 @@
             }
         },
         computed: {
-            // スケジュール数表示用の配列
-            scheduleNumberData: function() {
+            // 絞り込み後のカレンダーデータ
+            filteredCalendarData: function() {
                 if(this.showSchedules === 'personal'){
                     return this.calendarData.map((dateData) => {
-                        return {schedules: dateData.schedules.filter((schedule) => {
+                        return {
+                            date: dateData.date,
+                            dateNum: dateData.dateNum,
+                            schedules: dateData.schedules.filter((schedule) => {
                                 return schedule.user_id
-                            })}
+                            })
+                        }
                     })
                 } else if(this.showSchedules === 'shared') {
                     return this.calendarData.map((dateData) => {
-                        return {schedules: dateData.schedules.filter((schedule) => {
-                                return schedule.calendar_name
-                            })}
+                        return {
+                            date: dateData.date,
+                            dateNum: dateData.dateNum,
+                            schedules: dateData.schedules.filter((schedule) => {
+                                return schedule.calendar_id
+                            })
+                        }
                     })
-                } else {
-                    return this.calendarData
                 }
+
+                return this.calendarData
             },
             // 選択日のスケジュールデータ
             selectDateSchedules: function() {
-                if(this.showSchedules === 'personal'){
-                    for (let i = 0; i < this.calendarData.length; i++){
-                        if (this.selectedDateLabel === this.calendarData[i].date){
-                            return this.calendarData[i].schedules.filter((schedule) =>{
-                                return schedule.user_id
-                            })
-                        }
-                    }
-                } else if(this.showSchedules === 'shared') {
-                    for (let i = 0; i < this.calendarData.length; i++){
-                        if (this.selectedDateLabel === this.calendarData[i].date){
-                            return this.calendarData[i].schedules.filter((schedule) =>{
-                                return schedule.calendar_name
-                            })
-                        }
-                    }
-                } else {
-                    for (let i = 0; i < this.calendarData.length; i++){
-                        if (this.selectedDateLabel === this.calendarData[i].date){
-                            return this.calendarData[i].schedules
-                        }
+                for (let i = 0; i < this.filteredCalendarData.length; i++){
+                    if (this.selectedDateLabel === this.filteredCalendarData[i].date){
+                        return this.filteredCalendarData[i].schedules
                     }
                 }
             },
@@ -211,7 +200,6 @@
                 const newData = this.schedulesAndCalendarMethods.generateCalendarRelatedData(this.selectedMonth, this.schedulesData.schedules)
 
                this.selectedDateLabel = newData.selectedDateLabel
-               this.selectedMonthLabel = newData.selectedMonthLabel
                this.weeksNum = newData.weeksNum
                this.calendarData = newData.calendarData
             },

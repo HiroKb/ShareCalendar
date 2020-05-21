@@ -4,10 +4,9 @@
             <!--            カレンダー-->
             <v-col cols="7">
                 <calendar
-                    :date-label="selectedMonthLabel"
+                    :selected-month="selectedMonth"
                     :weeks="weeksNum"
                     :calendar-data="calendarData"
-                    :schedule-number-data="calendarData"
                     @changeSelectedMonthRequest="changeSelectedMonth"
                     @changeSelectedDateRequest="changeSelectedDateLabel"
                 />
@@ -170,7 +169,6 @@
                 const newData = this.schedulesAndCalendarMethods.generateCalendarRelatedData(this.selectedMonth, this.schedulesData.schedules)
 
                 this.selectedDateLabel = newData.selectedDateLabel
-                this.selectedMonthLabel = newData.selectedMonthLabel
                 this.weeksNum = newData.weeksNum
                 this.calendarData = newData.calendarData
             },
