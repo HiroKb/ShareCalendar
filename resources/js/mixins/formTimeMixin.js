@@ -1,6 +1,6 @@
 export default {
     computed: {
-        formTimes() {
+        mixinFormTimes: function() {
             return {
                 hour: [
                     {label: '指定なし', value: 'unspecified'},

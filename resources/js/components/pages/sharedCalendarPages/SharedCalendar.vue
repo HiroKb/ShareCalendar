@@ -17,7 +17,7 @@
                     <div class="d-flex justify-space-between align-center">
                         <v-card-title class="flex-grow-0 flex-shrink-0">{{ selectedDateLabel}}</v-card-title>
                         <v-btn
-                            class="mr-4" small fab :color="colors.themeColor" outlined
+                            class="mr-4" small fab :color="mixinThemeColor" outlined
                             @click="createScheduleModal = true"
                         >
                             <v-icon>mdi-plus</v-icon>
@@ -47,7 +47,7 @@
         >
             <create-schedule-form-card
                 ref="createForm"
-                :selected-date="selectedDateLabel"
+                :selected-date-label="selectedDateLabel"
                 :error-messages="createError"
                 @createScheduleRequest="createSchedule"
             >
@@ -83,8 +83,6 @@
 </template>
 
 <script>
-    import moment from "moment"
-
     import Calendar from "../../modules/Calendar"
     import CreateScheduleFormCard from "../../modules/CreateScheduleFormCard"
     import EditScheduleFormCard from "../../modules/EditScheduleFormCard"
@@ -166,7 +164,7 @@
             },
             // カレンダー関連データを変更
             changeCalendarRelatedData() {
-                const newData = this.schedulesAndCalendarMethods.generateCalendarRelatedData(this.selectedMonth, this.schedulesData.schedules)
+                const newData = this.mixinGenerateCalendarRelatedData(this.selectedMonth, this.schedulesData.schedules)
 
                 this.selectedDateLabel = newData.selectedDateLabel
                 this.weeksNum = newData.weeksNum
@@ -207,7 +205,7 @@
                 // リクエスト成功の場合
                 if (response.status === CREATED) {
                     // カレンダーデータとスケジュールリストデータを更新
-                    const newData = this.schedulesAndCalendarMethods.addScheduleToSchedulesListAndCalendarData(response.data, this.schedulesData.schedules, this.calendarData)
+                    const newData = this.mixinAddScheduleToSchedulesListAndCalendarData(response.data, this.schedulesData.schedules, this.calendarData)
                     this.$emit('changeSchedulesData',{schedules: newData.newScheduleList})
                     this.calendarData = newData.newCalendarData
 
@@ -249,7 +247,7 @@
                 // 通信成功の場合
                 if(response.status === SUCCESS) {
                     // スケジュールリストとカレンダーデータのスケジュールを更新
-                    const newData = this.schedulesAndCalendarMethods.updateScheduleInSchedulesListAndCalendarData(this.scheduleDataToBeUpdated, response.data, this.schedulesData.schedules, this.calendarData)
+                    const newData = this.mixinUpdateScheduleInSchedulesListAndCalendarData(this.scheduleDataToBeUpdated, response.data, this.schedulesData.schedules, this.calendarData)
                     this.$emit('changeSchedulesData',{schedules: newData.newScheduleList})
                     this.calendarData = newData.newCalendarData
 
@@ -277,7 +275,7 @@
 
                 if(response.status === SUCCESS) {
                     // カレンダーデータとスケジュールリストデータからスケジュールを削除
-                    const newData = this.schedulesAndCalendarMethods.removeScheduleFromSchedulesListAndCalendarData(this.scheduleDataToBeDeleted, this.schedulesData.schedules, this.calendarData)
+                    const newData = this.mixinRemoveScheduleFromSchedulesListAndCalendarData(this.scheduleDataToBeDeleted, this.schedulesData.schedules, this.calendarData)
                     this.$emit('changeSchedulesData',{schedules: newData.newScheduleList})
                     this.calendarData = newData.newCalendarData
 

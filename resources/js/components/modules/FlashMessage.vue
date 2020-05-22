@@ -2,7 +2,7 @@
     <div class="message-wrap">
         <v-alert
             :value="!!message"
-            :color="colors.themeColor"
+            :color="mixinThemeColor"
             dark
             dense
             tile

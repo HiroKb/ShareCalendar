@@ -3,7 +3,7 @@
         <v-tabs class="elevation-1" v-model="tab">
             <v-tab href="#login-tab">ログイン</v-tab>
             <v-tab href="#register-tab">新規登録</v-tab>
-            <v-tabs-slider :color="colors.themeColor"></v-tabs-slider>
+            <v-tabs-slider :color="mixinThemeColor"></v-tabs-slider>
 
             <v-tabs-items v-model="tab">
                 <v-divider ></v-divider>
@@ -18,7 +18,7 @@
                                     v-model="loginForm.data.email"
                                     label="メールアドレス"
                                     type="email"
-                                    :rules="[validationRules.required]"
+                                    :rules="[mixinValidationRules.required]"
                                     :error="errorMessages ? !!errorMessages.email : false"
                                     :error-messages="errorMessages ? errorMessages.email ? errorMessages.email : [] : []"
                                 ></v-text-field>
@@ -29,11 +29,11 @@
                                     @click:append="loginForm.showPassword = !loginForm.showPassword"
                                     :append-icon="loginForm.showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                                     :type="loginForm.showPassword ? 'text' : 'password'"
-                                    :rules="[validationRules.required]"
+                                    :rules="[mixinValidationRules.required]"
                                     :error="errorMessages ? !!errorMessages.password : false"
                                     :error-messages="errorMessages ? errorMessages.password ? errorMessages.password : [] : []"
                                 ></v-text-field>
-                                <v-btn class="mb-4" block  :color="colors.themeColor" dark type="submit">ログイン</v-btn>
+                                <v-btn class="mb-4" block  :color="mixinThemeColor" dark type="submit">ログイン</v-btn>
                                 <router-link :to="{name: 'sendResetPasswordLink'}">パスワードをお忘れの方</router-link>
                             </v-form>
                         </v-card-text>
@@ -48,7 +48,7 @@
                                     outlined
                                     v-model="registerForm.data.name"
                                     label="ユーザー名"
-                                    :rules="[validationRules.required, validationRules.max255]"
+                                    :rules="[mixinValidationRules.required, mixinValidationRules.max255]"
                                     :error="errorMessages ? !!errorMessages.name : false"
                                     :error-messages="errorMessages ? errorMessages.name ? errorMessages.name : [] : []"
                                 >
@@ -57,7 +57,7 @@
                                     outlined
                                     v-model="registerForm.data.email"
                                     label="メールアドレス"
-                                    :rules="[validationRules.required, validationRules.email, validationRules.max255]"
+                                    :rules="[mixinValidationRules.required, mixinValidationRules.email, mixinValidationRules.max255]"
                                     :error="errorMessages ? !!errorMessages.email : false"
                                     :error-messages="errorMessages ? errorMessages.email ? errorMessages.email : [] : []"
                                 ></v-text-field>
@@ -68,11 +68,11 @@
                                     @click:append="registerForm.showPassword = !registerForm.showPassword"
                                     :append-icon="registerForm.showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                                     :type="registerForm.showPassword ? 'text' : 'password'"
-                                    :rules="[validationRules.required, validationRules.min8]"
+                                    :rules="[mixinValidationRules.required, mixinValidationRules.min8]"
                                     :error="errorMessages ? !!errorMessages.password : false"
                                     :error-messages="errorMessages ? errorMessages.password ? errorMessages.password : [] : []"
                                 ></v-text-field>
-                                <v-btn block :color="colors.themeColor" dark type="submit">登録</v-btn>
+                                <v-btn block :color="mixinThemeColor" dark type="submit">登録</v-btn>
                             </v-form>
                         </v-card-text>
                     </v-card>

@@ -1,6 +1,6 @@
 export default {
     computed: {
-        utilMethods(){
+        mixinUtilMethods: function() {
             return {
                 /**
                  * 時刻フォーマットを変更

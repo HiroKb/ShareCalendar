@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-app-bar :color="colors.themeColor" dark app clipped-left>
+        <v-app-bar :color="mixinThemeColor" dark app clipped-left>
             <v-app-bar-nav-icon @click="drawer = !drawer" v-if="isLogin"></v-app-bar-nav-icon>
             <v-toolbar-title>
                 <router-link :to="{name: 'personalCalendar'}" class="toolbar-title">

@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <v-card-title>{{ selectedDate }}</v-card-title>
+        <v-card-title>{{ selectedDateLabel }}</v-card-title>
         <v-card-text>
             <v-form ref="form" @submit.prevent="createSchedule">
                 <v-container class="pa-0">
@@ -9,7 +9,7 @@
                             <v-select
                                 ref="hour"
                                 v-model="form.hour"
-                                :items="formTimes.hour"
+                                :items="mixinFormTimes.hour"
                                 item-text="label"
                                 item-value="value"
                                 :rules="[validationHour]"
@@ -23,7 +23,7 @@
                             <v-select
                                 ref="minute"
                                 v-model="form.minute"
-                                :items="formTimes.minute"
+                                :items="mixinFormTimes.minute"
                                 item-text="label"
                                 item-value="value"
                                 :rules="[validationMinute]"
@@ -39,7 +39,7 @@
 
                 <v-text-field
                     v-model="form.title"
-                    :rules="[validationRules.required, validationRules.max50]"
+                    :rules="[mixinValidationRules.required, mixinValidationRules.max50]"
                     :error="errorMessages ? !!errorMessages.title : false"
                     :error-messages="errorMessages ? errorMessages.title ? errorMessages.title : [] : []"
                     counter="50"
@@ -50,7 +50,7 @@
 
                 <v-textarea
                     v-model="form.description"
-                    :rules="[validationRules.max100]"
+                    :rules="[mixinValidationRules.max100]"
                     :error="errorMessages ? !!errorMessages.description : false"
                     :error-messages="errorMessages ? errorMessages.description ? errorMessages.description : [] : []"
                     counter="100"
@@ -60,7 +60,7 @@
                     rows="4"
                 >
                 </v-textarea>
-                <v-btn class="my-0" block :color="colors.themeColor" dark type="submit">スケジュール追加</v-btn>
+                <v-btn class="my-0" block :color="mixinThemeColor" dark type="submit">スケジュール追加</v-btn>
 
             </v-form>
         </v-card-text>
@@ -85,11 +85,13 @@
             }
         },
         props: {
-            selectedDate: {
+            // 選択日(スケジュールを追加する日)
+            selectedDateLabel: {
                 type: String,
                 required: true,
                 default: null
             },
+            // バックエンドバリデーションエラーメッセージ
             errorMessages: {
                 type: Object,
                 required: true,
@@ -136,16 +138,17 @@
                     : this.form.hour.value + ':' + this.form.minute.value + ':00'
                 const description = !!this.form.description ? this.form.description : null
                 const data = {
-                    date: this.selectedDate,
-                    time: time,
-                    title: this.form.title,
-                    description: description
+                    date: this.selectedDate, // 'YYYY-MM-DD'
+                    time: time, // null or 'HH:mm:ss'
+                    title: this.form.title, // String
+                    description: description // null or String
                 }
 
                 this.$emit('createScheduleRequest', data)
             }
         },
         watch: {
+            // 時刻フォームで指定なしが選択された場合もう一方の時刻フォームも指定なしに変更
             'form.hour.value': function (val) {
                 if(val === 'unspecified'){
                     this.form.minute = {label: '指定なし', value: 'unspecified'}

@@ -8,7 +8,7 @@
         <p class="schedule-data">{{ displayData.title }}</p>
         <p class="schedule-label">詳細</p>
         <p class="schedule-data">{{ displayData.description }}</p>
-        <v-btn class="my-0" block :color="colors.themeColor" dark
+        <v-btn class="my-0" block :color="mixinThemeColor" dark
                @click="deleteSchedule"
         >スケジュール削除</v-btn>
     </v-sheet>
@@ -21,6 +21,7 @@
         name: "DeleteScheduleFormCard",
         mixins: [colorsMixin, utilMethodsMixin],
         props: {
+            // 削除するスケジュールデータ
             scheduleData: {
                 type: Object,
                 require: true,
@@ -32,7 +33,7 @@
             displayData: function () {
                 return {
                     date: this.scheduleData.date ? this.scheduleData.date : '',
-                    time:  this.scheduleData.time ? this.utilMethods.timeFormatter(this.scheduleData.time) : '指定なし',
+                    time:  this.scheduleData.time ? this.mixinUtilMethods.timeFormatter(this.scheduleData.time) : '指定なし',
                     title: this.scheduleData ? this.scheduleData.title : '',
                     description: this.scheduleData.description ? this.scheduleData.description : 'なし'
                 }

@@ -1,9 +1,7 @@
 export default {
     computed: {
-        colors() {
-            return {
-                themeColor: 'indigo darken-1'
-            }
+        mixinThemeColor : function() {
+            return 'indigo darken-1'
         }
     },
 }

@@ -9,7 +9,7 @@
                             <v-select
                                 ref="hour"
                                 v-model="form.hour"
-                                :items="formTimes.hour"
+                                :items="mixinFormTimes.hour"
                                 item-text="label"
                                 item-value="value"
                                 :rules="[validationHour]"
@@ -23,7 +23,7 @@
                             <v-select
                                 ref="minute"
                                 v-model="form.minute"
-                                :items="formTimes.minute"
+                                :items="mixinFormTimes.minute"
                                 item-text="label"
                                 item-value="value"
                                 :rules="[validationMinute]"
@@ -58,7 +58,7 @@
                     rows="4"
                 >
                 </v-textarea>
-                <v-btn class="my-0" block :color="colors.themeColor" dark type="submit">スケジュール更新</v-btn>
+                <v-btn class="my-0" block :color="mixinThemeColor" dark type="submit">スケジュール更新</v-btn>
 
             </v-form>
         </v-card-text>
@@ -124,8 +124,8 @@
                 }
 
                 this.form = {
-                    hour: this.formTimes.hour.find((obj)=> obj.value === hour),
-                    minute: this.formTimes.minute.find((obj)=> obj.value === minute),
+                    hour: this.mixinFormTimes.hour.find((obj)=> obj.value === hour),
+                    minute: this.mixinFormTimes.minute.find((obj)=> obj.value === minute),
                     title: schedule.title ? schedule.title : '',
                     description: schedule.description ? schedule.description : ''
                 }
@@ -156,7 +156,7 @@
             }
         },
         watch: {
-            // 更新スケジュールが変更された場合
+            // scheduleData(変更するスケジュール)が変更された場合フォームを更新
             scheduleData: {
                 handler: function (val) {
                     Object.keys(val).length && this.changeForm()
@@ -164,6 +164,7 @@
                 deep: true,
                 immediate: true
             },
+            // 時刻フォームで指定なしが選択された場合もう一方の時刻フォームも指定なしに変更
             'form.hour.value': function (val) {
                 if(val === 'unspecified'){
                     this.form.minute = {label: '指定なし', value: 'unspecified'}

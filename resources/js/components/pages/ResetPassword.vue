@@ -9,10 +9,10 @@
                         outlined
                         v-model="form.password"
                         label="新しいパスワード"
-                        :rules="[validationRules.required, validationRules.min8]"
+                        :rules="[mixinValidationRules.required, mixinValidationRules.min8]"
                     >
                     </v-text-field>
-                    <v-btn block :color="colors.themeColor" dark type="submit">変更</v-btn>
+                    <v-btn block :color="mixinThemeColor" dark type="submit">変更</v-btn>
                 </v-form>
                 <template v-else>
                     <p>パスワードを変更しました。<br/><router-link :to="{name: 'personalCalendar'}">こちら</router-link>からマイページへアクセスしてください。</p>

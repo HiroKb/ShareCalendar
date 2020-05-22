@@ -3,7 +3,7 @@
         <v-progress-circular
             size="100"
             width="8"
-            :color="colors.themeColor"
+            :color="mixinThemeColor"
             indeterminate
         ></v-progress-circular>
     </v-overlay>
