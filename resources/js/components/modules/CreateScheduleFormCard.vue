@@ -138,7 +138,7 @@
                     : this.form.hour.value + ':' + this.form.minute.value + ':00'
                 const description = !!this.form.description ? this.form.description : null
                 const data = {
-                    date: this.selectedDate, // 'YYYY-MM-DD'
+                    date: this.selectedDateLabel, // 'YYYY-MM-DD'
                     time: time, // null or 'HH:mm:ss'
                     title: this.form.title, // String
                     description: description // null or String

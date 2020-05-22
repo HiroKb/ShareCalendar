@@ -123,7 +123,10 @@
             }
         },
         computed: {
-            // 選択日のスケジュールデータ
+            /**
+             * 選択日のスケジュールデータ
+             * @return {Array}
+             */
             selectDateSchedules: function () {
                 for (let i = 0; i < this.calendarData.length; i++){
                     if (this.selectedDateLabel === this.calendarData[i].date){
@@ -140,17 +143,25 @@
                 default: ''
             },
             // 共有スケジュールデータ
-            schedulesData: {
+            sharedSchedulesData: {
                 type: Object,
                 required: true,
-                default: {
+                default: () => ({
                     schedulesYear: null,
                     schedules: [],
-                }
+                })
+            },
+            // 親コンポーネントのスケジュール取得メソッド
+            fetchSharedSchedules: {
+                type: Function,
+                required: true,
             }
         },
         methods: {
-            // 選択月の変更
+            /**
+             * 選択月の変更
+             * @param {Number} num
+             */
             changeSelectedMonth(num) {
                 if (num === -1) {
                     this.selectedMonth = moment(this.selectedMonth).subtract(1, 'month')
@@ -158,35 +169,22 @@
                     this.selectedMonth = moment(this.selectedMonth).add(1, 'month')
                 }
             },
-            // 選択日の変更
+            /**
+             * 選択日の変更
+             * @param {String} date 'YYYY-MM-DD'
+             */
             changeSelectedDateLabel(date) {
                 this.selectedDateLabel = date
             },
-            // カレンダー関連データを変更
+            /**
+             * カレンダー関連のデータを更新
+             */
             changeCalendarRelatedData() {
-                const newData = this.mixinGenerateCalendarRelatedData(this.selectedMonth, this.schedulesData.schedules)
+                const newData = this.mixinGenerateCalendarRelatedData(this.selectedMonth, this.sharedSchedulesData.schedules)
 
                 this.selectedDateLabel = newData.selectedDateLabel
                 this.weeksNum = newData.weeksNum
                 this.calendarData = newData.calendarData
-            },
-            async fetchSharedSchedules(year){
-                const firstDay = moment().year(year).startOf('year')
-                const firstDayWeek = firstDay.day()
-                const lastDay = moment().year(year).endOf('year')
-                const lastDayWeek = lastDay.day()
-                const from = firstDay.subtract(firstDayWeek, 'day').format('YYYY-MM-DD')
-                const until = lastDay.add(6 - lastDayWeek, 'day').format('YYYY-MM-D')
-
-                this.$store.commit('loading/setLoadingFlg', true)
-                const response = await axios.get('/api/shared-calendars/' + this.sharedCalendarId + '/schedules/' + from + '/' + until)
-                this.$store.commit('loading/setLoadingFlg', false)
-
-                if (response.status === SUCCESS) {
-                    return response.data
-                }
-
-                this.$store.commit('error/setCode', response.status)
             },
             /**
              * スケジュールの作成
@@ -202,10 +200,9 @@
                 const response = await axios.post('/api/shared-calendars/' + this.sharedCalendarId + '/schedules', schedule)
                 this.$store.commit('loading/setLoadingFlg', false)
 
-                // リクエスト成功の場合
                 if (response.status === CREATED) {
                     // カレンダーデータとスケジュールリストデータを更新
-                    const newData = this.mixinAddScheduleToSchedulesListAndCalendarData(response.data, this.schedulesData.schedules, this.calendarData)
+                    const newData = this.mixinAddScheduleToSchedulesListAndCalendarData(response.data, this.sharedSchedulesData.schedules, this.calendarData)
                     this.$emit('changeSchedulesData',{schedules: newData.newScheduleList})
                     this.calendarData = newData.newCalendarData
 
@@ -215,13 +212,11 @@
                     return false
                 }
 
-                // バリデーションエラーの場合エラーメッセージを代入
                 if (response.status === VALIDATION_ERROR) {
                     this.createError.errors = response.data.errors
                     return false
                 }
 
-                // 上記以外の場合エラーコードを代入
                 this.$store.commit('error/setCode', response.status)
             },
             /**
@@ -244,10 +239,9 @@
                 const response = await axios.patch('/api/shared-calendars/' + this.sharedCalendarId + '/schedules/' + this.scheduleDataToBeUpdated.id, schedule)
                 this.$store.commit('loading/setLoadingFlg', false)
 
-                // 通信成功の場合
                 if(response.status === SUCCESS) {
                     // スケジュールリストとカレンダーデータのスケジュールを更新
-                    const newData = this.mixinUpdateScheduleInSchedulesListAndCalendarData(this.scheduleDataToBeUpdated, response.data, this.schedulesData.schedules, this.calendarData)
+                    const newData = this.mixinUpdateScheduleInSchedulesListAndCalendarData(this.scheduleDataToBeUpdated, response.data, this.sharedSchedulesData.schedules, this.calendarData)
                     this.$emit('changeSchedulesData',{schedules: newData.newScheduleList})
                     this.calendarData = newData.newCalendarData
 
@@ -257,9 +251,12 @@
                     return false
                 }
 
-                // 上記以外の場合エラーコードを代入
                 this.$store.commit('error/setCode', response.status)
             },
+            /**
+             * スケジュール削除
+             * @return {Promise<boolean>}
+             */
             async deleteSchedule(){
                 // スケジュールが選択されていない場合
                 if (!this.scheduleDataToBeDeleted.id){
@@ -275,7 +272,7 @@
 
                 if(response.status === SUCCESS) {
                     // カレンダーデータとスケジュールリストデータからスケジュールを削除
-                    const newData = this.mixinRemoveScheduleFromSchedulesListAndCalendarData(this.scheduleDataToBeDeleted, this.schedulesData.schedules, this.calendarData)
+                    const newData = this.mixinRemoveScheduleFromSchedulesListAndCalendarData(this.scheduleDataToBeDeleted, this.sharedSchedulesData.schedules, this.calendarData)
                     this.$emit('changeSchedulesData',{schedules: newData.newScheduleList})
                     this.calendarData = newData.newCalendarData
 
@@ -285,13 +282,20 @@
                     return false
                 }
 
-                // 通信エラーの場合エラーコードを代入
                 this.$store.commit('error/setCode', response.status)
             },
+            /**
+             * スケジュール更新モーダルの表示処理
+             * @param {Object} schedule 更新するスケジュールデータ
+             */
             showEditModal(schedule){
                 this.scheduleDataToBeUpdated = schedule
                 this.editScheduleModal = true
             },
+            /**
+             * スケジュール削除モーダルの表示処理
+             * @param {Object} schedule 削除するスケジュールデータ
+             */
             showDeleteModal(schedule) {
                 this.scheduleDataToBeDeleted = schedule
                 this.deleteScheduleModal = true
@@ -302,19 +306,29 @@
             this.selectedDateLabel = moment(this.selectedMonth).format('YYYY-MM-DD')
         },
         watch: {
+            /**
+             * スケジュールデータが更新された場合カレンダーデータも更新
+             */
+            sharedSchedulesData:{
+                handler: function (val) {
+                    this.changeCalendarRelatedData()
+                },
+                deep: true
+            },
             selectedMonth: async function () {
                 const selectedYear = moment(this.selectedMonth).format('YYYY')
-                if (this.schedulesData.schedulesYear !== selectedYear){
-                    const schedules= await this.fetchSharedSchedules(selectedYear)
-                    this.$emit('changeSchedulesData', {
-                        schedulesYear: selectedYear,
-                        schedules: schedules
-                    })
-                }
                 this.changeCalendarRelatedData()
+
+                if(this.sharedSchedulesData.schedulesYear !== selectedYear){
+                    // 親のスケジュール取得メソッドを呼ぶ
+                    this.fetchSharedSchedules(selectedYear, true)
+                }
             },
-            // モーダルが消えたときにモーダル内のフォームをリセット
-            createScheduleModal:  function (val) {
+            /**
+             *  モーダルが非表示になった場合モーダル内のフォームをリセット
+             * @param {Boolean} val モーダルの表示フラグ
+             */
+            createScheduleModal: function (val) {
                 !val && this.$refs.createForm.resetForm()
             },
             editScheduleModal: function (val) {
