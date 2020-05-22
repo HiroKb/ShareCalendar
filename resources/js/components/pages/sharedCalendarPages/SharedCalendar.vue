@@ -5,6 +5,7 @@
             <v-col cols="7">
                 <calendar
                     :selected-month="selectedMonth"
+                    :selected-date-label="selectedDateLabel"
                     :weeks="weeksNum"
                     :calendar-data="calendarData"
                     @changeSelectedMonthRequest="changeSelectedMonth"

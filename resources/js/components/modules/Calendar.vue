@@ -35,16 +35,22 @@
                                     :data-date="getDateData(row, col).date"
                                     @click="changeSelectedDate"
                                 >
-                                    <v-card class="cell-inner d-flex flex-column align-center justify-space-around" flat tile
+                                    <v-card class="cell-inner" flat tile
                                             :class="getDateData(row,  col).isSelectedMonth ? '' : 'grey lighten-4'"
                                     >
-<!--                                        日付-->
-                                        <v-card-title
-                                            class="pa-0"
-                                            :class="getWeekEndCSS(col)"
-                                        >{{ getDateData(row, col).dateNum }}</v-card-title>
-<!--                                        スケジュール数-->
-                                        <v-card-text class="text-center subtitle-1 pa-0">{{ getDateData(row, col).schedules.length}}</v-card-text>
+                                        <div
+                                            style="height: 100%; width: 100%;"
+                                            class="d-flex flex-column align-center justify-space-around"
+                                            :class="getDateData(row, col).date === selectedDateLabel ? 'blue lighten-5': ''"
+                                        >
+                                            <!--                                        日付-->
+                                            <v-card-title
+                                                class="pa-0"
+                                                :class="getWeekEndCSS(col)"
+                                            >{{ getDateData(row, col).dateNum }}</v-card-title>
+                                            <!--                                        スケジュール数-->
+                                            <v-card-text class="text-center subtitle-1 pa-0">{{ getDateData(row, col).schedules.length}}</v-card-text>
+                                        </div>
                                     </v-card>
                                 </td>
                             </tr>
@@ -70,6 +76,11 @@
                 type: Object,
                 required: true,
                 default: () => ({})
+            },
+            selectedDateLabel: {
+                type:String,
+                required: true,
+                default: ''
             },
             // 週数
             weeks: {
