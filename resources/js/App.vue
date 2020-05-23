@@ -104,6 +104,9 @@
     }
 </style>
 <style>
+    .content-wrap{
+        height: calc(100vh - 64px);
+    }
     .custom-scrollbar::-webkit-scrollbar
     {
         width:2px;
