@@ -1,52 +1,53 @@
 <template>
-    <div>
-        <div class="contents">
-            <h1>SearchSharedCalendar</h1>
-            <form @submit.prevent="searchSharedCalendar">
-                <label for="calendar-id">検索ID</label>
-                <input type="text" id="calendar-id" v-model="searchSharedCalendarData.search_id">
-                <p v-if="searchError.errors.search_id">{{ searchError.errors.search_id[0]}}</p>
-
-                <button type="submit">検索</button>
-
-            </form>
-        </div>
-    </div>
+    <v-container class="py-12">
+        <v-card>
+            <v-card-title>共有カレンダー検索</v-card-title>
+            <v-card-text>
+                <v-form ref="form" @submit.prevent="searchSharedCalendar">
+                    <v-text-field
+                        label="検索ID"
+                        v-model="form.search_id"
+                        outlined
+                        :rules="[mixinValidationRules.required]"
+                    >
+                    </v-text-field>
+                    <v-btn block :color="mixinThemeColor" dark type="submit">検索</v-btn>
+                </v-form>
+            </v-card-text>
+        </v-card>
+    </v-container>
 </template>
-
 <script>
+    import validationRulesMixin from "../../../mixins/validationRulesMixin"
+    import colorsMixin from "../../../mixins/colorsMixin";
     export default {
         name: "SearchSharedCalendar",
+        mixins: [validationRulesMixin, colorsMixin],
         data() {
             return {
-                searchSharedCalendarData: {
+                form: {
                     search_id: ''
                 },
-                searchError: {
-                    errors: {},
-                    errorFlg: false
-                }
             }
         },
         methods: {
+            /**
+             * applicationSharedCalendarに遷移
+             * @return {boolean}
+             */
             searchSharedCalendar () {
-                this.searchError.errors = {}
-                this.searchError.errorFlg = false
-
-                if (!this.searchSharedCalendarData.search_id) {
-                    this.searchError.errors.search_id = ['検索IDを入力してください。']
-                    this.searchError.errorFlg = true
-                }
-                if (this.searchError.errorFlg) {
+                // バリデーションチェック
+                if (!this.$refs.form.validate()){
                     return false
                 }
-
-                this.$router.push({name: 'applicationSharedCalendar', params: {searchId: this.searchSharedCalendarData.search_id}})
+                this.$router.push({name: 'applicationSharedCalendar', params: {searchId: this.form.search_id}})
             }
         }
     }
 </script>
 
 <style scoped>
-
+    .container{
+        max-width: 600px;
+    }
 </style>
