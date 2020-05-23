@@ -1,17 +1,19 @@
 <template>
-    <v-sheet class="pt-4 pb-5 px-6">
-        <p class="schedule-label">日付</p>
-        <p class="schedule-data">{{ displayData.date }}</p>
-        <p class="schedule-label">時刻</p>
-        <p class="schedule-data">{{ displayData.time }}</p>
-        <p class="schedule-label">スケジュール名</p>
-        <p class="schedule-data">{{ displayData.title }}</p>
-        <p class="schedule-label">詳細</p>
-        <p class="schedule-data">{{ displayData.description }}</p>
-        <v-btn class="my-0" block :color="mixinThemeColor" dark
-               @click="deleteSchedule"
-        >スケジュール削除</v-btn>
-    </v-sheet>
+    <v-card>
+        <v-card-text class="pt-4">
+            <p class="schedule-label">日付</p>
+            <p class="schedule-data">{{ displayData.date }}</p>
+            <p class="schedule-label">時刻</p>
+            <p class="schedule-data">{{ displayData.time }}</p>
+            <p class="schedule-label">スケジュール名</p>
+            <p class="schedule-data">{{ displayData.title }}</p>
+            <p class="schedule-label">詳細</p>
+            <p class="schedule-data">{{ displayData.description }}</p>
+            <v-btn class="my-0" block :color="mixinThemeColor" dark
+                   @click="deleteSchedule"
+            >スケジュール削除</v-btn>
+        </v-card-text>
+    </v-card>
 </template>
 
 <script>
@@ -55,5 +57,6 @@
         margin-bottom: 20px;
         font-size: 20px;
         word-wrap: break-word;
+        color: rgba(0, 0, 0 ,0.87);
     }
 </style>

@@ -120,4 +120,7 @@
     {
         background: #919191;
     }
+    .transparent-black{
+        color: rgba(0, 0, 0, 0.87)
+    }
 </style>

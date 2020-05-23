@@ -4,17 +4,17 @@
             <v-card-title>カレンダー共有申請</v-card-title>
             <v-card-text>
                 <template v-if="sharedCalendarData.status === 'NotShared'">
-                <p class="title">{{'管理者: ' + sharedCalendarData.admin_name}}</p>
+                <p class="title transparent-black">{{'管理者: ' + sharedCalendarData.admin_name}}</p>
                 <v-form ref="form" @submit.prevent="applicationSharedCalendar">
                     <v-btn block :color="mixinThemeColor" dark type="submit">共有申請</v-btn>
                 </v-form>
                 </template>
 
-                <p class="title" v-else-if="sharedCalendarData.status === 'Shared'">共有済みのカレンダです。</p>
+                <p class="title transparent-black" v-else-if="sharedCalendarData.status === 'Shared'">共有済みのカレンダーです。</p>
 
-                <p class="title" v-else-if="sharedCalendarData.status === 'Applied'">共有申請済みのカレンダーです。</p>
+                <p class="title transparent-black" v-else-if="sharedCalendarData.status === 'Applied'">共有申請済みのカレンダーです。</p>
 
-                <p class="title" v-else>共有カレンダーが見つかりませんでした。</p>
+                <p class="title transparent-black" v-else>共有カレンダーが見つかりませんでした。</p>
             </v-card-text>
         </v-card>
     </v-container>
