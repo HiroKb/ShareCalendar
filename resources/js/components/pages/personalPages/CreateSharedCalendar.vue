@@ -1,60 +1,64 @@
 <template>
-    <div>
-        <div class="contents">
-            <h1>CreateShareCalendar</h1>
-            <form @submit.prevent="createShareCalendar">
-                <label for="calendar-name">カレンダー名</label>
-                <input type="text" id="calendar-name" v-model="createShareCalendarData.calendar_name">
-                <p v-if="createError.errors.calendar_name">{{ createError.errors.calendar_name[0]}}</p>
-
-                <button type="submit">作成</button>
-
-            </form>
-        </div>
-    </div>
+    <v-container class="py-12">
+        <v-card>
+            <v-card-title>共有カレンダー作成</v-card-title>
+            <v-card-text>
+                <v-form ref="form" @submit.prevent="createShareCalendar">
+                    <v-text-field
+                        label="カレンダー名"
+                        v-model="form.calendar_name"
+                        outlined
+                        :rules="[mixinValidationRules.required]"
+                        :error="errors ? !!errors.calendar_name : false"
+                        :error-messages="errors ? errors.calendar_name ? errors.calendar_name : [] : []"
+                    >
+                    </v-text-field>
+                    <v-btn block :color="mixinThemeColor" dark type="submit">作成</v-btn>
+                </v-form>
+            </v-card-text>
+        </v-card>
+    </v-container>
 </template>
 
 <script>
     import {CREATED, VALIDATION_ERROR} from "../../../util"
+    import validationRulesMixin from "../../../mixins/validationRulesMixin"
+    import colorsMixin from "../../../mixins/colorsMixin";
     export default {
         name: "CreateShareCalendar",
+        mixins: [validationRulesMixin, colorsMixin],
         data(){
             return {
-                createShareCalendarData: {
+                form: {
                     calendar_name: ''
                 },
-                createError: {
-                    errors: {},
-                    errorFlg: false
-                }
+                errors: {}, //カレンダー作成APIバリデーションエラーメッセージ
             }
         },
         methods: {
+            /**
+             * カレンダー作成処理
+             * @return {Promise<boolean>}
+             */
             async createShareCalendar () {
-                this.createError.errors = {}
-                this.createError.errorFlg = false
-                if (!this.createShareCalendarData.calendar_name){
-                    this.createError.errors.calendar_name = ['共有カレンダー名は必須です。']
-                    this.createError.errorFlg = true
-                }
-                if (this.createError.errorFlg){
+                // バリデーションチェック
+                if (!this.$refs.form.validate()){
                     return false
                 }
 
-
                 this.$store.commit('loading/setLoadingFlg', true)
-                const response = await axios.post('/api/shared-calendars', this.createShareCalendarData)
+                const response = await axios.post('/api/shared-calendars', this.form)
                 this.$store.commit('loading/setLoadingFlg', false)
 
 
                 if (response.status === CREATED) {
-                    this.$store.commit('flashMessage/setMessage', '共有カレンダーを作成しました。')
+                    this.$store.commit('flashMessage/setMessage', this.form.calendar_name + 'カレンダーを作成しました。')
                     this.$router.push({name: 'sharedCalendar', params: {sharedCalendarId: response.data.id}})
                     return false
                 }
 
                 if (response.status === VALIDATION_ERROR) {
-                    this.createError.errors = response.data.errors
+                    this.errors = response.data.errors
                 }
 
                 this.$store.commit('error/setCode', response.status)
@@ -64,4 +68,7 @@
 </script>
 
 <style scoped>
+    .container{
+        max-width: 600px;
+    }
 </style>
