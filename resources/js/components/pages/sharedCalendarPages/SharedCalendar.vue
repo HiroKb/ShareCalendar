@@ -179,11 +179,14 @@
             },
             /**
              * カレンダー関連のデータを更新
+             * @param {boolean} changeSelectedDate selectedDateLabelを変更するか
              */
-            changeCalendarRelatedData() {
+            changeCalendarRelatedData(changeSelectedDate = true) {
                 const newData = this.mixinGenerateCalendarRelatedData(this.selectedMonth, this.sharedSchedulesData.schedules)
 
-                this.selectedDateLabel = newData.selectedDateLabel
+                if (changeSelectedDate) {
+                    this.selectedDateLabel = newData.selectedDateLabel
+                }
                 this.weeksNum = newData.weeksNum
                 this.calendarData = newData.calendarData
             },
@@ -312,7 +315,7 @@
              */
             sharedSchedulesData:{
                 handler: function (val) {
-                    this.changeCalendarRelatedData()
+                    this.changeCalendarRelatedData(false)
                 },
                 deep: true
             },
