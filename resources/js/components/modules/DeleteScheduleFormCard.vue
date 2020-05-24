@@ -35,7 +35,7 @@
             displayData: function () {
                 return {
                     date: this.scheduleData.date ? this.scheduleData.date : '',
-                    time:  this.scheduleData.time ? this.mixinUtilMethods.timeFormatter(this.scheduleData.time) : '指定なし',
+                    time:  this.scheduleData.time ? this.mixinTimeFormatter(this.scheduleData.time) : '指定なし',
                     title: this.scheduleData ? this.scheduleData.title : '',
                     description: this.scheduleData.description ? this.scheduleData.description : 'なし'
                 }

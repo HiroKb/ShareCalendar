@@ -5,7 +5,7 @@
                 <v-list-item :key="index">
 <!--                    スケジュール名・時刻-->
                     <v-list-item-content>
-                        <v-list-item-title v-if="schedule.time">{{mixinUtilMethods.timeFormatter(schedule.time)}}</v-list-item-title>
+                        <v-list-item-title v-if="schedule.time">{{mixinTimeFormatter(schedule.time)}}</v-list-item-title>
                         <v-list-item-title>{{schedule.title}}</v-list-item-title>
                     </v-list-item-content>
 

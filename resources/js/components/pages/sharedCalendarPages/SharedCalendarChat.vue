@@ -1,45 +1,93 @@
 <template>
-    <div class="contents">
-        <ul>
-            <li v-for="message in chatMessages">
-                <div class="message" v-if="message.posted_user_id === userId">
-                    <p>自分</p>
-                    <p>{{ changeDateFormat(message.created_at)}}</p>
-                    <p>{{ message.message }}</p>
-                </div>
-                <div class="message" v-else-if="message.posted_user_id === null">
-                    <p>削除されたユーザー</p>
-                    <p>{{ changeDateFormat(message.created_at)}}</p>
-                    <p>{{ message.message }}</p>
-                </div>
-                <div class="message" v-else>
-                    <p>{{ message.posted_user.name}}</p>
-                    <p>{{ changeDateFormat(message.created_at)}}</p>
-                    <p>{{ message.message }}</p>
-                </div>
-            </li>
-        </ul>
-        <form @submit.prevent="createMessage">
-            <textarea v-model="createMessageForm.data.message"></textarea>
-            <button>送信</button>
-        </form>
-    </div>
+    <v-container class="content-wrap py-12">
+        <v-card class="fill-height">
+            <v-card-text class="fill-height d-flex flex-column">
+                <v-list
+                    class="flex-grow-1 flex-shrink-1 custom-scrollbar"
+                    style="overflow-y: scroll"
+                    id="js-scroll-bottom-area"
+                >
+                    <v-list-item
+                        v-for="(message, index) in chatMessages"
+                        :key="index"
+                    >
+<!--                        自分が投稿したメッセージ-->
+                        <v-list-item-content
+                            class="d-flex flex-column align-end"
+                            v-if="message.posted_user_id === userId"
+                        >
+                            <p>{{ dateTimeFormatter(message.created_at)}}</p>
+                            <p class="balloon right-balloon"
+                            >{{ message.message }}</p>
+                        </v-list-item-content>
+
+<!--                        他ユーザーが投稿したメッセージ-->
+                        <v-list-item-content
+                            class="d-flex flex-column align-start"
+                            v-else>
+                            <div class="d-flex" style="max-width: 70%">
+<!--                                ユーザーアカウントが存在-->
+                                <p class="mb-0 flex-shrink-1 text-truncate"
+                                   v-if="message.posted_user_id"
+                                >{{message.posted_user.name}}</p>
+<!--                                ユーザーアカウントが削除済み-->
+                                <p class="mb-0 flex-shrink-1 text-truncate"
+                                   v-else
+                                >削除されたユーザー</p>
+
+                                <p class="mb-0 ml-4 flex-shrink-0">{{ dateTimeFormatter(message.created_at)}}</p>
+                            </div>
+                            <p class="balloon left-balloon">{{ message.message }}</p>
+                        </v-list-item-content>
+
+<!--                        投稿したユーザーが削除されているメッセージ-->
+                        <v-list-item-content
+                            class="d-flex flex-column align-start"
+                            v-else>
+                            <p>削除されたユーザー</p>
+                            <p>{{ dateTimeFormatter(message.created_at)}}</p>
+                            <p>{{ message.message }}</p>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list>
+                <v-form
+                    class="flex-grow-0 flex-shrink-0 mt-4"
+                    ref="form" @submit.prevent="createMessage"
+                >
+                    <v-textarea
+                        v-model="createMessageForm.form.message"
+                        label="メッセージ"
+                        counter="500"
+                        :rules="[mixinValidationRules.required]"
+                        :error="createMessageForm.errorMessages ? !!createMessageForm.errorMessages.message : false"
+                        :error-messages="createMessageForm.errorMessages ? createMessageForm.errorMessages.message ? createMessageForm.errorMessages.message : [] : []"
+                        outlined
+                        dense
+                        rows="2"
+                    >
+                    </v-textarea>
+                    <v-btn class="my-0" block :color="mixinThemeColor" dark type="submit">スケジュール追加</v-btn>
+                </v-form>
+            </v-card-text>
+        </v-card>
+    </v-container>
 </template>
 
 <script>
-    import {CREATED, VALIDATION_ERROR} from "../../../util";
+    import validationRulesMixin from "../../../mixins/validationRulesMixin"
+    import colorsMixin from "../../../mixins/colorsMixin"
+    import {CREATED, VALIDATION_ERROR} from "../../../util"
     import {mapGetters} from "vuex";
-    import moment from "moment";
-
     export default {
         name: "SharedCalendarChat",
+        mixins: [validationRulesMixin, colorsMixin],
         data() {
             return {
                 createMessageForm: {
-                    data: {
+                    form: {
                         message: ''
                     },
-                    errors: {}
+                    errorsMessages: {}
                 }
             }
         },
@@ -61,47 +109,113 @@
             }),
         },
         methods: {
+            /**
+             * チャットエリアの最下部にスクロール
+             */
+            scrollBottomMessagesArea() {
+                const messagesArea = this.$el.querySelector('#js-scroll-bottom-area')
+                messagesArea.scrollTop = messagesArea.scrollHeight
+            },
+            dateTimeFormatter(date){
+                return moment(date, 'YYYY-MM-DD HH:mm:ss').format('MM/DD  HH:mm')
+            },
+            /**
+             // * メッセージ投稿処理
+             * @return {Promise<boolean>}
+             */
             async createMessage () {
-                if (!this.createMessageForm.data.message){
+                if(!this.$refs.form.validate()){
                     return false
                 }
 
                 this.$store.commit('loading/setLoadingFlg', true)
-                const response = await axios.post('/api/shared-calendars/' + this.sharedCalendarId + '/chat/messages', this.createMessageForm.data)
+                const response = await axios.post('/api/shared-calendars/' + this.sharedCalendarId + '/chat/messages', this.createMessageForm.form)
                 this.$store.commit('loading/setLoadingFlg', false)
 
                 if (response.status === CREATED) {
 
+                    this.createMessageForm.form.message = ''
+                    this.$refs.form.resetValidation()
+
                     const newMessages = _.cloneDeep(this.chatMessages)
-
-                    console.log(newMessages)
-
                     newMessages.push(response.data)
-
-                    console.log(newMessages)
-
                     this.$emit('changeChatMessagesData', newMessages)
 
-                    this.createMessageForm.data.message = ''
                     return false
                 }
 
                 if (response.status === VALIDATION_ERROR) {
-                    this.createMessageForm.errors = response.data.errors
+                    this.createMessageForm.errorsMessages = response.data.errors
                     return false
                 }
 
                 this.$store.commit('error/setCode', response.status)
             },
-            changeDateFormat(date){
-                return moment(date, 'YYYY-MM-DD HH:mm:ss').format('MM/DD  HH:mm')
-            }
+        },
+        watch: {
+            /**
+             * メッセージリストが更新された場合チャットエリアを最下部にスクロール
+             */
+            chatMessages:{
+                handler: function () {
+                    this.$nextTick(() => {
+                        this.scrollBottomMessagesArea()
+                    })
+                },
+                deep: true,
+            },
+        },
+        /**
+         * 描画時にチャットエリアを最下部にスクロール
+         */
+        mounted() {
+            this.$nextTick(() => {
+                this.scrollBottomMessagesArea()
+            })
         }
     }
 </script>
 
 <style scoped>
-.message{
-    border-bottom: 1px solid black;
-}
+    .container{
+        max-width: 680px;
+    }
+    .balloon{
+        position: relative;
+        display: inline-block;
+        max-width: 70%;
+        margin-bottom: 0;
+        padding: 8px 12px;
+        text-align: left;
+        border-radius: 4px;
+        font-size: 16px;
+        white-space: pre-wrap;
+        line-height: 1.5;
+    }
+    .left-balloon{
+        margin-left: 10px;
+        background: #767676;
+        color: white;
+    }
+    .left-balloon::before {
+        content: '';
+        position: absolute;
+        left: -10px;
+        top: 0;
+        border: 14px solid transparent;
+        border-top-color: #767676;
+    }
+    .right-balloon{
+        margin-right: 10px;
+        background: #3949AB;
+        color: white;
+    }
+    .right-balloon::after {
+        content: '';
+        position: absolute;
+        right: -10px;
+        top: 0;
+        border: 14px solid transparent;
+        border-top-color: #3949AB;
+    }
 </style>
