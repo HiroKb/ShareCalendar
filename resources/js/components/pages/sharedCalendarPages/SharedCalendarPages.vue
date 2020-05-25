@@ -73,7 +73,7 @@
                      :shared-calendar-applicants="sharedCalendarApplicants"
                      :shared-schedules-data="sharedSchedulesData"
                      :fetch-shared-schedules="fetchSharedSchedules"
-                     @unShareMember="removeMember"
+                     @removeMember="removeMember"
                      @allowApplication="allowApplications"
                      @rejectApplication="removeApplicants"
                      @changeCalendarData="changeCalendarData"
