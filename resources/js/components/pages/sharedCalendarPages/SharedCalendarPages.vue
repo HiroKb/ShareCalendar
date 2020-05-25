@@ -315,10 +315,10 @@
                 this.fetchChatMessages(),
                 this.fetchSharedCalendarMembers()
             ])
+            this.$store.commit('loading/setLoadingFlg', false)
             if (this.adminFlg === 'admin') {
                 await this.fetchSharedCalendarApplicants()
             }
-            this.$store.commit('loading/setLoadingFlg', false)
         },
     }
 </script>
