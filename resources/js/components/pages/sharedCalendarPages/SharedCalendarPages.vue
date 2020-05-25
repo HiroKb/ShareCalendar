@@ -108,7 +108,10 @@
                 // 共有メンバーリスト
                 sharedCalendarMembers: [],
                 // 共有申請者リスト
-                sharedCalendarApplicants: [],
+                sharedCalendarApplicants: {
+                    data: [],
+                    loadingFlg: true
+                },
             }
         },
         props: {
@@ -215,10 +218,13 @@
              * @return {Promise<boolean>}
              */
             async fetchSharedCalendarApplicants() {
+                this.sharedCalendarApplicants.loadingFlg = true
+
                 const response = await axios.get('/api/shared-calendars/' + this.sharedCalendarId + '/applications')
 
                 if(response.status === SUCCESS) {
-                    this.sharedCalendarApplicants = response.data
+                    this.sharedCalendarApplicants.data = response.data
+                    this.sharedCalendarApplicants.loadingFlg = false
                     return false
                 }
 
@@ -259,9 +265,9 @@
              */
             removeApplicants (userList) {
                 userList.forEach((removedUser) => {
-                    for (let i = 0; i < this.sharedCalendarApplicants.length; i++){
-                        if (this.sharedCalendarApplicants[i].id === removedUser.id) {
-                            this.sharedCalendarApplicants.splice(i, 1)
+                    for (let i = 0; i < this.sharedCalendarApplicants.data.length; i++){
+                        if (this.sharedCalendarApplicants.data[i].id === removedUser.id) {
+                            this.sharedCalendarApplicants.data.splice(i, 1)
                             break
                         }
                     }
@@ -308,11 +314,10 @@
                 this.fetchSharedCalendar(),
                 this.fetchChatMessages(),
                 this.fetchSharedCalendarMembers()
-            ]).then(x => {
-                if (this.adminFlg === 'admin') {
-                    this.fetchSharedCalendarApplicants()
-                }
-            })
+            ])
+            if (this.adminFlg === 'admin') {
+                await this.fetchSharedCalendarApplicants()
+            }
             this.$store.commit('loading/setLoadingFlg', false)
         },
     }

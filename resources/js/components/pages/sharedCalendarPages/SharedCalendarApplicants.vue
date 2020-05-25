@@ -1,82 +1,154 @@
 <template>
-    <div>
-        <div class="contents">
-            <div v-if="sharedCalendarApplicants.length">
-                <div v-for="applicant in sharedCalendarApplicants" :key="applicant.id">
-                    <p>{{ applicant.name }}</p>
-                    <button @click="showAllowModal(applicant)">
-                        <i class="fas fa-check"></i>
-                    </button>
-                    <button @click="showRejectModal(applicant)">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <button @click="showAllowAllModal">全て許可</button>
-                <button @click="showRejectAllModal">全て拒否</button>
-            </div>
-            <p v-else>
-                現在共有申請者はいません。
-            </p>
-        </div>
-        <div class="modal-background" v-show="modalFlg" @click="hideModal">
-            <div class="modal" >
-                <div class="modal-inner" @click.stop>
-                    <i class="fas fa-times" @click="hideModal"></i>
-
-                    <form @submit.prevent="allowApplication([selectApplicantData])" v-show="allowModalFlg">
-                        <p>{{ selectApplicantName }}</p>
-                        <p>共有申請を許可しますか</p>
-                        <button>許可</button>
-                    </form>
-
-                    <form @submit.prevent="allowApplication(allApplicantsData)" v-show="allowAllModalFlg">
-                        <p v-for="applicants in sharedCalendarApplicants" :key="applicants.id">
-                            {{ applicants.name}}
-                        </p>
-                        <p>全ての共有申請を許可しますか</p>
-                        <button>許可</button>
-                    </form>
-
-                    <form @submit.prevent="rejectApplication([selectApplicantData])" v-show="rejectModalFlg">
-                        <p>{{ selectApplicantName }}</p>
-                        <p>共有申請を拒否しますか</p>
-                        <button>拒否</button>
-                    </form>
-
-                    <form @submit.prevent="rejectApplication(allApplicantsData)" v-show="rejectAllModalFlg">
-                        <p v-for="applicants in sharedCalendarApplicants" :key="applicants.id">
-                            {{ applicants.name}}
-                        </p>
-                        <p>全ての共有申請を拒否しますか</p>
-                        <button>拒否</button>
-                    </form>
-
+    <v-container class="content-wrap py-12">
+        <v-card class="fill-height d-flex flex-column">
+            <div class="flex-grow-0 flex-shrink-0 d-flex align-center">
+                <v-card-title>共有申請者</v-card-title>
+<!--                申請者が存在する場合一括許可拒否ボタン-->
+                <div v-if="!sharedCalendarApplicants.loadingFlg && allApplicantsData.length">
+                    <v-btn
+                        small fab text
+                        :color="mixinThemeColor"
+                        @click="allowAllApplicationModal = !allowAllApplicationModal"
+                    >
+                        <v-icon>mdi-account-multiple-plus-outline</v-icon>
+                    </v-btn>
+                    <v-btn
+                        small fab text
+                        :color="mixinThemeColor"
+                        @click="rejectAllApplicationModal = !rejectAllApplicationModal"
+                    >
+                        <v-icon>mdi-account-multiple-remove-outline</v-icon>
+                    </v-btn>
                 </div>
             </div>
-        </div>
-    </div>
+
+            <v-card-subtitle
+                v-if="!sharedCalendarApplicants.loadingFlg && !allApplicantsData.length"
+            >現在共有申請者はいません。</v-card-subtitle>
+
+            <v-card-text
+                class="mb-4 flex-grow-1 flex-shrink-1 custom-scrollbar"
+                style="overflow-y: scroll"
+                v-if="!sharedCalendarApplicants.loadingFlg && allApplicantsData.length"
+            >
+<!--                申請者リスト-->
+                <v-list>
+                    <v-list-item
+                        v-for="(applicant, index) in allApplicantsData"
+                        :key="index"
+                    >
+                        <v-list-item-content>
+                            <v-list-item-title class="title">{{applicant.name}}</v-list-item-title>
+                        </v-list-item-content>
+
+                        <v-list-item-action class="d-flex flex-row">
+                            <v-btn
+                                small fab text
+                                :color="mixinThemeColor"
+                                @click="showAllowApplicationModal(applicant)"
+                            >
+                                <v-icon>mdi-account-plus-outline</v-icon>
+                            </v-btn>
+                            <v-btn
+                                class="ml-2"
+                                small fab text
+                                :color="mixinThemeColor"
+                                @click="showRejectApplicationModal(applicant)"
+                            >
+                                <v-icon>mdi-account-remove-outline</v-icon>
+                            </v-btn>
+                        </v-list-item-action>
+                    </v-list-item>
+                </v-list>
+            </v-card-text>
+        </v-card>
+
+<!--        申請許可モーダル-->
+        <v-dialog
+            v-model="allowApplicationModal"
+            max-width="500px"
+        >
+            <v-card>
+                <v-card-title>{{ selectedApplicantName }}</v-card-title>
+                <v-card-text>
+                    <v-form @submit.prevent="allowApplication([selectedApplicantData])">
+                        <p class="subtitle-1">共有申請を許可しますか？</p>
+                        <v-btn block :color="mixinThemeColor" dark type="submit">許可</v-btn>
+                    </v-form>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
+
+<!--        申請一括許可モーダル-->
+        <v-dialog
+            v-model="allowAllApplicationModal"
+            max-width="500px"
+        >
+            <v-card>
+                <v-card-text>
+                    <p class="pt-4 subtitle-1">全ての共有申請を許可しますか？</p>
+                    <v-form @submit.prevent="allowApplication(allApplicantsData)">
+                        <v-btn block :color="mixinThemeColor" dark type="submit">許可</v-btn>
+                    </v-form>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
+
+<!--        申請拒否モーダル-->
+        <v-dialog
+            v-model="rejectApplicationModal"
+            max-width="500px"
+        >
+            <v-card>
+                <v-card-title>{{ selectedApplicantName }}</v-card-title>
+                <v-card-text>
+                    <v-form @submit.prevent="rejectApplication([selectedApplicantData])">
+                        <p class="subtitle-1">共有申請を拒否しますか？</p>
+                        <v-btn block :color="mixinThemeColor" dark type="submit">拒否</v-btn>
+                    </v-form>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
+
+<!--        申請一括拒否モーダル-->
+        <v-dialog
+            v-model="rejectAllApplicationModal"
+            max-width="500px"
+        >
+            <v-card>
+                <v-card-text>
+                    <p class="pt-4 subtitle-1">全ての共有申請を拒否しますか？</p>
+                    <v-form @submit.prevent="rejectApplication(allApplicantsData)">
+                        <v-btn block :color="mixinThemeColor" dark type="submit">拒否</v-btn>
+                    </v-form>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
+    </v-container>
 </template>
 
 <script>
+    import colorsMixin from "../../../mixins/colorsMixin"
     import {CREATED, SUCCESS} from "../../../util"
     export default {
         name: "SharedCalendarApplicants",
+        mixins: [colorsMixin],
         data () {
             return {
-                modalFlg: false,
-                allowModalFlg: false,
-                allowAllModalFlg: false,
-                rejectModalFlg: false,
-                rejectAllModalFlg: false,
-                selectApplicantData: null
+                selectedApplicantData: null, //選択された申請者データ
+                // モーダルフラグ
+                allowApplicationModal: false,
+                allowAllApplicationModal: false,
+                rejectApplicationModal: false,
+                rejectAllApplicationModal: false,
             }
         },
         computed: {
             allApplicantsData: function () {
-                return [...this.sharedCalendarApplicants]
+                return _.cloneDeep(this.sharedCalendarApplicants.data)
             },
-            selectApplicantName: function () {
-                return this.selectApplicantData ? this.selectApplicantData.name : ''
+            selectedApplicantName: function () {
+                return this.selectedApplicantData ? this.selectedApplicantData.name : ''
             },
         },
         props: {
@@ -85,10 +157,20 @@
                 required: true,
             },
             sharedCalendarApplicants: {
-                required: true
+                type: Object,
+                required: true,
+                default: () => ({
+                    data: [],
+                    loadingFlg: false
+                })
             },
         },
         methods: {
+            /**
+             * 申請許可処理
+             * @param {Array} applicantsList 申請を許可するユーザーデータ配列
+             * @return {Promise<boolean>}
+             */
             async allowApplication(applicantsList = []) {
                 if (!this.sharedCalendarData.id || !applicantsList.length) {
                     return false
@@ -105,15 +187,28 @@
                 this.$store.commit('loading/setLoadingFlg', false)
 
                 if (response.status === CREATED) {
+
                     this.$emit('allowApplication', applicantsList)
-                    this.hideModal()
-                    this.$store.commit('flashMessage/setMessage', '共有申請を許可しました。')
+
+                    if (applicantsList.length === 1) {
+                        this.$store.commit('flashMessage/setMessage', applicantsList[0].name + 'さんの共有申請を許可しました。')
+                    } else {
+                        this.$store.commit('flashMessage/setMessage', '全ての共有申請を許可しました。')
+                    }
+
+                    this.allowApplicationModal = false
+                    this.allowAllApplicationModal = false
                     return false
                 }
 
                 this.$store.commit('error/setCode', response.status)
             },
-            async rejectApplication(applicantsList) {
+            /**
+             * 申請拒否処理
+             * @param {Array} applicantsList 申請を拒否するユーザーデータ配列
+             * @return {Promise<boolean>}
+             */
+            async rejectApplication(applicantsList = []) {
                 if (!this.sharedCalendarData.id || !applicantsList.length) {
                     return false
                 }
@@ -127,67 +222,60 @@
                 this.$store.commit('loading/setLoadingFlg', false)
 
                 if (response.status === SUCCESS) {
+
                     this.$emit('rejectApplication', applicantsList)
-                    this.hideModal()
-                    this.$store.commit('flashMessage/setMessage', '共有申請を拒否しました。')
+
+                    if (applicantsList.length === 1) {
+                        this.$store.commit('flashMessage/setMessage', applicantsList[0].name + 'さんの共有申請を拒否しました。')
+                    } else {
+                        this.$store.commit('flashMessage/setMessage', '全ての共有申請を拒否しました。')
+                    }
+                    this.rejectApplicationModal = false
+                    this.rejectAllApplicationModal = false
                     return false
                 }
 
                 this.$store.commit('error/setCode', response.status)
             },
-            showAllowModal(applicant) {
-                this.selectApplicantData = applicant
-                this.modalFlg = true
-                this.allowModalFlg = true
+            /**
+             * 申請許可モーダル表示処理
+             * @param {Object} applicant ユーザーデータ
+             */
+            showAllowApplicationModal(applicant) {
+                this.selectedApplicantData = applicant
+                this.allowApplicationModal = true
             },
-            showAllowAllModal() {
-                this.modalFlg = true
-                this.allowAllModalFlg= true
-            },
-            showRejectModal(applicant) {
-                this.selectApplicantData = applicant
-                this.modalFlg = true
-                this.rejectModalFlg = true
-            },
-            showRejectAllModal() {
-                this.modalFlg = true
-                this.rejectAllModalFlg= true
-            },
-            hideModal() {
-                this.modalFlg = false
-                this.allowModalFlg = false
-                this.allowAllModalFlg = false
-                this.rejectModalFlg = false
-                this.rejectAllModalFlg = false
-
-                this.selectApplicantData = null
+            /**
+             * 申請拒否モーダル表示処理
+             * @param {Object} applicant ユーザーデータ
+             */
+            showRejectApplicationModal(applicant) {
+                this.selectedApplicantData = applicant
+                this.rejectApplicationModal = true
             },
         },
+        watch:{
+            /**
+             * モーダルが消えた場合選択した申請者を初期化
+             * @param {Boolean} val モーダル表示フラグ
+             */
+            allowApplicationModal: function (val) {
+                if (!val) {
+                    this.selectedApplicantData = null
+                }
+            },
+            rejectApplicationModal: function (val) {
+                if (!val) {
+                    this.selectedApplicantData = null
+                }
+            }
+
+        }
     }
 </script>
 
 <style scoped>
-    .sidebar-wrap{
-        display: flex;
-    }
-    .modal-background{
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        width: 100vw ;
-        z-index: 10;
-        background: rgba(0, 0, 0, .1);
-    }
-
-    .modal{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        width: 100vw ;
-    }
-    .modal-inner{
-        background: #ffffff;
+    .container{
+        max-width: 600px;
     }
 </style>
