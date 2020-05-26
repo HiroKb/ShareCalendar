@@ -17,7 +17,7 @@
                             <v-list-item-title class="title">{{member.name}}</v-list-item-title>
                         </v-list-item-content>
 
-                        <v-list-item-action v-if="member.id !== sharedCalendarData.admin_id">
+                        <v-list-item-action v-if="userId === sharedCalendarData.admin_id && member.id !== sharedCalendarData.admin_id">
                             <v-btn
                                 small fab text
                                 :color="mixinThemeColor"
@@ -35,6 +35,7 @@
         <v-dialog
             v-model="removeMemberModal.show"
             max-width="500px"
+            v-if="userId === sharedCalendarData.admin_id"
         >
             <v-card>
                 <v-card-title>{{ memberName }}</v-card-title>
@@ -52,6 +53,7 @@
 <script>
     import {SUCCESS} from "../../../util"
     import colorsMixin from "../../../mixins/colorsMixin"
+    import {mapGetters} from "vuex";
     export default {
         name: "SharedCalendarMembers",
         mixins: [colorsMixin],
@@ -64,6 +66,9 @@
             }
         },
         computed: {
+            ...mapGetters({
+                userId: 'user/userId'
+            }),
             // 名前表示用
             memberName: function () {
                 return this.removeMemberModal.memberData ? this.removeMemberModal.memberData.name : ''
