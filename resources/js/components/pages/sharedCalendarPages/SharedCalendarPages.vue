@@ -16,50 +16,75 @@
             <v-list dense nav>
 
                 <v-list-item :to="{name: 'sharedCalendar', params: {sharedCalendarId: sharedCalendarId}}">
+                    <v-list-item-icon class="mr-4">
+                        <v-icon>mdi-calendar</v-icon>
+                    </v-list-item-icon>
                     <v-list-item-content>
-                        共有カレンダー
+                        <v-list-item-title class="subtitle-1">共有カレンダー</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
 
                 <v-list-item :to="{name: 'sharedCalendarChat', params: {sharedCalendarId: sharedCalendarId}}">
+                    <v-list-item-icon class="mr-4">
+                        <v-icon>mdi-forum-outline</v-icon>
+                    </v-list-item-icon>
                     <v-list-item-content>
-                        チャット
+                        <v-list-item-title class="subtitle-1">チャット</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
 
                 <v-list-item :to="{name: 'sharedCalendarMembers', params: {sharedCalendarId: sharedCalendarId}}">
+                    <v-list-item-icon class="mr-4">
+                        <v-icon>mdi-account-multiple-outline</v-icon>
+                    </v-list-item-icon>
                     <v-list-item-content>
-                        共有メンバー一覧
+                        <v-list-item-title class="subtitle-1">共有メンバー</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
 
                 <v-list-item :to="{name: 'sharedCalendarApplicants', params:{sharedCalendarId: sharedCalendarId}}" v-if="adminFlg === 'admin'">
+                    <v-list-item-icon class="mr-4">
+                        <v-icon>mdi-account-question-outline</v-icon>
+                    </v-list-item-icon>
                     <v-list-item-content>
-                        共有申請者一覧
+                        <v-list-item-title class="subtitle-1">共有申請者</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
 
                 <v-list-item :to="{name: 'sharedCalendarInfo', params:{sharedCalendarId: sharedCalendarId}}" v-if="adminFlg === 'admin'">
+                    <v-list-item-icon class="mr-4">
+                        <v-icon>mdi-calendar-question</v-icon>
+                    </v-list-item-icon>
                     <v-list-item-content>
-                        共有カレンダー情報/変更
+                        <v-list-item-title class="subtitle-1">カレンダー情報/変更</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
+
+                <v-list-item :to="{name: 'deleteSharedCalendar', params:{sharedCalendarId: sharedCalendarId}}" v-if="adminFlg === 'admin'">
+                    <v-list-item-icon class="mr-4">
+                        <v-icon>mdi-calendar-remove</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title class="subtitle-1">カレンダー削除</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
 
                 <v-list-item :to="{name: 'unShareCalendar', params:{sharedCalendarId: sharedCalendarId}}" v-if="adminFlg === 'notAdmin'">
+                    <v-list-item-icon class="mr-4">
+                        <v-icon>mdi-calendar-remove</v-icon>
+                    </v-list-item-icon>
                     <v-list-item-content>
-                        共有解除
-                    </v-list-item-content>
-                </v-list-item>
-
-                <v-list-item :to="{name: 'deleteSharedCalendar', params:{sharedCalendarId: sharedCalendarId}}" v-if="adminFlg === 'admin'">
-                    <v-list-item-content>
-                        カレンダー削除
+                        <v-list-item-title class="subtitle-1">共有解除</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
 
                 <v-list-item :to="{name: 'personalCalendar'}">
+                    <v-list-item-icon class="mr-4">
+                        <v-icon>mdi-home-outline</v-icon>
+                    </v-list-item-icon>
                     <v-list-item-content>
-                        マイページ
+                        <v-list-item-title class="subtitle-1">マイページ</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
 

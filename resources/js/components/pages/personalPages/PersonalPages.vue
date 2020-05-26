@@ -4,28 +4,39 @@
             :value="drawer" @input="$emit('changeDrawer', $event)"
         >
             <v-list dense nav>
-
                 <v-list-item :to="{name: 'personalCalendar'}">
+                    <v-list-item-icon class="mr-4">
+                        <v-icon>mdi-calendar</v-icon>
+                    </v-list-item-icon>
                     <v-list-item-content>
-                        マイカレンダー
+                        <v-list-item-title class="subtitle-1">マイカレンダー</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
 
                 <v-list-item :to="{name: 'sharedCalendarList'}">
+                    <v-list-item-icon class="mr-4">
+                        <v-icon>mdi-calendar-multiple</v-icon>
+                    </v-list-item-icon>
                     <v-list-item-content>
-                        共有カレンダー一覧
+                        <v-list-item-title class="subtitle-1">共有カレンダー一覧</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
 
                 <v-list-item :to="{name: 'createSharedCalendar'}">
+                    <v-list-item-icon class="mr-4">
+                        <v-icon>mdi-calendar-edit</v-icon>
+                    </v-list-item-icon>
                     <v-list-item-content>
-                        共有カレンダー作成
+                        <v-list-item-title class="subtitle-1">共有カレンダー作成</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
 
                 <v-list-item :to="{name: 'searchSharedCalendar'}">
+                    <v-list-item-icon class="mr-4">
+                        <v-icon>mdi-calendar-search</v-icon>
+                    </v-list-item-icon>
                     <v-list-item-content>
-                        共有カレンダー検索
+                        <v-list-item-title class="subtitle-1">共有カレンダー検索</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
 

@@ -2,8 +2,9 @@
     <v-container class="py-12">
         <!--        共有カレンダー情報-->
         <v-card>
-            <v-card-text class="pt-4">
-                <div class="py-4 d-flex align-end justify-space-between">
+            <v-card-title>カレンダー情報</v-card-title>
+            <v-card-text>
+                <div class="pb-4 d-flex align-end justify-space-between">
                     <div>
                         <p class="info-label">共有カレンダー名</p>
                         <p class="info-data">{{ sharedCalendarData.calendar_name }}</p>
@@ -14,7 +15,7 @@
                     >変更</v-btn>
                 </div>
                 <v-divider></v-divider>
-                <div class="py-4 d-flex align-center justify-space-between">
+                <div class="pt-4 d-flex align-center justify-space-between">
                     <div>
                         <p class="info-label">検索ID</p>
                         <p class="info-data">{{ sharedCalendarData.search_id }}</p>
