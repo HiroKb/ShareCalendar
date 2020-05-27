@@ -36,6 +36,7 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/',
+        name: 'top',
         beforeEnter (to, from, next) {
             next({name: 'authentication'})
         }
@@ -182,9 +183,10 @@ const routes = [
         component: SystemError
     },
     {
-        path: '/404',
+        path: '*',
         component: NotFound
-    }
+    },
+
 ]
 
 // VueRouterインスタンスを作成

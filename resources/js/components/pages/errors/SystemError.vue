@@ -1,13 +1,44 @@
 <template>
-    <p>システムエラー</p>
+    <v-container class="py-12">
+        <v-card>
+            <v-card-title>500</v-card-title>
+            <v-card-text>
+                <p>サーバーで問題が発生しているためアクセスできませんでした。</p>
+                <router-link :to="{name: 'top'}">TOPページ</router-link>
+                <a style="text-decoration: underline"
+                   class="ml-4"
+                   @click.prevent="$router.go(-1)" v-if="!!from"
+                >一つ前のページ</a>
+            </v-card-text>
+        </v-card>
+    </v-container>
 </template>
 
 <script>
     export default {
-        name: "SystemError"
+        name: "SystemError",
+        data() {
+            return{
+                from: null
+            }
+        },
+        /**
+         * どこからアクセスしたかをfromに代入
+         * @param to
+         * @param from
+         * @param next
+         */
+        beforeRouteEnter (to, from, next) {
+            next(vm => {
+                vm.from = from.name
+            })
+        }
     }
 </script>
 
 <style scoped>
-
+    .container{
+        max-width: 600px;
+    }
 </style>
+
