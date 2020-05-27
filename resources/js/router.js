@@ -36,7 +36,14 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/',
+        beforeEnter (to, from, next) {
+            next({name: 'authentication'})
+        }
+    },
+    {
+        path: '/auth/:prevPath?',
         name: 'authentication',
+        props: true,
         component: Authentication,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
@@ -77,7 +84,8 @@ const routes = [
             if (store.getters['user/loginCheck']){
                 next()
             } else {
-                next({name: 'authentication'})
+                // 要求されたページパス(to.path)をparamに付与
+                next({name: 'authentication', params: {prevPath: to.path}})
             }
         },
         children: [
@@ -127,7 +135,8 @@ const routes = [
             if (store.getters['user/loginCheck']){
                 next()
             } else {
-                next({name: 'authentication'})
+                // 要求されたページパス(to.path)をparamに付与
+                next({name: 'authentication', params: {prevPath: to.path}})
             }
         },
         children: [

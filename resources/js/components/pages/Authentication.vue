@@ -92,6 +92,7 @@
         mixins: [validationRulesMixin, colorsMixin],
         data() {
             return {
+                prevPathName: null,
                 tab: 'login-tab',
                 loginForm: {
                     data: {
@@ -108,6 +109,13 @@
                     },
                     showPassword: false
                 }
+            }
+        },
+        props: {
+            // 要認証ページからリダイレクトされた場合のリダイレクト元のパス(router)
+            prevPath: {
+                required: false,
+                default: null
             }
         },
         computed: {
@@ -131,7 +139,11 @@
 
                 // 通信成功時
                 if (this.authApiStatus) {
-                    this.$router.push({name: 'personalCalendar'})
+                    if (this.prevPath === null) {
+                        this.$router.push({name: 'personalCalendar'})
+                    }else {
+                        this.$router.push(this.prevPath)
+                    }
                 }
             },
             /**
@@ -149,7 +161,13 @@
 
                 // 通信成功の場合
                 if (this.authApiStatus) {
-                    this.$router.push({name: 'personalCalendar'})
+                    if (this.authApiStatus) {
+                        if (this.prevPath === null) {
+                            this.$router.push({name: 'personalCalendar'})
+                        }else {
+                            this.$router.push(this.prevPath)
+                        }
+                    }
                 }
             }
         },
@@ -181,7 +199,7 @@
                     this.registerForm.showPassword = false
                 }
             }
-        }
+        },
     }
 </script>
 
