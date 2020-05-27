@@ -18,6 +18,11 @@ Route::post('/password/reset/link', 'ResetPassword\ForgotPasswordController@send
 Route::post('/password/reset', 'ResetPassword\ResetPasswordController@reset');
 // ログインユーザー返却
 Route::get('/users', fn() => Auth::user())->name('user');
+// トークンリフレッシュ
+Route::get('/refresh-token', function (\Illuminate\Http\Request $request) {
+    $request->session()->regenerateToken();
+    return response()->json();
+});
 
 // ユーザーネーム変更
 Route::patch('/users/name', 'UserController@updateName');

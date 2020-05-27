@@ -3,6 +3,7 @@ export const SUCCESS = 200
 export const CREATED = 201
 export const VALIDATION_ERROR= 422
 export const NOT_FOUND = 404
+export const UNAUTHORIZED = 419
 export const INTERNAL_SERVER_ERROR = 500
 
     /**

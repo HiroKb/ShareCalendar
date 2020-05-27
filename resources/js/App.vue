@@ -44,7 +44,7 @@
     import FlashMessage from "./components/modules/FlashMessage"
     import colorsMixin from "./mixins/colorsMixin"
     import {mapGetters, mapState} from 'vuex'
-    import {INTERNAL_SERVER_ERROR, NOT_FOUND} from './util'
+    import {INTERNAL_SERVER_ERROR, NOT_FOUND, UNAUTHORIZED} from './util'
 
     export default {
         components: {
@@ -81,12 +81,16 @@
             }
         },
         watch: {
-            errorCode: { // エラーコードに変化があった場合
-                handler (val) {
+             errorCode: { // エラーコードに変化があった場合
+                async handler (val) {
                     if (val === INTERNAL_SERVER_ERROR) {
                         this.$router.push('/500')
                     }else if (val === NOT_FOUND) {
                         this.$router.push('/404')
+                    } else if (val === UNAUTHORIZED) {
+                        await axios.get('/api/refresh-token')
+                        this.$store.commit('user/setUser', null)
+                        this.$router.push({name: 'authentication'})
                     }
                 },
                 immediate: true
