@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
@@ -22,28 +22,28 @@ class SharedCalendar extends Model
 
     public function admin()
     {
-        return $this->belongsTo('App\User', 'admin_id', 'id');
+        return $this->belongsTo('App\Models\User', 'admin_id', 'id');
     }
 
     public function members()
     {
-        return $this->belongsToMany('App\User','shared_calendar_user_members', 'calendar_id', 'user_id')
+        return $this->belongsToMany('App\Models\User','shared_calendar_user_members', 'calendar_id', 'user_id')
                     ->withTimestamps();
     }
 
     public function applicants()
     {
-        return $this->belongsToMany('App\User','shared_calendar_user_applications', 'calendar_id', 'user_id')
+        return $this->belongsToMany('App\Models\User','shared_calendar_user_applications', 'calendar_id', 'user_id')
             ->withTimestamps();
     }
 
     public function schedules()
     {
-        return $this->hasMany('App\SharedSchedule', 'calendar_id', 'id');
+        return $this->hasMany('App\Models\SharedSchedule', 'calendar_id', 'id');
     }
 
     public function chatMessages()
     {
-        return $this->hasMany('App\ChatMessage', 'calendar_id', 'id');
+        return $this->hasMany('App\Models\ChatMessage', 'calendar_id', 'id');
     }
 }

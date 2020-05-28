@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Schedule;
-use App\SharedCalendar;
-use App\SharedSchedule;
-use App\User;
+use App\Models\Schedule;
+use App\Models\SharedCalendar;
+use App\Models\SharedSchedule;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Log;

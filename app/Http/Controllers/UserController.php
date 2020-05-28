@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdateUserEmailRequest;
 use App\Http\Requests\UpdateUserNameRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;

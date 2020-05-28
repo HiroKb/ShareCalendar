@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
@@ -20,6 +20,6 @@ class SharedSchedule extends Model
 
     public function calendar()
     {
-        return $this->belongsTo('App\SharedCalendar', 'calendar_id', 'id');
+        return $this->belongsTo('App\Models\SharedCalendar', 'calendar_id', 'id');
     }
 }

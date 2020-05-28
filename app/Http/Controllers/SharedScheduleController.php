@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateScheduleRequest;
 use App\Http\Requests\UpdateScheduleRequest;
-use App\SharedCalendar;
-use App\SharedSchedule;
+use App\Models\SharedCalendar;
+use App\Models\SharedSchedule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

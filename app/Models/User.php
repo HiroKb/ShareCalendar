@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use App\Notifications\ResetPasswordJp;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -61,18 +61,18 @@ class User extends Authenticatable
 
     public function schedules()
     {
-        return $this->hasMany('App\Schedule');
+        return $this->hasMany('App\Models\Schedule');
     }
 
     public function sharedCalendars()
     {
-       return $this->belongsToMany('App\SharedCalendar', 'shared_calendar_user_members', 'user_id', 'calendar_id')
+       return $this->belongsToMany('App\Models\SharedCalendar', 'shared_calendar_user_members', 'user_id', 'calendar_id')
                     ->withTimestamps();
     }
 
     public function applicationCalendars()
     {
-        return $this->belongsToMany('App\SharedCalendar', 'shared_calendar_user_applications', 'user_id', 'calendar_id')
+        return $this->belongsToMany('App\Models\SharedCalendar', 'shared_calendar_user_applications', 'user_id', 'calendar_id')
             ->withTimestamps();
     }
 }

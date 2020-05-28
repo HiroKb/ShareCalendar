@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Schedule;
-use App\User;
+use App\Models\Schedule;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;

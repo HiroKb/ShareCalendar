@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SharedCalendarNameRequest;
 use App\Http\Requests\ProcessingApplicationToSharingCalendarRequest;
-use App\SharedCalendar;
+use App\Models\SharedCalendar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

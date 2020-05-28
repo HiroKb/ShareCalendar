@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\ChatMessage;
+use App\Models\ChatMessage;
 use App\Http\Requests\ChatMessageRequest;
-use App\SharedCalendar;
+use App\Models\SharedCalendar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
