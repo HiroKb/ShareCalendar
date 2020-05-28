@@ -1,9 +1,11 @@
 // ステータスコード
 export const SUCCESS = 200
 export const CREATED = 201
-export const VALIDATION_ERROR= 422
+export const AUTHENTICATION_REQUIRED = 401
 export const NOT_FOUND = 404
-export const UNAUTHORIZED = 419
+export const CSRF_NOT_EXIST = 419
+export const ONLY_UNAUTHENTICATED = 420
+export const VALIDATION_ERROR= 422
 export const INTERNAL_SERVER_ERROR = 500
 
     /**

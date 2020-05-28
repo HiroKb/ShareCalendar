@@ -44,7 +44,13 @@
     import FlashMessage from "./components/modules/FlashMessage"
     import colorsMixin from "./mixins/colorsMixin"
     import {mapGetters, mapState} from 'vuex'
-    import {INTERNAL_SERVER_ERROR, NOT_FOUND, UNAUTHORIZED} from './util'
+    import {
+        AUTHENTICATION_REQUIRED,
+        CSRF_NOT_EXIST,
+        INTERNAL_SERVER_ERROR,
+        NOT_FOUND,
+        ONLY_UNAUTHENTICATED,
+    } from './util'
 
     export default {
         components: {
@@ -87,10 +93,12 @@
                         this.$router.push('/500')
                     }else if (val === NOT_FOUND) {
                         this.$router.push('/404')
-                    } else if (val === UNAUTHORIZED) {
+                    } else if (val === AUTHENTICATION_REQUIRED || val === CSRF_NOT_EXIST) {
                         await axios.get('/api/refresh-token')
                         this.$store.commit('user/setUser', null)
                         this.$router.push({name: 'authentication'})
+                    } else if (val === ONLY_UNAUTHENTICATED) {
+                        this.$router.push({name: 'personalCalendar'})
                     }
                 },
                 immediate: true
