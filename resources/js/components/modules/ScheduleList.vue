@@ -12,7 +12,7 @@
 <!--                    個人カレンダーで表示されている個人スケジュールの場合か-->
 <!--                    共有カレンダーで表示されている場合は-->
 <!--                    スケジュール更新・削除ボタンを表示-->
-                    <template v-if="!isPersonal || (isPersonal && schedule.user_id)">
+                    <template v-if="!isPersonal || (isPersonal && !schedule.calendar_id)">
                         <v-list-item-action>
                             <v-btn
                                 x-small fab :color="mixinThemeColor" outlined

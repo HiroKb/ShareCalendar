@@ -160,7 +160,7 @@
                             date: dateData.date,
                             dateNum: dateData.dateNum,
                             schedules: dateData.schedules.filter((schedule) => {
-                                return schedule.user_id
+                                return !schedule.calendar_id
                             }),
                             isSelectedMonth: dateData.isSelectedMonth
                         }
