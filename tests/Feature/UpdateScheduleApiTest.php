@@ -16,7 +16,8 @@ class UpdateScheduleApiTest extends TestCase
     {
         parent::setUp();
 //        ダミーユーザー作成
-        $this->user = factory(User::class)->create();
+        $this->user1 = factory(User::class)->create();
+        $this->user2 = factory(User::class)->create();
     }
 
     /**
@@ -44,9 +45,9 @@ class UpdateScheduleApiTest extends TestCase
         $schedule3->title = 'test3';
         $schedule3->description = 'test3';
 
-        $this->user->schedules()->save($schedule1);
-        $this->user->schedules()->save($schedule2);
-        $this->user->schedules()->save($schedule3);
+        $this->user1->schedules()->save($schedule1);
+        $this->user1->schedules()->save($schedule2);
+        $this->user1->schedules()->save($schedule3);
 
         // スケジュールが登録されていることを確認
         $this->assertDatabaseHas('schedules', ['id' => $schedule2->id]);
@@ -56,7 +57,7 @@ class UpdateScheduleApiTest extends TestCase
             'title' => 'test22',
             'description' => 'description22'
         ];
-        $response = $this->actingAs($this->user)->json('patch', '/api/schedules/' . $schedule2->id, $data);
+        $response = $this->actingAs($this->user1)->json('patch', '/api/schedules/' . $schedule2->id, $data);
 
 //        レスポンスが期待通りか
         $response
@@ -74,5 +75,9 @@ class UpdateScheduleApiTest extends TestCase
         $this->assertEquals($updatedSchedule->time, $data['time']);
         $this->assertEquals($updatedSchedule->title, $data['title']);
         $this->assertEquals($updatedSchedule->description, $data['description']);
+
+        $response = $this->actingAs($this->user2)->json('patch', '/api/schedules/' . $schedule2->id, $data);
+
+        $response->assertStatus(404);
     }
 }

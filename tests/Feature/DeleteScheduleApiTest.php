@@ -17,7 +17,8 @@ class DeleteScheduleApiTest extends TestCase
     {
         parent::setUp();
 //        ダミーユーザー作成
-        $this->user = factory(User::class)->create();
+        $this->user1 = factory(User::class)->create();
+        $this->user2 = factory(User::class)->create();
     }
 
     /**
@@ -45,19 +46,24 @@ class DeleteScheduleApiTest extends TestCase
         $schedule3->title = 'test3';
         $schedule3->description = 'test3';
 
-        $this->user->schedules()->save($schedule1);
-        $this->user->schedules()->save($schedule2);
-        $this->user->schedules()->save($schedule3);
+        $this->user1->schedules()->save($schedule1);
+        $this->user1->schedules()->save($schedule2);
+        $this->user1->schedules()->save($schedule3);
 
         // スケジュールが登録されていることを確認
         $this->assertDatabaseHas('schedules', ['id' => $schedule2->id]);
 
-        $response = $this->actingAs($this->user)->json('delete', '/api/schedules/' . $schedule2->id);
+        $response = $this->actingAs($this->user1)->json('delete', '/api/schedules/' . $schedule2->id);
 
 //        レスポンスが期待通りか
         $response->assertStatus(200);
 
         // スケジュールが削除されているか
         $this->assertDatabaseMissing('schedules', ['id' => $schedule2->id]);
+
+        $response = $this->actingAs($this->user2)->json('delete', '/api/schedules/' . $schedule3->id);
+
+        $response->assertStatus(404);
+        $this->assertDatabaseHas('schedules', ['id' => $schedule3->id]);
     }
 }

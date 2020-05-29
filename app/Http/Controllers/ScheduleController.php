@@ -6,10 +6,7 @@ use App\Http\Requests\CreateScheduleRequest;
 use App\Http\Requests\UpdateScheduleRequest;
 use App\Models\Schedule;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class ScheduleController extends Controller
 {
@@ -48,34 +45,22 @@ class ScheduleController extends Controller
      * @param CreateScheduleRequest $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function create(CreateScheduleRequest $request)
+    public function store(CreateScheduleRequest $request)
     {
-        $schedule = new Schedule();
-
-        $schedule->date = $request->date;
-        $schedule->time = $request->time;
-        $schedule->title = $request->title;
-        $schedule->description = $request->description;
-
-
-        Auth::user()->schedules()->save($schedule);
-
-        return response($schedule, 201);
+        return response(Schedule::storeSchedule($request->all()), 201);
     }
 
+    /**
+     * スケジュール更新
+     * @param UpdateScheduleRequest $request
+     * @param Schedule $schedule
+     * @return Schedule
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function update(UpdateScheduleRequest $request, Schedule $schedule)
     {
-        if ($schedule->user_id !== Auth::id()){
-            abort(response()->json([],404));
-        }
-
-        $schedule->time = $request->time;
-        $schedule->title = $request->title;
-        $schedule->description = $request->description;
-
-        $schedule->save();
-
-        return $schedule;
+        $this->authorize('update', $schedule);
+        return $schedule->updateSchedule($request);
     }
 
     /**
@@ -86,13 +71,8 @@ class ScheduleController extends Controller
      */
     public function destroy(Schedule $schedule)
     {
-
-        if ($schedule->user_id !== Auth::id()){
-            abort(response()->json([],404));
-        }
-
+        $this->authorize('delete', $schedule);
         $schedule->delete();
-
-        return response($schedule, 200);
+        return response([], 200);
     }
 }

@@ -47,7 +47,7 @@ Route::group(['middleware' => 'api.auth'], function () {
 //登録スケジュール取得
     Route::get('/schedules/{from}/{until}', 'ScheduleController@list');
 // スケジュール登録
-    Route::post('/schedules', 'ScheduleController@create');
+    Route::post('/schedules', 'ScheduleController@store');
 // スケジュール更新
     Route::patch('/schedules/{schedule}', 'ScheduleController@update');
 // スケジュール削除
