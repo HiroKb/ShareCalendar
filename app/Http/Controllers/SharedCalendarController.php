@@ -70,18 +70,6 @@ class SharedCalendarController extends Controller
     }
 
     /**
-     * 参加共有カレンダー一覧
-     * @return mixed
-     */
-    public function list()
-    {
-        return Auth::user()->sharedCalendars()
-            ->withPivot('created_at AS joined_at')
-            ->orderBy('joined_at', 'asc')
-            ->get();
-    }
-
-    /**
      * 共有カレンダーデータ
      * @param SharedCalendar $sharedCalendar
      * @return SharedCalendar

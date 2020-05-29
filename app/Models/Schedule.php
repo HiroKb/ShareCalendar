@@ -32,6 +32,10 @@ class Schedule extends Model
         'description' => null
     ];
 
+    /**
+     * リレーション(スケジュール所有ユーザー)
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo('App\Models\User');
@@ -51,7 +55,7 @@ class Schedule extends Model
     }
 
     /**
-     * すけジュール更新
+     * スケジュール更新
      * @param $request
      * @return $this
      */

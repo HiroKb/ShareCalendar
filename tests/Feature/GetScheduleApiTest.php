@@ -92,6 +92,5 @@ class GetScheduleApiTest extends TestCase
             ->assertJsonPath('2020-04-20.2.title', 'test5')
             ->assertJsonPath('2020-04-20.3.title', 'test2')
             ->assertJsonPath('2020-04-30.0.title', 'test1');
-
     }
 }

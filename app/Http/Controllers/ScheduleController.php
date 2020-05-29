@@ -10,35 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller
 {
-    public function list($from, $until)
-    {
-        $personalSchedules = Auth::user()->schedules()
-            ->whereBetween('date', [$from, $until])
-            ->get()
-            ->toArray();
-        $sharedSchedules = [];
-
-        $sharedDataCollection = User::with([
-            'sharedCalendars.schedules' => function($query) use($from, $until){
-            $query->whereBetween('date', [$from, $until]);
-            }])->find(Auth::id());
-        $sharedCalendars = $sharedDataCollection->toArray()['shared_calendars'];
-
-        foreach ($sharedCalendars as $sharedCalendar){
-            foreach ($sharedCalendar['schedules'] as $sharedSchedule){
-                $sharedSchedule['calendar_name'] = $sharedCalendar['calendar_name'];
-                $sharedSchedules[] = $sharedSchedule;
-            }
-        }
-
-        $schedulesCollection = collect(array_merge($personalSchedules, $sharedSchedules));
-
-        $sortedSchedules = $schedulesCollection
-                            ->sortBy('time' )
-                            ->groupBy('date');
-
-        return response($sortedSchedules);
-    }
 
     /**
      * スケジュール登録
@@ -73,6 +44,6 @@ class ScheduleController extends Controller
     {
         $this->authorize('delete', $schedule);
         $schedule->delete();
-        return response([], 200);
+        return [];
     }
 }
