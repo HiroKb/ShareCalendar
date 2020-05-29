@@ -35,7 +35,11 @@ class UpdateUserNameApiTest extends TestCase
 
 //        レスポンスが期待通りか
         $response->assertStatus(200)
-                 ->assertJson(['name' => $newName]);
+                 ->assertJson([
+                     'id' => $this->user->id,
+                     'name' => $newName,
+                     'email' => $this->user->email
+                 ]);
 
 //        ユーザー名が変更されているか
         $this->assertEquals($newName, Auth::user()->name);

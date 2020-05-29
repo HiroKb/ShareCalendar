@@ -22,7 +22,7 @@ class LoginApiTest extends TestCase
     /**
      * @test
      */
-    public function should_認証後ログインユーザーデータを返却()
+    public function should_認証後ユーザーデータを返却()
     {
         $response = $this->json('post', route('login'),[
             'email' => $this->user->email,
@@ -32,7 +32,10 @@ class LoginApiTest extends TestCase
 //        レスポンスが期待通りか
         $response
             ->assertStatus(200)
-            ->assertJson(['name' => $this->user->name]);
+            ->assertJson([
+                'name' => $this->user->name,
+                'email' => $this->user->email
+                ]);
 
 //        指定したユーザーがログイン状態か
         $this->assertAuthenticatedAs($this->user);

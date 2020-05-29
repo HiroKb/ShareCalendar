@@ -37,8 +37,31 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'email', 'email_verified_at', 'password', 'remember_token', 'created_at', 'updated_at'
     ];
+
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    /**
+     * 本人しか取得できないユーザーデータのアクセサ
+     * @return array
+     */
+    public function getPrivateDataAttribute()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email
+        ];
+    }
 
     /**
      * パスワード再設定メールのオーバーライド
@@ -50,14 +73,6 @@ class User extends Authenticatable
         $this->notify(new ResetPasswordJp($token));
     }
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
 
     public function schedules()
     {
@@ -75,4 +90,7 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Models\SharedCalendar', 'shared_calendar_user_applications', 'user_id', 'calendar_id')
             ->withTimestamps();
     }
+
+
+
 }

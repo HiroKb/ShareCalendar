@@ -7,7 +7,7 @@
 */
 
 // ログインユーザー返却
-Route::get('/users', fn() => Auth::user())->name('user');
+Route::get('/users', 'userController@getUserData')->name('user');
 // トークンリフレッシュ
 Route::get('/refresh-token', function (\Illuminate\Http\Request $request) {
     $request->session()->regenerateToken();
@@ -19,13 +19,13 @@ Route::get('/refresh-token', function (\Illuminate\Http\Request $request) {
  */
 Route::group(['middleware' => 'api.guest'], function () {
 // 新規登録
-    Route::post('/register', 'Auth\RegisterController@register')->name('register');
+    Route::post('/register', 'CustomizedAuth\RegisterController@register')->name('register');
 // ログイン
-    Route::post('/login', 'Auth\LoginController@login')->name('login');
+    Route::post('/login', 'CustomizedAuth\LoginController@login')->name('login');
 // パスワードリセットメール送信
-    Route::post('/password/reset/link', 'ResetPassword\ForgotPasswordController@sendResetLinkEmail');
+    Route::post('/password/reset/link', 'CustomizedAuth\ForgotPasswordController@sendResetLinkEmail');
 // パスワードリセット
-    Route::post('/password/reset', 'ResetPassword\ResetPasswordController@reset');
+    Route::post('/password/reset', 'CustomizedAuth\ResetPasswordController@reset');
 });
 
 /**
@@ -33,7 +33,7 @@ Route::group(['middleware' => 'api.guest'], function () {
  */
 Route::group(['middleware' => 'api.auth'], function () {
 // ログアウト
-    Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+    Route::post('/logout', 'CustomizedAuth\LoginController@logout')->name('logout');
 // ユーザーネーム変更
     Route::patch('/users/name', 'UserController@updateName');
 // メールアドレス変更

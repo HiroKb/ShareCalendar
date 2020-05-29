@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function getUserData()
+    {
+        $user = Auth::user();
+        return $user ? $user->private_data : null;
+    }
     /**
      * ユーザーネーム変更
      * @param UpdateUserNameRequest $request
@@ -26,7 +31,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return Auth::user();
+        return $user->private_data;
     }
 
     /**
@@ -42,7 +47,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return Auth::user();
+        return $user->private_data;
     }
 
     /**

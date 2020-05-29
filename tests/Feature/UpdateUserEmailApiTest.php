@@ -26,11 +26,11 @@ class UpdateUserEmailApiTest extends TestCase
     public function should_ユーザーのメールアドレスを変更後ユーザーデータを返却()
     {
 
-        $email = Str::random() . '@test.com';
+        $newEmail = Str::random() . '@test.com';
 
         $response = $this->actingAs($this->user)
             ->json('patch', '/api/users/email',[
-                'email' => $email,
+                'email' => $newEmail,
                 'password' => 'password'
             ]);
 
@@ -38,11 +38,12 @@ class UpdateUserEmailApiTest extends TestCase
 //        レスポンスが期待通りか
         $response->assertStatus(200)
                  ->assertJson([
+                     'id' => $this->user->id,
                      'name' => $this->user->name,
-                     'email' => $email
+                     'email' => $newEmail
                  ]);
 
 //        メールアドレスが正しく変更されているか
-        $this->assertEquals($email, Auth::user()->email);
+        $this->assertEquals($newEmail, Auth::user()->email);
     }
 }

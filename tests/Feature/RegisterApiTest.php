@@ -31,6 +31,9 @@ class RegisterApiTest extends TestCase
 
         $response
             ->assertStatus(201)
-            ->assertJson(['name' => $user->name]);
+            ->assertJson([
+                'name' => $user->name,
+                'email' => $user->email
+                ]);
     }
 }
