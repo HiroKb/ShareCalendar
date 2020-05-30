@@ -2,250 +2,161 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IdListRequest;
 use App\Http\Requests\SharedCalendarNameRequest;
-use App\Http\Requests\ProcessingApplicationToSharingCalendarRequest;
 use App\Models\SharedCalendar;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Ramsey\Uuid\Uuid;
-use function Psy\debug;
+use App\Services\SharedCalendarService;
 
 class SharedCalendarController extends Controller
 {
     /**
-     * 共有カレンダー作成
+     * カレンダーのデータを取得
+     * @param SharedCalendar $sharedCalendar
+     * @return SharedCalendar|mixed
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function show(SharedCalendar $sharedCalendar)
+    {
+        $this->authorize('show', $sharedCalendar);
+        return $sharedCalendar->getCalendarData();
+    }
+
+    /**
+     * カレンダー作成
      * @param SharedCalendarNameRequest $request
      * @return mixed
      */
-    public function create(SharedCalendarNameRequest $request)
+    public function store(SharedCalendarNameRequest $request)
     {
-        return DB::transaction(function () use($request){
-            $calendar = new SharedCalendar();
-            $calendar->calendar_name = $request->calendar_name;
-            $calendar->admin_id = Auth::id();
-            $calendar->save();
-
-            $calendar->members()->attach([Auth::id()]);
-
-            return $calendar;
-        });
+        return response(SharedCalendar::storeSharedCalendar($request), 201);
     }
 
-    public function destroy(SharedCalendar $sharedCalendar)
-    {
-        // カレンダー管理者以外のアクセスの場合
-        if ($sharedCalendar->admin_id !== Auth::id()) {
-            abort(404);
-        }
-
-        $sharedCalendar->delete();
-
-        return response([], 200);
-    }
-
+    /**
+     * カレンダー名変更
+     * @param SharedCalendar $sharedCalendar
+     * @param SharedCalendarNameRequest $request
+     * @return mixed
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function updateName(SharedCalendar $sharedCalendar, SharedCalendarNameRequest $request)
     {
-        // カレンダー管理者以外のアクセスの場合
-        if ($sharedCalendar->admin_id !== Auth::id()) {
-            abort(404);
-        }
-        $sharedCalendar->calendar_name = $request->calendar_name;
-        $sharedCalendar->save();
-
-        return $sharedCalendar;
+        $this->authorize('updateName', $sharedCalendar);
+        return $sharedCalendar->updateName($request);
     }
 
+    /**
+     * カレンダー検索ID変更
+     * @param SharedCalendar $sharedCalendar
+     * @return mixed
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function updateSearchId(SharedCalendar $sharedCalendar)
     {
-        // カレンダー管理者以外のアクセスの場合
-        if ($sharedCalendar->admin_id !== Auth::id()) {
-            abort(404);
-        }
-        $sharedCalendar->search_id = Uuid::uuid4()->toString();
-        $sharedCalendar->save();
-
-        return $sharedCalendar;
+        $this->authorize('updateSearchId', $sharedCalendar);
+        return $sharedCalendar->updateSearchId();
     }
 
     /**
-     * 共有カレンダーデータ
+     * カレンダー削除
      * @param SharedCalendar $sharedCalendar
-     * @return SharedCalendar
+     * @return array
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function index(SharedCalendar $sharedCalendar)
+    public function destroy(SharedCalendar $sharedCalendar)
     {
-        $userId = Auth::id();
-        if (!$sharedCalendar->members()->where('user_id', $userId)->exists()){
-            abort(404);
-        }
-
-        if ($sharedCalendar->admin_id !== $userId){
-            unset($sharedCalendar['search_id']);
-        }
-        return $sharedCalendar;
+        $this->authorize('updateSearchId', $sharedCalendar);
+        $sharedCalendar->delete();
+        return [];
     }
 
     /**
-     * カレンダ共有メンバー
+     * 共有メンバーリスト
      * @param SharedCalendar $sharedCalendar
+     * @param SharedCalendarService $sharedCalendarService
      * @return \Illuminate\Database\Eloquent\Collection
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function membersList(SharedCalendar $sharedCalendar)
+    public function membersList(SharedCalendar $sharedCalendar, SharedCalendarService $sharedCalendarService)
     {
-        if (!$sharedCalendar->members()->where('user_id', Auth::id())->exists()){
-            abort(404);
-        }
-
-        return $sharedCalendar
-            ->members()
-            ->withPivot('created_at AS joined_at')
-            ->orderBy('joined_at', 'asc')
-            ->get();
-    }
-
-    public function unShare(SharedCalendar $sharedCalendar, $memberId = null)
-    {
-        $userId = Auth::id();
-//        カレンダー管理者のアクセスの場合はmemberIdをリクエストで渡されたIDに
-//        memberIdが指定されいない場合はアクセスしたユーザーのIDに
-//        意図しないアクセスの場合404
-        if (isset($memberId) && $sharedCalendar->admin_id !== $userId){
-            abort(404);
-        } elseif(!isset($memberId)) {
-            $memberId = $userId;
-        }
-        if ($sharedCalendar->admin_id === $memberId ||
-            !$sharedCalendar->members()->where('user_id', $memberId)->exists()){
-            abort(404);
-        }
-        $sharedCalendar->members()->detach($memberId);
-        return response([], 200);
+        $this->authorize('membersList', $sharedCalendar);
+        return $sharedCalendarService->getMembersList($sharedCalendar);
     }
 
     /**
      * 共有申請者リスト
      * @param SharedCalendar $sharedCalendar
+     * @param SharedCalendarService $sharedCalendarService
      * @return \Illuminate\Database\Eloquent\Collection
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function applicationsList(SharedCalendar $sharedCalendar)
+    public function applicationsList(SharedCalendar $sharedCalendar, SharedCalendarService $sharedCalendarService)
     {
-        // カレンダー管理者以外のアクセスの場合
-        if ($sharedCalendar->admin_id !== Auth::id()) {
-            abort(404);
-        }
-        return $sharedCalendar
-            ->applicants()
-            ->withPivot('created_at AS application_at')
-            ->orderBy('application_at', 'asc')
-            ->get();
-
+        $this->authorize('applicationsList', $sharedCalendar);
+        return $sharedCalendarService->getApplicationsList($sharedCalendar);
     }
 
     /**
      * 共有申請許可
      * @param SharedCalendar $sharedCalendar
-     * @param Request $request
-     * @return mixed
+     * @param IdListRequest $request
+     * @param SharedCalendarService $sharedCalendarService
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|mixed
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function allowApplication(SharedCalendar $sharedCalendar, Request $request)
+    public function allowApplication(SharedCalendar $sharedCalendar, IdListRequest $request, SharedCalendarService $sharedCalendarService)
     {
-//        カレンダー管理者以外のアクセスの場合
-        if ($sharedCalendar->admin_id !== Auth::id()) {
-            abort(404);
-        }
-
-//        送られてきたIDが全て共有申請済みか確認
-        foreach ($request->id_list as $applicantId) {
-            if (!$sharedCalendar->applicants()->where('user_id', $applicantId)->exists()){
-                abort(404);
-                break;
-            }
-        }
-
-        return DB::transaction(function () use($sharedCalendar, $request){
-
-            $sharedCalendar->members()->sync($request->id_list, false);
-            $sharedCalendar->applicants()->detach($request->id_list);
-            return response([], 201);
-        });
+        $this->authorize('allowApplication', $sharedCalendar);
+        return $sharedCalendarService->allowApplication($sharedCalendar, $request->id_list);
     }
 
     /**
      * 共有申請拒否
      * @param SharedCalendar $sharedCalendar
-     * @param Request $request
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @param IdListRequest $request
+     * @return array
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function rejectApplication(SharedCalendar $sharedCalendar, Request $request)
+    public function rejectApplication(SharedCalendar $sharedCalendar, IdListRequest $request)
     {
-//        カレンダー管理者以外のアクセスの場合
-        if ($sharedCalendar->admin_id !== Auth::id()) {
-            abort(404);
-        }
-//        送られてきたIDが全て共有申請済みか確認
-        foreach ($request->id_list as $applicantId) {
-            if (!$sharedCalendar->applicants()->where('user_id', $applicantId)->exists()){
-                abort(404);
-                break;
-            }
-        }
+        $this->authorize('rejectApplication', $sharedCalendar);
         $sharedCalendar->applicants()->detach($request->id_list);
-        return response([], 200);
+        return [];
     }
 
     /**
-     * 共有カレンダー検索
-     * @param $searchId
-     * @return array
+     * メンバーから削除(共有解除)
+     * @param SharedCalendar $sharedCalendar
+     * @param null $memberId
+     * @param SharedCalendarService $sharedCalendarService
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function search($searchId)
+    public function removeMember(SharedCalendar $sharedCalendar, $memberId = null, SharedCalendarService $sharedCalendarService)
     {
-        $userId = Auth::id();
-        $sharedCalendar = SharedCalendar::where('search_id', $searchId)->first();
-        if (!$sharedCalendar){
-            return [
-                'status' => 'NotFound',
-                'search_id' => '',
-                'admin_name' => ''
-            ];
-        }
-        if ($sharedCalendar->members()->where('user_id', $userId)->exists()){
-            return [
-                'status' => 'Shared',
-                'search_id' => '',
-                'admin_name' => ''
-            ];
-        }
-        if ($sharedCalendar->applicants()->where('user_id', $userId)->exists()) {
-            return [
-                'status' => 'Applied',
-                'search_id' => '',
-                'admin_name' => ''
-            ];
-        }
-        return [
-            'status' => 'NotShared',
-            'search_id' => $sharedCalendar->search_id,
-            'admin_name' => $sharedCalendar->admin->name
-        ];
+        $this->authorize('removeMember', $sharedCalendar);
+        return $sharedCalendarService->removeMember($sharedCalendar, $memberId);
     }
 
-    // カレンダー共有申請
-    public function application($searchId)
+
+    /**
+     * カレンダー検索
+     * @param $searchId
+     * @param SharedCalendarService $sharedCalendarService
+     * @return array
+     */
+    public function search($searchId, SharedCalendarService $sharedCalendarService)
     {
-        $userId = Auth::id();
-        $sharedCalendar = SharedCalendar::where('search_id', $searchId)->first();
-//        IDが間違っているかすでに共有済み、申請済みの場合
-        if (!$sharedCalendar ||
-            $sharedCalendar->members()->where('user_id', $userId)->exists() ||
-            $sharedCalendar->applicants()->where('user_id', $userId)->exists()){
-            abort(404);
-        }
-        $sharedCalendar->applicants()->attach([$userId]);
+        return $sharedCalendarService->search($searchId);
+    }
 
-        return response([], 201);
-
+    /**
+     * カレンダー共有申請
+     * @param $searchId
+     * @param SharedCalendarService $sharedCalendarService
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function application($searchId, SharedCalendarService $sharedCalendarService)
+    {
+        return $sharedCalendarService->application($searchId);
     }
 }

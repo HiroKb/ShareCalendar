@@ -35,16 +35,17 @@ class CreateSharedCalendarApiTest extends TestCase
         $response = $this->actingAs($this->user)
             ->json('post', '/api/shared-calendars', $data);
 
+        $calendar = SharedCalendar::first();
+        $this->assertEquals($data['calendar_name'], $calendar->calendar_name);
+        $this->assertEquals(Auth::user()->id, $calendar->admin_id);
+
 //        レスポンスが期待通りか
         $response
             ->assertStatus(201)
             ->assertJson([
                 'calendar_name' => $data['calendar_name'],
-                'admin_id' => $this->user->id
+                'admin_id' => $this->user->id,
+                'search_id' => $calendar->search_id
             ]);
-
-        $calendar = SharedCalendar::first();
-        $this->assertEquals($data['calendar_name'], $calendar->calendar_name);
-        $this->assertEquals(Auth::user()->id, $calendar->admin_id);
     }
 }

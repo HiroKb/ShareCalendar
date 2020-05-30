@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
 class SharedCalendar extends Model
@@ -11,6 +13,14 @@ class SharedCalendar extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
+    protected $fillable = [
+        'calendar_name'
+    ];
+
+    protected $hidden = [
+        'search_id', 'created_at', 'updated_at'
+    ];
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -18,6 +28,16 @@ class SharedCalendar extends Model
         $this->attributes['id'] = Uuid::uuid4()->toString();
 
         $this->attributes['search_id'] = Uuid::uuid4()->toString();
+    }
+
+    public function getDataForAdminAttribute()
+    {
+        return [
+            'id' => $this->id,
+            'search_id' => $this->search_id,
+            'admin_id' => $this->admin_id,
+            'calendar_name' => $this->calendar_name
+        ];
     }
 
     public function admin()
@@ -45,5 +65,62 @@ class SharedCalendar extends Model
     public function chatMessages()
     {
         return $this->hasMany('App\Models\ChatMessage', 'calendar_id', 'id');
+    }
+
+    /**
+     * カレンダーデータ返却
+     * ユーザーが管理者であれば管理者用データ、それ以外はsearch_idを除外したデータを返却
+     * @return $this|mixed
+     */
+    public function getCalendarData()
+    {
+        if ($this->admin_id === Auth::id()){
+            return $this->data_for_admin;
+        }
+        return $this;
+    }
+
+    /**
+     * カレンダー作成
+     * member中間テーブルにデータを追加
+     * @param $request
+     * @return mixed
+     */
+    public static function storeSharedCalendar($request)
+    {
+        $userId = Auth::id();
+        $calendar = new static();
+        $calendar->calendar_name = $request->calendar_name;
+        $calendar->admin_id = $userId;
+
+        return DB::transaction(function () use($calendar, $userId){
+            $calendar->save();
+            $calendar->members()->attach([$userId]);
+            return $calendar->data_for_admin;
+        });
+    }
+
+    /**
+     * カレンダー名変更
+     * @param $request
+     * @return mixed
+     */
+    public function updateName($request)
+    {
+        $this->calendar_name = $request->calendar_name;
+        $this->save();
+        return $this->data_for_admin;
+    }
+
+    /**
+     * 検索ID変更(Uuid)
+     * @return mixed
+     * @throws \Exception
+     */
+    public function updateSearchId()
+    {
+        $this->search_id = Uuid::uuid4()->toString();
+        $this->save();
+        return $this->data_for_admin;
     }
 }

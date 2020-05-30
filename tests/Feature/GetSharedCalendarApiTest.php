@@ -19,6 +19,7 @@ class GetSharedCalendarApiTest extends TestCase
 
         $this->user1 = factory(User::class)->create();
         $this->user2 = factory(User::class)->create();
+        $this->user3 = factory(User::class)->create();
     }
 
     /**
@@ -32,6 +33,7 @@ class GetSharedCalendarApiTest extends TestCase
         $calendar->admin_id = $this->user1->id;
         $calendar->save();
         $calendar->members()->attach([$this->user1->id]);
+        $calendar->members()->attach([$this->user2->id]);
 
         $response = $this->actingAs($this->user1)->json('get', '/api/shared-calendars/' . $calendar->id);
 
@@ -42,6 +44,13 @@ class GetSharedCalendarApiTest extends TestCase
                  ]);
 
         $response = $this->actingAs($this->user2)->json('get', '/api/shared-calendars/' . $calendar->id);
+
+        $response->assertStatus(200)
+            ->assertJsonMissingExact([
+                'search_id' => $calendar->search_id
+            ]);
+
+        $response = $this->actingAs($this->user3)->json('get', '/api/shared-calendars/' . $calendar->id);
 
         $response->assertStatus(404);
     }

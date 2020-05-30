@@ -55,26 +55,26 @@ Route::group(['middleware' => 'api.auth'], function () {
     // スケジュール削除
     Route::delete('/schedules/{schedule}', 'ScheduleController@destroy');
 
-    // 共有カレンダー作成
-    Route::post('/shared-calendars', 'SharedCalendarController@create');
-    // 共有カレンダー削除
-    Route::delete('/shared-calendars/{sharedCalendar}', 'SharedCalendarController@destroy');
     // 共有カレンダーデータ
-    Route::get('/shared-calendars/{sharedCalendar}', 'SharedCalendarController@index');
+    Route::get('/shared-calendars/{sharedCalendar}', 'SharedCalendarController@show');
+    // 共有カレンダー作成
+    Route::post('/shared-calendars', 'SharedCalendarController@store');
     // 共有カレンダー名変更
     Route::patch('/shared-calendars/{sharedCalendar}/name', 'SharedCalendarController@updateName');
     // 共有カレンダー検索ID変更
     Route::patch('/shared-calendars/{sharedCalendar}/search-id', 'SharedCalendarController@updateSearchId');
+    // 共有カレンダー削除
+    Route::delete('/shared-calendars/{sharedCalendar}', 'SharedCalendarController@destroy');
     // カレンダー共有メンバー
     Route::get('/shared-calendars/{sharedCalendar}/members', 'SharedCalendarController@membersList');
-    // カレンダー共有解除
-    Route::delete('/shared-calendars/{sharedCalendar}/members/{memberId?}', 'SharedCalendarController@unShare');
     // カレンダー共有申請者
     Route::get('/shared-calendars/{sharedCalendar}/applications', 'SharedCalendarController@applicationsList');
-    // カレンダー共有メンバー追加(共有申請許可
+    // カレンダー共有申請許可
     Route::put('/shared-calendars/{sharedCalendar}/members', 'SharedCalendarController@allowApplication');
     // カレンダー共有申請拒否
     Route::delete('/shared-calendars/{sharedCalendar}/applications', 'SharedCalendarController@rejectApplication');
+    // カレンダー共有解除
+    Route::delete('/shared-calendars/{sharedCalendar}/members/{memberId?}', 'SharedCalendarController@removeMember');
 
     // 共有カレンダー検索
     Route::get('/shared-calendars/{searchId}/search', 'SharedCalendarController@search');
