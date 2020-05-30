@@ -20,6 +20,7 @@ class SharedCalendarPolicy
         //
     }
 
+    // SharedCalendarControllerに関わるもの
     public function show(User $user, SharedCalendar $sharedCalendar)
     {
         return $sharedCalendar->members()->where('user_id', $user->id)->exists();
@@ -61,6 +62,24 @@ class SharedCalendarPolicy
     }
 
     public function removeMember(User $user, SharedCalendar $sharedCalendar)
+    {
+        return $sharedCalendar->members()->where('user_id', $user->id)->exists();
+    }
+
+    // SharedScheduleControllerに関わるもの
+    public function scheduleIndex(User $user, SharedCalendar $sharedCalendar)
+    {
+        return $sharedCalendar->members()->where('user_id', $user->id)->exists();
+    }
+    public function storeSchedule(User $user, SharedCalendar $sharedCalendar)
+    {
+        return $sharedCalendar->members()->where('user_id', $user->id)->exists();
+    }
+    public function destroySchedule(User $user, SharedCalendar $sharedCalendar)
+    {
+        return $sharedCalendar->members()->where('user_id', $user->id)->exists();
+    }
+    public function updateSchedule(User $user, SharedCalendar $sharedCalendar)
     {
         return $sharedCalendar->members()->where('user_id', $user->id)->exists();
     }

@@ -81,13 +81,14 @@ Route::group(['middleware' => 'api.auth'], function () {
     // カレンダー共有申請
     Route::put('/shared-calendars/{searchId}/applications', 'SharedCalendarController@application');
 
+    // 共有スケジュール一覧
+    Route::get('/shared-calendars/{sharedCalendar}/schedules/{from}/{until}', 'SharedScheduleController@index');
     // 共有スケジュール作成
-    Route::post('/shared-calendars/{sharedCalendar}/schedules', 'SharedScheduleController@create');
+    Route::post('/shared-calendars/{sharedCalendar}/schedules', 'SharedScheduleController@store');
+    // 共有スケジュール更新
+    Route::patch('/shared-calendars/{sharedCalendar}/schedules/{sharedSchedule}', 'SharedScheduleController@update');
     //共有スケジュール削除
     Route::delete('/shared-calendars/{sharedCalendar}/schedules/{sharedSchedule}', 'SharedScheduleController@destroy');
-    Route::patch('/shared-calendars/{sharedCalendar}/schedules/{sharedSchedule}', 'SharedScheduleController@update');
-    // 共有スケジュールリスト取得
-    Route::get('/shared-calendars/{sharedCalendar}/schedules/{from}/{until}', 'SharedScheduleController@list');
 
     // チャットメッセージ一覧
     Route::get('/shared-calendars/{sharedCalendar}/chat/messages', 'ChatMessageController@list');

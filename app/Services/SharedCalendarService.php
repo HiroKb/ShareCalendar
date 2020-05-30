@@ -4,11 +4,9 @@ namespace App\Services;
 use App\Models\SharedCalendar;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Expr\Cast\Object_;
 
 class SharedCalendarService
 {
-
     /**
      * 共有メンバー取得
      * @param SharedCalendar $sharedCalendar

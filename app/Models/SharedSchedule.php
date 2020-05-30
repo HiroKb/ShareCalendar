@@ -10,6 +10,15 @@ class SharedSchedule extends Model
     protected $table = 'shared_schedules';
     protected $keyType = 'string';
     public $incrementing = false;
+
+    protected $fillable = [
+        'title', 'description', 'date', 'time'
+    ];
+
+    protected $hidden = [
+        'created_at', 'update_at'
+    ];
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -17,7 +26,10 @@ class SharedSchedule extends Model
         $this->attributes['id'] = Uuid::uuid4()->toString();
     }
 
-
+    /**
+     * リレーション(共有カレンダー)
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function calendar()
     {
         return $this->belongsTo('App\Models\SharedCalendar', 'calendar_id', 'id');

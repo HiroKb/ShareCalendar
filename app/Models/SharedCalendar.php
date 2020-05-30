@@ -30,6 +30,10 @@ class SharedCalendar extends Model
         $this->attributes['search_id'] = Uuid::uuid4()->toString();
     }
 
+    /**
+     * カレンダー管理者のみが取得できるデータ
+     * @return array
+     */
     public function getDataForAdminAttribute()
     {
         return [
@@ -40,28 +44,48 @@ class SharedCalendar extends Model
         ];
     }
 
+    /**
+     * リレーション(カレンダー管理者)
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function admin()
     {
         return $this->belongsTo('App\Models\User', 'admin_id', 'id');
     }
 
+    /**
+     * リレーション(カレンダー共有メンバー)
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function members()
     {
         return $this->belongsToMany('App\Models\User','shared_calendar_user_members', 'calendar_id', 'user_id')
                     ->withTimestamps();
     }
 
+    /**
+     * リレーション(共有申請者)
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function applicants()
     {
         return $this->belongsToMany('App\Models\User','shared_calendar_user_applications', 'calendar_id', 'user_id')
             ->withTimestamps();
     }
 
+    /**
+     * リレーション(共有スケジュール)
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function schedules()
     {
         return $this->hasMany('App\Models\SharedSchedule', 'calendar_id', 'id');
     }
 
+    /**
+     * リレーション(チャットメッセージ)
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function chatMessages()
     {
         return $this->hasMany('App\Models\ChatMessage', 'calendar_id', 'id');
