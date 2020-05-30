@@ -83,4 +83,14 @@ class SharedCalendarPolicy
     {
         return $sharedCalendar->members()->where('user_id', $user->id)->exists();
     }
+
+    // ChatMessageControllerに関わるもの
+    public function messageIndex(User $user, SharedCalendar $sharedCalendar)
+    {
+        return $sharedCalendar->members()->where('user_id', $user->id)->exists();
+    }
+    public function storeMessage(User $user, SharedCalendar $sharedCalendar)
+    {
+        return $sharedCalendar->members()->where('user_id', $user->id)->exists();
+    }
 }

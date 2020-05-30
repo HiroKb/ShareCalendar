@@ -91,8 +91,8 @@ Route::group(['middleware' => 'api.auth'], function () {
     Route::delete('/shared-calendars/{sharedCalendar}/schedules/{sharedSchedule}', 'SharedScheduleController@destroy');
 
     // チャットメッセージ一覧
-    Route::get('/shared-calendars/{sharedCalendar}/chat/messages', 'ChatMessageController@list');
+    Route::get('/shared-calendars/{sharedCalendar}/chat/messages', 'ChatMessageController@index');
     // チャットメッセージ作成
-    Route::post('/shared-calendars/{sharedCalendar}/chat/messages', 'ChatMessageController@create');
+    Route::post('/shared-calendars/{sharedCalendar}/chat/messages', 'ChatMessageController@store');
 });
 
