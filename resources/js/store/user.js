@@ -14,7 +14,9 @@ const getters = {
     // ユーザーの名前
     userName: state => state.user ? state.user.name : null,
     // ユーザーのメールアドレス
-    userEmail: state => state.user ? state.user.email : null
+    userEmail: state => state.user ? state.user.email : null,
+    // パスワードが登録されているか
+    passwordExists: state => state.user ? state.user.passwordExists : null
 }
 
 const mutations = {
@@ -201,6 +203,33 @@ const actions = {
         if (response.status === VALIDATION_ERROR) {
             context.commit('setErrorMessages', response.data.errors)
 
+            // その他のエラーの場合
+        } else {
+            context.commit('error/setCode', response.status, { root: true})
+        }
+    },
+    // パスワード登録
+    async registrationPassword(context, data) {
+        // apiStatusの初期化
+        context.commit('setApiStatus', null)
+
+        context.commit('loading/setLoadingFlg', true, { root: true})
+        // パスワード変更APIの呼び出し
+        const response = await axios.post('/api/users/password', data)
+        context.commit('loading/setLoadingFlg', false, { root: true})
+
+        // 通信成功時
+        if(response.status === CREATED) {
+            context.commit('setApiStatus', true)
+            context.state.user.passwordExists = true
+            return false
+        }
+
+        // エラー時
+        context.commit('setApiStatus', false)
+        // バリデーションエラーの場合
+        if (response.status === VALIDATION_ERROR) {
+            context.commit('setErrorMessages', response.data.errors)
             // その他のエラーの場合
         } else {
             context.commit('error/setCode', response.status, { root: true})

@@ -61,7 +61,8 @@ class User extends Authenticatable
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'email' => $this->email
+            'email' => $this->email,
+            'passwordExists' => !!$this->password
         ];
     }
 
@@ -132,14 +133,31 @@ class User extends Authenticatable
     /**
      * パスワード変更処理
      * @param $request
-     * @return array
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function updatePassword($request)
     {
+        if(!$this->password) {
+            return response([], 404);
+        }
         $this->password = Hash::make($request->new_password);
         $this->save();
         return [];
     }
 
+    /**
+     * パスワード新規登録
+     * @param $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function registrationPassword($request)
+    {
+        if(!!$this->password) {
+            return response([], 404);
+        }
+        $this->password = Hash::make($request->password);
+        $this->save();
+        return response([], 201);
+    }
 
 }

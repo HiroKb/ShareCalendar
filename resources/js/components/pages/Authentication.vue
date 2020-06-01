@@ -10,6 +10,14 @@
                 <v-tab-item value="login-tab">
                     <v-card flat tile>
                         <v-card-text>
+                            <a href="/o-auth/google"
+
+
+                            ><img
+                                src="/images/btn_google_signin_light_normal_web@2x.png"
+                                alt="googleでログイン"
+                                style="height: 52px"
+                            ></a>
                             <v-form ref="loginForm" @submit.prevent="login">
                                 <!--                            rulesでフロントのバリデーション-->
                                 <!--                            error,error-messageでバックのバリデーション結果を表示-->

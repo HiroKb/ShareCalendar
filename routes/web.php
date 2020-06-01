@@ -11,6 +11,11 @@
 |
 */
 
+// OAuth認証リダイレクト処理
+Route::get('/o-auth/{provider}', 'CustomizedAuth\OAuthController@redirect');
+// OAuth認証コールバック後処理
+Route::get('/o-auth/{provider}/callback', 'CustomizedAuth\OAuthController@handleProviderCallback');
+
 
 Route::get('/password/reset', fn() => view('index'))->name('password.reset');
 

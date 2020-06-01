@@ -26,7 +26,10 @@
                     >変更</v-btn>
                 </div>
                 <v-divider></v-divider>
-                <div class="py-4 mb-8 d-flex align-end justify-space-between">
+                <div
+                    class="py-4 mb-8 d-flex align-end justify-space-between"
+                    v-if="passwordExists"
+                >
                     <div>
                         <p class="info-label">パスワード</p>
                         <p class="info-data">********</p>
@@ -35,6 +38,19 @@
                         :color="mixinThemeColor" dark
                         @click.stop="editPasswordModal.show = !editPasswordModal.show"
                     >変更</v-btn>
+                </div>
+                <div
+                    class="py-4 mb-8 d-flex align-end justify-space-between"
+                    v-else
+                >
+                    <div>
+                        <p class="info-label">パスワード</p>
+                        <p class="info-data">登録されていません</p>
+                    </div>
+                    <v-btn
+                        :color="mixinThemeColor" dark
+                        @click.stop="registrationPasswordModal.show = !registrationPasswordModal.show"
+                    >登録</v-btn>
                 </div>
                 <div class="text-right">
                     <router-link :to="{name: 'deleteAccount'}">アカウント削除</router-link>
@@ -140,6 +156,31 @@
                 </v-card-text>
             </v-card>
         </v-dialog>
+
+        <v-dialog
+            v-model="registrationPasswordModal.show"
+            max-width="500px"
+        >
+            <v-card>
+                <v-card-title>パスワード登録</v-card-title>
+                <v-card-text>
+                    <v-form ref="registrationPasswordForm" @submit.prevent="registrationPassword">
+                        <v-text-field
+                            v-model="registrationPasswordModal.form.password"
+                            label="パスワード"
+                            @click:append="registrationPasswordModal.showPassword = !registrationPasswordModal.showPassword"
+                            :append-icon="registrationPasswordModal.showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                            :type="registrationPasswordModal.showPassword ? 'text' : 'password'"
+                            :rules="[mixinValidationRules.required, mixinValidationRules.min8]"
+                            :error="errorMessages ? !!errorMessages.password : false"
+                            :error-messages="errorMessages ? errorMessages.password ? errorMessages.password : [] : []"
+                            outlined
+                        ></v-text-field>
+                        <v-btn block :color="mixinThemeColor" dark type="submit">登録</v-btn>
+                    </v-form>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
     </v-container>
 </template>
 
@@ -178,13 +219,21 @@
                     },
                     showCurrentPassword: false,
                     showNewPassword: false
+                },
+                registrationPasswordModal: {
+                    show: false,
+                    form: {
+                        password: ''
+                    },
+                    showPassword: false
                 }
             }
         },
         computed : {
             ...mapGetters({
                 userName: 'user/userName',
-                userEmail: 'user/userEmail'
+                userEmail: 'user/userEmail',
+                passwordExists: 'user/passwordExists'
             }),
             ...mapState({
                 apiStatus: state => state.user.apiStatus, // API通信成否
@@ -243,6 +292,21 @@
                     this.$store.commit('flashMessage/setMessage', 'パスワードを変更しました。')
                 }
             },
+            /**
+             * パスワード登録処理
+             */
+            async registrationPassword(){
+                if (!this.$refs.registrationPasswordForm.validate()){
+                    return false
+                }
+
+                await this.$store.dispatch('user/registrationPassword', this.registrationPasswordModal.form)
+
+                if (this.apiStatus) {
+                    this.registrationPasswordModal.show = false
+                    this.$store.commit('flashMessage/setMessage', 'パスワードを登録しました。')
+                }
+            }
         },
         watch: {
             /**
@@ -272,6 +336,14 @@
                     this.editPasswordModal.showCurrentPassword = false
                     this.editPasswordModal.showNewPassword = false
                     this.$refs.editPasswordForm.resetValidation()
+                    this.setErrorMessages(null)
+                }
+            },
+            'registrationPasswordModal.show': function (val) {
+                if (val === false) {
+                    this.registrationPasswordModal.form.password = ''
+                    this.registrationPasswordModal.showPassword = false
+                    this.$refs.registrationPasswordForm.resetValidation()
                     this.setErrorMessages(null)
                 }
             },

@@ -32,10 +32,5 @@ class RegisterController extends \App\Http\Controllers\Auth\RegisterController
     protected function registered(Request $request, $user)
     {
         return response($user->private_data, 201);
-//        return response([
-//            'id' => $user->id,
-//            'name' => $user->name,
-//            'email' => $user->email
-//        ], 201);
     }
 }

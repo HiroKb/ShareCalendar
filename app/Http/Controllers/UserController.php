@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PasswordRequest;
 use App\Http\Requests\UpdateUserEmailRequest;
 use App\Http\Requests\UpdateUserNameRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
@@ -43,6 +44,16 @@ class UserController extends Controller
     public function updatePassword(UpdateUserPasswordRequest $request)
     {
         return Auth::user()->updatePassword($request);
+    }
+
+    /**
+     * パスワード新規登録(OAuthログインユーザー用)
+     * @param PasswordRequest $request
+     * @return mixed
+     */
+    public function registrationPassword(PasswordRequest $request)
+    {
+        return Auth::user()->registrationPassword($request);
     }
 
     /**

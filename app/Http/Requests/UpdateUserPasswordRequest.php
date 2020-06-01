@@ -29,6 +29,9 @@ class UpdateUserPasswordRequest extends FormRequest
             'current_password' => [
                 'required',
                 function ($attribute, $value, $fail){
+                    if (!Auth::user()->password) {
+                        $fail('パスワードが登録されていません');
+                    }
                     if (!Hash::check($value, Auth::user()->password)) {
                         $fail('現在のパスワードが間違っています');
                     }

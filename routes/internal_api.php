@@ -40,6 +40,8 @@ Route::group(['middleware' => 'api.auth'], function () {
     Route::patch('/users/email', 'UserController@updateEmail');
     // ユーザーパスワード変更
     Route::patch('/users/password', 'UserController@updatePassword');
+    // パスワードの登録
+    Route::post('/users/password', 'UserController@registrationPassword');
     // アカウント削除
     Route::delete('/users', 'UserController@destroy');
     // 個人スケジュールと共有カレンダーのスケジュールリスト取得
