@@ -3,9 +3,35 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class UserService
 {
+    /**
+     * ユーザー画像更新
+     * @param $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function updateImage($request)
+    {
+        $image = $request->image;
+        $user = Auth::user();
+        $beforeUpdatePath = $user->image_path;
+
+        $path = Storage::disk('s3')->putFile('image', $image, 'public');
+        try {
+            $updatedUser = $user->updateImagePath($path);
+            if ($beforeUpdatePath && Storage::disk('s3')->exists($beforeUpdatePath)){
+                Storage::disk('s3')->delete($beforeUpdatePath);
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Storage::disk('s3')->delete($path);
+        }
+        return response($updatedUser, 201);
+    }
     /**
      * $fromから$untilまでの個人スケジュールと共有スケジュールのリスト
      * @param $from

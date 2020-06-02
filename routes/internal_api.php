@@ -36,6 +36,8 @@ Route::group(['middleware' => 'api.auth'], function () {
     Route::post('/logout', 'CustomizedAuth\LoginController@logout')->name('logout');
     // ユーザーネーム変更
     Route::patch('/users/name', 'UserController@updateName');
+    // ユーザー画像更新
+    Route::patch('/users/image', 'UserController@updateImage');
     // メールアドレス変更
     Route::patch('/users/email', 'UserController@updateEmail');
     // ユーザーパスワード変更

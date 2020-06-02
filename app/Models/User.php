@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Uuid;
 
 class User extends Authenticatable
@@ -33,6 +34,9 @@ class User extends Authenticatable
         'name', 'email', 'password',
     ];
 
+    protected $appends = [
+        'image_url'
+    ];
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -52,6 +56,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function getImageUrlAttribute()
+    {
+         if ($this->image_path){
+             return Storage::disk('s3')->url($this->image_path);
+         }
+         return null;
+    }
+
     /**
      * 本人しか取得できないユーザーデータのアクセサ
      * @return array
@@ -61,6 +73,7 @@ class User extends Authenticatable
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'image_url' => $this->image_url,
             'email' => $this->email,
             'passwordExists' => !!$this->password
         ];
@@ -114,6 +127,18 @@ class User extends Authenticatable
     public function updateName($request)
     {
         $this->name = $request->name;
+        $this->save();
+        return $this->private_data;
+    }
+
+    /**
+     * イメージパスの更新
+     * @param $path
+     * @return mixed
+     */
+    public function updateImagePath($path)
+    {
+        $this->image_path = $path;
         $this->save();
         return $this->private_data;
     }

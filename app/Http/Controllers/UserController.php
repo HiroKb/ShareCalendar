@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ImageRequest;
 use App\Http\Requests\PasswordRequest;
 use App\Http\Requests\UpdateUserEmailRequest;
 use App\Http\Requests\UpdateUserNameRequest;
@@ -24,6 +25,17 @@ class UserController extends Controller
     public function updateName(UpdateUserNameRequest $request)
     {
         return Auth::user()->updateName($request);
+    }
+
+    /**
+     * ユーザー画像更新
+     * @param ImageRequest $request
+     * @param UserService $userService
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function updateImage(ImageRequest $request, UserService $userService)
+    {
+        return $userService->updateImage($request);
     }
 
     /**
