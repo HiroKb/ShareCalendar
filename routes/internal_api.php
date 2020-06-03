@@ -37,7 +37,7 @@ Route::group(['middleware' => 'api.auth'], function () {
     // ユーザーネーム変更
     Route::patch('/users/name', 'UserController@updateName');
     // ユーザー画像更新
-    Route::patch('/users/image', 'UserController@updateImage');
+    Route::post('/users/image', 'UserController@updateImage');
     // メールアドレス変更
     Route::patch('/users/email', 'UserController@updateEmail');
     // ユーザーパスワード変更

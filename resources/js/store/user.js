@@ -13,6 +13,8 @@ const getters = {
     userId: state => state.user ? state.user.id : null,
     // ユーザーの名前
     userName: state => state.user ? state.user.name : null,
+    // ユーザー画像
+    userImage: state => state.user ? state.user.image_url ? state.user.image_url : '/images/gray.jpg' : '/images/gray.jpg',
     // ユーザーのメールアドレス
     userEmail: state => state.user ? state.user.email : null,
     // パスワードが登録されているか
@@ -153,7 +155,35 @@ const actions = {
             context.commit('error/setCode', response.status, { root: true})
         }
     },
-    // ユーザー名変更
+    // ユーザー画像変更
+    async updateImage(context, data){
+        // apiStatusの初期化
+        context.commit('setApiStatus', null)
+        context.commit('loading/setLoadingFlg', true, { root: true})
+
+        const response = await axios.post('/api/users/image', data)
+
+        context.commit('loading/setLoadingFlg', false, { root: true})
+
+        // 通信成功時
+        if(response.status === CREATED) {
+            context.commit('setApiStatus', true)
+            context.commit('setUser', response.data)
+            return false
+        }
+
+        // エラー時
+        context.commit('setApiStatus', false)
+        // バリデーションエラーの場合
+        if (response.status === VALIDATION_ERROR) {
+            context.commit('setErrorMessages', response.data.errors)
+
+            // その他のエラーの場合
+        } else {
+            context.commit('error/setCode', response.status, { root: true})
+        }
+    },
+    // ユーザーパスワード変更
     async updateEmail(context, data) {
         // apiStatusの初期化
         context.commit('setApiStatus', null)

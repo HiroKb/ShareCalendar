@@ -4,6 +4,21 @@
 <!--        アカウント情報-->
         <v-card>
             <v-card-text class="pt-4">
+                <div class="py-4 d-flex flex-column align-center">
+                    <v-img
+                        :src="userImage"
+                        height="200px"
+                        width="200px"
+                        aspect-ratio="1"
+                        style="border-radius: 50%"
+                    ></v-img>
+                    <v-btn
+                        class="mt-4"
+                        :color="mixinThemeColor" dark
+                        @click.stop="editImageModal.show = !editImageModal.show"
+                    >変更</v-btn>
+                </div>
+                <v-divider></v-divider>
                 <div class="py-4 d-flex align-end justify-space-between">
                     <div>
                         <p class="info-label">ユーザー名</p>
@@ -81,6 +96,44 @@
                 </v-card-text>
             </v-card>
         </v-dialog>
+
+<!--        ユーザー画像変更モーダル-->
+        <v-dialog
+            v-model="editImageModal.show"
+            max-width="500px"
+        >
+            <v-card>
+                <v-card-title>ユーザー画像変更</v-card-title>
+                <v-card-text>
+                    <v-form
+                        ref="editImageForm" @submit.prevent="updateImage"
+                    >
+                        <div class="mb-1 d-flex justify-center">
+                                <v-img
+                                    class="d-block"
+                                    :src="previewImageURL"
+                                    height="200px"
+                                    max-width="200px"
+                                    aspect-ratio="1"
+                                    style="border-radius: 50%"
+                                ></v-img>
+                        </div>
+                        <v-file-input
+                            v-model="editImageModal.form.image"
+                            accept="image/jpeg, image/jpg, image/png, image/gif"
+                            :rules="[mixinValidationRules.required, mixinValidationRules.image]"
+                            :error="errorMessages ? !!errorMessages.image : false"
+                            :error-messages="errorMessages ? errorMessages.image ? errorMessages.image : [] : []"
+                            show-size
+                            prepend-icon="mdi-image"
+                            @change="onFileChange"
+                        ></v-file-input>
+                        <v-btn class="mt-3" block :color="mixinThemeColor" dark type="submit">変更</v-btn>
+                    </v-form>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
+
 
 <!--        メールアドレス変更モーダル-->
         <v-dialog
@@ -203,6 +256,13 @@
                     show: false,
                     form: {name: ''}
                 },
+                editImageModal: {
+                    show: false,
+                    previewImg: '',
+                    form: {
+                        image: null
+                    }
+                },
                 editEmailModal: {
                     show: false,
                     form: {
@@ -232,13 +292,22 @@
         computed : {
             ...mapGetters({
                 userName: 'user/userName',
+                userImage: 'user/userImage',
                 userEmail: 'user/userEmail',
-                passwordExists: 'user/passwordExists'
+                passwordExists: 'user/passwordExists',
             }),
             ...mapState({
                 apiStatus: state => state.user.apiStatus, // API通信成否
                 errorMessages: state => state.user.errorMessages // バリデーションエラーメッセージ
             }),
+            // 画像更新モーダルプレビュー表示用URL
+            previewImageURL: function () {
+                if (this.editImageModal.previewImg.length){
+                    return this.editImageModal.previewImg
+                }else {
+                    return this.userImage
+                }
+            }
         },
         methods: {
             ...mapMutations({
@@ -258,6 +327,23 @@
                 if (this.apiStatus) {
                     this.editNameModal.show = false
                     this.$store.commit('flashMessage/setMessage', 'ユーザー名を変更しました。')
+                }
+            },
+            /**
+             * ユーザー画像変更処理
+             */
+            async updateImage(){
+                if (!this.$refs.editImageForm.validate()){
+                    return false
+                }
+
+                const formData = new FormData()
+                formData.append('image', this.editImageModal.form.image)
+                await this.$store.dispatch('user/updateImage', formData)
+
+                if (this.apiStatus) {
+                    this.editImageModal.show = false
+                    this.$store.commit('flashMessage/setMessage', 'ユーザー画像を変更しました。')
                 }
             },
             /**
@@ -306,7 +392,27 @@
                     this.registrationPasswordModal.show = false
                     this.$store.commit('flashMessage/setMessage', 'パスワードを登録しました。')
                 }
-            }
+            },
+            /**
+             * 画像ファイルプレビュー
+             */
+            onFileChange(img){
+                if (typeof img === 'undefined' || !img){
+                    this.editImageModal.previewImg = ''
+                    return false
+                }
+                if (!img.type.match('image.*')){
+                    return false
+                }
+
+                const fileReader = new FileReader()
+
+                fileReader.onload = e => {
+                    this.editImageModal.previewImg = e.target.result
+                }
+
+                fileReader.readAsDataURL(img)
+            },
         },
         watch: {
             /**
@@ -317,6 +423,14 @@
                 if (val === false) {
                     this.editNameModal.form.name = ''
                     this.$refs.editNameForm.resetValidation()
+                    this.setErrorMessages(null)
+                }
+            },
+            'editImageModal.show': function (val) {
+                if (val === false) {
+                    this.editImageModal.previewImg = ''
+                    this.editImageModal.form.image = null
+                    this.$refs.editImageForm.resetValidation()
                     this.setErrorMessages(null)
                 }
             },

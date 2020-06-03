@@ -15,11 +15,10 @@ class UserService
      */
     public function updateImage($request)
     {
-        $image = $request->image;
         $user = Auth::user();
         $beforeUpdatePath = $user->image_path;
 
-        $path = Storage::disk('s3')->putFile('image', $image, 'public');
+        $path = Storage::disk('s3')->putFile('image', $request->image, 'public');
         try {
             $updatedUser = $user->updateImagePath($path);
             if ($beforeUpdatePath && Storage::disk('s3')->exists($beforeUpdatePath)){

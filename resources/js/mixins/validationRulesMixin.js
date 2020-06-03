@@ -8,6 +8,7 @@ export default {
                 max50: value => value.length <= 50 || '50文字以内で入力してください。',
                 max100: value => value.length <= 100 || '100文字以内で入力してください。',
                 max255: value => value.length <= 255 || '255文字以内で入力してください。',
+                image: value => !value || !!value.type.match('image.*') || 'ファイルの形式を確認してください。'
             }
         }
     }

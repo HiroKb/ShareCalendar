@@ -28,7 +28,7 @@ class updateUserImageApiTest extends TestCase
         Storage::fake('s3');
 
         $response = $this->actingAs($this->user)
-            ->json('patch', '/api/users/image', [
+            ->json('post', '/api/users/image', [
                 'image' => UploadedFile::fake()->image('test.jpg', 1980, 1080)->size(2000)
             ]);
 
@@ -41,7 +41,7 @@ class updateUserImageApiTest extends TestCase
             ]);
 
         $response = $this->actingAs($this->user)
-            ->json('patch', '/api/users/image', [
+            ->json('post', '/api/users/image', [
                 'image' => UploadedFile::fake()->image('test.jpg', 1980, 1080)->size(2000)
             ]);
 
