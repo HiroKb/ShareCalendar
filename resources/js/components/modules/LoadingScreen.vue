@@ -10,10 +10,10 @@
 </template>
 
 <script>
-    import colorsMixin from "../../mixins/colorsMixin"
+    import utilDataMixin from "../../mixins/utilDataMixin"
     export default {
         name: "LoadingScreen",
-        mixins: [colorsMixin],
+        mixins: [utilDataMixin],
         props: {
             loadingFlg: {
                 type: Boolean,

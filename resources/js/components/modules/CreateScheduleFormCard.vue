@@ -70,10 +70,10 @@
 <script>
     import formTimeMixin from "../../mixins/formTimeMixin"
     import validationRulesMixin from "../../mixins/validationRulesMixin"
-    import colorsMixin from "../../mixins/colorsMixin"
+    import utilDataMixin from "../../mixins/utilDataMixin"
     export default {
         name: "CreateScheduleFormCard",
-        mixins: [formTimeMixin, validationRulesMixin, colorsMixin],
+        mixins: [formTimeMixin, validationRulesMixin, utilDataMixin],
         data() {
             return {
                 form: {

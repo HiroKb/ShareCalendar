@@ -93,11 +93,11 @@
 
 <script>
     import validationRulesMixin from "../../mixins/validationRulesMixin"
-    import colorsMixin from "../../mixins/colorsMixin"
+    import utilDataMixin from "../../mixins/utilDataMixin"
     import {mapState} from 'vuex'
     export default {
         name: "Authentication",
-        mixins: [validationRulesMixin, colorsMixin],
+        mixins: [validationRulesMixin, utilDataMixin],
         data() {
             return {
                 prevPathName: null,

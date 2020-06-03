@@ -12,7 +12,17 @@
                 <v-menu bottom :offset-y="true" v-if="isLogin">
                     <template v-slot:activator="{ on }">
                         <v-btn v-on="on" text style="text-transform: none">
-                            {{ userName }}<v-icon>mdi-menu-down</v-icon>
+                            <div class="d-flex align-center">
+                                <v-img
+                                    :src="userImage"
+                                    height="50px"
+                                    width="50px"
+                                    aspect-ratio="1"
+                                    style="border-radius: 50%"
+                                ></v-img>
+                                <p class="ma-0 ml-3">{{ userName }}</p>
+                                <v-icon>mdi-menu-down</v-icon>
+                            </div>
                         </v-btn>
                     </template>
                     <v-list>
@@ -42,7 +52,7 @@
 <script>
     import LoadingScreen from "./components/modules/LoadingScreen.vue"
     import FlashMessage from "./components/modules/FlashMessage"
-    import colorsMixin from "./mixins/colorsMixin"
+    import utilDataMixin from "./mixins/utilDataMixin"
     import {mapGetters, mapState} from 'vuex'
     import {
         AUTHENTICATION_REQUIRED,
@@ -57,7 +67,7 @@
             LoadingScreen,
             FlashMessage
         },
-        mixins: [colorsMixin],
+        mixins: [utilDataMixin],
         data() {
             return {
                 drawer: null
@@ -72,7 +82,8 @@
             }),
             ...mapGetters({
                 userName: 'user/userName',
-                isLogin: 'user/loginCheck'
+                isLogin: 'user/loginCheck',
+                userImage: 'user/userImage'
             })
         },
         methods: {

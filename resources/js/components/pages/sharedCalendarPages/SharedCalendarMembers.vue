@@ -12,6 +12,9 @@
                         v-for="(member, index) in sharedCalendarMembers"
                         :key="index"
                     >
+                        <v-list-item-avatar>
+                            <v-img :src=" member.image_url || mixinNoImagePath"></v-img>
+                        </v-list-item-avatar>
                         <v-list-item-content>
                             <p v-if="member.id === sharedCalendarData.admin_id">管理者</p>
                             <v-list-item-title class="title">{{member.name}}</v-list-item-title>
@@ -38,7 +41,18 @@
             v-if="userId === sharedCalendarData.admin_id"
         >
             <v-card>
-                <v-card-title>{{ memberName }}</v-card-title>
+                <div
+                    class="d-flex flex-column align-center pt-5"
+                >
+                    <v-img
+                        :src="removeMemberImageUrl"
+                        height="200px"
+                        width="200px"
+                        aspect-ratio="1"
+                        style="border-radius: 50%"
+                    ></v-img>
+                    <v-card-title class="pt-2">{{ removeMemberName }}</v-card-title>
+                </div>
                 <v-card-text>
                     <v-form @submit.prevent="removeMember">
                         <p>このユーザーとの共有を解除しますか？</p>
@@ -52,11 +66,11 @@
 
 <script>
     import {SUCCESS} from "../../../util"
-    import colorsMixin from "../../../mixins/colorsMixin"
+    import utilDataMixin from "../../../mixins/utilDataMixin"
     import {mapGetters} from "vuex";
     export default {
         name: "SharedCalendarMembers",
-        mixins: [colorsMixin],
+        mixins: [utilDataMixin],
         data () {
             return {
                 removeMemberModal: {
@@ -70,8 +84,11 @@
                 userId: 'user/userId'
             }),
             // 名前表示用
-            memberName: function () {
+            removeMemberName: function () {
                 return this.removeMemberModal.memberData ? this.removeMemberModal.memberData.name : ''
+            },
+            removeMemberImageUrl: function () {
+                return this.removeMemberModal.memberData ? this.removeMemberModal.memberData.image_url ? this.removeMemberModal.memberData.image_url : this.mixinNoImagePath : ''
             }
         },
         props: {

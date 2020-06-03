@@ -66,11 +66,11 @@ class SharedCalendarService
     public function removeMember(SharedCalendar $sharedCalendar, $memberId)
     {
         $userId = Auth::id();
-        if ($userId !== $sharedCalendar->admin_id && isset($memberId) ||
-            $userId === $sharedCalendar->admin_id && !isset($memberId)){
+        if (($userId !== $sharedCalendar->admin_id && isset($memberId)) ||
+            ($userId === $sharedCalendar->admin_id && !isset($memberId))){
             return response([], 404);
         }
-        $memberId = isset($memberId) ? $memberId : $userId;
+        $memberId = $memberId ?? $userId;
         if ($memberId === $sharedCalendar->admin_id){
             return response([], 404);
         }
@@ -89,29 +89,27 @@ class SharedCalendarService
         $sharedCalendar = SharedCalendar::where('search_id', $searchId)->first();
         if (!$sharedCalendar){
             return [
-                'status' => 'NotFound',
-                'search_id' => '',
-                'admin_name' => ''
+                'isApplicable' => false,
+                'message' => '共有カレンダーが見つかりません。'
             ];
         }
         if ($sharedCalendar->members()->where('user_id', $userId)->exists()){
             return [
-                'status' => 'Shared',
-                'search_id' => '',
-                'admin_name' => ''
+                'isApplicable' => false,
+                'message' => '共有済みのカレンダーです。'
             ];
         }
         if ($sharedCalendar->applicants()->where('user_id', $userId)->exists()) {
             return [
-                'status' => 'Applied',
-                'search_id' => '',
-                'admin_name' => ''
+                'isApplicable' => false,
+                'message' => '共有申請済みのカレンダーです。'
             ];
         }
         return [
-            'status' => 'NotShared',
+            'isApplicable' => true,
             'search_id' => $sharedCalendar->search_id,
-            'admin_name' => $sharedCalendar->admin->name
+            'admin_name' => $sharedCalendar->admin->name,
+            'admin_image' => $sharedCalendar->admin->image_url
         ];
     }
 

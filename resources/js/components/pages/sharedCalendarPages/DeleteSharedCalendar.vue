@@ -16,10 +16,10 @@
 
 <script>
     import {SUCCESS} from "../../../util";
-    import colorsMixin from "../../../mixins/colorsMixin"
+    import utilDataMixin from "../../../mixins/utilDataMixin"
     export default {
         name: "DeleteSharedCalendar",
-        mixins: [colorsMixin],
+        mixins: [utilDataMixin],
         props: {
             sharedCalendarData: {
                 type: Object,

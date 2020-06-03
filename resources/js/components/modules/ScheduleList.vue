@@ -43,11 +43,11 @@
 </template>
 
 <script>
-    import colorsMixin from "../../mixins/colorsMixin"
+    import utilDataMixin from "../../mixins/utilDataMixin"
     import utilMethodsMixin from "../../mixins/utilMethodsMixin"
     export default {
         name: "ScheduleList",
-        mixins: [colorsMixin, utilMethodsMixin],
+        mixins: [utilDataMixin, utilMethodsMixin],
         props: {
             // スケジュール配列
             schedules: {

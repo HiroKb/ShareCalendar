@@ -90,14 +90,14 @@
     import DeleteScheduleFormCard from "../../modules/DeleteScheduleFormCard"
     import ScheduleList from "../../modules/ScheduleList"
 
-    import colorsMixin from "../../../mixins/colorsMixin"
+    import utilDataMixin from "../../../mixins/utilDataMixin"
     import schedulesAndCalendarMethodsMixin from "../../../mixins/schedulesAndCalendarMethodsMixin"
 
     import {CREATED, SUCCESS, VALIDATION_ERROR} from "../../../util";
     export default {
         name: "SharedCalendar",
         mixins: [
-            colorsMixin,
+            utilDataMixin,
             schedulesAndCalendarMethodsMixin
         ],
         components:{

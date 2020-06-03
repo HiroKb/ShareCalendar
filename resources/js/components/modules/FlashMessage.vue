@@ -13,10 +13,10 @@
 </template>
 
 <script>
-    import colorsMixin from "../../mixins/colorsMixin";
+    import utilDataMixin from "../../mixins/utilDataMixin";
     export default {
         name: "FlashMessage",
-        mixins:[colorsMixin],
+        mixins:[utilDataMixin],
         props: {
             message: {
                 type: String,

@@ -73,11 +73,11 @@
 
 <script>
     import {SUCCESS, VALIDATION_ERROR} from "../../../util"
-    import colorsMixin from "../../../mixins/colorsMixin"
+    import utilDataMixin from "../../../mixins/utilDataMixin"
     import validationRulesMixin from "../../../mixins/validationRulesMixin"
     export default {
         name: "SharedCalendarInfo.vue",
-        mixins: [validationRulesMixin, colorsMixin],
+        mixins: [validationRulesMixin, utilDataMixin],
         data () {
             return {
                 editCalendarNameModal: {

@@ -1,20 +1,24 @@
 <template>
     <v-container class="py-12">
-        <v-card v-if="sharedCalendarData.status">
+        <v-card v-if="Object.keys(sharedCalendarData).length">
             <v-card-title>カレンダー共有申請</v-card-title>
             <v-card-text>
-                <template v-if="sharedCalendarData.status === 'NotShared'">
-                <p class="title transparent-black">{{'管理者: ' + sharedCalendarData.admin_name}}</p>
+                <template v-if="sharedCalendarData.isApplicable">
+                    <div class="d-flex flex-column align-center">
+                        <v-img
+                            :src="sharedCalendarData.admin_image || mixinNoImagePath"
+                            height="200px"
+                            width="200px"
+                            aspect-ratio="1"
+                            style="border-radius: 50%"
+                        ></v-img>
+                        <p class="title transparent-black">{{'管理者: ' + sharedCalendarData.admin_name}}</p>
+                    </div>
                 <v-form ref="form" @submit.prevent="applicationSharedCalendar">
                     <v-btn block :color="mixinThemeColor" dark type="submit">共有申請</v-btn>
                 </v-form>
                 </template>
-
-                <p class="title transparent-black" v-else-if="sharedCalendarData.status === 'Shared'">共有済みのカレンダーです。</p>
-
-                <p class="title transparent-black" v-else-if="sharedCalendarData.status === 'Applied'">共有申請済みのカレンダーです。</p>
-
-                <p class="title transparent-black" v-else>共有カレンダーが見つかりませんでした。</p>
+                <p class="title transparent-black" v-else>{{sharedCalendarData.message}}</p>
             </v-card-text>
         </v-card>
     </v-container>
@@ -22,10 +26,10 @@
 
 <script>
     import {CREATED, SUCCESS} from "../../../util";
-    import colorsMixin from "../../../mixins/colorsMixin";
+    import utilDataMixin from "../../../mixins/utilDataMixin";
     export default {
         name: "ApplicationSharedCalendar",
-        mixins: [colorsMixin],
+        mixins: [utilDataMixin],
         data() {
             // 検索結果
             return {

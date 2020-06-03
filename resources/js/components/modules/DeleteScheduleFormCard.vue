@@ -17,11 +17,11 @@
 </template>
 
 <script>
-    import colorsMixin from "../../mixins/colorsMixin"
+    import utilDataMixin from "../../mixins/utilDataMixin"
     import utilMethodsMixin from "../../mixins/utilMethodsMixin"
     export default {
         name: "DeleteScheduleFormCard",
-        mixins: [colorsMixin, utilMethodsMixin],
+        mixins: [utilDataMixin, utilMethodsMixin],
         props: {
             // 削除するスケジュールデータ
             scheduleData: {

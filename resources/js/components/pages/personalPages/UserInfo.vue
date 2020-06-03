@@ -239,11 +239,11 @@
 
 <script>
     import {mapGetters, mapMutations, mapState} from "vuex";
-    import colorsMixin from "../../../mixins/colorsMixin"
+    import utilDataMixin from "../../../mixins/utilDataMixin"
     import validationRulesMixin from "../../../mixins/validationRulesMixin";
     export default {
         name: "UserInfo",
-        mixins: [validationRulesMixin, colorsMixin],
+        mixins: [validationRulesMixin, utilDataMixin],
         data() {
             return {
                 /**

@@ -37,6 +37,10 @@
                         v-for="(applicant, index) in allApplicantsData"
                         :key="index"
                     >
+
+                        <v-list-item-avatar>
+                            <v-img :src=" applicant.image_url || mixinNoImagePath"></v-img>
+                        </v-list-item-avatar>
                         <v-list-item-content>
                             <v-list-item-title class="title">{{applicant.name}}</v-list-item-title>
                         </v-list-item-content>
@@ -69,7 +73,18 @@
             max-width="500px"
         >
             <v-card>
-                <v-card-title>{{ selectedApplicantName }}</v-card-title>
+                <div
+                    class="d-flex flex-column align-center pt-5"
+                >
+                    <v-img
+                        :src="selectedApplicantImageUrl"
+                        height="200px"
+                        width="200px"
+                        aspect-ratio="1"
+                        style="border-radius: 50%"
+                    ></v-img>
+                    <v-card-title class="pt-2">{{ selectedApplicantName }}</v-card-title>
+                </div>
                 <v-card-text>
                     <v-form @submit.prevent="allowApplication([selectedApplicantData])">
                         <p class="subtitle-1">共有申請を許可しますか？</p>
@@ -100,7 +115,18 @@
             max-width="500px"
         >
             <v-card>
-                <v-card-title>{{ selectedApplicantName }}</v-card-title>
+                <div
+                    class="d-flex flex-column align-center pt-5"
+                >
+                    <v-img
+                        :src="selectedApplicantImageUrl"
+                        height="200px"
+                        width="200px"
+                        aspect-ratio="1"
+                        style="border-radius: 50%"
+                    ></v-img>
+                    <v-card-title class="pt-2">{{ selectedApplicantName }}</v-card-title>
+                </div>
                 <v-card-text>
                     <v-form @submit.prevent="rejectApplication([selectedApplicantData])">
                         <p class="subtitle-1">共有申請を拒否しますか？</p>
@@ -128,11 +154,11 @@
 </template>
 
 <script>
-    import colorsMixin from "../../../mixins/colorsMixin"
+    import utilDataMixin from "../../../mixins/utilDataMixin"
     import {CREATED, SUCCESS} from "../../../util"
     export default {
         name: "SharedCalendarApplicants",
-        mixins: [colorsMixin],
+        mixins: [utilDataMixin],
         data () {
             return {
                 selectedApplicantData: null, //選択された申請者データ
@@ -150,6 +176,9 @@
             selectedApplicantName: function () {
                 return this.selectedApplicantData ? this.selectedApplicantData.name : ''
             },
+            selectedApplicantImageUrl: function () {
+                return this.selectedApplicantData ? this.selectedApplicantData.image_url ? this.selectedApplicantData.image_url : this.mixinNoImagePath : ''
+            }
         },
         props: {
             sharedCalendarData: {
@@ -259,12 +288,12 @@
              * モーダルが消えた場合選択した申請者を初期化
              * @param {Boolean} val モーダル表示フラグ
              */
-            allowApplicationModal: function (val) {
+            'allowApplicationModal.show': function (val) {
                 if (!val) {
                     this.selectedApplicantData = null
                 }
             },
-            rejectApplicationModal: function (val) {
+            'rejectApplicationModal.show': function (val) {
                 if (!val) {
                     this.selectedApplicantData = null
                 }

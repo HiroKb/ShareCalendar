@@ -23,10 +23,10 @@
 <script>
     import {CREATED, VALIDATION_ERROR} from "../../../util"
     import validationRulesMixin from "../../../mixins/validationRulesMixin"
-    import colorsMixin from "../../../mixins/colorsMixin";
+    import utilDataMixin from "../../../mixins/utilDataMixin";
     export default {
         name: "CreateShareCalendar",
-        mixins: [validationRulesMixin, colorsMixin],
+        mixins: [validationRulesMixin, utilDataMixin],
         data(){
             return {
                 form: {

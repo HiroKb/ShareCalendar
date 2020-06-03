@@ -12,42 +12,50 @@
                         :key="index"
                     >
 <!--                        自分が投稿したメッセージ-->
-                        <v-list-item-content
-                            class="d-flex flex-column align-end"
-                            v-if="message.posted_user_id === userId"
-                        >
-                            <p>{{ dateTimeFormatter(message.created_at)}}</p>
-                            <p class="balloon right-balloon"
-                            >{{ message.message }}</p>
-                        </v-list-item-content>
+                        <template v-if="message.posted_user_id === userId">
+
+                            <v-list-item-content
+                                class="d-flex flex-column align-end"
+                            >
+                                <p>{{ dateTimeFormatter(message.created_at)}}</p>
+                                <p class="balloon right-balloon"
+                                >{{ message.message }}</p>
+                            </v-list-item-content>
+                            <v-list-item-avatar>
+                                <v-img :src="userImage"></v-img>
+                            </v-list-item-avatar>
+                        </template>
 
 <!--                        他ユーザーが投稿したメッセージ-->
-                        <v-list-item-content
-                            class="d-flex flex-column align-start"
-                            v-else>
-                            <div class="d-flex" style="max-width: 70%">
-<!--                                ユーザーアカウントが存在-->
-                                <p class="mb-0 flex-shrink-1 text-truncate"
-                                   v-if="message.posted_user_id"
-                                >{{message.posted_user.name}}</p>
-<!--                                ユーザーアカウントが削除済み-->
-                                <p class="mb-0 flex-shrink-1 text-truncate"
-                                   v-else
-                                >削除されたユーザー</p>
+                        <template v-else>
+                            <v-list-item-avatar>
+                                <v-img
+                                    :src="message.posted_user.image_url ? message.posted_user.image_url : mixinNoImagePath"
+                                    v-if="message.posted_user_id"
+                                ></v-img>
+                                <v-img
+                                    :src="mixinNoImagePath"
+                                    v-else
+                                ></v-img>
+                            </v-list-item-avatar>
+                            <v-list-item-content
+                                class="d-flex flex-column align-start"
+                            >
+                                <div class="d-flex" style="max-width: 70%">
+                                    <!--                                ユーザーアカウントが存在-->
+                                    <p class="mb-0 flex-shrink-1 text-truncate"
+                                       v-if="message.posted_user_id"
+                                    >{{message.posted_user.name}}</p>
+                                    <!--                                ユーザーアカウントが削除済み-->
+                                    <p class="mb-0 flex-shrink-1 text-truncate"
+                                       v-else
+                                    >削除されたユーザー</p>
 
-                                <p class="mb-0 ml-4 flex-shrink-0">{{ dateTimeFormatter(message.created_at)}}</p>
-                            </div>
-                            <p class="balloon left-balloon">{{ message.message }}</p>
-                        </v-list-item-content>
-
-<!--                        投稿したユーザーが削除されているメッセージ-->
-                        <v-list-item-content
-                            class="d-flex flex-column align-start"
-                            v-else>
-                            <p>削除されたユーザー</p>
-                            <p>{{ dateTimeFormatter(message.created_at)}}</p>
-                            <p>{{ message.message }}</p>
-                        </v-list-item-content>
+                                    <p class="mb-0 ml-4 flex-shrink-0">{{ dateTimeFormatter(message.created_at)}}</p>
+                                </div>
+                                <p class="balloon left-balloon">{{ message.message }}</p>
+                            </v-list-item-content>
+                        </template>
                     </v-list-item>
                 </v-list>
                 <v-form
@@ -75,12 +83,12 @@
 
 <script>
     import validationRulesMixin from "../../../mixins/validationRulesMixin"
-    import colorsMixin from "../../../mixins/colorsMixin"
+    import utilDataMixin from "../../../mixins/utilDataMixin"
     import {CREATED, VALIDATION_ERROR} from "../../../util"
     import {mapGetters} from "vuex";
     export default {
         name: "SharedCalendarChat",
-        mixins: [validationRulesMixin, colorsMixin],
+        mixins: [validationRulesMixin, utilDataMixin],
         data() {
             return {
                 createMessageForm: {
@@ -105,7 +113,8 @@
         },
         computed: {
             ...mapGetters({
-                userId: 'user/userId'
+                userId: 'user/userId',
+                userImage: 'user/userImage'
             }),
         },
         methods: {
