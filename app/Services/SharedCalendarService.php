@@ -1,12 +1,56 @@
 <?php
 namespace App\Services;
 
+use App\Http\Requests\ImageRequest;
 use App\Models\SharedCalendar;
+use Illuminate\Http\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class SharedCalendarService
 {
+    /**
+     * カレンダー画像更新
+     * @param SharedCalendar $sharedCalendar
+     * @param ImageRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function updateImage(SharedCalendar $sharedCalendar, ImageRequest $request)
+    {
+        $file = $request->image;
+        $tmpFileName = Str::random(20) . $file->getClientOriginalName();
+        $tmpPath = storage_path('app/tmp/') . $tmpFileName;
+
+//        中心を基準に200×200pxに切り抜きローカルtmpに保存
+        $image = Image::make($file);
+        $shortSide = $image->height() > $image->width() ? $image->width() : $image->height();
+        $image->resizeCanvas($shortSide, $shortSide)->resize(200,200);
+        $image->save($tmpPath);
+
+//        s3にアップロード・ローカルtmp内のファイル削除
+        $uploadPath = Storage::disk('s3')->putFile('image', new File($tmpPath), 'public');
+        Storage::disk('local')->delete('tmp/' . $tmpFileName);
+
+        DB::beginTransaction();
+//        DB内のパスを更新・以前の画像があればs3から削除
+        $beforeUpdatePath = $sharedCalendar->image_path;
+        try {
+            $updatedCalendar = $sharedCalendar->updateImagePath($uploadPath);
+            if ($beforeUpdatePath && Storage::disk('s3')->exists($beforeUpdatePath)){
+                Storage::disk('s3')->delete($beforeUpdatePath);
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Storage::disk('s3')->delete($uploadPath);
+            return response([], 500);
+        }
+        return response($updatedCalendar, 201);
+    }
+
     /**
      * 共有メンバー取得
      * @param SharedCalendar $sharedCalendar

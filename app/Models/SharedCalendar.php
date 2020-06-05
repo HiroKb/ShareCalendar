@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Uuid;
 
 class SharedCalendar extends Model
@@ -15,6 +16,10 @@ class SharedCalendar extends Model
 
     protected $fillable = [
         'calendar_name'
+    ];
+
+    protected $appends = [
+        'image_url'
     ];
 
     protected $hidden = [
@@ -30,6 +35,14 @@ class SharedCalendar extends Model
         $this->attributes['search_id'] = Uuid::uuid4()->toString();
     }
 
+    public function getImageUrlAttribute()
+    {
+        if ($this->image_path){
+            return Storage::disk('s3')->url($this->image_path);
+        }
+        return null;
+    }
+
     /**
      * カレンダー管理者のみが取得できるデータ
      * @return array
@@ -40,7 +53,8 @@ class SharedCalendar extends Model
             'id' => $this->id,
             'search_id' => $this->search_id,
             'admin_id' => $this->admin_id,
-            'calendar_name' => $this->calendar_name
+            'calendar_name' => $this->calendar_name,
+            'image_url' => $this->image_url
         ];
     }
 
@@ -132,6 +146,18 @@ class SharedCalendar extends Model
     public function updateName($request)
     {
         $this->calendar_name = $request->calendar_name;
+        $this->save();
+        return $this->data_for_admin;
+    }
+
+    /**
+     * イメージパス更新
+     * @param $path
+     * @return mixed
+     */
+    public function updateImagePath($path)
+    {
+        $this->image_path = $path;
         $this->save();
         return $this->data_for_admin;
     }

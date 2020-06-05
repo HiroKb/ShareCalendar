@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\IdListRequest;
+use App\Http\Requests\ImageRequest;
 use App\Http\Requests\SharedCalendarNameRequest;
 use App\Models\SharedCalendar;
 use App\Services\SharedCalendarService;
@@ -42,6 +43,20 @@ class SharedCalendarController extends Controller
     {
         $this->authorize('updateName', $sharedCalendar);
         return $sharedCalendar->updateName($request);
+    }
+
+    /**
+     * カレンダー画像更新
+     * @param SharedCalendar $sharedCalendar
+     * @param ImageRequest $request
+     * @param SharedCalendarService $sharedCalendarService
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function updateImage(SharedCalendar $sharedCalendar, ImageRequest $request, SharedCalendarService $sharedCalendarService)
+    {
+        $this->authorize('updateImage', $sharedCalendar);
+        return $sharedCalendarService->updateImage($sharedCalendar, $request);
     }
 
     /**

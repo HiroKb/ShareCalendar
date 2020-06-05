@@ -65,6 +65,8 @@ Route::group(['middleware' => 'api.auth'], function () {
     Route::post('/shared-calendars', 'SharedCalendarController@store');
     // 共有カレンダー名変更
     Route::patch('/shared-calendars/{sharedCalendar}/name', 'SharedCalendarController@updateName');
+    // 共有カレンダー画像更新
+    Route::post('/shared-calendars/{sharedCalendar}/image', 'SharedCalendarController@updateImage');
     // 共有カレンダー検索ID変更
     Route::patch('/shared-calendars/{sharedCalendar}/search-id', 'SharedCalendarController@updateSearchId');
     // 共有カレンダー削除

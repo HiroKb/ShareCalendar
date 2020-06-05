@@ -31,6 +31,11 @@ class SharedCalendarPolicy
         return $user->id === $sharedCalendar->admin_id;
     }
 
+    public function updateImage(User $user, SharedCalendar $sharedCalendar)
+    {
+        return $user->id === $sharedCalendar->admin_id;
+    }
+
     public function updateSearchId(User $user, SharedCalendar $sharedCalendar)
     {
         return $user->id === $sharedCalendar->admin_id;
