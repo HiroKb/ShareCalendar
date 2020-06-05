@@ -9,7 +9,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-class updateUserImageApiTest extends TestCase
+class UpdateUserImageApiTest extends TestCase
 {
     use RefreshDatabase;
 
