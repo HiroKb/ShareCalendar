@@ -120,7 +120,7 @@
                         </div>
                         <v-file-input
                             v-model="editImageModal.form.image"
-                            accept="image/jpeg, image/jpg, image/png, image/gif"
+                            accept="image/jpeg, image/jpg, image/png"
                             :rules="[mixinValidationRules.required, mixinValidationRules.image]"
                             :error="errorMessages ? !!errorMessages.image : false"
                             :error-messages="errorMessages ? errorMessages.image ? errorMessages.image : [] : []"
