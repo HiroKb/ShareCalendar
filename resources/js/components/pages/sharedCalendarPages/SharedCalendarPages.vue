@@ -6,6 +6,10 @@
             app clipped
         >
             <v-list-item>
+                <v-list-item-avatar>
+                    <v-img :src="calendarImageUrl"></v-img>
+                </v-list-item-avatar>
+
                 <v-list-item-content>
                     <v-list-item-title class="title">
                         {{ sharedCalendarData.calendar_name }}
@@ -113,8 +117,10 @@
 <script>
     import {SUCCESS} from "../../../util";
     import {mapGetters} from "vuex";
+    import utilDataMixin from "../../../mixins/utilDataMixin";
     export default {
         name: "SharedCalendarPages",
+        mixins: [utilDataMixin],
         data () {
             return {
                 // 共有スケジュールデータ
@@ -160,6 +166,14 @@
                     return this.sharedCalendarData.admin_id === this.userId ? 'admin' : 'notAdmin'
                 }
                 return null
+            },
+            // カレンダー画像URL
+            calendarImageUrl: function () {
+                if (this.sharedCalendarData.image_url){
+                    return this.sharedCalendarData.image_url
+                } else {
+                    return this.mixinNoImagePath
+                }
             }
         },
         methods: {

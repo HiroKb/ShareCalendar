@@ -23,6 +23,9 @@
                                 :to="{name: 'sharedCalendar', params:{sharedCalendarId: calendar.id}}"
                                 link
                             >
+                                <v-list-item-avatar>
+                                    <v-img :src=" calendar.image_url || mixinNoImagePath"></v-img>
+                                </v-list-item-avatar>
                                 <v-list-item-content>
                                     <v-list-item-title>{{calendar.calendar_name}}</v-list-item-title>
                                 </v-list-item-content>
@@ -37,6 +40,9 @@
                                 :to="{name: 'sharedCalendar', params:{sharedCalendarId: calendar.id}}"
                                 link
                             >
+                                <v-list-item-avatar>
+                                    <v-img :src=" calendar.image_url || mixinNoImagePath"></v-img>
+                                </v-list-item-avatar>
                                 <v-list-item-content>
                                     <v-list-item-title>{{calendar.calendar_name}}</v-list-item-title>
                                 </v-list-item-content>
@@ -51,9 +57,10 @@
 
 <script>
     import {mapGetters} from "vuex";
-
+    import utilDataMixin from "../../../mixins/utilDataMixin";
     export default {
         name: "SharedCalendar",
+        mixins: [utilDataMixin],
         props: {
             // 参加共有カレンダーリスト
             sharedCalendarList: {
