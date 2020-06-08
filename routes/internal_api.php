@@ -31,9 +31,17 @@ Route::group(['middleware' => 'api.guest'], function () {
 /**
  * 認証済みの場合許可
  */
-Route::group(['middleware' => 'api.auth'], function () {
+Route::group(['middleware' => ['api.auth']], function () {
     // ログアウト
     Route::post('/logout', 'CustomizedAuth\LoginController@logout')->name('logout');
+    // 確認メール再送
+    Route::post('/email/resend', 'CustomizedAuth\VerificationController@resend');
+});
+
+/**
+ * 認証・メールアドレス確認済みのみ許可
+ */
+Route::group(['middleware' => ['api.auth', 'api.verified']], function () {
     // ユーザーネーム変更
     Route::patch('/users/name', 'UserController@updateName');
     // ユーザー画像更新

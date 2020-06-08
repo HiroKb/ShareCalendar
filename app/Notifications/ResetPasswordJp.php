@@ -42,7 +42,7 @@ class ResetPasswordJp extends Notification
     {
         return (new MailMessage)
         ->subject('パスワード再設定 | ' . config('app.name'))
-        ->line('下のボタンからパスワードを再設定してください。')
+        ->line('下のボタンをクリックしてパスワードを再設定してください。')
         ->action('パスワード再設定', url(config('app.url').route('password.reset', ['token' => $this->token, 'email' => $notifiable->getEmailForPasswordReset()], false)));
     }
 

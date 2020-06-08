@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <v-app-bar :color="mixinThemeColor" dark app clipped-left>
-            <v-app-bar-nav-icon @click="drawer = !drawer" v-if="isLogin"></v-app-bar-nav-icon>
+            <v-app-bar-nav-icon @click="drawer = !drawer" v-if="isLogin && isPageShowNavigation"></v-app-bar-nav-icon>
             <v-toolbar-title>
                 <router-link :to="{name: 'personalCalendar'}" class="toolbar-title">
                     SHARE CALENDAR
@@ -9,7 +9,7 @@
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
-                <v-menu bottom :offset-y="true" v-if="isLogin">
+                <v-menu bottom :offset-y="true" v-if="isLogin && isPageShowNavigation">
                     <template v-slot:activator="{ on }">
                         <v-btn v-on="on" text style="text-transform: none">
                             <div class="d-flex align-center">
@@ -43,6 +43,7 @@
             <flash-message :message="message"/>
             <router-view :drawer="drawer"
                          @changeDrawer="drawer = $event"
+                         ref="test"
             />
         </v-content>
         <loading-screen :loading-flg="loadingFlg"/>
@@ -56,7 +57,7 @@
     import {mapGetters, mapState} from 'vuex'
     import {
         AUTHENTICATION_REQUIRED,
-        CSRF_NOT_EXIST,
+        CSRF_NOT_EXIST, EMAIL_NOT_VERIFIED,
         INTERNAL_SERVER_ERROR,
         NOT_FOUND,
         ONLY_UNAUTHENTICATED,
@@ -84,7 +85,11 @@
                 userName: 'user/userName',
                 isLogin: 'user/loginCheck',
                 userImage: 'user/userImage'
-            })
+            }),
+            // ヘッダーナビゲーションを表示するか
+            isPageShowNavigation: function () {
+                return !['emailNotVerified', 'systemError', 'notFound'].includes(this.$route.name)
+            }
         },
         methods: {
             async logout () {
@@ -101,9 +106,14 @@
              errorCode: { // エラーコードに変化があった場合
                 async handler (val) {
                     if (val === INTERNAL_SERVER_ERROR) {
-                        this.$router.push('/500')
+                        const path = '/500'
+                        this.$route.path !== path && this.$router.push(path)
                     }else if (val === NOT_FOUND) {
-                        this.$router.push('/404')
+                        const path = '/404'
+                        this.$route.path !== path && this.$router.push(path)
+                    } else if (val === EMAIL_NOT_VERIFIED){
+                        const path = '/403'
+                        this.$route.path !== path && this.$router.push(path)
                     } else if (val === AUTHENTICATION_REQUIRED || val === CSRF_NOT_EXIST) {
                         await axios.get('/api/refresh-token')
                         this.$store.commit('user/setUser', null)

@@ -4,6 +4,7 @@ import store from "./store";
 
 // ページコンポーネント
 import Authentication from "./components/pages/Authentication.vue"
+import EmailVerification from "./components/pages/EmailVerification.vue"
 import SendResetPasswordLink from "./components/pages/SendResetPasswordLink.vue"
 import ResetPassword from "./components/pages/ResetPassword.vue"
 
@@ -26,6 +27,7 @@ import UnShareCalendar from "./components/pages/sharedCalendarPages/UnShareCalen
 import DeleteSharedCalendar from "./components/pages/sharedCalendarPages/DeleteSharedCalendar.vue"
 
 
+import EmailNotVerified from "./components/pages/errors/EmailNotVerified.vue"
 import SystemError from "./components/pages/errors/SystemError.vue"
 import NotFound from "./components/pages/errors/NotFound.vue"
 
@@ -42,7 +44,7 @@ const routes = [
         }
     },
     {
-        path: '/auth/:prevPath?',
+        path: '/auth',
         name: 'authentication',
         props: true,
         component: Authentication,
@@ -51,6 +53,18 @@ const routes = [
                 next({name: 'personalCalendar'})
             } else {
                 next()
+            }
+        }
+    },
+    {
+        path: '/verify',
+        name: 'emailVerification',
+        component: EmailVerification,
+        beforeEnter (to, from, next) {
+            if (store.getters['user/loginCheck']){
+                next()
+            } else {
+                next({name: 'authentication'})
             }
         }
     },
@@ -85,8 +99,7 @@ const routes = [
             if (store.getters['user/loginCheck']){
                 next()
             } else {
-                // 要求されたページパス(to.path)をparamに付与
-                next({name: 'authentication', params: {prevPath: to.path}})
+                next({name: 'authentication'})
             }
         },
         children: [
@@ -136,8 +149,7 @@ const routes = [
             if (store.getters['user/loginCheck']){
                 next()
             } else {
-                // 要求されたページパス(to.path)をparamに付与
-                next({name: 'authentication', params: {prevPath: to.path}})
+                next({name: 'authentication'})
             }
         },
         children: [
@@ -179,11 +191,18 @@ const routes = [
         ]
     },
     {
+        path: '/403',
+        name: 'emailNotVerified',
+        component: EmailNotVerified
+    },
+    {
         path: '/500',
+        name: 'systemError',
         component: SystemError
     },
     {
         path: '*',
+        name: 'notFound',
         component: NotFound
     },
 

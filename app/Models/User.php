@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Notifications\ResetPasswordJp;
+use App\Notifications\VerifyEmailJp;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Uuid;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 
@@ -80,6 +81,13 @@ class User extends Authenticatable
     }
 
     /**
+     * メールアドレス確認用メールのオーバーライド
+     */
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new VerifyEmailJp);
+    }
+    /**
      * パスワード再設定メールのオーバーライド
      *
      * @param string $token
@@ -88,7 +96,6 @@ class User extends Authenticatable
     {
         $this->notify(new ResetPasswordJp($token));
     }
-
 
     /**
      * リレーション(個人スケジュール)

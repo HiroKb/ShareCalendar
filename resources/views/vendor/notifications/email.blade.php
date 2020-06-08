@@ -53,7 +53,7 @@
 {{--    "If you’re having trouble clicking the \":actionText\" button, copy and paste the URL below\n".--}}
 {{--    'into your web browser: [:displayableActionUrl](:actionURL)',--}}
 @lang(
-	":actionTextボタンが使用できない場合は以下のURLにアクセスしてパスワードを再設定してください。
+	":actionTextボタンが使用できない場合は以下のURLからアクセスしてください。
 	[:actionURL](:actionURL)",
         [
             'actionText' => $actionText,

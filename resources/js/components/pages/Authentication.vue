@@ -116,14 +116,7 @@
                         password: ''
                     },
                     showPassword: false
-                }
-            }
-        },
-        props: {
-            // 要認証ページからリダイレクトされた場合のリダイレクト元のパス(router)
-            prevPath: {
-                required: false,
-                default: null
+                },
             }
         },
         computed: {
@@ -147,11 +140,7 @@
 
                 // 通信成功時
                 if (this.authApiStatus) {
-                    if (this.prevPath === null) {
-                        this.$router.push({name: 'personalCalendar'})
-                    }else {
-                        this.$router.push(this.prevPath)
-                    }
+                    this.$router.push({name: 'personalCalendar'})
                 }
             },
             /**
@@ -169,15 +158,9 @@
 
                 // 通信成功の場合
                 if (this.authApiStatus) {
-                    if (this.authApiStatus) {
-                        if (this.prevPath === null) {
-                            this.$router.push({name: 'personalCalendar'})
-                        }else {
-                            this.$router.push(this.prevPath)
-                        }
-                    }
+                    this.$router.push({name: 'emailVerification'})
                 }
-            }
+            },
         },
         created() {
             // インスタンス生成時にバックエンドバリデーションエラーメッセージを初期化

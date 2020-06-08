@@ -16,6 +16,9 @@ Route::get('/o-auth/{provider}', 'CustomizedAuth\OAuthController@redirect');
 // OAuth認証コールバック後処理
 Route::get('/o-auth/{provider}/callback', 'CustomizedAuth\OAuthController@handleProviderCallback');
 
+// メールアドレス認証
+Route::get('email/verify/{id}/{hash}', 'CustomizedAuth\VerificationController@verify')->name('verification.verify');
+
 
 Route::get('/password/reset', fn() => view('index'))->name('password.reset');
 
