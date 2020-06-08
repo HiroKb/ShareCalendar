@@ -44,7 +44,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $hidden = [
-        'email', 'email_verified_at', 'password', 'remember_token', 'created_at', 'updated_at'
+        'email', 'email_verified_at', 'password', 'remember_token', 'created_at', 'updated_at', 'image_path', 'provider_name', 'provider_id'
     ];
 
 
@@ -76,7 +76,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'name' => $this->name,
             'image_url' => $this->image_url,
             'email' => $this->email,
-            'passwordExists' => !!$this->password
+            'isOAuth' => !!$this->provider_id
         ];
     }
 
@@ -176,20 +176,4 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->save();
         return [];
     }
-
-    /**
-     * パスワード新規登録
-     * @param $request
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
-     */
-    public function registrationPassword($request)
-    {
-        if(!!$this->password) {
-            return response([], 404);
-        }
-        $this->password = Hash::make($request->password);
-        $this->save();
-        return response([], 201);
-    }
-
 }

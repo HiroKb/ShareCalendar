@@ -39,33 +39,29 @@ class UserController extends Controller
     }
 
     /**
-     * ユーザーのメールアドレス変更
+     * メールアドレス更新
      * @param UpdateUserEmailRequest $request
-     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     * @return mixed
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function updateEmail(UpdateUserEmailRequest $request)
     {
-        return Auth::user()->updateEmail($request);
+        $user = Auth::user();
+        if (!$user->email) return response([], 404);
+        return $user->updateEmail($request);
     }
 
     /**
-     * ユーザーのパスワード変更
+     * パスワード変更
      * @param UpdateUserPasswordRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return mixed
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function updatePassword(UpdateUserPasswordRequest $request)
     {
-        return Auth::user()->updatePassword($request);
-    }
-
-    /**
-     * パスワード新規登録(OAuthログインユーザー用)
-     * @param PasswordRequest $request
-     * @return mixed
-     */
-    public function registrationPassword(PasswordRequest $request)
-    {
-        return Auth::user()->registrationPassword($request);
+        $user = Auth::user();
+        if (!$user->password) return response([], 404);
+        return $user->updatePassword($request);
     }
 
     /**
