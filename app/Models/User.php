@@ -151,18 +151,6 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * メールアドレス変更処理
-     * @param $request
-     * @return mixed
-     */
-    public function updateEmail($request)
-    {
-        $this->email = $request->email;
-        $this->save();
-        return $this->private_data;
-    }
-
-    /**
      * パスワード変更処理
      * @param $request
      * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response

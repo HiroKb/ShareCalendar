@@ -131,31 +131,23 @@
         >
             <v-card>
                 <v-card-title>メールアドレス変更</v-card-title>
-                <v-card-text>
+                <v-card-text v-if="!editEmailModal.isDoneRequest">
                     <v-form ref="editEmailForm" @submit.prevent="updateEmail">
 
                         <v-text-field
-                            v-model="editEmailModal.form.email"
+                            v-model="editEmailModal.form.new_email"
                             label="新しいメールアドレス"
                             :rules="[mixinValidationRules.required, mixinValidationRules.email, mixinValidationRules.max255]"
-                            :error="errorMessages ? !!errorMessages.email : false"
-                            :error-messages="errorMessages ? errorMessages.email ? errorMessages.email : [] : []"
-                            outlined
-                        ></v-text-field>
-
-                        <v-text-field
-                            v-model="editEmailModal.form.password"
-                            label="パスワード"
-                            @click:append="editEmailModal.showPassword = !editEmailModal.showPassword"
-                            :append-icon="editEmailModal.showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                            :type="editEmailModal.showPassword ? 'text' : 'password'"
-                            :rules="[mixinValidationRules.required, mixinValidationRules.min8]"
-                            :error="errorMessages ? !!errorMessages.password : false"
-                            :error-messages="errorMessages ? errorMessages.password ? errorMessages.password : [] : []"
+                            :error="errorMessages ? !!errorMessages.new_email : false"
+                            :error-messages="errorMessages ? errorMessages.new_email ? errorMessages.new_email : [] : []"
                             outlined
                         ></v-text-field>
                         <v-btn block :color="mixinThemeColor" dark type="submit">変更</v-btn>
                     </v-form>
+                </v-card-text>
+                <v-card-text v-else>
+                    <p>メールアドレス確認用のメールを送信しました。</p>
+                    <p>メール内のボタンをクリックして確認を完了してください。</p>
                 </v-card-text>
             </v-card>
         </v-dialog>
@@ -231,10 +223,9 @@
                 editEmailModal: {
                     show: false,
                     form: {
-                        email: '',
-                        password: ''
+                        new_email: '',
                     },
-                    showPassword: false
+                    isDoneRequest: false
                 },
                 editPasswordModal: {
                     show: false,
@@ -312,19 +303,17 @@
                 }
             },
             /**
-             * メールアドレス変更処理
+             * メールアドレス変更リクエスト
              * @return {Promise<boolean>}
              */
             async updateEmail () {
                 if (!this.$refs.editEmailForm.validate()){
                     return false
                 }
-
                 await this.$store.dispatch('user/updateEmail', this.editEmailModal.form)
 
                 if (this.apiStatus) {
-                    this.editEmailModal.show = false
-                    this.$store.commit('flashMessage/setMessage', 'メールアドレスを変更しました。')
+                    this.editEmailModal.isDoneRequest = true
                 }
             },
             /**
@@ -386,9 +375,8 @@
             },
             'editEmailModal.show': function (val) {
                 if (val === false) {
-                    this.editEmailModal.form.email = ''
-                    this.editEmailModal.form.password = ''
-                    this.editEmailModal.showPassword = false
+                    this.editEmailModal.form.new_email = ''
+                    this.editEmailModal.isDoneRequest = false
                     this.$refs.editEmailForm.resetValidation()
                     this.setErrorMessages(null)
                 }

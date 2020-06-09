@@ -183,21 +183,25 @@ const actions = {
             context.commit('error/setCode', response.status, { root: true})
         }
     },
-    // ユーザーパスワード変更
+    /**
+     * メールアドレス変更リクエスト
+     * @param context
+     * @param data
+     * @return {Promise<boolean>}
+     */
     async updateEmail(context, data) {
         // apiStatusの初期化
         context.commit('setApiStatus', null)
         context.commit('loading/setLoadingFlg', true, { root: true})
 
         // メールアドレス変更APIの呼び出し
-        const response = await axios.patch('/api/users/email', data)
+        const response = await axios.post('/api/users/email', data)
 
         context.commit('loading/setLoadingFlg', false, { root: true})
 
         // 通信成功時
-        if(response.status === SUCCESS) {
+        if(response.status === CREATED) {
             context.commit('setApiStatus', true)
-            context.commit('setUser', response.data)
             return false
         }
 

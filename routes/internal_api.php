@@ -46,8 +46,8 @@ Route::group(['middleware' => ['api.auth', 'api.verified']], function () {
     Route::patch('/users/name', 'UserController@updateName');
     // ユーザー画像更新
     Route::post('/users/image', 'UserController@updateImage');
-    // メールアドレス変更
-    Route::patch('/users/email', 'UserController@updateEmail');
+    // メールアドレス確認メール送信
+    Route::post('/users/email', 'UserController@sendUpdateEmailLink');
     // ユーザーパスワード変更
     Route::patch('/users/password', 'UserController@updatePassword');
     // パスワードの登録

@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notification;
 class ResetPasswordJp extends Notification
 {
     use Queueable;
+    private $token;
 
     /**
      * Create a new notification instance.

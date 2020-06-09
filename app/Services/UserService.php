@@ -1,7 +1,9 @@
 <?php
 namespace App\Services;
 
+use App\models\EmailUpdate;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -49,6 +51,57 @@ class UserService
         }
         return response($updatedUser, 201);
     }
+
+    /**
+     * メールアドレス変更確認メール送信・新しいアドレス・ユーザーid・トークンを保存
+     * @param $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function sendUpdateEmailLink($request)
+    {
+        $new_email = $request->new_email;
+
+        $token = hash_hmac('sha256', Str::random(40).$new_email, config('app.key'));
+
+        $emailUpdate = new EmailUpdate();
+        $emailUpdate->user_id = Auth::id();
+        $emailUpdate->new_email = $new_email;
+        $emailUpdate->token = $token;
+        $emailUpdate->save();
+
+        $emailUpdate->sendEmailUpdateNotification($token);
+        return response([], 201);
+    }
+
+    /**
+     * メールアドレス更新処理
+     * 確認メール送信から1時間以上経過している場合はリダイレクト
+     * @param $token
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function updateEmail($token)
+    {
+        $user = Auth::user();
+        $emailUpdate = EmailUpdate::where([
+            'user_id' => $user->id,
+            'token' => $token
+        ])->first();
+
+        if ($emailUpdate === null) return redirect('/404');
+
+        if (Carbon::parse($emailUpdate->created_at)->addHour()->isPast()){
+            $emailUpdate->delete();
+            return redirect('/404');
+        }
+
+        $user->email = $emailUpdate->new_email;
+        $user->save();
+        $emailUpdate->delete();
+
+        return redirect('/personal/account/info');
+    }
+
+
     /**
      * $fromから$untilまでの個人スケジュールと共有スケジュールのリスト
      * @param $from

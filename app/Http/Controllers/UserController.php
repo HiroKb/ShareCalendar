@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ImageRequest;
-use App\Http\Requests\PasswordRequest;
-use App\Http\Requests\UpdateUserEmailRequest;
+use App\Http\Requests\UpdateEmailRequest;
 use App\Http\Requests\UpdateUserNameRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
 use App\Services\UserService;
@@ -39,16 +38,31 @@ class UserController extends Controller
     }
 
     /**
-     * メールアドレス更新
-     * @param UpdateUserEmailRequest $request
-     * @return mixed
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * メールアドレス変更確認メール送信
+     * @param UpdateEmailRequest $request
+     * @param UserService $userService
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function updateEmail(UpdateUserEmailRequest $request)
+    public function sendUpdateEmailLink(UpdateEmailRequest $request, UserService $userService)
     {
-        $user = Auth::user();
-        if (!$user->email) return response([], 404);
-        return $user->updateEmail($request);
+        if (!Auth::user()->email) {
+            return response([], 404);
+        }
+        return $userService->sendUpdateEmailLink($request);
+    }
+
+    /**
+     * メールアドレス変更処理
+     * @param $token
+     * @param UserService $userService
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
+     */
+    public function updateEmail($token, UserService $userService)
+    {
+        if (!Auth::user()->email) {
+            return response([], 404);
+        }
+        return $userService->updateEmail($token);
     }
 
     /**
@@ -60,7 +74,9 @@ class UserController extends Controller
     public function updatePassword(UpdateUserPasswordRequest $request)
     {
         $user = Auth::user();
-        if (!$user->password) return response([], 404);
+        if (!$user->password) {
+            return response([], 404);
+        }
         return $user->updatePassword($request);
     }
 

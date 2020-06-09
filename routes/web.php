@@ -17,7 +17,10 @@ Route::get('/o-auth/{provider}', 'CustomizedAuth\OAuthController@redirect');
 Route::get('/o-auth/{provider}/callback', 'CustomizedAuth\OAuthController@handleProviderCallback');
 
 // メールアドレス認証
-Route::get('email/verify/{id}/{hash}', 'CustomizedAuth\VerificationController@verify')->name('verification.verify');
+Route::get('/email/verify/{id}/{hash}', 'CustomizedAuth\VerificationController@verify')->name('verification.verify');
+
+// メールアドレス変更処理
+Route::get('/email/update/{token}', 'UserController@updateEmail')->middleware('auth.redirect');
 
 
 Route::get('/password/reset', fn() => view('index'))->name('password.reset');
