@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\DeleteExpiredEmailUpdates;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -13,7 +14,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        DeleteExpiredEmailUpdates::class
     ];
 
     /**
@@ -26,6 +27,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        $schedule->command('delete:expired_email_updates')->dailyAt('04:00');
     }
 
     /**
