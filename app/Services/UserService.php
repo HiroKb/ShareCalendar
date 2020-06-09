@@ -101,6 +101,30 @@ class UserService
         return redirect('/personal/account/info');
     }
 
+    /**
+     * アカウント削除処理・画像が登録されている場合はs3から画像を削除
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function deleteAccount()
+    {
+        $user = Auth::user();
+        $image_path = $user->image_path;
+        if ($image_path === null){
+            $user->delete();
+            return [];
+        }
+
+        DB::beginTransaction();
+        try {
+            $user->delete();
+            Storage::disk('s3')->delete($image_path);
+            DB::commit();
+            return [];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response([], 500);
+        }
+    }
 
     /**
      * $fromから$untilまでの個人スケジュールと共有スケジュールのリスト

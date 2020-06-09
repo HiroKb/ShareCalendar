@@ -51,6 +51,26 @@ class SharedCalendarService
         return response($updatedCalendar, 201);
     }
 
+    public function deleteCalendar(SharedCalendar $sharedCalendar)
+    {
+        $image_path = $sharedCalendar->image_path;
+        if ($image_path === null){
+            $sharedCalendar->delete();
+            return [];
+        }
+
+        DB::beginTransaction();
+        try {
+            $sharedCalendar->delete();
+            Storage::disk('s3')->delete($image_path);
+            DB::commit();
+            return [];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response([], 500);
+        }
+    }
+
     /**
      * 共有メンバー取得
      * @param SharedCalendar $sharedCalendar

@@ -82,12 +82,12 @@ class UserController extends Controller
 
     /**
      * ユーザー削除処理
-     * @return array
+     * @param UserService $userService
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function destroy()
+    public function destroy(UserService $userService)
     {
-        Auth::user()->delete();
-        return [];
+        return $userService->deleteAccount();
     }
 
     /**

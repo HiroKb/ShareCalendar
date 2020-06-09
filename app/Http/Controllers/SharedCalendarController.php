@@ -77,11 +77,10 @@ class SharedCalendarController extends Controller
      * @return array
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function destroy(SharedCalendar $sharedCalendar)
+    public function destroy(SharedCalendar $sharedCalendar, SharedCalendarService $sharedCalendarService)
     {
         $this->authorize('updateSearchId', $sharedCalendar);
-        $sharedCalendar->delete();
-        return [];
+        return $sharedCalendarService->deleteCalendar($sharedCalendar);
     }
 
     /**
