@@ -10,14 +10,30 @@
                 <v-tab-item value="login-tab">
                     <v-card flat tile>
                         <v-card-text>
-                            <a href="/o-auth/google"
-
-
-                            ><img
-                                src="/images/btn_google_signin_light_normal_web@2x.png"
-                                alt="googleでログイン"
-                                style="height: 52px"
-                            ></a>
+                            <v-btn
+                                href="/o-auth/google"
+                                dark color="#ea4335"
+                                class="font-weight-bold"
+                                style="text-transform: none"
+                            >
+                                <v-icon class="mr-2">mdi-google</v-icon>Googleでログイン
+                            </v-btn>
+                            <v-btn
+                                href="/o-auth/twitter"
+                                dark color="#1da1f2"
+                                class="font-weight-bold"
+                                style="text-transform: none"
+                            >
+                                <v-icon class="mr-2">mdi-twitter</v-icon>Twitterでログイン
+                            </v-btn>
+                            <v-btn
+                                href="/o-auth/github"
+                                dark color="#333"
+                                class="font-weight-bold"
+                                style="text-transform: none"
+                            >
+                                <v-icon class="mr-2">mdi-github</v-icon>GitHubでログイン
+                            </v-btn>
                             <v-form ref="loginForm" @submit.prevent="login">
                                 <!--                            rulesでフロントのバリデーション-->
                                 <!--                            error,error-messageでバックのバリデーション結果を表示-->
@@ -41,7 +57,9 @@
                                     :error="errorMessages ? !!errorMessages.password : false"
                                     :error-messages="errorMessages ? errorMessages.password ? errorMessages.password : [] : []"
                                 ></v-text-field>
-                                <v-btn class="mb-4" block  :color="mixinThemeColor" dark type="submit">ログイン</v-btn>
+                                <v-btn class="mb-4 font-weight-bold"
+                                       block  :color="mixinThemeColor" dark
+                                       type="submit">ログイン</v-btn>
                                 <router-link :to="{name: 'sendResetPasswordLink'}">パスワードをお忘れの方</router-link>
                             </v-form>
                         </v-card-text>
@@ -80,7 +98,11 @@
                                     :error="errorMessages ? !!errorMessages.password : false"
                                     :error-messages="errorMessages ? errorMessages.password ? errorMessages.password : [] : []"
                                 ></v-text-field>
-                                <v-btn block :color="mixinThemeColor" dark type="submit">登録</v-btn>
+                                <v-btn
+                                    class="font-weight-bold"
+                                    block :color="mixinThemeColor" dark
+                                    type="submit"
+                                >登録</v-btn>
                             </v-form>
                         </v-card-text>
                     </v-card>

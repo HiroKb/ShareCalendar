@@ -34,33 +34,28 @@ class OAuthController extends Controller
             return redirect('/');
         }
 
-//        Auth::login(User::firstOrCreate([
-//            'provider_name' => $provider,
-//            'provider_id' => $user->getId()
-//        ],[
-//            'name' => $user->getName(),
-//            'email_verified_at' => Carbon::now()
-//        ]));
-
         $user = User::where([
             'provider_name' => $provider,
             'provider_id' => $socialUser->getId()
         ])->first();
 
         if ($user !== null) {
-            logger($user);
+            if ($user->provider_email !== $socialUser->getEmail()){
+                $user->provider_email = $socialUser->getEmail();
+                $user->save();
+            }
             Auth::login($user);
             return redirect('/');
         }
 
         $newUser = new User();
-        $newUser->name = $socialUser->getName();
+        $newUser->name = !!$socialUser->getName() ? $socialUser->getName() : $socialUser->getNickname();
         $newUser->provider_name = $provider;
         $newUser->provider_id = $socialUser->getId();
+        $newUser->provider_email = $socialUser->getEmail();
         $newUser->email_verified_at = Carbon::now();
         $newUser->save();
 
-        logger($newUser);
         Auth::login($newUser);
         return redirect('/');
     }
