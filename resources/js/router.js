@@ -8,6 +8,9 @@ import EmailVerification from "./components/pages/EmailVerification.vue"
 import SendResetPasswordLink from "./components/pages/SendResetPasswordLink.vue"
 import ResetPassword from "./components/pages/ResetPassword.vue"
 
+import TermsOfUse from "./components/pages/TermsOfUse.vue"
+import PrivacyPolicy from "./components/pages/PrivacyPolicy.vue"
+
 import PersonalPages from "./components/pages/personalPages/PersonalPages.vue"
 import UserInfo from "./components/pages/personalPages/UserInfo.vue"
 import PersonalCalendar from "./components/pages/personalPages/PersonalCalendar.vue"
@@ -55,6 +58,16 @@ const routes = [
                 next()
             }
         }
+    },
+    {
+        path: '/terms-of-use',
+        name: 'termsOfUse',
+        component: TermsOfUse
+    },
+    {
+        path: '/privacy-policy',
+        name: 'privacyPolicy',
+        component: PrivacyPolicy
     },
     {
         path: '/verify',

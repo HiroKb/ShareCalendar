@@ -6,7 +6,7 @@
             <v-tabs-slider :color="mixinThemeColor"></v-tabs-slider>
 
             <v-tabs-items v-model="tab">
-                <v-divider ></v-divider>
+                <v-divider></v-divider>
                 <v-tab-item value="login-tab">
                     <v-card flat tile>
                         <v-card-text>
@@ -57,11 +57,12 @@
                                     :error="errorMessages ? !!errorMessages.password : false"
                                     :error-messages="errorMessages ? errorMessages.password ? errorMessages.password : [] : []"
                                 ></v-text-field>
-                                <v-btn class="mb-4 font-weight-bold"
+                                <v-btn class="font-weight-bold"
                                        block  :color="mixinThemeColor" dark
                                        type="submit">ログイン</v-btn>
-                                <router-link :to="{name: 'sendResetPasswordLink'}">パスワードをお忘れの方</router-link>
                             </v-form>
+                            <p class="mt-4">登録又はログインを行うことで、<br><router-link :to="{name: 'termsOfUse'}">利用規約</router-link>と<router-link :to="{name: 'privacyPolicy'}">プライバシーポリシー</router-link>に同意したものとみなします。</p>
+                            <router-link :to="{name: 'sendResetPasswordLink'}">パスワードをお忘れの方</router-link>
                         </v-card-text>
                     </v-card>
                 </v-tab-item>
@@ -69,6 +70,30 @@
                 <v-tab-item value="register-tab">
                     <v-card flat tile>
                         <v-card-text>
+                            <v-btn
+                                href="/o-auth/google"
+                                dark color="#ea4335"
+                                class="font-weight-bold"
+                                style="text-transform: none"
+                            >
+                                <v-icon class="mr-2">mdi-google</v-icon>Googleで登録
+                            </v-btn>
+                            <v-btn
+                                href="/o-auth/twitter"
+                                dark color="#1da1f2"
+                                class="font-weight-bold"
+                                style="text-transform: none"
+                            >
+                                <v-icon class="mr-2">mdi-twitter</v-icon>Twitterで登録
+                            </v-btn>
+                            <v-btn
+                                href="/o-auth/github"
+                                dark color="#333"
+                                class="font-weight-bold"
+                                style="text-transform: none"
+                            >
+                                <v-icon class="mr-2">mdi-github</v-icon>GitHubで登録
+                            </v-btn>
                             <v-form ref="registerForm" @submit.prevent="register">
                                 <v-text-field
                                     outlined
@@ -104,6 +129,7 @@
                                     type="submit"
                                 >登録</v-btn>
                             </v-form>
+                            <p class="mt-4">登録又はログインを行うことで、<br><router-link :to="{name: 'termsOfUse'}">利用規約</router-link>と<router-link :to="{name: 'privacyPolicy'}">プライバシーポリシー</router-link>に同意したものとみなします。</p>
                         </v-card-text>
                     </v-card>
                 </v-tab-item>
