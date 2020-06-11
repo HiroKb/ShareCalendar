@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSharedSchedulesTable extends Migration
+class CreateSharedCalendarUserMembers20200331 extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,15 @@ class CreateSharedSchedulesTable extends Migration
      */
     public function up()
     {
-        Schema::create('shared_schedules', function (Blueprint $table) {
-            $table->uuid('id')->primary()->unique();
+        Schema::create('shared_calendar_user_members', function (Blueprint $table) {
             $table->uuid('calendar_id');
-            $table->string('title', 50);
-            $table->string('description', 100)->nullable();
-            $table->date('date');
-            $table->time('time')->nullable();
+            $table->uuid('user_id');
             $table->timestamps();
 
             $table->foreign('calendar_id')->references('id')->on('shared_calendars')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->primary(['calendar_id', 'user_id']);
+
         });
     }
 
@@ -33,6 +32,6 @@ class CreateSharedSchedulesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shared_schedules');
+        Schema::dropIfExists('shared_calendar_user_members');
     }
 }

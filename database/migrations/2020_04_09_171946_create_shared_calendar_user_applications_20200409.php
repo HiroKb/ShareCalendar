@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateChatMessagesTable extends Migration
+class CreateSharedCalendarUserApplications20200409 extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreateChatMessagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('chat_messages', function (Blueprint $table) {
-            $table->uuid('id')->primary()->unique();
+        Schema::create('shared_calendar_user_applications', function (Blueprint $table) {
             $table->uuid('calendar_id');
-            $table->uuid('posted_user_id')->nullable();
-            $table->string('message', 1000);
+            $table->uuid('user_id');
             $table->timestamps();
 
             $table->foreign('calendar_id')->references('id')->on('shared_calendars')->onDelete('cascade');
-            $table->foreign('posted_user_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->primary(['calendar_id', 'user_id']);
         });
     }
 
@@ -32,6 +31,6 @@ class CreateChatMessagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('chat_messages');
+        Schema::dropIfExists('shared_calendar_user_applications');
     }
 }
