@@ -7,6 +7,7 @@ use App\Http\Requests\ImageRequest;
 use App\Http\Requests\SharedCalendarNameRequest;
 use App\Models\SharedCalendar;
 use App\Services\SharedCalendarService;
+use Illuminate\Support\Facades\DB;
 
 class SharedCalendarController extends Controller
 {
@@ -29,7 +30,7 @@ class SharedCalendarController extends Controller
      */
     public function store(SharedCalendarNameRequest $request)
     {
-        return response(SharedCalendar::storeSharedCalendar($request), 201);
+        return SharedCalendar::storeSharedCalendar($request);
     }
 
     /**

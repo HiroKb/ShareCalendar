@@ -30,14 +30,15 @@ class SharedCalendarService
         $image->resizeCanvas($shortSide, $shortSide)->resize(200,200);
         $image->save($tmpPath);
 
-//        s3にアップロード・ローカルtmp内のファイル削除
-        $uploadPath = Storage::disk('s3')->putFile('image', new File($tmpPath), 'public');
-        Storage::disk('local')->delete('tmp/' . $tmpFileName);
 
         DB::beginTransaction();
-//        DB内のパスを更新・以前の画像があればs3から削除
         $beforeUpdatePath = $sharedCalendar->image_path;
         try {
+//          s3にアップロード・ローカルtmp内のファイル削除
+            $uploadPath = Storage::disk('s3')->putFile('image', new File($tmpPath), 'public');
+            Storage::disk('local')->delete('tmp/' . $tmpFileName);
+
+//            DB内のパスを更新・以前の画像があればs3から削除
             $updatedCalendar = $sharedCalendar->updateImagePath($uploadPath);
             if ($beforeUpdatePath && Storage::disk('s3')->exists($beforeUpdatePath)){
                 Storage::disk('s3')->delete($beforeUpdatePath);
@@ -114,11 +115,11 @@ class SharedCalendarService
                 return response([], 404);
             }
         }
-        return DB::transaction(function () use($sharedCalendar, $idList){
+        DB::transaction(function () use($sharedCalendar, $idList){
             $sharedCalendar->members()->sync($idList, false);
             $sharedCalendar->applicants()->detach($idList);
-            return response([], 201);
         });
+        return response([], 201);
     }
 
     /**
@@ -151,7 +152,7 @@ class SharedCalendarService
     {
         $userId = Auth::id();
         $sharedCalendar = SharedCalendar::where('search_id', $searchId)->first();
-        if (!$sharedCalendar){
+        if ($sharedCalendar === null){
             return [
                 'isApplicable' => false,
                 'message' => '共有カレンダーが見つかりません。'

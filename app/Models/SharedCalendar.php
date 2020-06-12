@@ -130,11 +130,11 @@ class SharedCalendar extends Model
         $calendar->calendar_name = $request->calendar_name;
         $calendar->admin_id = $userId;
 
-        return DB::transaction(function () use($calendar, $userId){
+        DB::transaction(function () use($calendar, $userId){
             $calendar->save();
             $calendar->members()->attach([$userId]);
-            return $calendar->data_for_admin;
         });
+        return response($calendar->data_for_admin, 201);
     }
 
     /**
