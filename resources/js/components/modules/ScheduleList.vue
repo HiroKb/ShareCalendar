@@ -34,7 +34,7 @@
 <!--                    個人カレンダーで表示されている共有スケジュールの場合-->
 <!--                    共有カレンダーのリンクを表示-->
                     <v-list-item-action class="calendar-link-wrap" v-if="isPersonal && schedule.calendar_id">
-                        <router-link class="calendar-link" :to="{name: 'sharedCalendar', params:{sharedCalendarId: schedule.calendar_id}}">{{ schedule.calendar_name }}</router-link>
+                        <router-link class="calendar-link" :to="{name: 'sharedCalendar', params:{sharedCalendarId: schedule.calendar_id}}">{{ schedule.calendar.calendar_name }}</router-link>
                     </v-list-item-action>
                 </v-list-item>
                 <v-divider v-if="index + 1 < schedules.length"></v-divider>

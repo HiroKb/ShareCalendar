@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\models\EmailUpdate;
+use App\Models\Schedule;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\File;
@@ -134,32 +135,20 @@ class UserService
      */
     public function getSchedulesList($from, $until)
     {
-        $personalSchedules = Auth::user()->schedules()
-            ->whereBetween('date', [$from, $until])
-            ->get()
-            ->toArray();
+        $userId = Auth::id();
 
-        $sharedSchedules = [];
+        $personalSchedules = Schedule::where('user_id', $userId)->whereBetween('date', [$from, $until])->get();
+
         $sharedDataCollection = User::with([
             'sharedCalendars.schedules' => function($query) use($from, $until){
-                $query->whereBetween('date', [$from, $until]);
-            }])->find(Auth::id());
-        $sharedCalendars = $sharedDataCollection->toArray()['shared_calendars'];
+                $query->whereBetween('date', [$from, $until])->with('calendar:id,calendar_name');
+            }])->find($userId);
+        $sharedSchedule = collect(collect($sharedDataCollection)->get('shared_calendars'))->pluck('schedules')->collapse();
 
-        foreach ($sharedCalendars as $sharedCalendar){
-            foreach ($sharedCalendar['schedules'] as $sharedSchedule){
-                $sharedSchedule['calendar_name'] = $sharedCalendar['calendar_name'];
-                $sharedSchedules[] = $sharedSchedule;
-            }
-        }
-
-        $schedulesCollection = collect(array_merge($personalSchedules, $sharedSchedules));
-
-        $sortedSchedules = $schedulesCollection
-            ->sortBy('time' )
-            ->groupBy('date');
-
-        return $sortedSchedules;
+        return collect($personalSchedules)
+                ->merge($sharedSchedule)
+                ->sortBy('time' )
+                ->groupBy('date');
     }
 
     /**
