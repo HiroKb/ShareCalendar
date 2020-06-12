@@ -8,13 +8,14 @@ use App\Http\Requests\UpdateUserNameRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
 use App\Services\UserService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
     public function getUserData()
     {
         $user = Auth::user();
-        return $user ? $user->private_data : null;
+        return $user !== null ? $user->private_data : null;
     }
     /**
      * ユーザー名変更
@@ -45,7 +46,7 @@ class UserController extends Controller
      */
     public function sendUpdateEmailLink(UpdateEmailRequest $request, UserService $userService)
     {
-        if (!Auth::user()->email) {
+        if (Auth::user()->email === null) {
             return response([], 404);
         }
         return $userService->sendUpdateEmailLink($request);
@@ -59,7 +60,7 @@ class UserController extends Controller
      */
     public function updateEmail($token, UserService $userService)
     {
-        if (!Auth::user()->email) {
+        if (Auth::user()->email === null) {
             return response([], 404);
         }
         return $userService->updateEmail($token);
@@ -74,7 +75,7 @@ class UserController extends Controller
     public function updatePassword(UpdateUserPasswordRequest $request)
     {
         $user = Auth::user();
-        if (!$user->password) {
+        if ($user->password === null) {
             return response([], 404);
         }
         return $user->updatePassword($request);

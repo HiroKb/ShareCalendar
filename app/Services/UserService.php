@@ -31,15 +31,16 @@ class UserService
         $image->resizeCanvas($shortSide, $shortSide)->resize(200,200);
         $image->save($tmpPath);
 
-//        s3にアップロード・ローカルtmp内のファイル削除
-        $uploadPath = Storage::disk('s3')->putFile('image', new File($tmpPath), 'public');
-        Storage::disk('local')->delete('tmp/' . $tmpFileName);
 
         DB::beginTransaction();
-//        DB内のパスを更新・以前の画像があればs3から削除
         $user = Auth::user();
         $beforeUpdatePath = $user->image_path;
         try {
+//          s3にアップロード・ローカルtmp内のファイル削除
+            $uploadPath = Storage::disk('s3')->putFile('image', new File($tmpPath), 'public');
+            Storage::disk('local')->delete('tmp/' . $tmpFileName);
+
+//          DB内のパスを更新・以前の画像があればs3から削除
             $updatedUser = $user->updateImagePath($uploadPath);
             if ($beforeUpdatePath && Storage::disk('s3')->exists($beforeUpdatePath)){
                 Storage::disk('s3')->delete($beforeUpdatePath);
@@ -48,6 +49,7 @@ class UserService
         } catch (\Exception $e) {
             DB::rollBack();
             Storage::disk('s3')->delete($uploadPath);
+            Storage::disk('local')->delete('tmp/' . $tmpFileName);
             return response([], 500);
         }
         return response($updatedUser, 201);
