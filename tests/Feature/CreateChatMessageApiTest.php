@@ -46,7 +46,6 @@ class CreateChatMessageApiTest extends TestCase
             ->assertStatus(201)
             ->assertJson([
                 'message' => $data['message'],
-                'calendar_id' => $calendar->id,
                 'posted_user_id' => $this->user1->id
             ]);
 

@@ -7,7 +7,6 @@ use Ramsey\Uuid\Uuid;
 
 class SharedSchedule extends Model
 {
-    protected $table = 'shared_schedules';
     protected $keyType = 'string';
     public $incrementing = false;
 

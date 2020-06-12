@@ -8,7 +8,6 @@ use Ramsey\Uuid\Uuid;
 
 class Schedule extends Model
 {
-    protected $table = 'schedules';
     protected $keyType = 'string';
     public $incrementing = false;
 

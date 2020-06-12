@@ -7,7 +7,6 @@ use Ramsey\Uuid\Uuid;
 
 class ChatMessage extends Model
 {
-    protected $table = 'chat_messages';
     protected $keyType = 'string';
     public $incrementing = false;
 
@@ -17,6 +16,10 @@ class ChatMessage extends Model
 
         $this->attributes['id'] = Uuid::uuid4()->toString();
     }
+
+    protected $hidden = [
+        'id', 'calendar_id', 'updated_at'
+    ];
 
     public function calendar()
     {

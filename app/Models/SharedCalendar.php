@@ -10,7 +10,6 @@ use Ramsey\Uuid\Uuid;
 
 class SharedCalendar extends Model
 {
-    protected $table = 'shared_calendars';
     protected $keyType = 'string';
     public $incrementing = false;
 
@@ -23,7 +22,7 @@ class SharedCalendar extends Model
     ];
 
     protected $hidden = [
-        'search_id', 'created_at', 'updated_at'
+        'image_path', 'search_id', 'created_at', 'updated_at', 'pivot'
     ];
 
     public function __construct(array $attributes = [])

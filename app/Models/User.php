@@ -38,13 +38,9 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'image_url'
     ];
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'email', 'email_verified_at', 'password', 'remember_token', 'created_at', 'updated_at', 'image_path', 'provider_name', 'provider_id'
+
+    protected $visible = [
+        'id', 'name', 'image_url', 'schedules', 'sharedCalendars'
     ];
 
 
