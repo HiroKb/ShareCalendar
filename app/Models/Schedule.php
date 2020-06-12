@@ -43,14 +43,14 @@ class Schedule extends Model
     /**
      * スケジュール作成
      * @param $request
-     * @return static
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public static function storeSchedule($request)
     {
         $schedule = new static;
         unset($request['_token']);
         Auth::user()->schedules()->save($schedule->fill($request));
-        return $schedule;
+        return response($schedule, 201);
     }
 
     /**

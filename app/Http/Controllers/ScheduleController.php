@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateScheduleRequest;
 use App\Http\Requests\UpdateScheduleRequest;
 use App\Models\Schedule;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller
 {
@@ -18,7 +16,7 @@ class ScheduleController extends Controller
      */
     public function store(CreateScheduleRequest $request)
     {
-        return response(Schedule::storeSchedule($request->all()), 201);
+        return Schedule::storeSchedule($request->all());
     }
 
     /**
