@@ -149,7 +149,7 @@
                 required: true,
                 default: () => ({
                     schedulesYear: null,
-                    schedules: [],
+                    schedules: {},
                 })
             },
             // 親コンポーネントのスケジュール取得メソッド
@@ -206,9 +206,8 @@
 
                 if (response.status === CREATED) {
                     // カレンダーデータとスケジュールリストデータを更新
-                    const newData = this.mixinAddScheduleToSchedulesListAndCalendarData(response.data, this.sharedSchedulesData.schedules, this.calendarData)
-                    this.$emit('changeSchedulesData',{schedules: newData.newScheduleList})
-                    this.calendarData = newData.newCalendarData
+                    const newSchedules = this.mixinAddScheduleToSchedulesList(response.data, this.sharedSchedulesData.schedules)
+                    this.$emit('changeSchedulesData',{schedules: newSchedules})
 
                     // モーダルを非表示にしフラッシュメッセージを表示
                     this.createScheduleModal = false
@@ -245,9 +244,8 @@
 
                 if(response.status === SUCCESS) {
                     // スケジュールリストとカレンダーデータのスケジュールを更新
-                    const newData = this.mixinUpdateScheduleInSchedulesListAndCalendarData(this.scheduleDataToBeUpdated, response.data, this.sharedSchedulesData.schedules, this.calendarData)
-                    this.$emit('changeSchedulesData',{schedules: newData.newScheduleList})
-                    this.calendarData = newData.newCalendarData
+                    const newSchedules = this.mixinUpdateScheduleInSchedulesList(this.scheduleDataToBeUpdated, response.data, this.sharedSchedulesData.schedules)
+                    this.$emit('changeSchedulesData',{schedules: newSchedules})
 
                     // モーダルを非表示にしフラッシュメッセージを表示
                     this.editScheduleModal = false
@@ -276,9 +274,8 @@
 
                 if(response.status === SUCCESS) {
                     // カレンダーデータとスケジュールリストデータからスケジュールを削除
-                    const newData = this.mixinRemoveScheduleFromSchedulesListAndCalendarData(this.scheduleDataToBeDeleted, this.sharedSchedulesData.schedules, this.calendarData)
-                    this.$emit('changeSchedulesData',{schedules: newData.newScheduleList})
-                    this.calendarData = newData.newCalendarData
+                    const newSchedules = this.mixinRemoveScheduleFromScheduleList(this.scheduleDataToBeDeleted, this.sharedSchedulesData.schedules)
+                    this.$emit('changeSchedulesData',{schedules: newSchedules})
 
                     // モーダルを非表示にしフラッシュメッセージを表示
                     this.deleteScheduleModal = false

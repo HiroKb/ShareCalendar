@@ -77,56 +77,16 @@ export default {
             }
         },
         /**
-         * スケジュールリストとカレンダーデータにスケジュールを追加
-         * @param {Object} schedule 追加するスケジュール
-         * @param {Object} schedulesList スケジュールリスト
-         * @param {Array} calendarData カレンダーデータ
-         * @return {{newCalendarData: Array, newScheduleList: Object}} スケジュールを追加したスケジュールリストとカレンダーデータ
-         */
-        mixinAddScheduleToSchedulesListAndCalendarData(schedule, schedulesList, calendarData) {
-            const newScheduleList = this.mixinAddScheduleToSchedulesList(schedule, schedulesList)
-            const newCalendarData = this.mixinAddScheduleToCalendarData(schedule, calendarData)
-
-            return {
-                newScheduleList: newScheduleList,
-                newCalendarData: newCalendarData
-            }
-        },
-        /**
-         * スケジュールリストとカレンダーデータのスケジュールを更新
+         * スケジュールリストを更新
          * @param {Object} scheduleToDelete 更新前のスケジュール(削除するスケジュール)
          * @param {Object} scheduleToAdd 更新後のスケジュール(追加するスケジュール)
          * @param {Object} schedulesList スケジュールリスト
-         * @param {Array} calendarData カレンダーデータ
-         * @return {{newCalendarData: Array, newScheduleList: Object}} スケジュールを更新したスケジュールリストとカレンダーデータ
+         * @return {Object} 更新後のスケジュールリストオブジェクト
          */
-        mixinUpdateScheduleInSchedulesListAndCalendarData(scheduleToDelete, scheduleToAdd, schedulesList, calendarData) {
+        mixinUpdateScheduleInSchedulesList(scheduleToDelete, scheduleToAdd, schedulesList) {
             const deletedResultScheduleList = this.mixinRemoveScheduleFromScheduleList(scheduleToDelete, schedulesList)
-            const newScheduleList = this.mixinAddScheduleToSchedulesList(scheduleToAdd, deletedResultScheduleList)
+            return  this.mixinAddScheduleToSchedulesList(scheduleToAdd, deletedResultScheduleList)
 
-            const deletedResultCalendarData = this.mixinRemoveScheduleFromCalendarData(scheduleToDelete, calendarData)
-            const newCalendarData = this.mixinAddScheduleToCalendarData(scheduleToAdd, deletedResultCalendarData)
-
-            return {
-                newScheduleList: newScheduleList,
-                newCalendarData: newCalendarData
-            }
-        },
-        /**
-         * スケジュールリストとカレンダーデータからスケジュールを削除
-         * @param {Object} schedule 削除するスケジュール
-         * @param {Object} schedulesList スケジュールリスト
-         * @param {Array} calendarData カレンダーデータ
-         * @return {{newCalendarData: Array, newScheduleList: Object}}
-         */
-        mixinRemoveScheduleFromSchedulesListAndCalendarData(schedule, schedulesList, calendarData) {
-            const newScheduleList = this.mixinRemoveScheduleFromScheduleList(schedule, schedulesList)
-            const newCalendarData = this.mixinRemoveScheduleFromCalendarData(schedule, calendarData)
-
-            return {
-                newScheduleList: newScheduleList,
-                newCalendarData: newCalendarData
-            }
         },
         /**
          * スケジュールリストにスケジュールを追加
@@ -136,12 +96,11 @@ export default {
          */
         mixinAddScheduleToSchedulesList(schedule, schedulesList){
 
-            // スケジュールリストディープコピー
-            const newSchedulesList = _.cloneDeep(schedulesList)
+            const newSchedulesList = Array.isArray(schedulesList) ? {} : _.cloneDeep(schedulesList)
 
             // スケジュールをスケジュールリストデータに追加
             // 登録した日にスケジュールがない場合
-            if (!newSchedulesList[schedule.date]){
+            if (newSchedulesList[schedule.date] === undefined || !newSchedulesList[schedule.date].length){
                 newSchedulesList[schedule.date] = [schedule]
                 return newSchedulesList
             }
@@ -168,48 +127,6 @@ export default {
             return newSchedulesList
         },
         /**
-         * カレンダーデータにスケジュールを追加
-         * @param {Object} schedule 追加するスケジュール
-         * @param {Array} calendarData カレンダーデータ
-         * @return {Array} newCalendarData スケジュールを追加したカレンダーデータ
-         */
-        mixinAddScheduleToCalendarData(schedule, calendarData){
-            // カレンダーデータをディープコピー
-            const newCalendarData = _.cloneDeep(calendarData)
-
-            outer: for (let i = 0; i < newCalendarData.length; i++) {
-                if (schedule.date === newCalendarData[i].date){
-                    // スケジュール登録数0の日付か
-                    // 登録したスケジュールに時間情報がない場合
-                    // 配列の先頭にデータを追加
-                    if (!newCalendarData[i].schedules.length || schedule.time === null) {
-                        newCalendarData[i].schedules.unshift(schedule)
-                        break
-                    }
-
-                    // 前後スケジュールが登録されている場合
-                    // 時間順に並ぶようにデータを追加
-                    for (let t = 0; t < newCalendarData[i].schedules.length; t++) {
-
-                        if (newCalendarData[i].schedules[t].time === null) {
-                            continue
-                        }
-
-                        if(schedule.time <= newCalendarData[i].schedules[t].time) {
-                            newCalendarData[i].schedules.splice(t, 0, schedule)
-                            break outer
-                        }
-                    }
-
-                    // 上記以外の場合最後にデータを追加
-                    newCalendarData[i].schedules.push(schedule)
-                    break
-                }
-            }
-
-            return newCalendarData
-        },
-        /**
          * スケジュールリストからスケジュールを削除
          * @param {Object} schedule 削除するスケジュール
          * @param {Object} schedulesList スケジュールリスト
@@ -226,28 +143,6 @@ export default {
             }
             // 変更したスケジュールリストデータを返却
             return newSchedulesList
-        },
-        /**
-         * カレンダーデータからスケジュールを削除
-         * @param {Object} schedule 削除するスケジュール
-         * @param {Array} calendarData カレンダーリスト
-         * @return {Array} newCalendarData スケジュールを削除したカレンダーデータ
-         */
-        mixinRemoveScheduleFromCalendarData(schedule, calendarData) {
-
-            const newCalendarData = _.cloneDeep(calendarData)
-            outer: for (let i = 0; i < newCalendarData.length; i++) {
-                if (schedule.date === newCalendarData[i].date) {
-                    for (let t = 0 ; t < newCalendarData[i].schedules.length; t++) {
-                        if (schedule.id === newCalendarData[i].schedules[t].id) {
-                            newCalendarData[i].schedules.splice(t, 1)
-                            break outer
-                        }
-                    }
-                }
-            }
-
-            return newCalendarData
         },
     }
 }
