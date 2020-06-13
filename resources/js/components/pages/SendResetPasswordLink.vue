@@ -1,9 +1,9 @@
 <template>
-    <v-container class="mt-12 elevation-1">
+    <v-container class="mt-12">
 
-        <v-card flat tile>
+        <v-card>
             <v-card-text>
-                <v-form ref="form" @submit.prevent="sendLink" v-if="!responseFlg">
+                <v-form ref="form" @submit.prevent="sendLink" v-if="!isSent">
 
                     <p>ご登録いただいているメールアドレスに<br/>パスワード再設定用のURLを送信いたします。</p>
                     <v-text-field
@@ -13,7 +13,11 @@
                         :rules="[mixinValidationRules.required]"
                     >
                     </v-text-field>
-                    <v-btn block :color="mixinThemeColor" dark type="submit">送信</v-btn>
+                    <v-btn
+                        class="font-weight-bold"
+                        block :color="mixinThemeColor"
+                        dark type="submit"
+                    >送信</v-btn>
                 </v-form>
                 <p v-else>パスワード再設定用のURLを送信いたしました。<br/>メールをご確認ください。</p>
             </v-card-text>
@@ -32,7 +36,7 @@
                 form: {
                     email: ''
                 },
-                responseFlg: false
+                isSent: false
             }
         },
         methods: {
@@ -49,7 +53,7 @@
                 await axios.post('/api/password/reset/link', this.form)
                 this.$store.commit('loading/setLoadingFlg', false)
 
-                this.responseFlg = true
+                this.isSent = true
             }
         }
     }

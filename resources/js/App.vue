@@ -3,8 +3,11 @@
         <v-app-bar :color="mixinThemeColor" dark app clipped-left>
             <v-app-bar-nav-icon @click="drawer = !drawer" v-if="isLogin && isPageShowNavigation"></v-app-bar-nav-icon>
             <v-toolbar-title>
-                <router-link :to="{name: 'personalCalendar'}" class="toolbar-title">
-                    SHARE CALENDAR
+                <router-link
+                    :to="{name: 'personalCalendar'}"
+                    class="toolbar-title font-weight-bold"
+                >
+                    ShareCalendar
                 </router-link>
             </v-toolbar-title>
             <v-spacer></v-spacer>

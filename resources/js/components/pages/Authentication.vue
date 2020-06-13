@@ -1,6 +1,10 @@
 <template>
     <v-container class="mt-12">
-        <v-tabs class="elevation-1" v-model="tab">
+        <v-tabs
+            fixed-tabs
+            class="elevation-1"
+            v-model="tab"
+        >
             <v-tab href="#login-tab">ログイン</v-tab>
             <v-tab href="#register-tab">新規登録</v-tab>
             <v-tabs-slider :color="mixinThemeColor"></v-tabs-slider>
@@ -10,31 +14,38 @@
                 <v-tab-item value="login-tab">
                     <v-card flat tile>
                         <v-card-text>
-                            <v-btn
-                                href="/o-auth/google"
-                                dark color="#ea4335"
-                                class="font-weight-bold"
-                                style="text-transform: none"
-                            >
-                                <v-icon class="mr-2">mdi-google</v-icon>Googleでログイン
-                            </v-btn>
-                            <v-btn
-                                href="/o-auth/twitter"
-                                dark color="#1da1f2"
-                                class="font-weight-bold"
-                                style="text-transform: none"
-                            >
-                                <v-icon class="mr-2">mdi-twitter</v-icon>Twitterでログイン
-                            </v-btn>
+                            <div class="d-flex justify-space-between">
+                                <v-btn
+                                    href="/o-auth/google"
+                                    dark color="#ea4335"
+                                    class="font-weight-bold social-button"
+                                    style="text-transform: none"
+                                >
+                                    <v-icon class="mr-2">mdi-google</v-icon>Googleでログイン
+                                </v-btn>
+                                <v-btn
+                                    href="/o-auth/twitter"
+                                    dark color="#1da1f2"
+                                    class="font-weight-bold social-button"
+                                    style="text-transform: none"
+                                >
+                                    <v-icon class="mr-2">mdi-twitter</v-icon>Twitterでログイン
+                                </v-btn>
+                            </div>
                             <v-btn
                                 href="/o-auth/github"
                                 dark color="#333"
-                                class="font-weight-bold"
+                                class="font-weight-bold social-button my-4"
                                 style="text-transform: none"
                             >
                                 <v-icon class="mr-2">mdi-github</v-icon>GitHubでログイン
                             </v-btn>
-                            <v-form ref="loginForm" @submit.prevent="login">
+                            <v-divider></v-divider>
+                            <v-form
+                                class="mt-4"
+                                ref="loginForm"
+                                @submit.prevent="login"
+                            >
                                 <!--                            rulesでフロントのバリデーション-->
                                 <!--                            error,error-messageでバックのバリデーション結果を表示-->
                                 <v-text-field
@@ -70,31 +81,38 @@
                 <v-tab-item value="register-tab">
                     <v-card flat tile>
                         <v-card-text>
-                            <v-btn
-                                href="/o-auth/google"
-                                dark color="#ea4335"
-                                class="font-weight-bold"
-                                style="text-transform: none"
-                            >
-                                <v-icon class="mr-2">mdi-google</v-icon>Googleで登録
-                            </v-btn>
-                            <v-btn
-                                href="/o-auth/twitter"
-                                dark color="#1da1f2"
-                                class="font-weight-bold"
-                                style="text-transform: none"
-                            >
-                                <v-icon class="mr-2">mdi-twitter</v-icon>Twitterで登録
-                            </v-btn>
+                            <div class="d-flex justify-space-between">
+                                <v-btn
+                                    href="/o-auth/google"
+                                    dark color="#ea4335"
+                                    class="font-weight-bold social-button"
+                                    style="text-transform: none"
+                                >
+                                    <v-icon class="mr-2">mdi-google</v-icon>Googleで登録
+                                </v-btn>
+                                <v-btn
+                                    href="/o-auth/twitter"
+                                    dark color="#1da1f2"
+                                    class="font-weight-bold social-button"
+                                    style="text-transform: none"
+                                >
+                                    <v-icon class="mr-2">mdi-twitter</v-icon>Twitterで登録
+                                </v-btn>
+                            </div>
                             <v-btn
                                 href="/o-auth/github"
                                 dark color="#333"
-                                class="font-weight-bold"
+                                class="font-weight-bold social-button my-4"
                                 style="text-transform: none"
                             >
                                 <v-icon class="mr-2">mdi-github</v-icon>GitHubで登録
                             </v-btn>
-                            <v-form ref="registerForm" @submit.prevent="register">
+                            <v-divider></v-divider>
+                            <v-form
+                                class="mt-4"
+                                ref="registerForm"
+                                @submit.prevent="register"
+                            >
                                 <v-text-field
                                     outlined
                                     v-model="registerForm.data.name"
@@ -245,5 +263,8 @@
 <style scoped>
     .container{
         max-width: 600px;
+    }
+    .social-button{
+        width: 48%;
     }
 </style>

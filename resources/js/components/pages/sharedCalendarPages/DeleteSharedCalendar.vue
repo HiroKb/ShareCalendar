@@ -7,7 +7,11 @@
                 <p class="mb-0">共有カレンダー内のスケジュール、チャット等のデータが全て削除されます</p>
                 <p>この共有カレンダーを削除しますか？</p>
                 <v-form ref="form" @submit.prevent="deleteSharedCalendar">
-                    <v-btn block :color="mixinThemeColor" dark type="submit">削除</v-btn>
+                    <v-btn
+                        class="font-weight-bold"
+                        block :color="mixinThemeColor" dark
+                        type="submit"
+                    >削除</v-btn>
                 </v-form>
             </v-card-text>
         </v-card>

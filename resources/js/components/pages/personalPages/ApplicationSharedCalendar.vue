@@ -14,11 +14,15 @@
                         ></v-img>
                         <p class="title transparent-black">{{'管理者: ' + sharedCalendarData.admin_name}}</p>
                     </div>
-                <v-form ref="form" @submit.prevent="applicationSharedCalendar">
-                    <v-btn block :color="mixinThemeColor" dark type="submit">共有申請</v-btn>
-                </v-form>
+                    <v-form ref="form" @submit.prevent="applicationSharedCalendar">
+                        <v-btn
+                            class="font-weight-bold"
+                            block :color="mixinThemeColor"
+                            dark type="submit"
+                        >共有申請</v-btn>
+                    </v-form>
                 </template>
-                <p class="title transparent-black" v-else>{{sharedCalendarData.message}}</p>
+                <p class="subtitle-1" v-else>{{sharedCalendarData.message}}</p>
             </v-card-text>
         </v-card>
     </v-container>

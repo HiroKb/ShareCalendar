@@ -9,7 +9,8 @@
             <p class="schedule-data">{{ displayData.title }}</p>
             <p class="schedule-label">詳細</p>
             <p class="schedule-data">{{ displayData.description }}</p>
-            <v-btn class="my-0" block :color="mixinThemeColor" dark
+            <v-btn class="my-0 font-weight-bold"
+                   block :color="mixinThemeColor" dark
                    @click="deleteSchedule"
             >スケジュール削除</v-btn>
         </v-card-text>

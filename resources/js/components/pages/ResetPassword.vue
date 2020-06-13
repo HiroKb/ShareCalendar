@@ -1,18 +1,25 @@
 <template>
-    <v-container class="mt-12 elevation-1">
+    <v-container class="mt-12">
 
-        <v-card flat tile>
+        <v-card>
             <v-card-text>
-                <v-form ref="form" @submit.prevent="resetPassword" v-if="!responseFlg">
+                <v-form ref="form" @submit.prevent="resetPassword" v-if="!isUpdated">
 
                     <v-text-field
                         outlined
                         v-model="form.password"
                         label="新しいパスワード"
+                        @click:append="showPassword = !showPassword"
+                        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                        :type="showPassword ? 'text' : 'password'"
                         :rules="[mixinValidationRules.required, mixinValidationRules.min8]"
                     >
                     </v-text-field>
-                    <v-btn block :color="mixinThemeColor" dark type="submit">変更</v-btn>
+                    <v-btn
+                        class="font-weight-bold"
+                        block :color="mixinThemeColor"
+                        dark type="submit"
+                    >変更</v-btn>
                 </v-form>
                 <template v-else>
                     <p>パスワードを変更しました。<br/><router-link :to="{name: 'personalCalendar'}">こちら</router-link>からマイページへアクセスしてください。</p>
@@ -38,7 +45,8 @@
                     token: this.$route.query.token,
                     email: this.$route.query.email
                 },
-                responseFlg: false
+                isUpdated: false,
+                showPassword: false
             }
         },
         methods: {
@@ -57,7 +65,7 @@
                 if (response.status === SUCCESS) {
                     // 変更処理が成功した場合ログインされるためユーザー情報を取得する
                     await this.$store.dispatch('user/getLoginUser')
-                    this.responseFlg = true
+                    this.isUpdated = true
                     this.$store.commit('loading/setLoadingFlg', false)
                     return false
                 }

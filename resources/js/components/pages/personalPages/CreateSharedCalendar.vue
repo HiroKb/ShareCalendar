@@ -13,7 +13,11 @@
                         :error-messages="errors ? errors.calendar_name ? errors.calendar_name : [] : []"
                     >
                     </v-text-field>
-                    <v-btn block :color="mixinThemeColor" dark type="submit">作成</v-btn>
+                    <v-btn
+                        class="font-weight-bold"
+                        block :color="mixinThemeColor"
+                        dark type="submit"
+                    >作成</v-btn>
                 </v-form>
             </v-card-text>
         </v-card>

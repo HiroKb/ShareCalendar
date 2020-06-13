@@ -13,7 +13,7 @@
                         style="border-radius: 50%"
                     ></v-img>
                     <v-btn
-                        class="mt-4"
+                        class="mt-4 font-weight-bold"
                         :color="mixinThemeColor" dark
                         @click.stop="editImageModal.show = !editImageModal.show"
                     >変更</v-btn>
@@ -25,6 +25,7 @@
                         <p class="info-data">{{ sharedCalendarData.calendar_name }}</p>
                     </div>
                     <v-btn
+                        class="font-weight-bold"
                         :color="mixinThemeColor" dark
                         @click.stop="editCalendarNameModal.show = !editCalendarNameModal.show"
                     >変更</v-btn>
@@ -38,6 +39,7 @@
                         <p class="info-data">{{ invitationUrl }}</p>
                     </div>
                     <v-btn
+                        class="font-weight-bold"
                         :color="mixinThemeColor" dark
                         @click.stop="updateSearchIdModal.show = !updateSearchIdModal.show"
                     >変更</v-btn>
@@ -62,7 +64,11 @@
                             :error-messages="editCalendarNameModal.errors ? editCalendarNameModal.errors.calendar_name ? editCalendarNameModal.errors.calendar_name : [] : []"
                             outlined
                         ></v-text-field>
-                        <v-btn block :color="mixinThemeColor" dark type="submit">変更</v-btn>
+                        <v-btn
+                            class="font-weight-bold"
+                            block :color="mixinThemeColor"
+                            dark type="submit"
+                        >変更</v-btn>
                     </v-form>
                 </v-card-text>
             </v-card>
@@ -99,7 +105,11 @@
                             prepend-icon="mdi-image"
                             @change="onFileChange"
                         ></v-file-input>
-                        <v-btn class="mt-3" block :color="mixinThemeColor" dark type="submit">変更</v-btn>
+                        <v-btn
+                            class="mt-3 font-weight-bold"
+                            block :color="mixinThemeColor" dark
+                            type="submit"
+                        >変更</v-btn>
                     </v-form>
                 </v-card-text>
             </v-card>
@@ -115,7 +125,11 @@
                 <v-card-text>
                     <p>検索IDと招待URLがランダムに変更され、<br>現在の検索ID、招待URLは使用できなくなります。<p/>
                     <v-form @submit.prevent="updateSearchId">
-                        <v-btn block :color="mixinThemeColor" dark type="submit">変更</v-btn>
+                        <v-btn
+                            class="font-weight-bold"
+                            block :color="mixinThemeColor" dark
+                            type="submit"
+                        >変更</v-btn>
                     </v-form>
                 </v-card-text>
             </v-card>

@@ -74,7 +74,11 @@
                         rows="2"
                     >
                     </v-textarea>
-                    <v-btn class="my-0" block :color="mixinThemeColor" dark type="submit">スケジュール追加</v-btn>
+                    <v-btn
+                        class="my-0 font-weight-bold"
+                        block :color="mixinThemeColor" dark
+                        type="submit"
+                    >送信</v-btn>
                 </v-form>
             </v-card-text>
         </v-card>

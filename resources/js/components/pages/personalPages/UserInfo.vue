@@ -13,7 +13,7 @@
                         style="border-radius: 50%"
                     ></v-img>
                     <v-btn
-                        class="mt-4"
+                        class="mt-4 font-weight-bold"
                         :color="mixinThemeColor" dark
                         @click.stop="editImageModal.show = !editImageModal.show"
                     >変更</v-btn>
@@ -25,6 +25,7 @@
                         <p class="info-data">{{ userName }}</p>
                     </div>
                     <v-btn
+                        class="font-weight-bold"
                         :color="mixinThemeColor" dark
                         @click.stop="editNameModal.show = !editNameModal.show"
                     >変更</v-btn>
@@ -37,6 +38,7 @@
                             <p class="info-data">{{ userEmail }}</p>
                         </div>
                         <v-btn
+                            class="font-weight-bold"
                             :color="mixinThemeColor" dark
                             @click.stop="editEmailModal.show = !editEmailModal.show"
                         >変更</v-btn>
@@ -50,6 +52,7 @@
                             <p class="info-data">********</p>
                         </div>
                         <v-btn
+                            class="font-weight-bold"
                             :color="mixinThemeColor" dark
                             @click.stop="editPasswordModal.show = !editPasswordModal.show"
                         >変更</v-btn>
@@ -79,7 +82,11 @@
                             :error-messages="errorMessages ? errorMessages.name ? errorMessages.name : [] : []"
                             outlined
                         ></v-text-field>
-                        <v-btn block :color="mixinThemeColor" dark type="submit">変更</v-btn>
+                        <v-btn
+                            class="font-weight-bold"
+                            block :color="mixinThemeColor"
+                            dark type="submit"
+                        >変更</v-btn>
                     </v-form>
                 </v-card-text>
             </v-card>
@@ -116,7 +123,11 @@
                             prepend-icon="mdi-image"
                             @change="onFileChange"
                         ></v-file-input>
-                        <v-btn class="mt-3" block :color="mixinThemeColor" dark type="submit">変更</v-btn>
+                        <v-btn
+                            class="mt-3 font-weight-bold"
+                            block :color="mixinThemeColor"
+                            dark type="submit"
+                        >変更</v-btn>
                     </v-form>
                 </v-card-text>
             </v-card>
@@ -142,7 +153,11 @@
                             :error-messages="errorMessages ? errorMessages.new_email ? errorMessages.new_email : [] : []"
                             outlined
                         ></v-text-field>
-                        <v-btn block :color="mixinThemeColor" dark type="submit">変更</v-btn>
+                        <v-btn
+                            class="font-weight-bold"
+                            block :color="mixinThemeColor"
+                            dark type="submit"
+                        >変更</v-btn>
                     </v-form>
                 </v-card-text>
                 <v-card-text v-else>
@@ -186,7 +201,11 @@
                             :error-messages="errorMessages ? errorMessages.new_password ? errorMessages.new_password : [] : []"
                             outlined
                         ></v-text-field>
-                        <v-btn block :color="mixinThemeColor" dark type="submit">変更</v-btn>
+                        <v-btn
+                            class="font-weight-bold"
+                            block :color="mixinThemeColor"
+                            dark type="submit"
+                        >変更</v-btn>
                     </v-form>
                 </v-card-text>
             </v-card>

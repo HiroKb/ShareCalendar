@@ -88,7 +88,11 @@
                 <v-card-text>
                     <v-form @submit.prevent="allowApplication([selectedApplicantData])">
                         <p class="subtitle-1">共有申請を許可しますか？</p>
-                        <v-btn block :color="mixinThemeColor" dark type="submit">許可</v-btn>
+                        <v-btn
+                            class="font-weight-bold"
+                            block :color="mixinThemeColor"
+                            dark type="submit"
+                        >許可</v-btn>
                     </v-form>
                 </v-card-text>
             </v-card>
@@ -103,7 +107,11 @@
                 <v-card-text>
                     <p class="pt-4 subtitle-1">全ての共有申請を許可しますか？</p>
                     <v-form @submit.prevent="allowApplication(allApplicantsData)">
-                        <v-btn block :color="mixinThemeColor" dark type="submit">許可</v-btn>
+                        <v-btn
+                            class="font-weight-bold"
+                            block :color="mixinThemeColor"
+                            dark type="submit"
+                        >許可</v-btn>
                     </v-form>
                 </v-card-text>
             </v-card>
@@ -130,7 +138,11 @@
                 <v-card-text>
                     <v-form @submit.prevent="rejectApplication([selectedApplicantData])">
                         <p class="subtitle-1">共有申請を拒否しますか？</p>
-                        <v-btn block :color="mixinThemeColor" dark type="submit">拒否</v-btn>
+                        <v-btn
+                            class="font-weight-bold"
+                            block :color="mixinThemeColor"
+                            dark type="submit"
+                        >拒否</v-btn>
                     </v-form>
                 </v-card-text>
             </v-card>
@@ -145,7 +157,11 @@
                 <v-card-text>
                     <p class="pt-4 subtitle-1">全ての共有申請を拒否しますか？</p>
                     <v-form @submit.prevent="rejectApplication(allApplicantsData)">
-                        <v-btn block :color="mixinThemeColor" dark type="submit">拒否</v-btn>
+                        <v-btn
+                            class="font-weight-bold"
+                            block :color="mixinThemeColor"
+                            dark type="submit"
+                        >拒否</v-btn>
                     </v-form>
                 </v-card-text>
             </v-card>

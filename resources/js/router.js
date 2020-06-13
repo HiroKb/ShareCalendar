@@ -43,7 +43,11 @@ const routes = [
         path: '/',
         name: 'top',
         beforeEnter (to, from, next) {
-            next({name: 'authentication'})
+            if (store.getters['user/loginCheck']){
+                next({name: 'personalCalendar'})
+            } else {
+                next({name: 'authentication'})
+            }
         }
     },
     {

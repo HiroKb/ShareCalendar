@@ -11,7 +11,11 @@
                         :rules="[mixinValidationRules.required]"
                     >
                     </v-text-field>
-                    <v-btn block :color="mixinThemeColor" dark type="submit">検索</v-btn>
+                    <v-btn
+                        block :color="mixinThemeColor"
+                        dark type="submit"
+                        class="font-weight-bold"
+                    >検索</v-btn>
                 </v-form>
             </v-card-text>
         </v-card>

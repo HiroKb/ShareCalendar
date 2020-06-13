@@ -56,7 +56,11 @@
                 <v-card-text>
                     <v-form @submit.prevent="removeMember">
                         <p>このユーザーとの共有を解除しますか？</p>
-                        <v-btn block :color="mixinThemeColor" dark type="submit">解除</v-btn>
+                        <v-btn
+                            class="font-weight-bold"
+                            block :color="mixinThemeColor"
+                            dark type="submit"
+                        >解除</v-btn>
                     </v-form>
                 </v-card-text>
             </v-card>
