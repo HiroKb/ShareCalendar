@@ -15,7 +15,7 @@ class UserController extends Controller
     public function getUserData()
     {
         $user = Auth::user();
-        return $user !== null ? $user->private_data : null;
+        return $user !== null ? $user->private_data : [];
     }
     /**
      * ユーザー名変更

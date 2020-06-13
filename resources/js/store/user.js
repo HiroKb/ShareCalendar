@@ -34,6 +34,22 @@ const mutations = {
 }
 
 const actions = {
+    // ログインユーザー取得
+    async getLoginUser(context) {
+        // apiStatusの初期化
+        context.commit('setApiStatus', null)
+        // ログインユーザー取得APIの呼び出し
+        const response = await axios.get('/api/users')
+
+        if (response.status === SUCCESS) {
+            const user = Array.isArray(response.data) ? null : response.data;
+
+            context.commit('setUser', user)
+            return false
+        }
+        // エラー時
+        context.commit('error/setCode', response.status, {root: true })
+    },
     // 会員登録処理
     async register(context, data) {
         // apiStatusの初期化
@@ -109,21 +125,6 @@ const actions = {
 
         // エラー時
         context.commit('setApiStatus', false)
-        context.commit('error/setCode', response.status, {root: true })
-    },
-    // ログインユーザー取得
-    async getLoginUser(context) {
-        // apiStatusの初期化
-        context.commit('setApiStatus', null)
-        // ログインユーザー取得APIの呼び出し
-        const response = await axios.get('/api/users')
-        const user = response.data || null
-
-        if (response.status === SUCCESS) {
-            context.commit('setUser', user)
-            return false
-        }
-        // エラー時
         context.commit('error/setCode', response.status, {root: true })
     },
     // ユーザー名変更
