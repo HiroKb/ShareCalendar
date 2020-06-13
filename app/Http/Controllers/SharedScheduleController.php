@@ -7,10 +7,6 @@ use App\Http\Requests\UpdateScheduleRequest;
 use App\Models\SharedCalendar;
 use App\Models\SharedSchedule;
 use App\Services\SharedScheduleService;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class SharedScheduleController extends Controller
 {
@@ -47,14 +43,14 @@ class SharedScheduleController extends Controller
      * 共有スケジュール削除
      * @param SharedCalendar $sharedCalendar
      * @param SharedSchedule $sharedSchedule
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @return array
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy(SharedCalendar $sharedCalendar, SharedSchedule $sharedSchedule)
     {
         $this->authorize('destroySchedule', $sharedCalendar);
         $sharedSchedule->delete();
-        return response([], 200);
+        return [];
     }
 
     /**
