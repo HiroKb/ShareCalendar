@@ -66,8 +66,10 @@
              */
             async searchSharedCalendar () {
 
+                const searchId = this.searchId.replace(/\u002f/g, '')
+
                 this.$store.commit('loading/setLoadingFlg', true)
-                const response =  await axios.get('/api/shared-calendars/' + this.searchId + '/search')
+                const response =  await axios.get('/api/shared-calendars/' + searchId + '/search')
                 this.$store.commit('loading/setLoadingFlg', false)
 
                 if (response.status === SUCCESS) {
