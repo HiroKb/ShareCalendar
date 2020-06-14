@@ -140,9 +140,6 @@
     }
 </style>
 <style>
-    .content-wrap{
-        height: calc(100vh - 64px);
-    }
     .custom-scrollbar::-webkit-scrollbar
     {
         width:2px;
@@ -158,5 +155,29 @@
     }
     .transparent-black{
         color: rgba(0, 0, 0, 0.87)
+    }
+
+    .fixed-content{
+        height: calc(100vh - 64px);
+        padding-top: 48px !important;
+        padding-bottom: 48px !important;
+    }
+    .container-mt{
+        margin-top: 48px;
+    }
+    .medium-container{
+        max-width: 600px !important;
+    }
+    @media screen and (max-width: 599px){
+        .container-mt{
+            margin-top: 0;
+        }
+    }
+    @media screen and (max-width: 959px){
+        .fixed-content{
+            height: calc(100vh - 56px);
+            padding-top: 12px !important;
+            padding-bottom: 12px !important;
+        }
     }
 </style>

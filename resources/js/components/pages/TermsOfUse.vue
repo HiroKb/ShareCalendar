@@ -1,5 +1,5 @@
 <template>
-    <v-container class="content-wrap py-12">
+    <v-container class="fixed-content medium-container">
         <v-card class="fill-height d-flex flex-column">
             <v-card-title class="flex-grow-0 flex-shrink-0"
             ><h1 class="title">ShareCalendar利用規約</h1></v-card-title>
@@ -172,9 +172,6 @@
 </script>
 
 <style scoped>
-    .container{
-        max-width: 600px;
-    }
     p{
         margin-bottom: 0 !important;
     }

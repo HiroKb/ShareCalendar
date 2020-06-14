@@ -1,5 +1,5 @@
 <template>
-    <v-container class="content-wrap py-12">
+    <v-container class="fixed-content py-12">
         <v-row class="fill-height">
 <!--            カレンダー-->
             <v-col cols="7">
@@ -385,7 +385,7 @@
 </script>
 
 <style scoped>
-    .content-wrap{
+    .fixed-content{
         height: calc(100vh - 64px);
     }
 </style>

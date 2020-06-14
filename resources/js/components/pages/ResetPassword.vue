@@ -1,5 +1,5 @@
 <template>
-    <v-container class="mt-12">
+    <v-container class="container-mt medium-container">
 
         <v-card>
             <v-card-text>
@@ -78,7 +78,4 @@
 </script>
 
 <style scoped>
-    .container{
-        max-width: 600px;
-    }
 </style>

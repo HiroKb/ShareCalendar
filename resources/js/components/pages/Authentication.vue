@@ -1,5 +1,5 @@
 <template>
-    <v-container class="mt-12">
+    <v-container class="container-mt medium-container">
         <v-tabs
             fixed-tabs
             class="elevation-1"
@@ -14,7 +14,7 @@
                 <v-tab-item value="login-tab">
                     <v-card flat tile>
                         <v-card-text>
-                            <div class="d-flex justify-space-between">
+                            <div class="d-block d-sm-flex justify-space-between ">
                                 <v-btn
                                     href="/o-auth/google"
                                     dark color="#ea4335"
@@ -26,7 +26,7 @@
                                 <v-btn
                                     href="/o-auth/twitter"
                                     dark color="#1da1f2"
-                                    class="font-weight-bold social-button"
+                                    class="font-weight-bold social-button mt-4 mt-sm-0"
                                     style="text-transform: none"
                                 >
                                     <v-icon class="mr-2">mdi-twitter</v-icon>Twitterでログイン
@@ -81,7 +81,7 @@
                 <v-tab-item value="register-tab">
                     <v-card flat tile>
                         <v-card-text>
-                            <div class="d-flex justify-space-between">
+                            <div class="d-block d-sm-flex justify-space-between">
                                 <v-btn
                                     href="/o-auth/google"
                                     dark color="#ea4335"
@@ -93,7 +93,7 @@
                                 <v-btn
                                     href="/o-auth/twitter"
                                     dark color="#1da1f2"
-                                    class="font-weight-bold social-button"
+                                    class="font-weight-bold social-button mt-4 mt-sm-0"
                                     style="text-transform: none"
                                 >
                                     <v-icon class="mr-2">mdi-twitter</v-icon>Twitterで登録
@@ -261,10 +261,12 @@
 </script>
 
 <style scoped>
-    .container{
-        max-width: 600px;
-    }
     .social-button{
         width: 48%;
+    }
+    @media screen and (max-width: 599px){
+        .social-button{
+            width: 100%;
+        }
     }
 </style>

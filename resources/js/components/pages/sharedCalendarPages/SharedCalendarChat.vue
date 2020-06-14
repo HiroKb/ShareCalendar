@@ -1,5 +1,5 @@
 <template>
-    <v-container class="content-wrap py-12">
+    <v-container class="fixed-content py-12">
         <v-card class="fill-height">
             <v-card-text class="fill-height d-flex flex-column">
                 <v-list

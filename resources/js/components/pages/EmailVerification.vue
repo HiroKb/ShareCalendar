@@ -1,5 +1,5 @@
 <template>
-    <v-container class="mt-12">
+    <v-container class="container-mt medium-container">
         <v-card>
             <v-card-text>
                 <p>メールアドレス認証用のメールを送信しました。<br>メール内のボタンからアカウント登録を完了させてください。</p>
@@ -41,7 +41,4 @@
 </script>
 
 <style scoped>
-    .container{
-        max-width: 600px;
-    }
 </style>
