@@ -2,7 +2,7 @@
 export const SUCCESS = 200
 export const CREATED = 201
 export const AUTHENTICATION_REQUIRED = 401
-export const EMAIL_NOT_VERIFIED = 403
+export const EMAIL_NOT_VERIFIED = 443
 export const NOT_FOUND = 404
 export const CSRF_NOT_EXIST = 419
 export const ONLY_UNAUTHENTICATED = 420

@@ -115,7 +115,7 @@
                         const path = '/404'
                         this.$route.path !== path && this.$router.push(path)
                     } else if (val === EMAIL_NOT_VERIFIED){
-                        const path = '/403'
+                        const path = '/443'
                         this.$route.path !== path && this.$router.push(path)
                     } else if (val === AUTHENTICATION_REQUIRED || val === CSRF_NOT_EXIST) {
                         await axios.get('/api/refresh-token')

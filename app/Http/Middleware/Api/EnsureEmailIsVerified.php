@@ -20,7 +20,7 @@ class EnsureEmailIsVerified
         if (! $request->user() ||
             ($request->user() instanceof MustVerifyEmail &&
                 ! $request->user()->hasVerifiedEmail())) {
-            return response([], 403);
+            return response([], 443);
         }
 
         return $next($request);

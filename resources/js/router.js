@@ -208,7 +208,7 @@ const routes = [
         ]
     },
     {
-        path: '/403',
+        path: '/443',
         name: 'emailNotVerified',
         component: EmailNotVerified
     },
