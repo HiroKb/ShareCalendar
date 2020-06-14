@@ -1,7 +1,6 @@
 <template>
-    <v-container class="py-12">
+    <v-container class="container-mt medium-container">
         <v-card v-if = !isMailSent>
-            <v-card-title>403</v-card-title>
             <v-card-text>
                 <p>メールアドレスが認証されていません。メールをご確認ください。</p>
                 <p>メールが届いていない場合は<span
@@ -52,8 +51,5 @@
 </script>
 
 <style scoped>
-    .container{
-        max-width: 600px;
-    }
 </style>
 
