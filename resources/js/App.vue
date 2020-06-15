@@ -2,7 +2,9 @@
     <v-app>
         <v-app-bar :color="mixinThemeColor" dark app clipped-left>
             <v-app-bar-nav-icon @click="drawer = !drawer" v-if="isLogin && isPageShowNavigation"></v-app-bar-nav-icon>
-            <v-toolbar-title>
+            <v-toolbar-title
+                class="pl-1 pl-md-5"
+            >
                 <router-link
                     :to="{name: 'personalCalendar'}"
                     class="toolbar-title font-weight-bold"
@@ -14,7 +16,8 @@
             <v-toolbar-items>
                 <v-menu bottom :offset-y="true" v-if="isLogin && isPageShowNavigation">
                     <template v-slot:activator="{ on }">
-                        <v-btn v-on="on" text style="text-transform: none">
+                        <v-btn
+                            v-on="on" text style="text-transform: none">
                             <div class="d-flex align-center">
                                 <v-img
                                     :src="userImage"
@@ -23,7 +26,7 @@
                                     aspect-ratio="1"
                                     style="border-radius: 50%"
                                 ></v-img>
-                                <p class="ma-0 ml-3">{{ userName }}</p>
+                                <p class="d-none d-sm-block  ma-0 ml-3 text-truncate user-name">{{ userName }}</p>
                                 <v-icon>mdi-menu-down</v-icon>
                             </div>
                         </v-btn>
@@ -138,6 +141,19 @@
         color: inherit;
         text-decoration: inherit;
     }
+    .user-name{
+        max-width: 500px;
+    }
+    @media screen and (max-width: 959px){
+        .user-name{
+            max-width: 230px;
+        }
+    }
+    @media screen and (max-width: 599px){
+        .user-name{
+            max-width: 100px;
+        }
+    }
 </style>
 <style>
     .custom-scrollbar::-webkit-scrollbar
@@ -168,16 +184,16 @@
     .medium-container{
         max-width: 600px !important;
     }
-    @media screen and (max-width: 599px){
-        .container-mt{
-            margin-top: 0;
-        }
-    }
     @media screen and (max-width: 959px){
         .fixed-content{
             height: calc(100vh - 56px);
             padding-top: 12px !important;
             padding-bottom: 12px !important;
+        }
+    }
+    @media screen and (max-width: 599px){
+        .container-mt{
+            margin-top: 0;
         }
     }
 </style>
