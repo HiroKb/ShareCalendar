@@ -152,4 +152,11 @@
         width: 100%;
         height: 100%;
     }
+
+
+    @media screen and (max-width: 599px){
+        .cell-outer{
+            padding-top: 18%;
+        }
+    }
 </style>

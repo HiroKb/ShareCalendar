@@ -169,9 +169,6 @@
     {
         background: #919191;
     }
-    .transparent-black{
-        color: rgba(0, 0, 0, 0.87)
-    }
 
     .fixed-content{
         height: calc(100vh - 64px);

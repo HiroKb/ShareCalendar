@@ -1,5 +1,5 @@
 <template>
-    <v-container class="fixed-content py-12">
+    <v-container class="fixed-content">
         <v-card class="fill-height">
             <template v-if="!sharedCalendarList.loadingFlg">
                 <v-card-title v-if="!sharedCalendarList.data.length">共有しているカレンダーがありません</v-card-title>
@@ -96,7 +96,4 @@
 </script>
 
 <style scoped>
-    .container{
-        max-width: 600px;
-    }
 </style>

@@ -1,6 +1,5 @@
 <template>
-    <v-container class="py-12">
-
+    <v-container class="container-mt medium-container">
 <!--        アカウント情報-->
         <v-card>
             <v-card-text class="pt-4">
@@ -423,9 +422,6 @@
 </script>
 
 <style scoped>
-    .container{
-        max-width: 600px;
-    }
     .info-label{
         margin-bottom: 0;
     }

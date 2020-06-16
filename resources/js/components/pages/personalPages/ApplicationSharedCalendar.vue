@@ -1,5 +1,5 @@
 <template>
-    <v-container class="py-12">
+    <v-container class="container-mt medium-container">
         <v-card v-if="Object.keys(sharedCalendarData).length">
             <v-card-title>カレンダー共有申請</v-card-title>
             <v-card-text>
@@ -12,7 +12,7 @@
                             aspect-ratio="1"
                             style="border-radius: 50%"
                         ></v-img>
-                        <p class="title transparent-black">{{'管理者: ' + sharedCalendarData.admin_name}}</p>
+                        <p class="title">{{'管理者: ' + sharedCalendarData.admin_name}}</p>
                     </div>
                     <v-form ref="form" @submit.prevent="applicationSharedCalendar">
                         <v-btn
@@ -91,7 +91,4 @@
 </script>
 
 <style scoped>
-    .container{
-        max-width: 600px;
-    }
 </style>
