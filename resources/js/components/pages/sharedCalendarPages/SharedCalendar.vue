@@ -1,8 +1,8 @@
 <template>
-    <v-container class="fixed-content py-12">
+    <v-container class="fixed-content">
         <v-row class="fill-height">
             <!--            カレンダー-->
-            <v-col cols="7">
+            <v-col cols="12" md="7">
                 <calendar
                     :selected-month="selectedMonth"
                     :selected-date-label="selectedDateLabel"
@@ -13,7 +13,7 @@
                 />
             </v-col>
             <!--            カレンダーメニュー-->
-            <v-col cols="5" class="fill-height">
+            <v-col cols="12" md="5" class="fill-height">
                 <v-card class="fill-height d-flex flex-column" style="overflow: hidden">
                     <div class="d-flex justify-space-between align-center">
                         <v-card-title class="flex-grow-0 flex-shrink-0">{{ selectedDateLabel}}</v-card-title>
@@ -343,7 +343,4 @@
 </script>
 
 <style scoped>
-    .fixed-content{
-        height: calc(100vh - 64px);
-    }
 </style>

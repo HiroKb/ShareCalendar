@@ -1,5 +1,5 @@
 <template>
-    <v-container class="fixed-content py-12">
+    <v-container class="fixed-content medium-container">
         <v-card class="fill-height d-flex flex-column">
             <div class="flex-grow-0 flex-shrink-0 d-flex align-center">
                 <v-card-title>共有申請者</v-card-title>
@@ -320,7 +320,4 @@
 </script>
 
 <style scoped>
-    .container{
-        max-width: 600px;
-    }
 </style>

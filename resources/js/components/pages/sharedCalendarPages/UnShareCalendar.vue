@@ -1,5 +1,5 @@
 <template>
-    <v-container class="py-12">
+    <v-container class="container-mt medium-container">
         <v-card>
             <v-card-title class="pb-2">共有解除</v-card-title>
             <v-card-title class="pt-0">{{ sharedCalendarData.calendar_name}}</v-card-title>
@@ -54,7 +54,4 @@
 </script>
 
 <style scoped>
-    .container{
-        max-width: 600px;
-    }
 </style>

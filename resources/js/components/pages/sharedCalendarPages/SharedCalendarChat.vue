@@ -1,5 +1,5 @@
 <template>
-    <v-container class="fixed-content py-12">
+    <v-container class="fixed-content">
         <v-card class="fill-height">
             <v-card-text class="fill-height d-flex flex-column">
                 <v-list
@@ -191,7 +191,7 @@
 
 <style scoped>
     .container{
-        max-width: 680px;
+        max-width: 720px;
     }
     .balloon{
         position: relative;

@@ -1,5 +1,5 @@
 <template>
-    <v-container class="py-12">
+    <v-container class="container-mt medium-container">
         <!--        共有カレンダー情報-->
         <v-card>
             <v-card-title>カレンダー情報</v-card-title>
@@ -19,8 +19,8 @@
                     >変更</v-btn>
                 </div>
                 <v-divider></v-divider>
-                <div class="py-4 d-flex align-end justify-space-between">
-                    <div>
+                <div class="py-4 d-flex align-center justify-space-between">
+                    <div class="mr-4">
                         <p class="info-label">共有カレンダー名</p>
                         <p class="info-data">{{ sharedCalendarData.calendar_name }}</p>
                     </div>
@@ -31,8 +31,8 @@
                     >変更</v-btn>
                 </div>
                 <v-divider></v-divider>
-                <div class="pt-4 d-flex align-center justify-space-between">
-                    <div>
+                <div class="pt-4 d-flex align-center justify-space-between ">
+                    <div class="mr-4">
                         <p class="info-label">検索ID</p>
                         <p class="info-data">{{ sharedCalendarData.search_id }}</p>
                         <p class="info-label mt-4">招待URL</p>
@@ -318,16 +318,13 @@
 </script>
 
 <style scoped>
-    .container{
-        max-width: 600px;
-    }
     .info-label{
         margin-bottom: 0;
     }
     .info-data{
         margin-bottom: 0;
         font-size: 20px;
-        word-wrap: break-word;
+        word-break: break-all;
         color: rgba(0, 0, 0 ,0.87);
     }
 </style>

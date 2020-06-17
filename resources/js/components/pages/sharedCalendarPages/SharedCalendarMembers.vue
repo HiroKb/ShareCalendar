@@ -1,5 +1,5 @@
 <template>
-    <v-container class="fixed-content py-12">
+    <v-container class="fixed-content">
         <v-card class="fill-height d-flex flex-column">
             <v-card-title class="flex-grow-0 flex-shrink-0">共有メンバー</v-card-title>
             <v-card-text
@@ -152,7 +152,4 @@
 </script>
 
 <style scoped>
-    .container{
-        max-width: 600px;
-    }
 </style>
