@@ -19,7 +19,7 @@
                 </div>
                 <v-divider></v-divider>
                 <div class="py-4 d-flex align-end justify-space-between">
-                    <div>
+                    <div class="mr-4">
                         <p class="info-label">ユーザー名</p>
                         <p class="info-data">{{ userName }}</p>
                     </div>
@@ -32,7 +32,7 @@
                 <template v-if="!isOAuth">
                     <v-divider></v-divider>
                     <div class="py-4 d-flex align-center justify-space-between">
-                        <div>
+                        <div class="mr-4">
                             <p class="info-label">メールアドレス</p>
                             <p class="info-data">{{ userEmail }}</p>
                         </div>
@@ -428,7 +428,7 @@
     .info-data{
         margin-bottom: 0;
         font-size: 20px;
-        word-wrap: break-word;
+        word-break: break-all;
         color: rgba(0, 0, 0 ,0.87);
     }
 </style>
