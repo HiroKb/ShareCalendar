@@ -17,7 +17,7 @@ class AuthenticateRedirect
     public function handle($request, Closure $next)
     {
         if (!Auth::check()) {
-            return redirect('/');
+            return redirect('/auth');
         };
         return $next($request);
     }

@@ -31,7 +31,7 @@ class OAuthController extends Controller
         try {
             $socialUser = Socialite::driver($provider)->user();
         } catch (\Exception $e) {
-            return redirect('/');
+            return redirect('/auth');
         }
 
         $user = User::where([
