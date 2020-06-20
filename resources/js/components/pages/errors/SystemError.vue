@@ -3,7 +3,7 @@
         <v-card>
             <v-card-title>500</v-card-title>
             <v-card-text>
-                <p>サーバーで問題が発生しているためアクセスできませんでした。</p>
+                <p>サーバーで問題が発生したためアクセスできませんでした。</p>
                 <router-link :to="{name: 'top'}">TOPページ</router-link>
                 <a style="text-decoration: underline"
                    class="ml-4"

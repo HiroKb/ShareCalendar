@@ -41,16 +41,20 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      * 認可エラーの場合404jsonレスポンス
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * それ以外の場合500jsonもしくは500view
+     * @param \Illuminate\Http\Request $request
+     * @param Exception $exception
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View|\Symfony\Component\HttpFoundation\Response
      */
     public function render($request, Exception $exception)
     {
         if ($exception instanceof AuthorizationException) {
             return response([], 404);
         }
-        return parent::render($request, $exception);
+
+        return $request->expectsJson()
+            ? response([], 500)
+            : view('errors.500');
+//        return parent::render($request, $exception);
     }
 }
