@@ -27,11 +27,4 @@ class SharedCalendarNameRequest extends FormRequest
             'calendar_name' => 'required|string|max:100'
         ];
     }
-
-    public function attributes()
-    {
-        return [
-            'calendar_name' => '共有カレンダー名'
-        ];
-    }
 }

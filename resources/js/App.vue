@@ -66,7 +66,7 @@
         CSRF_NOT_EXIST, EMAIL_NOT_VERIFIED,
         INTERNAL_SERVER_ERROR,
         NOT_FOUND,
-        ONLY_UNAUTHENTICATED,
+        ONLY_UNAUTHENTICATED, VALIDATION_ERROR,
     } from './util'
 
     export default {
@@ -114,7 +114,7 @@
                     if (val === INTERNAL_SERVER_ERROR) {
                         const path = '/500'
                         this.$route.path !== path && this.$router.push(path)
-                    }else if (val === NOT_FOUND) {
+                    }else if (val === NOT_FOUND || VALIDATION_ERROR) {
                         const path = '/404'
                         this.$route.path !== path && this.$router.push(path)
                     } else if (val === EMAIL_NOT_VERIFIED){

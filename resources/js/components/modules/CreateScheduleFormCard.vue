@@ -13,6 +13,7 @@
                                 item-text="label"
                                 item-value="value"
                                 :rules="[validationHour]"
+                                :error="errorMessages ? !!errorMessages.time : false"
                                 return-object
                                 label="時"
                                 outlined
@@ -27,6 +28,7 @@
                                 item-text="label"
                                 item-value="value"
                                 :rules="[validationMinute]"
+                                :error="errorMessages ? !!errorMessages.time : false"
                                 return-object
                                 label="分"
                                 outlined

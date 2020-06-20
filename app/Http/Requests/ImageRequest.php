@@ -27,4 +27,12 @@ class ImageRequest extends FormRequest
             'image' => 'required|image|mimes:jpeg,jpg,png|max:4000'
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'image.mimes' => 'jpeg,jpg,png画像のみアップロードできます',
+            'image.max' => '4MB以下の画像のみアップロードできます。'
+        ];
+    }
 }

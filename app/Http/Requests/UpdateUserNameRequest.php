@@ -27,12 +27,4 @@ class UpdateUserNameRequest extends FormRequest
             'name' => 'required|string|max:255'
         ];
     }
-
-    public function messages()
-    {
-        return [
-            'name.required' => 'ユーザー名を入力してください',
-            'name.max' => 'ユーザー名は255文字以内で入力してください'
-        ];
-    }
 }

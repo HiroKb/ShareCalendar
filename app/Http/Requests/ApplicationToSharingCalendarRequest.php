@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ApplicationToSharingCalendarRequest extends FormRequest
 {
@@ -26,5 +28,18 @@ class ApplicationToSharingCalendarRequest extends FormRequest
         return [
             'search_id' => 'required|string'
         ];
+    }
+
+
+    /**
+     * バリデーションエラー時の処理をオーバーライド
+     * @param Validator $validator
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'status' => 404,
+            'errors' => []
+        ], 404));
     }
 }
