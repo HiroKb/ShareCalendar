@@ -15,7 +15,7 @@ class SharedSchedule extends Model
     ];
 
     protected $hidden = [
-        'created_at', 'update_at'
+        'created_at', 'updated_at'
     ];
 
     public function __construct(array $attributes = [])
