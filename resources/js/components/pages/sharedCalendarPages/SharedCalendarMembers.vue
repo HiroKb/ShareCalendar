@@ -1,5 +1,5 @@
 <template>
-    <v-container class="fixed-content">
+    <v-container class="fixed-content medium-container">
         <v-card class="fill-height d-flex flex-column">
             <v-card-title class="flex-grow-0 flex-shrink-0">共有メンバー</v-card-title>
             <v-card-text
