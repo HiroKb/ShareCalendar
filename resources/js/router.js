@@ -3,6 +3,7 @@ import VueRouter from "vue-router"
 import store from "./store";
 
 // ページコンポーネント
+import Top from "./components/pages/Top.vue"
 import Authentication from "./components/pages/Authentication.vue"
 import EmailVerification from "./components/pages/EmailVerification.vue"
 import SendResetPasswordLink from "./components/pages/SendResetPasswordLink.vue"
@@ -42,11 +43,12 @@ const routes = [
     {
         path: '/',
         name: 'top',
+        component: Top,
         beforeEnter (to, from, next) {
             if (store.getters['user/loginCheck']){
                 next({name: 'personalCalendar'})
             } else {
-                next({name: 'authentication'})
+                next()
             }
         }
     },
