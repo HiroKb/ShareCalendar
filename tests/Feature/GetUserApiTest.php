@@ -36,12 +36,12 @@ class GetUserApiTest extends TestCase
     /**
      * @test
      */
-    public function should_ログインしていない場合空文字を返却()
+    public function should_ログインしていない場合空配列を返却()
     {
         $response = $this->json('get', route('user'));
 
 //        レスポンスが期待通りか
         $response->assertStatus(200);
-        $this->assertEquals('', $response->content());
+        $this->assertEquals('[]', $response->content());
     }
 }
