@@ -114,7 +114,7 @@
                     if (val === INTERNAL_SERVER_ERROR) {
                         const path = '/500'
                         this.$route.path !== path && this.$router.push(path)
-                    }else if (val === NOT_FOUND || VALIDATION_ERROR) {
+                    }else if (val === NOT_FOUND || val === VALIDATION_ERROR) {
                         const path = '/404'
                         this.$route.path !== path && this.$router.push(path)
                     } else if (val === EMAIL_NOT_VERIFIED){
