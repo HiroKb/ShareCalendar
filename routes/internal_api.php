@@ -7,7 +7,7 @@
 */
 
 // ログインユーザー返却
-Route::get('/users', 'userController@getUserData')->name('user');
+Route::get('/users', 'UserController@getUserData')->name('user');
 // トークンリフレッシュ
 Route::get('/refresh-token', function (\Illuminate\Http\Request $request) {
     $request->session()->regenerateToken();
