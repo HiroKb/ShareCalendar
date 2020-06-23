@@ -41,10 +41,10 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      * 認可エラーの場合404jsonレスポンス
-     * それ以外の場合500jsonもしくは500view
      * @param \Illuminate\Http\Request $request
      * @param Exception $exception
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View|\Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
+     * @throws Exception
      */
     public function render($request, Exception $exception)
     {
@@ -52,9 +52,6 @@ class Handler extends ExceptionHandler
             return response([], 404);
         }
 
-        return $request->expectsJson()
-            ? response([], 500)
-            : view('errors.500');
-//        return parent::render($request, $exception);
+        return parent::render($request, $exception);
     }
 }
