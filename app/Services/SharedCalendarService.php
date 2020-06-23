@@ -35,7 +35,7 @@ class SharedCalendarService
         $beforeUpdatePath = $sharedCalendar->image_path;
         try {
 //          s3にアップロード・ローカルtmp内のファイル削除
-            $uploadPath = Storage::disk('s3')->putFile('image', new File($tmpPath), 'public');
+            $uploadPath = Storage::disk('s3')->putFile('uploads', new File($tmpPath), 'public');
             Storage::disk('local')->delete('tmp/' . $tmpFileName);
 
 //            DB内のパスを更新・以前の画像があればs3から削除
