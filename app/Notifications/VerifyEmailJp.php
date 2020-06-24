@@ -48,6 +48,7 @@ class VerifyEmailJp extends Notification
         return (new MailMessage)
             ->subject('メールアドレス確認 | ' . config('app.name'))
             ->line('下のボタンをクリックしてメールアドレスを認証してください。')
+            ->line('有効期限は1時間です。')
             ->action('メールアドレス認証', $verificationUrl);
     }
 
