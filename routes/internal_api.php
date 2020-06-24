@@ -19,13 +19,13 @@ Route::get('/refresh-token', function (\Illuminate\Http\Request $request) {
  */
 Route::group(['middleware' => 'api.guest'], function () {
     // 新規登録
-    Route::post('/register', 'CustomizedAuth\RegisterController@register')->name('register');
+    Route::post('/register', 'Auth\RegisterController@register')->name('register');
     // ログイン
-    Route::post('/login', 'CustomizedAuth\LoginController@login')->name('login');
+    Route::post('/login', 'Auth\LoginController@login')->name('login');
     // パスワードリセットメール送信
-    Route::post('/password/reset/link', 'CustomizedAuth\ForgotPasswordController@sendResetLinkEmail');
+    Route::post('/password/reset/link', 'Auth\ForgotPasswordController@sendResetLinkEmail');
     // パスワードリセット
-    Route::post('/password/reset', 'CustomizedAuth\ResetPasswordController@reset');
+    Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
 });
 
 /**
@@ -33,9 +33,9 @@ Route::group(['middleware' => 'api.guest'], function () {
  */
 Route::group(['middleware' => ['api.auth']], function () {
     // ログアウト
-    Route::post('/logout', 'CustomizedAuth\LoginController@logout')->name('logout');
+    Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
     // 確認メール再送
-    Route::post('/email/resend', 'CustomizedAuth\VerificationController@resend');
+    Route::post('/email/resend', 'Auth\VerificationController@resend');
 });
 
 /**

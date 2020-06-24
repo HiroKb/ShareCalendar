@@ -12,12 +12,12 @@
 */
 
 // OAuth認証リダイレクト処理
-Route::get('/o-auth/{provider}', 'CustomizedAuth\OAuthController@redirect');
+Route::get('/o-auth/{provider}', 'Auth\OAuthController@redirect');
 // OAuth認証コールバック後処理
-Route::get('/o-auth/{provider}/callback', 'CustomizedAuth\OAuthController@handleProviderCallback');
+Route::get('/o-auth/{provider}/callback', 'Auth\OAuthController@handleProviderCallback');
 
 // メールアドレス認証
-Route::get('/email/verify/{id}/{hash}', 'CustomizedAuth\VerificationController@verify')->name('verification.verify');
+Route::get('/email/verify/{id}/{hash}', 'Auth\VerificationController@verify')->name('verification.verify');
 
 // メールアドレス変更処理
 Route::get('/email/update/{token}', 'UserController@updateEmail')->middleware('auth.redirect');
