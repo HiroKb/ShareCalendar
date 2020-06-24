@@ -82,7 +82,7 @@
                     <p class="mt-2">sharecalendar915@gmail.com</p>
                 </div>
 
-                <p class="mt-6">令和2年 月 日制定</p>
+                <p class="mt-6">令和2年6月24日制定</p>
             </v-card-text>
         </v-card>
     </v-container>

@@ -159,7 +159,7 @@
                     <p class="paragraph-text-indent">2.  本規約またはサービス利用契約に起因し、または関連する一切の紛争については、熊本地方裁判所を第一審の専属的合意管轄裁判所とします</p>
                 </div>
 
-                <p class="mt-6">令和2年 月 日制定</p>
+                <p class="mt-6">令和2年6月24日制定</p>
             </v-card-text>
         </v-card>
     </v-container>
