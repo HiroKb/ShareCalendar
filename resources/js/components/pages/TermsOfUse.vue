@@ -1,6 +1,6 @@
 <template>
     <v-container class="fixed-content medium-container">
-        <v-card class="fill-height d-flex flex-column">
+        <v-card class="d-flex flex-column card-container">
             <v-card-title class="flex-grow-0 flex-shrink-0"
             ><h1 class="title">ShareCalendar利用規約</h1></v-card-title>
             <v-card-text
@@ -86,7 +86,7 @@
                     <p class="paragraph-text-indent">1.  当方ウェブサイト及び本サービスに関する知的財産権は全て当方または当方にライセンスを許諾している者に帰属しており、本規約に基づく本サービスの利用許諾は、当方ウェブサイトまたは本サービスに関する当方または当方にライセンスを許諾している者の知的財産権の使用許諾を意味するものではありません。</p>
                     <p class="paragraph-text-indent">2.  登録ユーザーは、投稿データについて、自らが投稿その他送信することについての適法な権利を有していること、及び投稿データが第三者の権利を侵害していないことについて、当方に対し表明し、保証するものとします。</p>
                     <p class="paragraph-text-indent">3.  当方は、投稿データについて、本サービスの円滑な提供、当方システムの構築・改良・メンテナンス等に必要な範囲内で、変更、切除その他の改変を行うことができるものとします。</p>
-                    <p class="paragraph-text-indent">4.  登録ユーザーは、当社及び当社から権利を承継しまたは許諾された者に対して著作者人格権を行使しないことに同意するものとします。
+                    <p class="paragraph-text-indent">4.  登録ユーザーは、当方及び当方から権利を承継しまたは許諾された者に対して著作者人格権を行使しないことに同意するものとします。
                     </p>
                 </div>
 
@@ -159,7 +159,7 @@
                     <p class="paragraph-text-indent">2.  本規約またはサービス利用契約に起因し、または関連する一切の紛争については、熊本地方裁判所を第一審の専属的合意管轄裁判所とします</p>
                 </div>
 
-                <p class="mt-6">令和2年6月24日制定</p>
+                <p class="mt-6">令和2年6月25日制定</p>
             </v-card-text>
         </v-card>
     </v-container>
@@ -186,5 +186,13 @@
     .sub-item-text-indent{
         text-indent: -1em;
         padding-left: 3.8em;
+    }
+    .card-container{
+        height: 100%;
+    }
+    @media screen and (max-width: 599px){
+        .card-container{
+            height: 85%;
+        }
     }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <v-container class="fixed-content medium-container">
-        <v-card class="fill-height d-flex flex-column">
+        <v-card class="d-flex flex-column card-container">
             <v-card-title class="flex-grow-0 flex-shrink-0"
             ><h1 class="title">ShareCalendarプライバシーポリシー</h1></v-card-title>
             <v-card-text
@@ -11,14 +11,14 @@
 
                 <div class="mt-6">
                     <h2 class="subtitle-1">1.  収集する利用者情報及び収集方法</h2>
-                    <p>本ポリシーにおいて、「利用者情報」とは、ユーザーの識別に係る情報、通信サービス上の行動履歴、その他ユーザーまたはユーザーの端末に関連して生成または蓄積された情報であって、本ポリシーに基づき当社が収集するものを意味するものとします。</p>
-                    <p>本サービスにおいて当社が収集する利用者情報は、その収集方法に応じて、以下のようなものとなります。</p>
+                    <p>本ポリシーにおいて、「利用者情報」とは、ユーザーの識別に係る情報、通信サービス上の行動履歴、その他ユーザーまたはユーザーの端末に関連して生成または蓄積された情報であって、本ポリシーに基づき当方が収集するものを意味するものとします。</p>
+                    <p>本サービスにおいて当方が収集する利用者情報は、その収集方法に応じて、以下のようなものとなります。</p>
 
                     <p class="mt-2 paragraph-text-indent">(1)  ユーザーからご提供いただく情報</p>
                     <p class="item-text-indent">本サービスを利用するために、または本サービスの利用を通じてユーザーからご提供いただく情報は以下のとおりです。</p>
                     <p class="sub-item-text-indent">・メールアドレス等連絡先に関する情報</p>
                     <p class="sub-item-text-indent">・ユーザーの肖像を含む静止画情報</p>
-                    <p class="sub-item-text-indent">・入力フォームその他当社が定める方法を通じてユーザーが入力または送信する情報</p>
+                    <p class="sub-item-text-indent">・入力フォームその他当方が定める方法を通じてユーザーが入力または送信する情報</p>
 
                     <p class="mt-2 paragraph-text-indent">(2)  ユーザーが本サービスの利用において、他のサービスと連携を許可することにより、当該他のサービスからご提供いただく情報</p>
                     <p class="item-text-indent">ユーザーが、本サービスを利用するにあたり、ソーシャルネットワーキングサービス等の他のサービスとの連携を許可した場合には、その許可の際にご同意いただいた内容に基づき、以下の情報を当該外部サービスから収集します。</p>
@@ -82,7 +82,7 @@
                     <p class="mt-2">sharecalendar915@gmail.com</p>
                 </div>
 
-                <p class="mt-6">令和2年6月24日制定</p>
+                <p class="mt-6">令和2年6月25日制定</p>
             </v-card-text>
         </v-card>
     </v-container>
@@ -112,5 +112,13 @@
     .sub-item-text-indent{
         text-indent: -1em;
         padding-left: 2.8em;
+    }
+    .card-container{
+        height: 100%;
+    }
+    @media screen and (max-width: 599px){
+        .card-container{
+            height: 85%;
+        }
     }
 </style>
