@@ -1,6 +1,6 @@
 <template>
     <v-container class="fixed-content medium-container">
-        <v-card class="d-flex flex-column card-container">
+        <v-card class="d-flex flex-column fill-height-card">
             <v-card-title class="flex-grow-0 flex-shrink-0"
             ><h1 class="title">ShareCalendarプライバシーポリシー</h1></v-card-title>
             <v-card-text
@@ -112,13 +112,5 @@
     .sub-item-text-indent{
         text-indent: -1em;
         padding-left: 2.8em;
-    }
-    .card-container{
-        height: 100%;
-    }
-    @media screen and (max-width: 599px){
-        .card-container{
-            height: 85%;
-        }
     }
 </style>

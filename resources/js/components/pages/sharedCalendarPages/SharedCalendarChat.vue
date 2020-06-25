@@ -1,6 +1,6 @@
 <template>
     <v-container class="fixed-content">
-        <v-card class="fill-height">
+        <v-card class="fill-height-card">
             <v-card-text class="fill-height d-flex flex-column">
                 <v-list
                     class="flex-grow-1 flex-shrink-1 custom-scrollbar"

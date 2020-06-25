@@ -1,6 +1,6 @@
 <template>
     <v-container class="fixed-content medium-container">
-        <v-card class="fill-height">
+        <v-card class="fill-height-card">
             <template v-if="!sharedCalendarList.loadingFlg">
                 <v-card-title v-if="!sharedCalendarList.data.length">共有しているカレンダーがありません</v-card-title>
                 <div

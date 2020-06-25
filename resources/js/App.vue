@@ -181,6 +181,9 @@
     .medium-container{
         max-width: 600px !important;
     }
+    .fill-height-card{
+        height: 100%;
+    }
     @media screen and (max-width: 959px){
         .fixed-content{
             height: calc(100vh - 56px);
@@ -191,6 +194,9 @@
     @media screen and (max-width: 599px){
         .container-mt{
             margin-top: 0;
+        }
+        .fill-height-card{
+            height: 85%;
         }
     }
 </style>

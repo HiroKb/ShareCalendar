@@ -1,6 +1,6 @@
 <template>
     <v-container class="fixed-content medium-container">
-        <v-card class="fill-height d-flex flex-column">
+        <v-card class="fill-height-card d-flex flex-column">
             <v-card-title class="flex-grow-0 flex-shrink-0">共有メンバー</v-card-title>
             <v-card-text
                 class="mb-4 flex-grow-1 flex-shrink-1 custom-scrollbar"
