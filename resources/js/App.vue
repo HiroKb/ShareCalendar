@@ -132,6 +132,7 @@
             },
             $route () { // ルーティングに変化があった場合
                 this.$store.commit('error/setCode', null)
+                scrollTo(0,0)
             }
         }
     }
