@@ -1,6 +1,9 @@
 <template>
     <v-container class="fixed-content">
-        <v-row class="fill-height">
+        <v-row
+            class="fill-height"
+            style="max-width: 1320px; margin: 0 auto;"
+        >
 <!--            カレンダー-->
             <v-col cols="12" md="7">
                 <calendar
