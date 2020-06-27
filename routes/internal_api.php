@@ -26,6 +26,9 @@ Route::group(['middleware' => 'api.guest'], function () {
     Route::post('/password/reset/link', 'Auth\ForgotPasswordController@sendResetLinkEmail');
     // パスワードリセット
     Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
+
+//    テストユーザーログイン
+    Route::post('/test-user/login', 'Auth\TestUserLoginController@login');
 });
 
 /**
