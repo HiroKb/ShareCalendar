@@ -17,7 +17,7 @@ class UnAuthenticate
     {
         if (Auth::check()) {
             return response([], 420);
-        };
+        }
         return $next($request);
     }
 }

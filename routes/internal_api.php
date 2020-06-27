@@ -38,7 +38,7 @@ Route::group(['middleware' => ['api.auth']], function () {
     // ログアウト
     Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
     // 確認メール再送
-    Route::post('/email/resend', 'Auth\VerificationController@resend');
+    Route::post('/email/resend', 'Auth\VerificationController@resend')->middleware('api.test_user.not_allow');
 });
 
 /**
@@ -50,13 +50,11 @@ Route::group(['middleware' => ['api.auth', 'api.verified']], function () {
     // ユーザー画像更新
     Route::post('/users/image', 'UserController@updateImage');
     // メールアドレス確認メール送信
-    Route::post('/users/email', 'UserController@sendUpdateEmailLink');
+    Route::post('/users/email', 'UserController@sendUpdateEmailLink')->middleware('api.test_user.not_allow');
     // ユーザーパスワード変更
-    Route::patch('/users/password', 'UserController@updatePassword');
-    // パスワードの登録
-    Route::post('/users/password', 'UserController@registrationPassword');
+    Route::patch('/users/password', 'UserController@updatePassword')->middleware('api.test_user.not_allow');
     // アカウント削除
-    Route::delete('/users', 'UserController@destroy');
+    Route::delete('/users', 'UserController@destroy')->middleware('api.test_user.not_allow');
     // 個人スケジュールと共有カレンダーのスケジュールリスト取得
     Route::get('/schedules/{from}/{until}', 'UserController@schedulesList');
     // 共有しているカレンダーリストを取得
@@ -68,7 +66,7 @@ Route::group(['middleware' => ['api.auth', 'api.verified']], function () {
     // スケジュール更新
     Route::patch('/schedules/{schedule}', 'ScheduleController@update');
     // スケジュール削除
-    Route::delete('/schedules/{schedule}', 'ScheduleController@destroy');
+    Route::delete('/schedules/{schedule}', 'ScheduleController@destroy')->middleware('api.test_user.not_allow');
 
     // 共有カレンダーデータ
     Route::get('/shared-calendars/{sharedCalendar}', 'SharedCalendarController@show');
@@ -81,7 +79,7 @@ Route::group(['middleware' => ['api.auth', 'api.verified']], function () {
     // 共有カレンダー検索ID変更
     Route::patch('/shared-calendars/{sharedCalendar}/search-id', 'SharedCalendarController@updateSearchId');
     // 共有カレンダー削除
-    Route::delete('/shared-calendars/{sharedCalendar}', 'SharedCalendarController@destroy');
+    Route::delete('/shared-calendars/{sharedCalendar}', 'SharedCalendarController@destroy')->middleware('api.test_user.not_allow');
     // カレンダー共有メンバー
     Route::get('/shared-calendars/{sharedCalendar}/members', 'SharedCalendarController@membersList');
     // カレンダー共有申請者
@@ -91,7 +89,7 @@ Route::group(['middleware' => ['api.auth', 'api.verified']], function () {
     // カレンダー共有申請拒否
     Route::delete('/shared-calendars/{sharedCalendar}/applications', 'SharedCalendarController@rejectApplication');
     // カレンダー共有解除
-    Route::delete('/shared-calendars/{sharedCalendar}/members/{memberId?}', 'SharedCalendarController@removeMember');
+    Route::delete('/shared-calendars/{sharedCalendar}/members/{memberId?}', 'SharedCalendarController@removeMember')->middleware('api.test_user.not_allow');
 
     // 共有カレンダー検索
     Route::get('/shared-calendars/{searchId}/search', 'SharedCalendarController@search');
@@ -105,7 +103,7 @@ Route::group(['middleware' => ['api.auth', 'api.verified']], function () {
     // 共有スケジュール更新
     Route::patch('/shared-calendars/{sharedCalendar}/schedules/{sharedSchedule}', 'SharedScheduleController@update');
     //共有スケジュール削除
-    Route::delete('/shared-calendars/{sharedCalendar}/schedules/{sharedSchedule}', 'SharedScheduleController@destroy');
+    Route::delete('/shared-calendars/{sharedCalendar}/schedules/{sharedSchedule}', 'SharedScheduleController@destroy')->middleware('api.test_user.not_allow');
 
     // チャットメッセージ一覧
     Route::get('/shared-calendars/{sharedCalendar}/chat/messages', 'ChatMessageController@index');

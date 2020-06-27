@@ -17,7 +17,7 @@ class Authenticate
     {
         if (!Auth::check()) {
             return response([], 401);
-        };
+        }
         return $next($request);
     }
 }
