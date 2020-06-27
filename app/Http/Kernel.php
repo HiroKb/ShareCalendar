@@ -65,7 +65,8 @@ class Kernel extends HttpKernel
         'api.guest' => \App\Http\Middleware\Api\UnAuthenticate::class,
         'api.verified' => \App\Http\Middleware\Api\EnsureEmailIsVerified::class,
         'auth.redirect' => \App\Http\Middleware\AuthenticateRedirect::class,
-        'api.test_user.not_allow' => \App\Http\Middleware\Api\TestUserNotAllow::class
+        'api.test_user.not_allow' => \App\Http\Middleware\Api\TestUserNotAllow::class,
+        'test_user.redirect' => \App\Http\Middleware\TestUserRedirect::class
     ];
 
     /**

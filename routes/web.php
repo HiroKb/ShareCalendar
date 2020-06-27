@@ -17,10 +17,10 @@ Route::get('/o-auth/{provider}', 'Auth\OAuthController@redirect');
 Route::get('/o-auth/{provider}/callback', 'Auth\OAuthController@handleProviderCallback');
 
 // メールアドレス認証
-Route::get('/email/verify/{id}/{hash}', 'Auth\VerificationController@verify')->name('verification.verify');
+Route::get('/email/verify/{id}/{hash}', 'Auth\VerificationController@verify')->name('verification.verify')->middleware('test_user.redirect');
 
 // メールアドレス変更処理
-Route::get('/email/update/{token}', 'UserController@updateEmail')->middleware('auth.redirect');
+Route::get('/email/update/{token}', 'UserController@updateEmail')->middleware('auth.redirect', 'test_user.redirect');
 
 
 Route::get('/password/reset', fn() => view('index'))->name('password.reset');
