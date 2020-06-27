@@ -82,9 +82,12 @@ const actions = {
     async login(context, data) {
         // apiStatusの初期化
         context.commit('setApiStatus', null)
+
         context.commit('loading/setLoadingFlg', true, { root: true})
         // ログインAPIの呼び出し
-        const response = await axios.post('/api/login', data)
+        const response = data !== null
+            ? await axios.post('/api/login', data)
+            : await axios.post('/api/test-user/login')
 
         context.commit('loading/setLoadingFlg', false, { root: true})
         // 通信成功時

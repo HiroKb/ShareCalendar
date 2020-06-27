@@ -73,7 +73,18 @@
                                        type="submit">ログイン</v-btn>
                             </v-form>
                             <p class="mt-4">登録又はログインを行うことで、<br><router-link :to="{name: 'termsOfUse'}">利用規約</router-link>と<router-link :to="{name: 'privacyPolicy'}">プライバシーポリシー</router-link>に同意したものとみなします。</p>
-                            <router-link :to="{name: 'sendResetPasswordLink'}">パスワードをお忘れの方</router-link>
+                            <router-link
+                                :to="{name: 'sendResetPasswordLink'}"
+                                class="d-inline-block mb-4"
+                            >パスワードをお忘れの方</router-link>
+                            <v-divider></v-divider>
+                            <v-btn
+                                class="font-weight-bold my-4"
+                                block  :color="mixinThemeColor" dark
+                                @click.prevent="testUserLogin"
+                            >テストユーザーでログイン</v-btn>
+                            <p>テストユーザーは誰でもログイン・操作できるアカウントです。<br>個人情報や他の利用者が不快に感じる内容等を投稿しないでください。</p>
+                            <p>テストユーザーはアカウントや投稿したスケジュール、カレンダー等が削除できないように制限されています。</p>
                         </v-card-text>
                     </v-card>
                 </v-tab-item>
@@ -193,6 +204,24 @@
         },
         methods: {
             /**
+             * 新規登録処理
+             * @returns {Promise<void>}
+             */
+            async register () {
+                // バリデーションチェック
+                if (!this.$refs.registerForm.validate()){
+                    return false
+                }
+
+                await this.$store.dispatch('user/register', this.registerForm.data)
+
+
+                // 通信成功の場合
+                if (this.authApiStatus) {
+                    this.$router.push({name: 'emailVerification'})
+                }
+            },
+            /**
              * ログイン処理
              * @returns {Promise<boolean>}
              */
@@ -209,22 +238,10 @@
                     this.$router.push({name: 'personalCalendar'})
                 }
             },
-            /**
-             * 新規登録処理
-             * @returns {Promise<void>}
-             */
-            async register () {
-                // バリデーションチェック
-                if (!this.$refs.registerForm.validate()){
-                    return false
-                }
-
-                await this.$store.dispatch('user/register', this.registerForm.data)
-
-
-                // 通信成功の場合
+            async testUserLogin(){
+                await this.$store.dispatch('user/login', null)
                 if (this.authApiStatus) {
-                    this.$router.push({name: 'emailVerification'})
+                    this.$router.push({name: 'personalCalendar'})
                 }
             },
         },
