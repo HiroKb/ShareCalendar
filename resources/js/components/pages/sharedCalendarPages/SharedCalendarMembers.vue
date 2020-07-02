@@ -17,7 +17,7 @@
                         </v-list-item-avatar>
                         <v-list-item-content>
                             <p v-if="member.id === sharedCalendarData.admin_id">管理者</p>
-                            <v-list-item-title class="title">{{member.name}}</v-list-item-title>
+                            <v-list-item-title>{{member.name}}</v-list-item-title>
                         </v-list-item-content>
 
                         <v-list-item-action v-if="userId === sharedCalendarData.admin_id && member.id !== sharedCalendarData.admin_id">

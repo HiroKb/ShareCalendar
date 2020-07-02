@@ -42,7 +42,7 @@
                             <v-img :src=" applicant.image_url || mixinNoImagePath"></v-img>
                         </v-list-item-avatar>
                         <v-list-item-content>
-                            <v-list-item-title class="title">{{applicant.name}}</v-list-item-title>
+                            <v-list-item-title>{{applicant.name}}</v-list-item-title>
                         </v-list-item-content>
 
                         <v-list-item-action class="d-flex flex-row">
