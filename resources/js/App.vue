@@ -45,12 +45,12 @@
                 </v-menu>
             </v-toolbar-items>
         </v-app-bar>
-        <v-content>
+        <v-main>
             <flash-message :message="message"/>
             <router-view :drawer="drawer"
                          @changeDrawer="drawer = $event"
             />
-        </v-content>
+        </v-main>
         <loading-screen :loading-flg="loadingFlg"/>
     </v-app>
 </template>
