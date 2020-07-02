@@ -49,7 +49,6 @@
             <flash-message :message="message"/>
             <router-view :drawer="drawer"
                          @changeDrawer="drawer = $event"
-                         ref="test"
             />
         </v-content>
         <loading-screen :loading-flg="loadingFlg"/>
@@ -94,7 +93,7 @@
             }),
             // ヘッダーナビゲーションを表示するか
             isPageShowNavigation: function () {
-                return !['emailNotVerified', 'systemError', 'notFound'].includes(this.$route.name)
+                return !['systemError', 'notFound'].includes(this.$route.name)
             }
         },
         methods: {
