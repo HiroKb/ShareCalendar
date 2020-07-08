@@ -39,7 +39,7 @@
                                             :class="getDateData(row,  col).isSelectedMonth ? '' : 'grey lighten-4'"
                                     >
                                         <div
-                                            style="height: 100%; width: 100%;"
+                                            style="height: 100%; width: 100%; cursor: pointer;"
                                             class="d-flex flex-column align-center justify-space-around"
                                             :class="getDateData(row, col).date === selectedDateLabel ? 'blue lighten-5': ''"
                                         >
