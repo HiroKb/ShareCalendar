@@ -22,8 +22,14 @@ Route::get('/email/verify/{id}/{hash}', 'Auth\VerificationController@verify')->n
 // メールアドレス変更処理
 Route::get('/email/update/{token}', 'UserController@updateEmail')->middleware('auth.redirect', 'test_user.redirect');
 
-
+// パスワードリセット処理用
 Route::get('/password/reset', fn() => view('index'))->name('password.reset');
 
-//API以外のリクエストに対してはindexビューを返す
+// 管理者
+Route::namespace('Admin')->prefix('admin')->middleware(['normal_user.redirect'])->group(function (){
+    Route::post(config('admin_user.path').'/login', 'LoginController@login')->name('admin_login');
+});
+
+
+//パスが存在しないリクエストに対してはindexビューを返す
 Route::get('/{any?}', fn() => view('index'))->where('any', '.+');
