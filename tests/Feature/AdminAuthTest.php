@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\AdminLogin;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -41,12 +42,14 @@ class AdminAuthTest extends TestCase
      */
     public function should_管理者アカウントでログイン・ログアウト()
     {
+        $this->assertEquals(0, AdminLogin::count());
         $response = $this->post(route('admin_login'), [
             'name' => 'testtest',
             'password' => 'testtest'
         ]);
         $response->assertStatus(302);
         $this->assertGuest('admin');
+        $this->assertEquals(1, AdminLogin::count());
 
         $response = $this->post(route('admin_login'), [
             'name' => config('admin_user.name'),
@@ -56,6 +59,7 @@ class AdminAuthTest extends TestCase
         $response->assertStatus(302)
                  ->assertRedirect(route('admin_index'));
         $this->assertAuthenticated('admin');
+        $this->assertEquals(2, AdminLogin::count());
 
         $response = $this->post(route('admin_logout'));
         $this->assertGuest('admin');

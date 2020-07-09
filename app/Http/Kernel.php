@@ -69,6 +69,7 @@ class Kernel extends HttpKernel
         'test_user.redirect' => \App\Http\Middleware\TestUserRedirect::class,
         'normal_user.redirect' => \App\Http\Middleware\Admin\NormalUserRedirect::class,
         'admin.auth' => Middleware\Admin\Authenticate::class,
+        'record.ip' => Middleware\Admin\RecordIp::class
 
     ];
 

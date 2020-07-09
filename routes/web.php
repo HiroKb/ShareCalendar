@@ -30,7 +30,7 @@ Route::namespace('Admin')->prefix('admin/'.config('admin_user.path'))->middlewar
     // ログインフォーム表示
     Route::get('login', 'LoginController@showLoginForm')->name('admin_login');
     // ログイン処理
-    Route::post('login', 'LoginController@login');
+    Route::post('login', 'LoginController@login')->middleware('record.ip');
 
     Route::group(['middleware' => 'admin.auth'], function () {
         // ログアウト処理
