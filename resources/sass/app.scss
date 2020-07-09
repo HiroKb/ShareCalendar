@@ -1,1 +1,13 @@
-//
+.nav{
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  padding: 48px 24px 0;
+  border-right: #797979 solid 1px;
+}
+.contents{
+  width: 960px;
+  margin: 0 auto;
+  padding-top: 24px;
+}
