@@ -13,11 +13,11 @@
 <body>
 <div class="container">
     <nav class="nav">
-        <a href="{{route('admin_index')}}">HOME</a>
-        <a href="{{route('admin_registered_users')}}">登録ユーザー</a>
+        <a href="{{route('admin_index')}}" class="nav__item">HOME</a>
+        <a href="{{route('admin_registered_users')}}" class="nav__item">登録ユーザー</a>
         <form action="{{route('admin_logout')}}" method="post">
             @csrf
-            <button type="submit">ログアウト</button>
+            <button type="submit" class="nav__item">ログアウト</button>
         </form>
     </nav>
     <main class="contents">

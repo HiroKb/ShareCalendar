@@ -7,6 +7,27 @@
   border-right: #797979 solid 1px;
 }
 
+.nav__item {
+  display: block;
+}
+
+.nav__item:not(:first-child) {
+  margin-top: 16px;
+}
+
+.list {
+  padding-left: 0;
+}
+
+.list__item {
+  list-style: none;
+  padding: 8px 0;
+}
+
+.list__item:not(:last-of-type) {
+  border-bottom: #989898 1px solid;
+}
+
 .contents {
   width: 960px;
   margin: 0 auto;

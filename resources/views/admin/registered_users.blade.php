@@ -2,9 +2,9 @@
 
 @section('contents')
     <p>{{count($users)}}アカウント</p>
-    <ul>
+    <ul class="list">
         @foreach($users as $user)
-            <li>{{$user['name']}} : {{$user['created_at']}}</li>
+            <li class="list__item">{{$user['name']}} : {{$user['created_at']}}</li>
         @endforeach
     </ul>
 @endsection
