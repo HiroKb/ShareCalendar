@@ -40,11 +40,13 @@ class LoginController extends Controller
         $this->middleware('guest:admin')->except('logout');
     }
 
+//    使用するガードの変更
     protected function guard()
     {
         return Auth::guard('admin');
     }
 
+//    ログイン時に使用するカラムの変更
     public function username()
     {
         return 'name';
@@ -60,18 +62,5 @@ class LoginController extends Controller
     public function authenticated(Request $request, $user)
     {
         return view('admin.index');
-    }
-
-    /**
-     * オーバーライド
-     * ログアウト後の処理を変更
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|mixed
-     */
-    protected function loggedOut(Request $request)
-    {
-//        セッションを再生成
-        $request->session()->regenerate();
-        return response()->json();
     }
 }

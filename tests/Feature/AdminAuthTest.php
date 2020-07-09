@@ -39,7 +39,7 @@ class AdminAuthTest extends TestCase
     /**
      * @test
      */
-    public function should_管理者アカウントでログイン()
+    public function should_管理者アカウントでログイン・ログアウト()
     {
         $response = $this->post(route('admin_login'), [
             'name' => 'testtest',
@@ -51,10 +51,14 @@ class AdminAuthTest extends TestCase
         $response = $this->post(route('admin_login'), [
             'name' => config('admin_user.name'),
             'password' => config('admin_user.password')
-        ])->assertSee('AdminHome');
+        ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(200)
+                 ->assertSee('AdminHome');
         $this->assertAuthenticated('admin');
+
+        $response = $this->post(route('admin_logout'));
+        $this->assertGuest('admin');
     }
 
 }

@@ -28,6 +28,10 @@ Route::get('/password/reset', fn() => view('index'))->name('password.reset');
 // 管理者
 Route::namespace('Admin')->prefix('admin')->middleware(['normal_user.redirect'])->group(function (){
     Route::post(config('admin_user.path').'/login', 'LoginController@login')->name('admin_login');
+
+    Route::group(['middleware' => 'admin.auth'], function () {
+        Route::post(config('admin_user.path').'/logout', 'LoginController@logout')->name('admin_logout');
+    });
 });
 
 
