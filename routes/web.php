@@ -35,8 +35,10 @@ Route::namespace('Admin')->prefix('admin/'.config('admin_user.path'))->middlewar
     Route::group(['middleware' => 'admin.auth'], function () {
         // ログアウト処理
         Route::post('logout', 'LoginController@logout')->name('admin_logout');
-        // 管理者ホーム画面表示
+        // 管理者ホーム画面
         Route::get('home', 'AdminController@index')->name('admin_index');
+        // 登録ユーザー一覧画面
+        Route::get('registered-users', 'AdminController@registeredUsers')->name('admin_registered_users');
     });
 });
 
