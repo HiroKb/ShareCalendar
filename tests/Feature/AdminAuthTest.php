@@ -53,8 +53,8 @@ class AdminAuthTest extends TestCase
             'password' => config('admin_user.password')
         ]);
 
-        $response->assertStatus(200)
-                 ->assertSee('AdminHome');
+        $response->assertStatus(302)
+                 ->assertRedirect(route('admin_index'));
         $this->assertAuthenticated('admin');
 
         $response = $this->post(route('admin_logout'));

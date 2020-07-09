@@ -26,12 +26,17 @@ Route::get('/email/update/{token}', 'UserController@updateEmail')->middleware('a
 Route::get('/password/reset', fn() => view('index'))->name('password.reset');
 
 // 管理者
-Route::namespace('Admin')->prefix('admin')->middleware(['normal_user.redirect'])->group(function (){
-    Route::get(config('admin_user.path').'/login', 'LoginController@showLoginForm')->name('admin_login');
-    Route::post(config('admin_user.path').'/login', 'LoginController@login');
+Route::namespace('Admin')->prefix('admin/'.config('admin_user.path'))->middleware(['normal_user.redirect'])->group(function (){
+    // ログインフォーム表示
+    Route::get('login', 'LoginController@showLoginForm')->name('admin_login');
+    // ログイン処理
+    Route::post('login', 'LoginController@login');
 
     Route::group(['middleware' => 'admin.auth'], function () {
-        Route::post(config('admin_user.path').'/logout', 'LoginController@logout')->name('admin_logout');
+        // ログアウト処理
+        Route::post('logout', 'LoginController@logout')->name('admin_logout');
+        // 管理者ホーム画面表示
+        Route::get('home', 'AdminController@index')->name('admin_index');
     });
 });
 

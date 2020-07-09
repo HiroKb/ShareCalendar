@@ -66,6 +66,6 @@ class LoginController extends Controller
      */
     public function authenticated(Request $request, $user)
     {
-        return view('admin.index');
+        return redirect(route('admin_index'));
     }
 }
