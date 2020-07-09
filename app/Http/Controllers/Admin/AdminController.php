@@ -5,17 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AdminLogin;
 use App\Models\User;
+use App\Services\AdminService;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function index()
+    public function index(AdminService $adminService)
     {
-        return view('admin.index')->with('loginHistories', AdminLogin::getHistories());
+        return $adminService->getIndexView();
     }
 
-    public function registeredUsers()
+    public function registeredUsers(AdminService $adminService)
     {
-        return view('admin.registered_users')->with('users', User::latest()->get());
+        return $adminService->getRegisteredUsersView();
     }
 }
