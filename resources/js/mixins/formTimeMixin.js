@@ -4,6 +4,7 @@ export default {
             return {
                 hour: [
                     {label: '指定なし', value: 'unspecified'},
+                    {label: '0', value: '00'},
                     {label: '1', value: '01'},
                     {label: '2', value: '02'},
                     {label: '3', value: '03'},
@@ -30,6 +31,7 @@ export default {
                 ],
                 minute:  [
                     {label: '指定なし', value: 'unspecified'},
+                    {label: '00', value: '00'},
                     {label: '05', value: '05'},
                     {label: '10', value: '10'},
                     {label: '15', value: '15'},
