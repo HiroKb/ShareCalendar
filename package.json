@@ -18,7 +18,7 @@
         "laravel-mix": "^4.0.7",
         "lodash": "^4.17.13",
         "material-design-icons-iconfont": "^5.0.1",
-        "moment": "^2.24.0",
+        "moment": "^2.29.2",
         "resolve-url-loader": "^2.3.1",
         "sass": "^1.15.2",
         "sass-loader": "^7.1.0",
